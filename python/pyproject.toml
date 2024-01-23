@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "arflow"
+version = "0.1.0"
+description = ""
+authors = ["Yiqin Zhao <yiqinzhao@outlook.com>"]
+readme = "README.md"
+packages = [{include = "arflow"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.13"
+rerun-sdk = "^0.12.1"
+grpcio = "^1.60.0"
+grpcio-tools = "^1.60.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+serve = "arflow.main:serve"
