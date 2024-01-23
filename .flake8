@@ -1,0 +1,8 @@
+[flake8]
+extend-ignore:
+  # whitespace before ':' (conflicts with Black)
+  E203,
+  # Bad trailing comma (conflicts with Black)
+  E231,
+  # line too long (conflicts with Black)
+  E501,

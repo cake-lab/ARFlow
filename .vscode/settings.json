@@ -1,0 +1,17 @@
+{
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        },
+        "editor.defaultFormatter": "ms-python.black-formatter",
+    },
+    "nuxt.isNuxtApp": false,
+    "cSpell.words": [
+        "arflow",
+        "astype",
+        "frombuffer",
+        "ndarray",
+        "thecakelab"
+    ],
+}
