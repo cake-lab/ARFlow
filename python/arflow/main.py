@@ -36,8 +36,8 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     ) -> np.ndarray:
         # Decode YCbCr bytes into RGB.
         color_img = np.frombuffer(buffer, dtype=np.uint8)
-        color_img_w = session_configs.intrinsics.sample_resolution_x
-        color_img_h = session_configs.intrinsics.sample_resolution_y
+        color_img_w = session_configs.camera_intrinsics.sample_resolution_x
+        color_img_h = session_configs.camera_intrinsics.sample_resolution_y
         p = color_img_w * color_img_h
 
         y = color_img[:p].reshape((color_img_h, color_img_w))
@@ -139,41 +139,46 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     def data_frame(self, request: service_pb2.DataFrameRequest, context):
         session_configs = sessions[request.uid]
 
-        color_rgb = ARFlowService.decode_rgb_image(session_configs, request.rgb)
-        rr.log("rgb", rr.Image(color_rgb))
+        if session_configs.camera_color.enabled:
+            color_rgb = ARFlowService.decode_rgb_image(session_configs, request.color)
+            rr.log("rgb", rr.Image(color_rgb))
 
-        depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
-        rr.log("depth", rr.DepthImage(depth_img, meter=1.0))
+        if session_configs.camera_depth.enabled:
+            depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
+            rr.log("depth", rr.DepthImage(depth_img, meter=1.0))
 
         # Log point cloud.
+        if (
+            session_configs.camera_color.enabled
+            and session_configs.camera_depth.enabled
+        ):
+            entity_3d = "world"
+            rr.log(entity_3d, rr.ViewCoordinates.RIGHT_HAND_Y_DOWN)
+            # rr.log(
+            #     f"{entity_3d}/xyz",
+            #     rr.Arrows3D(
+            #         vectors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+            #         colors=[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
+            #     ),
+            # )
 
-        entity_3d = "world"
-        rr.log(entity_3d, rr.ViewCoordinates.RIGHT_HAND_Y_DOWN)
-        # rr.log(
-        #     f"{entity_3d}/xyz",
-        #     rr.Arrows3D(
-        #         vectors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-        #         colors=[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
-        #     ),
-        # )
+            color_img_w = session_configs.camera_intrinsics.sample_resolution_x
+            color_img_h = session_configs.camera_intrinsics.sample_resolution_y
+            transform, k = ARFlowService.decode_pose(session_configs, request.pose)
+            rr.log(
+                f"{entity_3d}/camera",
+                rr.Transform3D(mat3x3=transform[:3, :3], translation=transform[:3, 3]),
+            )
+            rr.log(
+                f"{entity_3d}/camera",
+                rr.Pinhole(resolution=[color_img_w, color_img_h], image_from_camera=k),
+            )
+            rr.log(f"{entity_3d}/camera", rr.Image(color_rgb))
 
-        color_img_w = session_configs.color_sample_size_x
-        color_img_h = session_configs.color_sample_size_y
-        transform, k = ARFlowService.decode_pose(session_configs, request.pose)
-        rr.log(
-            f"{entity_3d}/camera",
-            rr.Transform3D(mat3x3=transform[:3, :3], translation=transform[:3, 3]),
-        )
-        rr.log(
-            f"{entity_3d}/camera",
-            rr.Pinhole(resolution=[color_img_w, color_img_h], image_from_camera=k),
-        )
-        rr.log(f"{entity_3d}/camera", rr.Image(color_rgb))
-
-        pcd, clr = ARFlowService.decode_point_cloud(
-            session_configs, k, color_rgb, depth_img, transform
-        )
-        rr.log(f"{entity_3d}/point_cloud", rr.Points3D(pcd, colors=clr))
+            pcd, clr = ARFlowService.decode_point_cloud(
+                session_configs, k, color_rgb, depth_img, transform
+            )
+            rr.log(f"{entity_3d}/point_cloud", rr.Points3D(pcd, colors=clr))
 
         return service_pb2.DataFrameResponse(message="OK")
 

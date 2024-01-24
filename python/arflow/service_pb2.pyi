@@ -5,8 +5,8 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class RegisterRequest(_message.Message):
-    __slots__ = ("device_name", "intrinsics", "camera_color", "camera_depth", "camera_transform")
-    class Intrinsics(_message.Message):
+    __slots__ = ("device_name", "camera_intrinsics", "camera_color", "camera_depth", "camera_transform")
+    class CameraIntrinsics(_message.Message):
         __slots__ = ("focal_length_x", "focal_length_y", "principal_point_x", "principal_point_y", "native_resolution_x", "native_resolution_y", "sample_resolution_x", "sample_resolution_y")
         FOCAL_LENGTH_X_FIELD_NUMBER: _ClassVar[int]
         FOCAL_LENGTH_Y_FIELD_NUMBER: _ClassVar[int]
@@ -47,16 +47,16 @@ class RegisterRequest(_message.Message):
         enabled: bool
         def __init__(self, enabled: bool = ...) -> None: ...
     DEVICE_NAME_FIELD_NUMBER: _ClassVar[int]
-    INTRINSICS_FIELD_NUMBER: _ClassVar[int]
+    CAMERA_INTRINSICS_FIELD_NUMBER: _ClassVar[int]
     CAMERA_COLOR_FIELD_NUMBER: _ClassVar[int]
     CAMERA_DEPTH_FIELD_NUMBER: _ClassVar[int]
     CAMERA_TRANSFORM_FIELD_NUMBER: _ClassVar[int]
     device_name: str
-    intrinsics: RegisterRequest.Intrinsics
+    camera_intrinsics: RegisterRequest.CameraIntrinsics
     camera_color: RegisterRequest.CameraColor
     camera_depth: RegisterRequest.CameraDepth
     camera_transform: RegisterRequest.CameraTransform
-    def __init__(self, device_name: _Optional[str] = ..., intrinsics: _Optional[_Union[RegisterRequest.Intrinsics, _Mapping]] = ..., camera_color: _Optional[_Union[RegisterRequest.CameraColor, _Mapping]] = ..., camera_depth: _Optional[_Union[RegisterRequest.CameraDepth, _Mapping]] = ..., camera_transform: _Optional[_Union[RegisterRequest.CameraTransform, _Mapping]] = ...) -> None: ...
+    def __init__(self, device_name: _Optional[str] = ..., camera_intrinsics: _Optional[_Union[RegisterRequest.CameraIntrinsics, _Mapping]] = ..., camera_color: _Optional[_Union[RegisterRequest.CameraColor, _Mapping]] = ..., camera_depth: _Optional[_Union[RegisterRequest.CameraDepth, _Mapping]] = ..., camera_transform: _Optional[_Union[RegisterRequest.CameraTransform, _Mapping]] = ...) -> None: ...
 
 class RegisterResponse(_message.Message):
     __slots__ = ("message",)
