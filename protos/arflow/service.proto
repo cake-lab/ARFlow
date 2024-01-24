@@ -10,7 +10,7 @@ service ARFlowService {
 message RegisterRequest {
     string device_name = 1;
 
-    message Intrinsics {
+    message CameraIntrinsics {
         float focal_length_x = 1;
         float focal_length_y = 2;
 
@@ -23,7 +23,7 @@ message RegisterRequest {
         int32 sample_resolution_x = 7;
         int32 sample_resolution_y = 8;
     }
-    Intrinsics intrinsics = 2;
+    CameraIntrinsics camera_intrinsics = 2;
 
     message CameraColor {
         bool enabled = 1;
