@@ -68,10 +68,21 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     def decode_depth_image(
         session_configs: service_pb2.RegisterRequest, buffer: bytes
     ) -> np.ndarray:
-        dtype = np.float32 if session_configs.depth_data_length == 4 else np.uint16
+        if session_configs.camera_depth.data_type == "f32":
+            dtype = np.float32
+        elif session_configs.camera_depth.data_type == "u16":
+            dtype = np.uint16
+        else:
+            raise ValueError(
+                f"Unknown depth data type: {session_configs.camera_depth.data_type}"
+            )
+
         depth_img = np.frombuffer(buffer, dtype=dtype)
         depth_img = depth_img.reshape(
-            (session_configs.depth_resolution_y, session_configs.depth_resolution_x)
+            (
+                session_configs.camera_depth.resolution_y,
+                session_configs.camera_depth.resolution_x,
+            )
         )
 
         # 16-bit unsigned integer, describing the depth (distance to an object) in millimeters.
@@ -150,9 +161,9 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             color_rgb = ARFlowService.decode_rgb_image(session_configs, request.color)
             rr.log("rgb", rr.Image(color_rgb))
 
-        # if session_configs.camera_depth.enabled:
-        #     depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
-        #     rr.log("depth", rr.DepthImage(depth_img, meter=1.0))
+        if session_configs.camera_depth.enabled:
+            depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
+            rr.log("depth", rr.DepthImage(depth_img, meter=1.0))
 
         # # Log point cloud.
         # if (
