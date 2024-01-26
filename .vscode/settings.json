@@ -12,6 +12,7 @@
         "astype",
         "frombuffer",
         "ndarray",
-        "thecakelab"
+        "thecakelab",
+        "Xihe"
     ],
 }
