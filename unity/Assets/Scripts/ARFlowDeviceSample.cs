@@ -28,7 +28,8 @@ public class ARFlowDeviceSample : MonoBehaviour
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
 
-        Application.targetFrameRate = 30;
+        // QualitySettings.vSyncCount = 0;
+        // Application.targetFrameRate = 30;
     }
 
 
@@ -93,6 +94,8 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         _enabled = !_enabled;
         startPauseButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";
+
+        Debug.Log($"Current framerate: {Application.targetFrameRate}");
     }
 
     // Update is called once per frame

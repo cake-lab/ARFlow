@@ -51,9 +51,7 @@ namespace ARFlow
 
         public byte[] Encode()
         {
-            Debug.Log($"_depthImage.format = {_depthImage.format}");
             var depthValues = _depthImage.GetPlane(0).data.ToArray();
-            Debug.Log($"!!! depthValues.Length = {depthValues.Length}");
             var confidenceValues = _confidenceImage.GetPlane(0).data;
 
             for (var i = 0; i < confidenceValues.Length; i++)
@@ -99,8 +97,8 @@ namespace ARFlow
             cameraManager.TryAcquireLatestCpuImage(out _image);
 
             _nativeSize = _image.dimensions;
-            this._sampleSize = sampleSize;
-            _scale = this._sampleSize.x / (float) _nativeSize.x;
+            _sampleSize = sampleSize;
+            _scale = _sampleSize.x / (float)_nativeSize.x;
         }
 
         public byte[] Encode()
@@ -115,8 +113,8 @@ namespace ARFlow
             {
                 for (var u = 0; u < _sampleSize.x; u++)
                 {
-                    var iv = (int) (v / _scale);
-                    var iu = (int) (u / _scale);
+                    var iv = (int)(v / _scale);
+                    var iu = (int)(u / _scale);
                     colorBytes[v * _sampleSize.x + u] = planeY[iv * _nativeSize.x + iu];
                 }
             }
@@ -127,8 +125,8 @@ namespace ARFlow
             {
                 for (var u = 0; u < _sampleSize.x / 2; u++)
                 {
-                    var iv = (int) (v / _scale);
-                    var iu = (int) (u / _scale);
+                    var iv = (int)(v / _scale);
+                    var iu = (int)(u / _scale);
 
                     var sampleOffset = offsetUV + v * _sampleSize.x + u * 2;
                     var nativeOffset = iv * _nativeSize.x / 2 * 2 + iu * 2;

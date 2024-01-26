@@ -15,6 +15,7 @@
     "cSpell.words": [
         "arflow",
         "astype",
+        "flipud",
         "frombuffer",
         "ndarray",
         "thecakelab",
