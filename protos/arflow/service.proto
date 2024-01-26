@@ -17,26 +17,26 @@ message RegisterRequest {
         float principal_point_x = 3;
         float principal_point_y = 4;
 
-        int32 native_resolution_x = 5;
-        int32 native_resolution_y = 6;
-
-        int32 sample_resolution_x = 7;
-        int32 sample_resolution_y = 8;
+        int32 resolution_x = 5;
+        int32 resolution_y = 6;
     }
     CameraIntrinsics camera_intrinsics = 2;
 
     message CameraColor {
         bool enabled = 1;
-
-        int32 data_type = 2; // 0: float32, 1: uint16
+        float resize_factor_x = 2;
+        float resize_factor_y = 3;
     }
     CameraColor camera_color = 3;
 
     message CameraDepth {
         bool enabled = 1;
 
-        int32 data_depth = 2;
+        string data_type = 2;
         int32 confidence_filtering_level = 3;
+
+        int32 resolution_x = 4;
+        int32 resolution_y = 5;
     }
     CameraDepth camera_depth = 4;
 
@@ -44,6 +44,12 @@ message RegisterRequest {
         bool enabled = 1;
     }
     CameraTransform camera_transform = 5;
+
+    message CameraPointCloud {
+        bool enabled = 1;
+        float depth_upscale_factor = 2;
+    }
+    CameraPointCloud camera_point_cloud = 6;
 }
 
 message RegisterResponse {

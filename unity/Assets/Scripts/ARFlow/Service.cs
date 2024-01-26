@@ -24,37 +24,41 @@ namespace ARFlow {
     static ServiceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8ipgUKD1JlZ2lzdGVyUmVx",
+            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8iqwYKD1JlZ2lzdGVyUmVx",
             "dWVzdBITCgtkZXZpY2VfbmFtZRgBIAEoCRI8ChFjYW1lcmFfaW50cmluc2lj",
             "cxgCIAEoCzIhLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFJbnRyaW5zaWNzEjIK",
             "DGNhbWVyYV9jb2xvchgDIAEoCzIcLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFD",
             "b2xvchIyCgxjYW1lcmFfZGVwdGgYBCABKAsyHC5SZWdpc3RlclJlcXVlc3Qu",
             "Q2FtZXJhRGVwdGgSOgoQY2FtZXJhX3RyYW5zZm9ybRgFIAEoCzIgLlJlZ2lz",
-            "dGVyUmVxdWVzdC5DYW1lcmFUcmFuc2Zvcm0a7AEKEENhbWVyYUludHJpbnNp",
-            "Y3MSFgoOZm9jYWxfbGVuZ3RoX3gYASABKAISFgoOZm9jYWxfbGVuZ3RoX3kY",
-            "AiABKAISGQoRcHJpbmNpcGFsX3BvaW50X3gYAyABKAISGQoRcHJpbmNpcGFs",
-            "X3BvaW50X3kYBCABKAISGwoTbmF0aXZlX3Jlc29sdXRpb25feBgFIAEoBRIb",
-            "ChNuYXRpdmVfcmVzb2x1dGlvbl95GAYgASgFEhsKE3NhbXBsZV9yZXNvbHV0",
-            "aW9uX3gYByABKAUSGwoTc2FtcGxlX3Jlc29sdXRpb25feRgIIAEoBRoxCgtD",
-            "YW1lcmFDb2xvchIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgCIAEo",
-            "BRpWCgtDYW1lcmFEZXB0aBIPCgdlbmFibGVkGAEgASgIEhIKCmRhdGFfZGVw",
-            "dGgYAiABKAUSIgoaY29uZmlkZW5jZV9maWx0ZXJpbmdfbGV2ZWwYAyABKAUa",
-            "IgoPQ2FtZXJhVHJhbnNmb3JtEg8KB2VuYWJsZWQYASABKAgiIwoQUmVnaXN0",
-            "ZXJSZXNwb25zZRIPCgdtZXNzYWdlGAEgASgJIoEBChBEYXRhRnJhbWVSZXF1",
-            "ZXN0EgsKA3VpZBgBIAEoCRISCgVjb2xvchgCIAEoDEgAiAEBEhIKBWRlcHRo",
-            "GAMgASgMSAGIAQESFgoJdHJhbnNmb3JtGAQgASgMSAKIAQFCCAoGX2NvbG9y",
-            "QggKBl9kZXB0aEIMCgpfdHJhbnNmb3JtIiQKEURhdGFGcmFtZVJlc3BvbnNl",
-            "Eg8KB21lc3NhZ2UYASABKAkydQoNQVJGbG93U2VydmljZRIvCghyZWdpc3Rl",
-            "chIQLlJlZ2lzdGVyUmVxdWVzdBoRLlJlZ2lzdGVyUmVzcG9uc2USMwoKZGF0",
-            "YV9mcmFtZRIRLkRhdGFGcmFtZVJlcXVlc3QaEi5EYXRhRnJhbWVSZXNwb25z",
-            "ZUIJqgIGQVJGbG93YgZwcm90bzM="));
+            "dGVyUmVxdWVzdC5DYW1lcmFUcmFuc2Zvcm0SPQoSY2FtZXJhX3BvaW50X2Ns",
+            "b3VkGAYgASgLMiEuUmVnaXN0ZXJSZXF1ZXN0LkNhbWVyYVBvaW50Q2xvdWQa",
+            "pAEKEENhbWVyYUludHJpbnNpY3MSFgoOZm9jYWxfbGVuZ3RoX3gYASABKAIS",
+            "FgoOZm9jYWxfbGVuZ3RoX3kYAiABKAISGQoRcHJpbmNpcGFsX3BvaW50X3gY",
+            "AyABKAISGQoRcHJpbmNpcGFsX3BvaW50X3kYBCABKAISFAoMcmVzb2x1dGlv",
+            "bl94GAUgASgFEhQKDHJlc29sdXRpb25feRgGIAEoBRpQCgtDYW1lcmFDb2xv",
+            "chIPCgdlbmFibGVkGAEgASgIEhcKD3Jlc2l6ZV9mYWN0b3JfeBgCIAEoAhIX",
+            "Cg9yZXNpemVfZmFjdG9yX3kYAyABKAIagQEKC0NhbWVyYURlcHRoEg8KB2Vu",
+            "YWJsZWQYASABKAgSEQoJZGF0YV90eXBlGAIgASgJEiIKGmNvbmZpZGVuY2Vf",
+            "ZmlsdGVyaW5nX2xldmVsGAMgASgFEhQKDHJlc29sdXRpb25feBgEIAEoBRIU",
+            "CgxyZXNvbHV0aW9uX3kYBSABKAUaIgoPQ2FtZXJhVHJhbnNmb3JtEg8KB2Vu",
+            "YWJsZWQYASABKAgaQQoQQ2FtZXJhUG9pbnRDbG91ZBIPCgdlbmFibGVkGAEg",
+            "ASgIEhwKFGRlcHRoX3Vwc2NhbGVfZmFjdG9yGAIgASgCIiMKEFJlZ2lzdGVy",
+            "UmVzcG9uc2USDwoHbWVzc2FnZRgBIAEoCSKBAQoQRGF0YUZyYW1lUmVxdWVz",
+            "dBILCgN1aWQYASABKAkSEgoFY29sb3IYAiABKAxIAIgBARISCgVkZXB0aBgD",
+            "IAEoDEgBiAEBEhYKCXRyYW5zZm9ybRgEIAEoDEgCiAEBQggKBl9jb2xvckII",
+            "CgZfZGVwdGhCDAoKX3RyYW5zZm9ybSIkChFEYXRhRnJhbWVSZXNwb25zZRIP",
+            "CgdtZXNzYWdlGAEgASgJMnUKDUFSRmxvd1NlcnZpY2USLwoIcmVnaXN0ZXIS",
+            "EC5SZWdpc3RlclJlcXVlc3QaES5SZWdpc3RlclJlc3BvbnNlEjMKCmRhdGFf",
+            "ZnJhbWUSES5EYXRhRnJhbWVSZXF1ZXN0GhIuRGF0YUZyYW1lUmVzcG9uc2VC",
+            "CaoCBkFSRmxvd2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest), global::ARFlow.RegisterRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraIntrinsics), global::ARFlow.RegisterRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "NativeResolutionX", "NativeResolutionY", "SampleResolutionX", "SampleResolutionY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraColor), global::ARFlow.RegisterRequest.Types.CameraColor.Parser, new[]{ "Enabled", "DataType" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraDepth), global::ARFlow.RegisterRequest.Types.CameraDepth.Parser, new[]{ "Enabled", "DataDepth", "ConfidenceFilteringLevel" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraTransform), global::ARFlow.RegisterRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest), global::ARFlow.RegisterRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraIntrinsics), global::ARFlow.RegisterRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraColor), global::ARFlow.RegisterRequest.Types.CameraColor.Parser, new[]{ "Enabled", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraDepth), global::ARFlow.RegisterRequest.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraTransform), global::ARFlow.RegisterRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPointCloud), global::ARFlow.RegisterRequest.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterResponse), global::ARFlow.RegisterResponse.Parser, new[]{ "Message" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform" }, new[]{ "Color", "Depth", "Transform" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameResponse), global::ARFlow.DataFrameResponse.Parser, new[]{ "Message" }, null, null, null, null)
@@ -103,6 +107,7 @@ namespace ARFlow {
       cameraColor_ = other.cameraColor_ != null ? other.cameraColor_.Clone() : null;
       cameraDepth_ = other.cameraDepth_ != null ? other.cameraDepth_.Clone() : null;
       cameraTransform_ = other.cameraTransform_ != null ? other.cameraTransform_.Clone() : null;
+      cameraPointCloud_ = other.cameraPointCloud_ != null ? other.cameraPointCloud_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -172,6 +177,18 @@ namespace ARFlow {
       }
     }
 
+    /// <summary>Field number for the "camera_point_cloud" field.</summary>
+    public const int CameraPointCloudFieldNumber = 6;
+    private global::ARFlow.RegisterRequest.Types.CameraPointCloud cameraPointCloud_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.RegisterRequest.Types.CameraPointCloud CameraPointCloud {
+      get { return cameraPointCloud_; }
+      set {
+        cameraPointCloud_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -192,6 +209,7 @@ namespace ARFlow {
       if (!object.Equals(CameraColor, other.CameraColor)) return false;
       if (!object.Equals(CameraDepth, other.CameraDepth)) return false;
       if (!object.Equals(CameraTransform, other.CameraTransform)) return false;
+      if (!object.Equals(CameraPointCloud, other.CameraPointCloud)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -204,6 +222,7 @@ namespace ARFlow {
       if (cameraColor_ != null) hash ^= CameraColor.GetHashCode();
       if (cameraDepth_ != null) hash ^= CameraDepth.GetHashCode();
       if (cameraTransform_ != null) hash ^= CameraTransform.GetHashCode();
+      if (cameraPointCloud_ != null) hash ^= CameraPointCloud.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -242,6 +261,10 @@ namespace ARFlow {
         output.WriteRawTag(42);
         output.WriteMessage(CameraTransform);
       }
+      if (cameraPointCloud_ != null) {
+        output.WriteRawTag(50);
+        output.WriteMessage(CameraPointCloud);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -272,6 +295,10 @@ namespace ARFlow {
         output.WriteRawTag(42);
         output.WriteMessage(CameraTransform);
       }
+      if (cameraPointCloud_ != null) {
+        output.WriteRawTag(50);
+        output.WriteMessage(CameraPointCloud);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -296,6 +323,9 @@ namespace ARFlow {
       }
       if (cameraTransform_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(CameraTransform);
+      }
+      if (cameraPointCloud_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CameraPointCloud);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -335,6 +365,12 @@ namespace ARFlow {
           CameraTransform = new global::ARFlow.RegisterRequest.Types.CameraTransform();
         }
         CameraTransform.MergeFrom(other.CameraTransform);
+      }
+      if (other.cameraPointCloud_ != null) {
+        if (cameraPointCloud_ == null) {
+          CameraPointCloud = new global::ARFlow.RegisterRequest.Types.CameraPointCloud();
+        }
+        CameraPointCloud.MergeFrom(other.CameraPointCloud);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -383,6 +419,13 @@ namespace ARFlow {
             input.ReadMessage(CameraTransform);
             break;
           }
+          case 50: {
+            if (cameraPointCloud_ == null) {
+              CameraPointCloud = new global::ARFlow.RegisterRequest.Types.CameraPointCloud();
+            }
+            input.ReadMessage(CameraPointCloud);
+            break;
+          }
         }
       }
     #endif
@@ -428,6 +471,13 @@ namespace ARFlow {
               CameraTransform = new global::ARFlow.RegisterRequest.Types.CameraTransform();
             }
             input.ReadMessage(CameraTransform);
+            break;
+          }
+          case 50: {
+            if (cameraPointCloud_ == null) {
+              CameraPointCloud = new global::ARFlow.RegisterRequest.Types.CameraPointCloud();
+            }
+            input.ReadMessage(CameraPointCloud);
             break;
           }
         }
@@ -478,10 +528,8 @@ namespace ARFlow {
           focalLengthY_ = other.focalLengthY_;
           principalPointX_ = other.principalPointX_;
           principalPointY_ = other.principalPointY_;
-          nativeResolutionX_ = other.nativeResolutionX_;
-          nativeResolutionY_ = other.nativeResolutionY_;
-          sampleResolutionX_ = other.sampleResolutionX_;
-          sampleResolutionY_ = other.sampleResolutionY_;
+          resolutionX_ = other.resolutionX_;
+          resolutionY_ = other.resolutionY_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -539,51 +587,27 @@ namespace ARFlow {
           }
         }
 
-        /// <summary>Field number for the "native_resolution_x" field.</summary>
-        public const int NativeResolutionXFieldNumber = 5;
-        private int nativeResolutionX_;
+        /// <summary>Field number for the "resolution_x" field.</summary>
+        public const int ResolutionXFieldNumber = 5;
+        private int resolutionX_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public int NativeResolutionX {
-          get { return nativeResolutionX_; }
+        public int ResolutionX {
+          get { return resolutionX_; }
           set {
-            nativeResolutionX_ = value;
+            resolutionX_ = value;
           }
         }
 
-        /// <summary>Field number for the "native_resolution_y" field.</summary>
-        public const int NativeResolutionYFieldNumber = 6;
-        private int nativeResolutionY_;
+        /// <summary>Field number for the "resolution_y" field.</summary>
+        public const int ResolutionYFieldNumber = 6;
+        private int resolutionY_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public int NativeResolutionY {
-          get { return nativeResolutionY_; }
+        public int ResolutionY {
+          get { return resolutionY_; }
           set {
-            nativeResolutionY_ = value;
-          }
-        }
-
-        /// <summary>Field number for the "sample_resolution_x" field.</summary>
-        public const int SampleResolutionXFieldNumber = 7;
-        private int sampleResolutionX_;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public int SampleResolutionX {
-          get { return sampleResolutionX_; }
-          set {
-            sampleResolutionX_ = value;
-          }
-        }
-
-        /// <summary>Field number for the "sample_resolution_y" field.</summary>
-        public const int SampleResolutionYFieldNumber = 8;
-        private int sampleResolutionY_;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public int SampleResolutionY {
-          get { return sampleResolutionY_; }
-          set {
-            sampleResolutionY_ = value;
+            resolutionY_ = value;
           }
         }
 
@@ -606,10 +630,8 @@ namespace ARFlow {
           if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(FocalLengthY, other.FocalLengthY)) return false;
           if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(PrincipalPointX, other.PrincipalPointX)) return false;
           if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(PrincipalPointY, other.PrincipalPointY)) return false;
-          if (NativeResolutionX != other.NativeResolutionX) return false;
-          if (NativeResolutionY != other.NativeResolutionY) return false;
-          if (SampleResolutionX != other.SampleResolutionX) return false;
-          if (SampleResolutionY != other.SampleResolutionY) return false;
+          if (ResolutionX != other.ResolutionX) return false;
+          if (ResolutionY != other.ResolutionY) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -621,10 +643,8 @@ namespace ARFlow {
           if (FocalLengthY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(FocalLengthY);
           if (PrincipalPointX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(PrincipalPointX);
           if (PrincipalPointY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(PrincipalPointY);
-          if (NativeResolutionX != 0) hash ^= NativeResolutionX.GetHashCode();
-          if (NativeResolutionY != 0) hash ^= NativeResolutionY.GetHashCode();
-          if (SampleResolutionX != 0) hash ^= SampleResolutionX.GetHashCode();
-          if (SampleResolutionY != 0) hash ^= SampleResolutionY.GetHashCode();
+          if (ResolutionX != 0) hash ^= ResolutionX.GetHashCode();
+          if (ResolutionY != 0) hash ^= ResolutionY.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -659,21 +679,13 @@ namespace ARFlow {
             output.WriteRawTag(37);
             output.WriteFloat(PrincipalPointY);
           }
-          if (NativeResolutionX != 0) {
+          if (ResolutionX != 0) {
             output.WriteRawTag(40);
-            output.WriteInt32(NativeResolutionX);
+            output.WriteInt32(ResolutionX);
           }
-          if (NativeResolutionY != 0) {
+          if (ResolutionY != 0) {
             output.WriteRawTag(48);
-            output.WriteInt32(NativeResolutionY);
-          }
-          if (SampleResolutionX != 0) {
-            output.WriteRawTag(56);
-            output.WriteInt32(SampleResolutionX);
-          }
-          if (SampleResolutionY != 0) {
-            output.WriteRawTag(64);
-            output.WriteInt32(SampleResolutionY);
+            output.WriteInt32(ResolutionY);
           }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
@@ -701,21 +713,13 @@ namespace ARFlow {
             output.WriteRawTag(37);
             output.WriteFloat(PrincipalPointY);
           }
-          if (NativeResolutionX != 0) {
+          if (ResolutionX != 0) {
             output.WriteRawTag(40);
-            output.WriteInt32(NativeResolutionX);
+            output.WriteInt32(ResolutionX);
           }
-          if (NativeResolutionY != 0) {
+          if (ResolutionY != 0) {
             output.WriteRawTag(48);
-            output.WriteInt32(NativeResolutionY);
-          }
-          if (SampleResolutionX != 0) {
-            output.WriteRawTag(56);
-            output.WriteInt32(SampleResolutionX);
-          }
-          if (SampleResolutionY != 0) {
-            output.WriteRawTag(64);
-            output.WriteInt32(SampleResolutionY);
+            output.WriteInt32(ResolutionY);
           }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
@@ -739,17 +743,11 @@ namespace ARFlow {
           if (PrincipalPointY != 0F) {
             size += 1 + 4;
           }
-          if (NativeResolutionX != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeInt32Size(NativeResolutionX);
+          if (ResolutionX != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResolutionX);
           }
-          if (NativeResolutionY != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeInt32Size(NativeResolutionY);
-          }
-          if (SampleResolutionX != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeInt32Size(SampleResolutionX);
-          }
-          if (SampleResolutionY != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeInt32Size(SampleResolutionY);
+          if (ResolutionY != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResolutionY);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -775,17 +773,11 @@ namespace ARFlow {
           if (other.PrincipalPointY != 0F) {
             PrincipalPointY = other.PrincipalPointY;
           }
-          if (other.NativeResolutionX != 0) {
-            NativeResolutionX = other.NativeResolutionX;
+          if (other.ResolutionX != 0) {
+            ResolutionX = other.ResolutionX;
           }
-          if (other.NativeResolutionY != 0) {
-            NativeResolutionY = other.NativeResolutionY;
-          }
-          if (other.SampleResolutionX != 0) {
-            SampleResolutionX = other.SampleResolutionX;
-          }
-          if (other.SampleResolutionY != 0) {
-            SampleResolutionY = other.SampleResolutionY;
+          if (other.ResolutionY != 0) {
+            ResolutionY = other.ResolutionY;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -819,19 +811,11 @@ namespace ARFlow {
                 break;
               }
               case 40: {
-                NativeResolutionX = input.ReadInt32();
+                ResolutionX = input.ReadInt32();
                 break;
               }
               case 48: {
-                NativeResolutionY = input.ReadInt32();
-                break;
-              }
-              case 56: {
-                SampleResolutionX = input.ReadInt32();
-                break;
-              }
-              case 64: {
-                SampleResolutionY = input.ReadInt32();
+                ResolutionY = input.ReadInt32();
                 break;
               }
             }
@@ -866,19 +850,11 @@ namespace ARFlow {
                 break;
               }
               case 40: {
-                NativeResolutionX = input.ReadInt32();
+                ResolutionX = input.ReadInt32();
                 break;
               }
               case 48: {
-                NativeResolutionY = input.ReadInt32();
-                break;
-              }
-              case 56: {
-                SampleResolutionX = input.ReadInt32();
-                break;
-              }
-              case 64: {
-                SampleResolutionY = input.ReadInt32();
+                ResolutionY = input.ReadInt32();
                 break;
               }
             }
@@ -923,7 +899,8 @@ namespace ARFlow {
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public CameraColor(CameraColor other) : this() {
           enabled_ = other.enabled_;
-          dataType_ = other.dataType_;
+          resizeFactorX_ = other.resizeFactorX_;
+          resizeFactorY_ = other.resizeFactorY_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -945,18 +922,27 @@ namespace ARFlow {
           }
         }
 
-        /// <summary>Field number for the "data_type" field.</summary>
-        public const int DataTypeFieldNumber = 2;
-        private int dataType_;
-        /// <summary>
-        /// 0: float32, 1: uint16
-        /// </summary>
+        /// <summary>Field number for the "resize_factor_x" field.</summary>
+        public const int ResizeFactorXFieldNumber = 2;
+        private float resizeFactorX_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public int DataType {
-          get { return dataType_; }
+        public float ResizeFactorX {
+          get { return resizeFactorX_; }
           set {
-            dataType_ = value;
+            resizeFactorX_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "resize_factor_y" field.</summary>
+        public const int ResizeFactorYFieldNumber = 3;
+        private float resizeFactorY_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float ResizeFactorY {
+          get { return resizeFactorY_; }
+          set {
+            resizeFactorY_ = value;
           }
         }
 
@@ -976,7 +962,8 @@ namespace ARFlow {
             return true;
           }
           if (Enabled != other.Enabled) return false;
-          if (DataType != other.DataType) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ResizeFactorX, other.ResizeFactorX)) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ResizeFactorY, other.ResizeFactorY)) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -985,7 +972,8 @@ namespace ARFlow {
         public override int GetHashCode() {
           int hash = 1;
           if (Enabled != false) hash ^= Enabled.GetHashCode();
-          if (DataType != 0) hash ^= DataType.GetHashCode();
+          if (ResizeFactorX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ResizeFactorX);
+          if (ResizeFactorY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ResizeFactorY);
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -1008,9 +996,13 @@ namespace ARFlow {
             output.WriteRawTag(8);
             output.WriteBool(Enabled);
           }
-          if (DataType != 0) {
-            output.WriteRawTag(16);
-            output.WriteInt32(DataType);
+          if (ResizeFactorX != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(ResizeFactorX);
+          }
+          if (ResizeFactorY != 0F) {
+            output.WriteRawTag(29);
+            output.WriteFloat(ResizeFactorY);
           }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
@@ -1026,9 +1018,13 @@ namespace ARFlow {
             output.WriteRawTag(8);
             output.WriteBool(Enabled);
           }
-          if (DataType != 0) {
-            output.WriteRawTag(16);
-            output.WriteInt32(DataType);
+          if (ResizeFactorX != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(ResizeFactorX);
+          }
+          if (ResizeFactorY != 0F) {
+            output.WriteRawTag(29);
+            output.WriteFloat(ResizeFactorY);
           }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
@@ -1043,8 +1039,11 @@ namespace ARFlow {
           if (Enabled != false) {
             size += 1 + 1;
           }
-          if (DataType != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeInt32Size(DataType);
+          if (ResizeFactorX != 0F) {
+            size += 1 + 4;
+          }
+          if (ResizeFactorY != 0F) {
+            size += 1 + 4;
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -1061,8 +1060,11 @@ namespace ARFlow {
           if (other.Enabled != false) {
             Enabled = other.Enabled;
           }
-          if (other.DataType != 0) {
-            DataType = other.DataType;
+          if (other.ResizeFactorX != 0F) {
+            ResizeFactorX = other.ResizeFactorX;
+          }
+          if (other.ResizeFactorY != 0F) {
+            ResizeFactorY = other.ResizeFactorY;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -1083,8 +1085,12 @@ namespace ARFlow {
                 Enabled = input.ReadBool();
                 break;
               }
-              case 16: {
-                DataType = input.ReadInt32();
+              case 21: {
+                ResizeFactorX = input.ReadFloat();
+                break;
+              }
+              case 29: {
+                ResizeFactorY = input.ReadFloat();
                 break;
               }
             }
@@ -1106,8 +1112,12 @@ namespace ARFlow {
                 Enabled = input.ReadBool();
                 break;
               }
-              case 16: {
-                DataType = input.ReadInt32();
+              case 21: {
+                ResizeFactorX = input.ReadFloat();
+                break;
+              }
+              case 29: {
+                ResizeFactorY = input.ReadFloat();
                 break;
               }
             }
@@ -1152,8 +1162,10 @@ namespace ARFlow {
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public CameraDepth(CameraDepth other) : this() {
           enabled_ = other.enabled_;
-          dataDepth_ = other.dataDepth_;
+          dataType_ = other.dataType_;
           confidenceFilteringLevel_ = other.confidenceFilteringLevel_;
+          resolutionX_ = other.resolutionX_;
+          resolutionY_ = other.resolutionY_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -1175,15 +1187,15 @@ namespace ARFlow {
           }
         }
 
-        /// <summary>Field number for the "data_depth" field.</summary>
-        public const int DataDepthFieldNumber = 2;
-        private int dataDepth_;
+        /// <summary>Field number for the "data_type" field.</summary>
+        public const int DataTypeFieldNumber = 2;
+        private string dataType_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public int DataDepth {
-          get { return dataDepth_; }
+        public string DataType {
+          get { return dataType_; }
           set {
-            dataDepth_ = value;
+            dataType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1196,6 +1208,30 @@ namespace ARFlow {
           get { return confidenceFilteringLevel_; }
           set {
             confidenceFilteringLevel_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "resolution_x" field.</summary>
+        public const int ResolutionXFieldNumber = 4;
+        private int resolutionX_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int ResolutionX {
+          get { return resolutionX_; }
+          set {
+            resolutionX_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "resolution_y" field.</summary>
+        public const int ResolutionYFieldNumber = 5;
+        private int resolutionY_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int ResolutionY {
+          get { return resolutionY_; }
+          set {
+            resolutionY_ = value;
           }
         }
 
@@ -1215,8 +1251,10 @@ namespace ARFlow {
             return true;
           }
           if (Enabled != other.Enabled) return false;
-          if (DataDepth != other.DataDepth) return false;
+          if (DataType != other.DataType) return false;
           if (ConfidenceFilteringLevel != other.ConfidenceFilteringLevel) return false;
+          if (ResolutionX != other.ResolutionX) return false;
+          if (ResolutionY != other.ResolutionY) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -1225,8 +1263,10 @@ namespace ARFlow {
         public override int GetHashCode() {
           int hash = 1;
           if (Enabled != false) hash ^= Enabled.GetHashCode();
-          if (DataDepth != 0) hash ^= DataDepth.GetHashCode();
+          if (DataType.Length != 0) hash ^= DataType.GetHashCode();
           if (ConfidenceFilteringLevel != 0) hash ^= ConfidenceFilteringLevel.GetHashCode();
+          if (ResolutionX != 0) hash ^= ResolutionX.GetHashCode();
+          if (ResolutionY != 0) hash ^= ResolutionY.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -1249,13 +1289,21 @@ namespace ARFlow {
             output.WriteRawTag(8);
             output.WriteBool(Enabled);
           }
-          if (DataDepth != 0) {
-            output.WriteRawTag(16);
-            output.WriteInt32(DataDepth);
+          if (DataType.Length != 0) {
+            output.WriteRawTag(18);
+            output.WriteString(DataType);
           }
           if (ConfidenceFilteringLevel != 0) {
             output.WriteRawTag(24);
             output.WriteInt32(ConfidenceFilteringLevel);
+          }
+          if (ResolutionX != 0) {
+            output.WriteRawTag(32);
+            output.WriteInt32(ResolutionX);
+          }
+          if (ResolutionY != 0) {
+            output.WriteRawTag(40);
+            output.WriteInt32(ResolutionY);
           }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
@@ -1271,13 +1319,21 @@ namespace ARFlow {
             output.WriteRawTag(8);
             output.WriteBool(Enabled);
           }
-          if (DataDepth != 0) {
-            output.WriteRawTag(16);
-            output.WriteInt32(DataDepth);
+          if (DataType.Length != 0) {
+            output.WriteRawTag(18);
+            output.WriteString(DataType);
           }
           if (ConfidenceFilteringLevel != 0) {
             output.WriteRawTag(24);
             output.WriteInt32(ConfidenceFilteringLevel);
+          }
+          if (ResolutionX != 0) {
+            output.WriteRawTag(32);
+            output.WriteInt32(ResolutionX);
+          }
+          if (ResolutionY != 0) {
+            output.WriteRawTag(40);
+            output.WriteInt32(ResolutionY);
           }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
@@ -1292,11 +1348,17 @@ namespace ARFlow {
           if (Enabled != false) {
             size += 1 + 1;
           }
-          if (DataDepth != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeInt32Size(DataDepth);
+          if (DataType.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(DataType);
           }
           if (ConfidenceFilteringLevel != 0) {
             size += 1 + pb::CodedOutputStream.ComputeInt32Size(ConfidenceFilteringLevel);
+          }
+          if (ResolutionX != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResolutionX);
+          }
+          if (ResolutionY != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResolutionY);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -1313,11 +1375,17 @@ namespace ARFlow {
           if (other.Enabled != false) {
             Enabled = other.Enabled;
           }
-          if (other.DataDepth != 0) {
-            DataDepth = other.DataDepth;
+          if (other.DataType.Length != 0) {
+            DataType = other.DataType;
           }
           if (other.ConfidenceFilteringLevel != 0) {
             ConfidenceFilteringLevel = other.ConfidenceFilteringLevel;
+          }
+          if (other.ResolutionX != 0) {
+            ResolutionX = other.ResolutionX;
+          }
+          if (other.ResolutionY != 0) {
+            ResolutionY = other.ResolutionY;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -1338,12 +1406,20 @@ namespace ARFlow {
                 Enabled = input.ReadBool();
                 break;
               }
-              case 16: {
-                DataDepth = input.ReadInt32();
+              case 18: {
+                DataType = input.ReadString();
                 break;
               }
               case 24: {
                 ConfidenceFilteringLevel = input.ReadInt32();
+                break;
+              }
+              case 32: {
+                ResolutionX = input.ReadInt32();
+                break;
+              }
+              case 40: {
+                ResolutionY = input.ReadInt32();
                 break;
               }
             }
@@ -1365,12 +1441,20 @@ namespace ARFlow {
                 Enabled = input.ReadBool();
                 break;
               }
-              case 16: {
-                DataDepth = input.ReadInt32();
+              case 18: {
+                DataType = input.ReadString();
                 break;
               }
               case 24: {
                 ConfidenceFilteringLevel = input.ReadInt32();
+                break;
+              }
+              case 32: {
+                ResolutionX = input.ReadInt32();
+                break;
+              }
+              case 40: {
+                ResolutionY = input.ReadInt32();
                 break;
               }
             }
@@ -1560,6 +1644,232 @@ namespace ARFlow {
                 break;
               case 8: {
                 Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      public sealed partial class CameraPointCloud : pb::IMessage<CameraPointCloud>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<CameraPointCloud> _parser = new pb::MessageParser<CameraPointCloud>(() => new CameraPointCloud());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<CameraPointCloud> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[4]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public CameraPointCloud() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public CameraPointCloud(CameraPointCloud other) : this() {
+          enabled_ = other.enabled_;
+          depthUpscaleFactor_ = other.depthUpscaleFactor_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public CameraPointCloud Clone() {
+          return new CameraPointCloud(this);
+        }
+
+        /// <summary>Field number for the "enabled" field.</summary>
+        public const int EnabledFieldNumber = 1;
+        private bool enabled_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Enabled {
+          get { return enabled_; }
+          set {
+            enabled_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "depth_upscale_factor" field.</summary>
+        public const int DepthUpscaleFactorFieldNumber = 2;
+        private float depthUpscaleFactor_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float DepthUpscaleFactor {
+          get { return depthUpscaleFactor_; }
+          set {
+            depthUpscaleFactor_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as CameraPointCloud);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(CameraPointCloud other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Enabled != other.Enabled) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(DepthUpscaleFactor, other.DepthUpscaleFactor)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Enabled != false) hash ^= Enabled.GetHashCode();
+          if (DepthUpscaleFactor != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(DepthUpscaleFactor);
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (DepthUpscaleFactor != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(DepthUpscaleFactor);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (DepthUpscaleFactor != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(DepthUpscaleFactor);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (Enabled != false) {
+            size += 1 + 1;
+          }
+          if (DepthUpscaleFactor != 0F) {
+            size += 1 + 4;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(CameraPointCloud other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Enabled != false) {
+            Enabled = other.Enabled;
+          }
+          if (other.DepthUpscaleFactor != 0F) {
+            DepthUpscaleFactor = other.DepthUpscaleFactor;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+              case 21: {
+                DepthUpscaleFactor = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+              case 21: {
+                DepthUpscaleFactor = input.ReadFloat();
                 break;
               }
             }

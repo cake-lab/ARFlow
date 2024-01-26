@@ -6,6 +6,11 @@
         },
         "editor.defaultFormatter": "ms-python.black-formatter",
     },
+    "[csharp]": {
+        "editor.formatOnSave": true,
+        "editor.maxTokenizationLineLength": 2500,
+        "editor.inlineSuggest.suppressSuggestions": false
+    },
     "nuxt.isNuxtApp": false,
     "cSpell.words": [
         "arflow",

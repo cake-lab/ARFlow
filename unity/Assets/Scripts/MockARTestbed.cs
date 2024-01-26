@@ -8,9 +8,9 @@ public class MockARTestbed : MonoBehaviour
     public Button connectButton;
     public Button sendButton;
 
-    private Vector2Int _sampleSize;
-    
     private ARFlowClient _client;
+    private Vector2Int _sampleSize;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,11 +21,11 @@ public class MockARTestbed : MonoBehaviour
         connectButton.onClick.AddListener(OnConnectButtonClick);
         sendButton.onClick.AddListener(OnSendButtonClick);
     }
-    
+
     private void OnConnectButtonClick()
     {
         _sampleSize = new Vector2Int(256, 128);
-        
+
         _client.Connect(new RegisterRequest()
         {
             DeviceName = "MockDataTestbed",
@@ -33,12 +33,10 @@ public class MockARTestbed : MonoBehaviour
             {
                 FocalLengthX = 1,
                 FocalLengthY = 2,
-                NativeResolutionX = 3,
-                NativeResolutionY = 4,
+                ResolutionX = 3,
+                ResolutionY = 4,
                 PrincipalPointX = 0.5f,
-                PrincipalPointY = 0.5f,
-                SampleResolutionX = _sampleSize.x,
-                SampleResolutionY = _sampleSize.y
+                PrincipalPointY = 0.5f
             },
             CameraColor = new RegisterRequest.Types.CameraColor()
             {
@@ -47,7 +45,7 @@ public class MockARTestbed : MonoBehaviour
             CameraDepth = new RegisterRequest.Types.CameraDepth()
             {
                 Enabled = false,
-                DataDepth = 0
+                DataType = "f32",
             },
             CameraTransform = new RegisterRequest.Types.CameraTransform()
             {
@@ -60,7 +58,7 @@ public class MockARTestbed : MonoBehaviour
     {
         var size = _sampleSize.x * _sampleSize.y + 2 * (_sampleSize.x / 2 * _sampleSize.y / 2);
         var colorBytes = new byte[size];
-            
+
         _client.SendFrame(new DataFrameRequest()
         {
             Color = ByteString.CopyFrom(colorBytes)
@@ -70,6 +68,6 @@ public class MockARTestbed : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

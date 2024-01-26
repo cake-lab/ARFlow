@@ -763,7 +763,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968066944b5f74471bae3ef68917697c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConnectButton: {fileID: 1214793587}
+  connectButton: {fileID: 1214793587}
+  sendButton: {fileID: 1408228369}
 --- !u!1 &1214793585
 GameObject:
   m_ObjectHideFlags: 0
