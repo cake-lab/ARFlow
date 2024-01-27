@@ -17,6 +17,7 @@
         "astype",
         "flipud",
         "frombuffer",
+        "gmtime",
         "ndarray",
         "thecakelab",
         "Xihe"

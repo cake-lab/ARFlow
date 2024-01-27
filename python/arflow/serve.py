@@ -1,8 +1,13 @@
 """Data exchanging service."""
 import asyncio
+import os
+import pickle
+import sys
+import time
 import uuid
 from concurrent import futures
-from typing import Dict
+from time import gmtime, strftime
+from typing import Dict, List
 
 import grpc
 import numpy as np
@@ -18,11 +23,25 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     num_frame: int = 0
     loop = asyncio.get_event_loop()
 
+    _start_time = time.time_ns()
+    _frame_data: List = []
+
     def __init__(self) -> None:
         super().__init__()
 
-    def register(self, request: service_pb2.RegisterRequest, context):
-        uid = str(uuid.uuid4())
+    def register(
+        self, request: service_pb2.RegisterRequest, context, uid: str = None
+    ) -> service_pb2.RegisterResponse:
+        """Register a client."""
+        # Save the frame data.
+        time_stamp = (time.time_ns() - self._start_time) / 1e9
+        self._frame_data.append(
+            {"time_stamp": time_stamp, "data": request.SerializeToString()}
+        )
+
+        # Start processing.
+        if uid is None:
+            uid = str(uuid.uuid4())
         sessions[uid] = request
 
         rr.init(f"{request.device_name} - ARFlow", spawn=True)
@@ -163,6 +182,13 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
         return pcd, clr
 
     def data_frame(self, request: service_pb2.DataFrameRequest, context):
+        # Save the frame data.
+        time_stamp = (time.time_ns() - self._start_time) / 1e9
+        self._frame_data.append(
+            {"time_stamp": time_stamp, "data": request.SerializeToString()}
+        )
+
+        # Start processing.
         session_configs = sessions[request.uid]
 
         if session_configs.camera_color.enabled:
@@ -199,19 +225,44 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             )
             rr.log("world/point_cloud", rr.Points3D(pcd, colors=clr))
 
+        # Call the for user extension code.
+        self.on_frame_received(request)
+
         return service_pb2.DataFrameResponse(message="OK")
+
+    def on_frame_received(self, frame_data: service_pb2.DataFrameRequest):
+        pass
+
+    def on_program_exit(self, path_to_save):
+        """Save the data and exit."""
+        print("Saving the data...")
+        f_name = strftime("%Y_%m_%d_%H_%M_%S", gmtime())
+        save_path = os.path.join(path_to_save, f"frames_{f_name}.pkl")
+        with open(save_path, "wb") as f:
+            pickle.dump(self._frame_data, f)
+
+        print(f"Data saved to {save_path}")
+
+
+def create_server(service, port: int = 8500, path_to_save: str = "./"):
+    """Run gRPC server."""
+    try:
+        s: ARFlowService = service()
+
+        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        service_pb2_grpc.add_ARFlowServiceServicer_to_server(s, server)
+        server.add_insecure_port("[::]:%s" % port)
+        server.start()
+
+        print(f"Register server started on port {port}")
+        server.wait_for_termination()
+    except KeyboardInterrupt:
+        s.on_program_exit(path_to_save)
+        sys.exit(0)
 
 
 def serve():
-    """Run gRPC server."""
-    port = 8500
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    service_pb2_grpc.add_ARFlowServiceServicer_to_server(ARFlowService(), server)
-    server.add_insecure_port("[::]:%s" % port)
-    server.start()
-
-    print(f"Register server started on port {port}")
-    server.wait_for_termination()
+    create_server(ARFlowService, port=8500)
 
 
 if __name__ == "__main__":
