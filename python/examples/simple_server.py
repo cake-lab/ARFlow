@@ -3,7 +3,7 @@ import arflow
 
 
 class CustomService(arflow.ARFlowService):
-    def on_frame_received(self, frame: arflow.service_pb2.DataFrameRequest):
+    def on_frame_received(self, frame: arflow.DataFrameRequest):
         """Called when a frame is received."""
         print("Frame received!")
 
