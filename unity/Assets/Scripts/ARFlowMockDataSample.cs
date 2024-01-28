@@ -2,9 +2,11 @@ using UnityEngine;
 using ARFlow;
 using Google.Protobuf;
 using UnityEngine.UI;
+using TMPro;
 
 public class ARFlowMockDataSample : MonoBehaviour
 {
+    public TMP_InputField addressInput;
     public Button connectButton;
     public Button sendButton;
 
@@ -15,7 +17,7 @@ public class ARFlowMockDataSample : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        const string serverURL = "http://0.0.0.0:8500";
+        string serverURL = addressInput.text;
         _client = new ARFlowClient(serverURL);
 
         connectButton.onClick.AddListener(OnConnectButtonClick);
