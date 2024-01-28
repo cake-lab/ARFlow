@@ -1,10 +1,13 @@
 [tool.poetry]
 name = "arflow"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Yiqin Zhao <yiqinzhao@outlook.com>"]
 readme = "README.md"
 packages = [{include = "arflow"}]
+license = "GPL-3.0"
+homepage = "https://cake.wpi.edu/ARFlow/"
+repository = "https://github.com/cake-lab/ARFlow"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.13"
