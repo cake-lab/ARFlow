@@ -18,7 +18,7 @@ public class ARFlowMockDataSample : MonoBehaviour
     void Start()
     {
         string serverURL = addressInput.text;
-        _client = new ARFlowClient(serverURL);
+        _client = new ARFlowClient($"http://{serverURL}");
 
         connectButton.onClick.AddListener(OnConnectButtonClick);
         sendButton.onClick.AddListener(OnSendButtonClick);
