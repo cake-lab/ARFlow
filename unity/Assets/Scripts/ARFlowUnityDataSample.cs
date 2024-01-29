@@ -41,6 +41,8 @@ public class ARFlowUnityDataSample : MonoBehaviour
         _depthRenderTexture = new RenderTexture(_captureCamera.pixelWidth, _captureCamera.pixelHeight, 24, RenderTextureFormat.R8);
         _colorTexture = new Texture2D(_captureCamera.pixelWidth, _captureCamera.pixelHeight, TextureFormat.RGB24, false);
         _depthTexture = new Texture2D(_captureCamera.pixelWidth, _captureCamera.pixelHeight, TextureFormat.RFloat, false);
+
+        Application.targetFrameRate = 60;
     }
 
     private void OnConnectButtonClick()

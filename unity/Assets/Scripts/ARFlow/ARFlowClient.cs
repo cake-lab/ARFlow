@@ -49,8 +49,11 @@ namespace ARFlow
             frameData.Uid = _sessionId;
             try
             {
-                var response = _client.data_frame(frameData);
-                Debug.Log(response);
+                _client.data_frameAsync(frameData)
+                .ResponseAsync.ContinueWith(response =>
+                {
+                    Debug.Log(response);
+                });
             }
             catch (Exception e)
             {
