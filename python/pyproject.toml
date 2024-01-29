@@ -15,6 +15,9 @@ rerun-sdk = "^0.12.1"
 grpcio = "^1.60.0"
 grpcio-tools = "^1.60.0"
 
+[tool.poetry.group.dev.dependencies]
+mkdocs = "^1.5.3"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

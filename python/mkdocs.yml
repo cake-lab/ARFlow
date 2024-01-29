@@ -1,0 +1,5 @@
+site_name: ARFlow
+site_url: https://cake.wpi.edu/ARFlow/
+nav:
+  - Home: index.md
+theme: readthedocs
