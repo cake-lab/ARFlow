@@ -13,11 +13,11 @@ namespace ARFlow
 
         public ARFlowClient(string address)
         {
-            var handler = new YetAnotherHttpHandler() {Http2Only = true};
+            var handler = new YetAnotherHttpHandler() { Http2Only = true };
             _channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions()
             {
                 HttpHandler = handler,
-                MaxReceiveMessageSize = 4194304 * 10
+                MaxReceiveMessageSize = null
             });
             _client = new ARFlowService.ARFlowServiceClient(_channel);
         }
@@ -26,7 +26,7 @@ namespace ARFlow
         {
             _channel.Dispose();
         }
-        
+
         public void Connect(RegisterRequest requestData)
         {
             try

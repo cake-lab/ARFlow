@@ -24,8 +24,10 @@ message RegisterRequest {
 
     message CameraColor {
         bool enabled = 1;
-        float resize_factor_x = 2;
-        float resize_factor_y = 3;
+
+        string data_type = 2;
+        float resize_factor_x = 3;
+        float resize_factor_y = 4;
     }
     CameraColor camera_color = 3;
 

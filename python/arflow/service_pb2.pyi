@@ -22,14 +22,16 @@ class RegisterRequest(_message.Message):
         resolution_y: int
         def __init__(self, focal_length_x: _Optional[float] = ..., focal_length_y: _Optional[float] = ..., principal_point_x: _Optional[float] = ..., principal_point_y: _Optional[float] = ..., resolution_x: _Optional[int] = ..., resolution_y: _Optional[int] = ...) -> None: ...
     class CameraColor(_message.Message):
-        __slots__ = ("enabled", "resize_factor_x", "resize_factor_y")
+        __slots__ = ("enabled", "data_type", "resize_factor_x", "resize_factor_y")
         ENABLED_FIELD_NUMBER: _ClassVar[int]
+        DATA_TYPE_FIELD_NUMBER: _ClassVar[int]
         RESIZE_FACTOR_X_FIELD_NUMBER: _ClassVar[int]
         RESIZE_FACTOR_Y_FIELD_NUMBER: _ClassVar[int]
         enabled: bool
+        data_type: str
         resize_factor_x: float
         resize_factor_y: float
-        def __init__(self, enabled: bool = ..., resize_factor_x: _Optional[float] = ..., resize_factor_y: _Optional[float] = ...) -> None: ...
+        def __init__(self, enabled: bool = ..., data_type: _Optional[str] = ..., resize_factor_x: _Optional[float] = ..., resize_factor_y: _Optional[float] = ...) -> None: ...
     class CameraDepth(_message.Message):
         __slots__ = ("enabled", "data_type", "confidence_filtering_level", "resolution_x", "resolution_y")
         ENABLED_FIELD_NUMBER: _ClassVar[int]

@@ -54,8 +54,7 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     def decode_rgb_image(
         session_configs: service_pb2.RegisterRequest, buffer: bytes
     ) -> np.ndarray:
-        # Decode YCbCr bytes into RGB.
-        color_img = np.frombuffer(buffer, dtype=np.uint8)
+        # Calculate the size of the image.
         color_img_w = int(
             session_configs.camera_intrinsics.resolution_x
             * session_configs.camera_color.resize_factor_x
@@ -65,21 +64,29 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             * session_configs.camera_color.resize_factor_y
         )
         p = color_img_w * color_img_h
+        color_img = np.frombuffer(buffer, dtype=np.uint8)
 
-        y = color_img[:p].reshape((color_img_h, color_img_w))
-        cbcr = color_img[p:].reshape((color_img_h // 2, color_img_w // 2, 2))
-        cb, cr = cbcr[:, :, 0], cbcr[:, :, 1]
+        # Decode RGB bytes into RGB.
+        if session_configs.camera_color.data_type == "RGB24":
+            color_rgb = color_img.reshape((color_img_h, color_img_w, 3))
+            color_rgb = color_rgb.astype(np.uint8)
 
-        # Very important! Convert to float32 first!
-        cb = np.repeat(cb, 2, axis=0).repeat(2, axis=1).astype(np.float32) - 128
-        cr = np.repeat(cr, 2, axis=0).repeat(2, axis=1).astype(np.float32) - 128
+        # Decode YCbCr bytes into RGB.
+        elif session_configs.camera_color.data_type == "YCbCr420":
+            y = color_img[:p].reshape((color_img_h, color_img_w))
+            cbcr = color_img[p:].reshape((color_img_h // 2, color_img_w // 2, 2))
+            cb, cr = cbcr[:, :, 0], cbcr[:, :, 1]
 
-        r = np.clip(y + 1.403 * cr, 0, 255)
-        g = np.clip(y - 0.344 * cb - 0.714 * cr, 0, 255)
-        b = np.clip(y + 1.772 * cb, 0, 255)
+            # Very important! Convert to float32 first!
+            cb = np.repeat(cb, 2, axis=0).repeat(2, axis=1).astype(np.float32) - 128
+            cr = np.repeat(cr, 2, axis=0).repeat(2, axis=1).astype(np.float32) - 128
 
-        color_rgb = np.stack([r, g, b], axis=-1)
-        color_rgb = color_rgb.astype(np.uint8)
+            r = np.clip(y + 1.403 * cr, 0, 255)
+            g = np.clip(y - 0.344 * cb - 0.714 * cr, 0, 255)
+            b = np.clip(y + 1.772 * cb, 0, 255)
+
+            color_rgb = np.stack([r, g, b], axis=-1)
+            color_rgb = color_rgb.astype(np.uint8)
 
         return color_rgb
 
@@ -193,10 +200,12 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
 
         if session_configs.camera_color.enabled:
             color_rgb = ARFlowService.decode_rgb_image(session_configs, request.color)
+            color_rgb = np.flipud(color_rgb)
             rr.log("rgb", rr.Image(color_rgb))
 
         if session_configs.camera_depth.enabled:
             depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
+            depth_img = np.flipud(depth_img)
             rr.log("depth", rr.DepthImage(depth_img, meter=1.0))
 
         if session_configs.camera_transform.enabled:
@@ -249,7 +258,13 @@ def create_server(service, port: int = 8500, path_to_save: str = "./"):
     try:
         s: ARFlowService = service()
 
-        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        server = grpc.server(
+            futures.ThreadPoolExecutor(max_workers=10),
+            options=[
+                ("grpc.max_send_message_length", -1),
+                ("grpc.max_receive_message_length", -1),
+            ],
+        )
         service_pb2_grpc.add_ARFlowServiceServicer_to_server(s, server)
         server.add_insecure_port("[::]:%s" % port)
         server.start()

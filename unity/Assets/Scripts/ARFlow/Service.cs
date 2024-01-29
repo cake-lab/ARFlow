@@ -24,7 +24,7 @@ namespace ARFlow {
     static ServiceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8iqwYKD1JlZ2lzdGVyUmVx",
+            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8ivgYKD1JlZ2lzdGVyUmVx",
             "dWVzdBITCgtkZXZpY2VfbmFtZRgBIAEoCRI8ChFjYW1lcmFfaW50cmluc2lj",
             "cxgCIAEoCzIhLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFJbnRyaW5zaWNzEjIK",
             "DGNhbWVyYV9jb2xvchgDIAEoCzIcLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFD",
@@ -35,27 +35,27 @@ namespace ARFlow {
             "pAEKEENhbWVyYUludHJpbnNpY3MSFgoOZm9jYWxfbGVuZ3RoX3gYASABKAIS",
             "FgoOZm9jYWxfbGVuZ3RoX3kYAiABKAISGQoRcHJpbmNpcGFsX3BvaW50X3gY",
             "AyABKAISGQoRcHJpbmNpcGFsX3BvaW50X3kYBCABKAISFAoMcmVzb2x1dGlv",
-            "bl94GAUgASgFEhQKDHJlc29sdXRpb25feRgGIAEoBRpQCgtDYW1lcmFDb2xv",
-            "chIPCgdlbmFibGVkGAEgASgIEhcKD3Jlc2l6ZV9mYWN0b3JfeBgCIAEoAhIX",
-            "Cg9yZXNpemVfZmFjdG9yX3kYAyABKAIagQEKC0NhbWVyYURlcHRoEg8KB2Vu",
-            "YWJsZWQYASABKAgSEQoJZGF0YV90eXBlGAIgASgJEiIKGmNvbmZpZGVuY2Vf",
-            "ZmlsdGVyaW5nX2xldmVsGAMgASgFEhQKDHJlc29sdXRpb25feBgEIAEoBRIU",
-            "CgxyZXNvbHV0aW9uX3kYBSABKAUaIgoPQ2FtZXJhVHJhbnNmb3JtEg8KB2Vu",
-            "YWJsZWQYASABKAgaQQoQQ2FtZXJhUG9pbnRDbG91ZBIPCgdlbmFibGVkGAEg",
-            "ASgIEhwKFGRlcHRoX3Vwc2NhbGVfZmFjdG9yGAIgASgCIiMKEFJlZ2lzdGVy",
-            "UmVzcG9uc2USDwoHbWVzc2FnZRgBIAEoCSKBAQoQRGF0YUZyYW1lUmVxdWVz",
-            "dBILCgN1aWQYASABKAkSEgoFY29sb3IYAiABKAxIAIgBARISCgVkZXB0aBgD",
-            "IAEoDEgBiAEBEhYKCXRyYW5zZm9ybRgEIAEoDEgCiAEBQggKBl9jb2xvckII",
-            "CgZfZGVwdGhCDAoKX3RyYW5zZm9ybSIkChFEYXRhRnJhbWVSZXNwb25zZRIP",
-            "CgdtZXNzYWdlGAEgASgJMnUKDUFSRmxvd1NlcnZpY2USLwoIcmVnaXN0ZXIS",
-            "EC5SZWdpc3RlclJlcXVlc3QaES5SZWdpc3RlclJlc3BvbnNlEjMKCmRhdGFf",
-            "ZnJhbWUSES5EYXRhRnJhbWVSZXF1ZXN0GhIuRGF0YUZyYW1lUmVzcG9uc2VC",
-            "CaoCBkFSRmxvd2IGcHJvdG8z"));
+            "bl94GAUgASgFEhQKDHJlc29sdXRpb25feRgGIAEoBRpjCgtDYW1lcmFDb2xv",
+            "chIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgCIAEoCRIXCg9yZXNp",
+            "emVfZmFjdG9yX3gYAyABKAISFwoPcmVzaXplX2ZhY3Rvcl95GAQgASgCGoEB",
+            "CgtDYW1lcmFEZXB0aBIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgC",
+            "IAEoCRIiChpjb25maWRlbmNlX2ZpbHRlcmluZ19sZXZlbBgDIAEoBRIUCgxy",
+            "ZXNvbHV0aW9uX3gYBCABKAUSFAoMcmVzb2x1dGlvbl95GAUgASgFGiIKD0Nh",
+            "bWVyYVRyYW5zZm9ybRIPCgdlbmFibGVkGAEgASgIGkEKEENhbWVyYVBvaW50",
+            "Q2xvdWQSDwoHZW5hYmxlZBgBIAEoCBIcChRkZXB0aF91cHNjYWxlX2ZhY3Rv",
+            "chgCIAEoAiIjChBSZWdpc3RlclJlc3BvbnNlEg8KB21lc3NhZ2UYASABKAki",
+            "gQEKEERhdGFGcmFtZVJlcXVlc3QSCwoDdWlkGAEgASgJEhIKBWNvbG9yGAIg",
+            "ASgMSACIAQESEgoFZGVwdGgYAyABKAxIAYgBARIWCgl0cmFuc2Zvcm0YBCAB",
+            "KAxIAogBAUIICgZfY29sb3JCCAoGX2RlcHRoQgwKCl90cmFuc2Zvcm0iJAoR",
+            "RGF0YUZyYW1lUmVzcG9uc2USDwoHbWVzc2FnZRgBIAEoCTJ1Cg1BUkZsb3dT",
+            "ZXJ2aWNlEi8KCHJlZ2lzdGVyEhAuUmVnaXN0ZXJSZXF1ZXN0GhEuUmVnaXN0",
+            "ZXJSZXNwb25zZRIzCgpkYXRhX2ZyYW1lEhEuRGF0YUZyYW1lUmVxdWVzdBoS",
+            "LkRhdGFGcmFtZVJlc3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest), global::ARFlow.RegisterRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraIntrinsics), global::ARFlow.RegisterRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraColor), global::ARFlow.RegisterRequest.Types.CameraColor.Parser, new[]{ "Enabled", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraColor), global::ARFlow.RegisterRequest.Types.CameraColor.Parser, new[]{ "Enabled", "DataType", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraDepth), global::ARFlow.RegisterRequest.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraTransform), global::ARFlow.RegisterRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPointCloud), global::ARFlow.RegisterRequest.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null)}),
@@ -899,6 +899,7 @@ namespace ARFlow {
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public CameraColor(CameraColor other) : this() {
           enabled_ = other.enabled_;
+          dataType_ = other.dataType_;
           resizeFactorX_ = other.resizeFactorX_;
           resizeFactorY_ = other.resizeFactorY_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -922,8 +923,20 @@ namespace ARFlow {
           }
         }
 
+        /// <summary>Field number for the "data_type" field.</summary>
+        public const int DataTypeFieldNumber = 2;
+        private string dataType_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public string DataType {
+          get { return dataType_; }
+          set {
+            dataType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
         /// <summary>Field number for the "resize_factor_x" field.</summary>
-        public const int ResizeFactorXFieldNumber = 2;
+        public const int ResizeFactorXFieldNumber = 3;
         private float resizeFactorX_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -935,7 +948,7 @@ namespace ARFlow {
         }
 
         /// <summary>Field number for the "resize_factor_y" field.</summary>
-        public const int ResizeFactorYFieldNumber = 3;
+        public const int ResizeFactorYFieldNumber = 4;
         private float resizeFactorY_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -962,6 +975,7 @@ namespace ARFlow {
             return true;
           }
           if (Enabled != other.Enabled) return false;
+          if (DataType != other.DataType) return false;
           if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ResizeFactorX, other.ResizeFactorX)) return false;
           if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ResizeFactorY, other.ResizeFactorY)) return false;
           return Equals(_unknownFields, other._unknownFields);
@@ -972,6 +986,7 @@ namespace ARFlow {
         public override int GetHashCode() {
           int hash = 1;
           if (Enabled != false) hash ^= Enabled.GetHashCode();
+          if (DataType.Length != 0) hash ^= DataType.GetHashCode();
           if (ResizeFactorX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ResizeFactorX);
           if (ResizeFactorY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ResizeFactorY);
           if (_unknownFields != null) {
@@ -996,12 +1011,16 @@ namespace ARFlow {
             output.WriteRawTag(8);
             output.WriteBool(Enabled);
           }
+          if (DataType.Length != 0) {
+            output.WriteRawTag(18);
+            output.WriteString(DataType);
+          }
           if (ResizeFactorX != 0F) {
-            output.WriteRawTag(21);
+            output.WriteRawTag(29);
             output.WriteFloat(ResizeFactorX);
           }
           if (ResizeFactorY != 0F) {
-            output.WriteRawTag(29);
+            output.WriteRawTag(37);
             output.WriteFloat(ResizeFactorY);
           }
           if (_unknownFields != null) {
@@ -1018,12 +1037,16 @@ namespace ARFlow {
             output.WriteRawTag(8);
             output.WriteBool(Enabled);
           }
+          if (DataType.Length != 0) {
+            output.WriteRawTag(18);
+            output.WriteString(DataType);
+          }
           if (ResizeFactorX != 0F) {
-            output.WriteRawTag(21);
+            output.WriteRawTag(29);
             output.WriteFloat(ResizeFactorX);
           }
           if (ResizeFactorY != 0F) {
-            output.WriteRawTag(29);
+            output.WriteRawTag(37);
             output.WriteFloat(ResizeFactorY);
           }
           if (_unknownFields != null) {
@@ -1038,6 +1061,9 @@ namespace ARFlow {
           int size = 0;
           if (Enabled != false) {
             size += 1 + 1;
+          }
+          if (DataType.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(DataType);
           }
           if (ResizeFactorX != 0F) {
             size += 1 + 4;
@@ -1059,6 +1085,9 @@ namespace ARFlow {
           }
           if (other.Enabled != false) {
             Enabled = other.Enabled;
+          }
+          if (other.DataType.Length != 0) {
+            DataType = other.DataType;
           }
           if (other.ResizeFactorX != 0F) {
             ResizeFactorX = other.ResizeFactorX;
@@ -1085,11 +1114,15 @@ namespace ARFlow {
                 Enabled = input.ReadBool();
                 break;
               }
-              case 21: {
-                ResizeFactorX = input.ReadFloat();
+              case 18: {
+                DataType = input.ReadString();
                 break;
               }
               case 29: {
+                ResizeFactorX = input.ReadFloat();
+                break;
+              }
+              case 37: {
                 ResizeFactorY = input.ReadFloat();
                 break;
               }
@@ -1112,11 +1145,15 @@ namespace ARFlow {
                 Enabled = input.ReadBool();
                 break;
               }
-              case 21: {
-                ResizeFactorX = input.ReadFloat();
+              case 18: {
+                DataType = input.ReadString();
                 break;
               }
               case 29: {
+                ResizeFactorX = input.ReadFloat();
+                break;
+              }
+              case 37: {
                 ResizeFactorY = input.ReadFloat();
                 break;
               }
