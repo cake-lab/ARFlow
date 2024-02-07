@@ -189,6 +189,8 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
         return pcd, clr
 
     def data_frame(self, request: service_pb2.DataFrameRequest, context):
+        decoded_data = {}
+
         # Save the frame data.
         time_stamp = (time.time_ns() - self._start_time) / 1e9
         self._frame_data.append(
@@ -200,11 +202,13 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
 
         if session_configs.camera_color.enabled:
             color_rgb = ARFlowService.decode_rgb_image(session_configs, request.color)
+            decoded_data["color_rgb"] = color_rgb
             color_rgb = np.flipud(color_rgb)
             rr.log("rgb", rr.Image(color_rgb))
 
         if session_configs.camera_depth.enabled:
             depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
+            decoded_data["depth_img"] = depth_img
             depth_img = np.flipud(depth_img)
             rr.log("depth", rr.DepthImage(depth_img, meter=1.0))
 
@@ -219,6 +223,7 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             # )
 
             transform = ARFlowService.decode_transform(request.transform)
+            decoded_data["transform"] = transform
             rr.log(
                 "world/camera",
                 rr.Transform3D(mat3x3=transform[:3, :3], translation=transform[:3, 3]),
@@ -232,10 +237,12 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             pcd, clr = ARFlowService.decode_point_cloud(
                 session_configs, k, color_rgb, depth_img, transform
             )
+            decoded_data["point_cloud_pcd"] = pcd
+            decoded_data["point_cloud_clr"] = clr
             rr.log("world/point_cloud", rr.Points3D(pcd, colors=clr))
 
         # Call the for user extension code.
-        self.on_frame_received(request)
+        self.on_frame_received(decoded_data)
 
         return service_pb2.DataFrameResponse(message="OK")
 
