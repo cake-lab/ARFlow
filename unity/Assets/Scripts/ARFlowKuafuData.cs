@@ -6,13 +6,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 
-public class ARFlowDeviceSample : MonoBehaviour
+public class ARFlowKuafuData : MonoBehaviour
 {
     public ARCameraManager cameraManager;
     public AROcclusionManager occlusionManager;
 
     public Button connectButton;
-    public Button startPauseButton;
+    public Button triggerButton;
 
     private ARFlowClient _client;
     private Vector2Int _sampleSize;
@@ -23,16 +23,13 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         // const string serverURL = "http://192.168.1.100:8500";
         // const string serverURL = "http://169.254.189.74:8500";
-        // const string serverURL = "http://192.168.1.139:8500";
-        const string serverURL = "http://192.168.1.100:8500";
+        // const string serverURL = "http://100.71.197.137:8500";
+        const string serverURL = "http://192.168.1.139:8500";
         _client = new ARFlowClient(serverURL);
 
         connectButton.onClick.AddListener(OnConnectButtonClick);
-        startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
+        triggerButton.onClick.AddListener(OnTriggerButtonClick);
 
-        // OnConnectButtonClick();
-
-        // The following suppose to limit the fps to 30, but it doesn't work.
         // QualitySettings.vSyncCount = 0;
         // Application.targetFrameRate = 30;
     }
@@ -55,22 +52,22 @@ public class ARFlowDeviceSample : MonoBehaviour
                 {
                     FocalLengthX = k.focalLength.x,
                     FocalLengthY = k.focalLength.y,
-                    ResolutionX = k.resolution.x,
-                    ResolutionY = k.resolution.y,
                     PrincipalPointX = k.principalPoint.x,
                     PrincipalPointY = k.principalPoint.y,
+                    ResolutionX = k.resolution.x,
+                    ResolutionY = k.resolution.y,
                 },
                 CameraColor = new RegisterRequest.Types.CameraColor()
                 {
                     Enabled = true,
                     DataType = "YCbCr420",
                     ResizeFactorX = depthImage.dimensions.x / (float)colorImage.dimensions.x,
-                    ResizeFactorY = depthImage.dimensions.y / (float)colorImage.dimensions.y,
+                    ResizeFactorY = depthImage.dimensions.x / (float)colorImage.dimensions.x,
                 },
                 CameraDepth = new RegisterRequest.Types.CameraDepth()
                 {
                     Enabled = true,
-                    DataType = "u16", // f32 for iOS, u16 for Android
+                    DataType = "f32", // Float32 for iOS, UInt16 for Android
                     ConfidenceFilteringLevel = 0,
                     ResolutionX = depthImage.dimensions.x,
                     ResolutionY = depthImage.dimensions.y
@@ -89,28 +86,28 @@ public class ARFlowDeviceSample : MonoBehaviour
             depthImage.Dispose();
 
             _client.Connect(requestData);
-
-            // OnStartPauseButtonClick();
         }
-        catch (Exception e)
+        catch (System.Exception e)
         {
             Debug.LogError(e);
         }
     }
 
-    private void OnStartPauseButtonClick()
+    private void OnTriggerButtonClick()
     {
-        Debug.Log($"Current framerate: {Application.targetFrameRate}");
+        // _enabled = !_enabled;
+        // triggerButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";
 
-        _enabled = !_enabled;
-        startPauseButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";
+        // Debug.Log($"Current framerate: {Application.targetFrameRate}");
+
+        UploadFrame();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!_enabled) return;
-        UploadFrame();
+        // if (!_enabled) return;
+        // UploadFrame();
     }
 
     private void UploadFrame()
@@ -128,7 +125,6 @@ public class ARFlowDeviceSample : MonoBehaviour
             m.m10, m.m11, m.m12, m.m13,
             m.m20, m.m21, m.m22, m.m23
         }, 0, cameraTransformBytes, 0, transformLength);
-
 
         _client.SendFrame(new DataFrameRequest()
         {

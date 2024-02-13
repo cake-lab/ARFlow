@@ -44,13 +44,12 @@ namespace ARFlow {
             "bWVyYVRyYW5zZm9ybRIPCgdlbmFibGVkGAEgASgIGkEKEENhbWVyYVBvaW50",
             "Q2xvdWQSDwoHZW5hYmxlZBgBIAEoCBIcChRkZXB0aF91cHNjYWxlX2ZhY3Rv",
             "chgCIAEoAiIjChBSZWdpc3RlclJlc3BvbnNlEg8KB21lc3NhZ2UYASABKAki",
-            "gQEKEERhdGFGcmFtZVJlcXVlc3QSCwoDdWlkGAEgASgJEhIKBWNvbG9yGAIg",
-            "ASgMSACIAQESEgoFZGVwdGgYAyABKAxIAYgBARIWCgl0cmFuc2Zvcm0YBCAB",
-            "KAxIAogBAUIICgZfY29sb3JCCAoGX2RlcHRoQgwKCl90cmFuc2Zvcm0iJAoR",
-            "RGF0YUZyYW1lUmVzcG9uc2USDwoHbWVzc2FnZRgBIAEoCTJ1Cg1BUkZsb3dT",
-            "ZXJ2aWNlEi8KCHJlZ2lzdGVyEhAuUmVnaXN0ZXJSZXF1ZXN0GhEuUmVnaXN0",
-            "ZXJSZXNwb25zZRIzCgpkYXRhX2ZyYW1lEhEuRGF0YUZyYW1lUmVxdWVzdBoS",
-            "LkRhdGFGcmFtZVJlc3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
+            "UAoQRGF0YUZyYW1lUmVxdWVzdBILCgN1aWQYASABKAkSDQoFY29sb3IYAiAB",
+            "KAwSDQoFZGVwdGgYAyABKAwSEQoJdHJhbnNmb3JtGAQgASgMIiQKEURhdGFG",
+            "cmFtZVJlc3BvbnNlEg8KB21lc3NhZ2UYASABKAkydQoNQVJGbG93U2Vydmlj",
+            "ZRIvCghyZWdpc3RlchIQLlJlZ2lzdGVyUmVxdWVzdBoRLlJlZ2lzdGVyUmVz",
+            "cG9uc2USMwoKZGF0YV9mcmFtZRIRLkRhdGFGcmFtZVJlcXVlc3QaEi5EYXRh",
+            "RnJhbWVSZXNwb25zZUIJqgIGQVJGbG93YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -60,7 +59,7 @@ namespace ARFlow {
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraTransform), global::ARFlow.RegisterRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPointCloud), global::ARFlow.RegisterRequest.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterResponse), global::ARFlow.RegisterResponse.Parser, new[]{ "Message" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform" }, new[]{ "Color", "Depth", "Transform" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameResponse), global::ARFlow.DataFrameResponse.Parser, new[]{ "Message" }, null, null, null, null)
           }));
     }
@@ -68,6 +67,7 @@ namespace ARFlow {
 
   }
   #region Messages
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class RegisterRequest : pb::IMessage<RegisterRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -490,6 +490,7 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class CameraIntrinsics : pb::IMessage<CameraIntrinsics>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -864,6 +865,7 @@ namespace ARFlow {
 
       }
 
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class CameraColor : pb::IMessage<CameraColor>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -1164,6 +1166,7 @@ namespace ARFlow {
 
       }
 
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class CameraDepth : pb::IMessage<CameraDepth>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -1501,6 +1504,7 @@ namespace ARFlow {
 
       }
 
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class CameraTransform : pb::IMessage<CameraTransform>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -1690,6 +1694,7 @@ namespace ARFlow {
 
       }
 
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class CameraPointCloud : pb::IMessage<CameraPointCloud>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -1921,6 +1926,7 @@ namespace ARFlow {
 
   }
 
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class RegisterResponse : pb::IMessage<RegisterResponse>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -2110,6 +2116,7 @@ namespace ARFlow {
 
   }
 
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class DataFrameRequest : pb::IMessage<DataFrameRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -2171,80 +2178,38 @@ namespace ARFlow {
 
     /// <summary>Field number for the "color" field.</summary>
     public const int ColorFieldNumber = 2;
-    private readonly static pb::ByteString ColorDefaultValue = pb::ByteString.Empty;
-
-    private pb::ByteString color_;
+    private pb::ByteString color_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pb::ByteString Color {
-      get { return color_ ?? ColorDefaultValue; }
+      get { return color_; }
       set {
         color_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
-    /// <summary>Gets whether the "color" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasColor {
-      get { return color_ != null; }
-    }
-    /// <summary>Clears the value of the "color" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearColor() {
-      color_ = null;
-    }
 
     /// <summary>Field number for the "depth" field.</summary>
     public const int DepthFieldNumber = 3;
-    private readonly static pb::ByteString DepthDefaultValue = pb::ByteString.Empty;
-
-    private pb::ByteString depth_;
+    private pb::ByteString depth_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pb::ByteString Depth {
-      get { return depth_ ?? DepthDefaultValue; }
+      get { return depth_; }
       set {
         depth_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
-    /// <summary>Gets whether the "depth" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasDepth {
-      get { return depth_ != null; }
-    }
-    /// <summary>Clears the value of the "depth" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearDepth() {
-      depth_ = null;
-    }
 
     /// <summary>Field number for the "transform" field.</summary>
     public const int TransformFieldNumber = 4;
-    private readonly static pb::ByteString TransformDefaultValue = pb::ByteString.Empty;
-
-    private pb::ByteString transform_;
+    private pb::ByteString transform_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pb::ByteString Transform {
-      get { return transform_ ?? TransformDefaultValue; }
+      get { return transform_; }
       set {
         transform_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
-    }
-    /// <summary>Gets whether the "transform" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasTransform {
-      get { return transform_ != null; }
-    }
-    /// <summary>Clears the value of the "transform" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearTransform() {
-      transform_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2274,9 +2239,9 @@ namespace ARFlow {
     public override int GetHashCode() {
       int hash = 1;
       if (Uid.Length != 0) hash ^= Uid.GetHashCode();
-      if (HasColor) hash ^= Color.GetHashCode();
-      if (HasDepth) hash ^= Depth.GetHashCode();
-      if (HasTransform) hash ^= Transform.GetHashCode();
+      if (Color.Length != 0) hash ^= Color.GetHashCode();
+      if (Depth.Length != 0) hash ^= Depth.GetHashCode();
+      if (Transform.Length != 0) hash ^= Transform.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2299,15 +2264,15 @@ namespace ARFlow {
         output.WriteRawTag(10);
         output.WriteString(Uid);
       }
-      if (HasColor) {
+      if (Color.Length != 0) {
         output.WriteRawTag(18);
         output.WriteBytes(Color);
       }
-      if (HasDepth) {
+      if (Depth.Length != 0) {
         output.WriteRawTag(26);
         output.WriteBytes(Depth);
       }
-      if (HasTransform) {
+      if (Transform.Length != 0) {
         output.WriteRawTag(34);
         output.WriteBytes(Transform);
       }
@@ -2325,15 +2290,15 @@ namespace ARFlow {
         output.WriteRawTag(10);
         output.WriteString(Uid);
       }
-      if (HasColor) {
+      if (Color.Length != 0) {
         output.WriteRawTag(18);
         output.WriteBytes(Color);
       }
-      if (HasDepth) {
+      if (Depth.Length != 0) {
         output.WriteRawTag(26);
         output.WriteBytes(Depth);
       }
-      if (HasTransform) {
+      if (Transform.Length != 0) {
         output.WriteRawTag(34);
         output.WriteBytes(Transform);
       }
@@ -2350,13 +2315,13 @@ namespace ARFlow {
       if (Uid.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Uid);
       }
-      if (HasColor) {
+      if (Color.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(Color);
       }
-      if (HasDepth) {
+      if (Depth.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(Depth);
       }
-      if (HasTransform) {
+      if (Transform.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(Transform);
       }
       if (_unknownFields != null) {
@@ -2374,13 +2339,13 @@ namespace ARFlow {
       if (other.Uid.Length != 0) {
         Uid = other.Uid;
       }
-      if (other.HasColor) {
+      if (other.Color.Length != 0) {
         Color = other.Color;
       }
-      if (other.HasDepth) {
+      if (other.Depth.Length != 0) {
         Depth = other.Depth;
       }
-      if (other.HasTransform) {
+      if (other.Transform.Length != 0) {
         Transform = other.Transform;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -2452,6 +2417,7 @@ namespace ARFlow {
 
   }
 
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class DataFrameResponse : pb::IMessage<DataFrameResponse>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage

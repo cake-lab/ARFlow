@@ -60,9 +60,9 @@ message RegisterResponse {
 
 message DataFrameRequest {
     string uid = 1;
-    optional bytes color = 2;
-    optional bytes depth = 3;
-    optional bytes transform = 4;
+    bytes color = 2;
+    bytes depth = 3;
+    bytes transform = 4;
 }
 
 message DataFrameResponse {

@@ -17,15 +17,15 @@ public class ARFlowMockDataSample : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string serverURL = addressInput.text;
-        _client = new ARFlowClient($"http://{serverURL}");
-
         connectButton.onClick.AddListener(OnConnectButtonClick);
         sendButton.onClick.AddListener(OnSendButtonClick);
     }
 
     private void OnConnectButtonClick()
     {
+        string serverURL = addressInput.text;
+        _client = new ARFlowClient($"http://{serverURL}");
+
         _sampleSize = new Vector2Int(256, 192);
 
         _client.Connect(new RegisterRequest()
@@ -43,13 +43,13 @@ public class ARFlowMockDataSample : MonoBehaviour
             CameraColor = new RegisterRequest.Types.CameraColor()
             {
                 Enabled = true,
+                DataType = "YCbCr420",
                 ResizeFactorX = 1.0f,
                 ResizeFactorY = 1.0f,
             },
             CameraDepth = new RegisterRequest.Types.CameraDepth()
             {
                 Enabled = false,
-                DataType = "f32",
             },
             CameraTransform = new RegisterRequest.Types.CameraTransform()
             {

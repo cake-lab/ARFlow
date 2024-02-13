@@ -1,3 +1,3 @@
 #!/bin/sh
 
-python examples/simple_server.py
+poetry run python examples/simple_server.py

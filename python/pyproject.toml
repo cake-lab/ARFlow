@@ -4,19 +4,28 @@ version = "0.2.0"
 description = ""
 authors = ["Yiqin Zhao <yiqinzhao@outlook.com>"]
 readme = "README.md"
-packages = [{include = "arflow"}]
+packages = [{ include = "arflow" }]
 license = "GPL-3.0"
 homepage = "https://cake.wpi.edu/ARFlow/"
 repository = "https://github.com/cake-lab/ARFlow"
 
+[tool.poetry.urls]
+"Paper"  = "https://doi.org/10.1145/3638550.3643617"
+"Video" = "https://youtu.be/mml8YrCgfTk"
+
 [tool.poetry.dependencies]
-python = ">=3.8,<3.13"
+python = ">=3.8,<3.11"
 rerun-sdk = "^0.12.1"
-grpcio = "^1.60.0"
-grpcio-tools = "^1.60.0"
+grpcio = "*"
+grpcio-tools = "*"
 
 [tool.poetry.group.dev.dependencies]
 mkdocs = "^1.5.3"
+
+# [tool.poetry.group.legacy.dependencies]
+# grpcio-tools = "==1.28.1"
+# protobuf = "==3.19.6"
+# mypy-protobuf = "==1.16.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -24,5 +33,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 serve = "arflow.main:serve"
-example_simple_server = "examples.simple_server:main"
-example_simple_replay = "examples.simple_replay:main"
