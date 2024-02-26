@@ -1,13 +1,3 @@
-# ARFlow
-
-[ARFlow: A Framework for Simplifying AR Experimentation Workflow](https://doi.org/10.1145/3638550.3643617)
-
-[Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#bibtex) | [Project Page](https://cake.wpi.edu/ARFlow/) | [Video](https://youtu.be/mml8YrCgfTk)
-
-Watch our demo video:
-
-[![Demo video](https://img.youtube.com/vi/mml8YrCgfTk/maxresdefault.jpg)](https://youtu.be/mml8YrCgfTk)
-
 # Get Started With the ARFlow Server
 
 ARFlow server can be simply installed via `pip`:
