@@ -73,9 +73,12 @@ class XiheService(arflow.ARFlowService):
         p = (p - xihenet_utils.n_min) / xihenet_utils.n_scale
         p = p.numpy()
         coefficients = p.reshape((-1)).reshape((3, -1))
+        t = coefficients
         coefficients = np.moveaxis(coefficients, 0, -1)
         coefficients = coefficients.reshape((-1))
         # coefficients = coefficients.tolist()
+
+        self.result_buffer.append(",".join([str(v) for v in t.flatten().tolist()]))
 
         shc = u3d.SphericalHarmonics.from_array(coefficients, channel_order="last")
         shc_image = shc.reconstruct_to_canvas()

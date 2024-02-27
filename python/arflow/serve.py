@@ -30,6 +30,9 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     def __init__(self) -> None:
         super().__init__()
 
+        self.rr = rr
+        self.result_buffer = []
+
     def register(
         self, request: service_pb2.RegisterRequest, context, uid: str = None
     ) -> service_pb2.RegisterResponse:
@@ -245,20 +248,21 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
         # Call the for user extension code.
         self.on_frame_received(decoded_data)
 
-        return service_pb2.DataFrameResponse(message="OK")
+        if len(self.result_buffer) > 0:
+            r = self.result_buffer.pop()
+            return service_pb2.DataFrameResponse(message=r)
+        else:
+            return service_pb2.DataFrameResponse(message="")
 
     def on_frame_received(self, frame_data: service_pb2.DataFrameRequest):
         pass
 
     def on_program_exit(self, path_to_save):
         """Save the data and exit."""
-        print("Saving the data...")
         f_name = strftime("%Y_%m_%d_%H_%M_%S", gmtime())
         save_path = os.path.join(path_to_save, f"frames_{f_name}.pkl")
         with open(save_path, "wb") as f:
             pickle.dump(self._frame_data, f)
-
-        print(f"Data saved to {save_path}")
 
 
 def create_server(service, port: int = 8500, path_to_save: str | None = "./"):

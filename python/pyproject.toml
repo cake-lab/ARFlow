@@ -21,6 +21,7 @@ grpcio-tools = "*"
 torch = "^2.2.1"
 pandas = "^2.2.1"
 imageio = "^2.34.0"
+ipykernel = "^6.29.3"
 
 [tool.poetry.group.dev.dependencies]
 mkdocs = "^1.5.3"

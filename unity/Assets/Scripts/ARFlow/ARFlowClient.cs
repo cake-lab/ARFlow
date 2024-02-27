@@ -44,16 +44,20 @@ namespace ARFlow
             }
         }
 
-        public void SendFrame(DataFrameRequest frameData)
+        public string SendFrame(DataFrameRequest frameData)
         {
+            string res = "";
             frameData.Uid = _sessionId;
             try
             {
-                _client.data_frameAsync(frameData)
-                .ResponseAsync.ContinueWith(response =>
-                {
-                    Debug.Log(response);
-                });
+                // _client.data_frameAsync(frameData)
+                // .ResponseAsync.ContinueWith(response =>
+                // {
+                //     Debug.Log(response);
+                // });
+                var response = _client.data_frame(frameData); ;
+                res = response.Message;
+
             }
             catch (Exception e)
             {
@@ -61,6 +65,8 @@ namespace ARFlow
                 // Network, device image, camera intrinsics
                 Debug.LogError(e);
             }
+
+            return res;
         }
     }
 }
