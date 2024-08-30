@@ -1,0 +1,35 @@
+{
+    "metadata": [
+        {
+            "src": [
+                {
+                    "src": "../",
+                    "files": ["unity.sln"]
+                }
+            ],
+            "dest": "api",
+            "filter": "filterConfig.yml"
+        }
+    ],
+    "build": {
+        "content": [
+            {
+                "files": ["**/*.{md,yml}"],
+                "exclude": ["_site/**"]
+            }
+        ],
+        "resource": [
+            {
+                "files": ["images/**"]
+            }
+        ],
+        "output": "../../website/docs/client",
+        "template": ["default", "modern"],
+        "globalMetadata": {
+            "_appName": "ARFlow",
+            "_appTitle": "ARFlow",
+            "_enableSearch": true,
+            "pdf": true
+        }
+    }
+}
