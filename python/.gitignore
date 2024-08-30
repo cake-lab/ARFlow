@@ -254,3 +254,9 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,visualstudiocode,python
 
 test_data/*
+docs/*
+
+# Ignore all gRPC-generated files
+# arflow/service_pb2_grpc.py
+# arflow/service_pb2.py
+# arflow/service_pb2.pyi

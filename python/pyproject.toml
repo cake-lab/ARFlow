@@ -19,8 +19,8 @@ rerun-sdk = "^0.12.1"
 grpcio = "*"
 grpcio-tools = "*"
 
-[tool.poetry.group.dev.dependencies]
-mkdocs = "^1.5.3"
+[tool.poetry.group.docs.dependencies]
+pdoc = "^14.6.1"
 
 # [tool.poetry.group.legacy.dependencies]
 # grpcio-tools = "==1.28.1"
@@ -32,4 +32,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-serve = "arflow.main:serve"
+serve = "arflow.serve:serve"
+docs = "arflow.docs:make_docs"
+simple-server = "examples.simple_server:main"
+simple-replay = "examples.simple_replay:main"

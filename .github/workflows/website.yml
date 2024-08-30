@@ -1,0 +1,94 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches:
+      - main
+    paths:
+      - 'python/**'
+      - '.github/workflows/website.yml'
+    
+    # Alternative: only build for tags.
+    # tags:
+    #   - '*'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# security: restrict permissions for CI jobs.
+permissions:
+  contents: read
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    # defaults:
+    #   run:
+    #     working-directory: ./python
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10.12'
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: '1.8.3'
+
+      - name: Setup a local virtual environment (if no poetry.toml file)
+        working-directory: ./python
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+
+      - name: Define a cache for the virtual environment based on the dependencies lock file
+        uses: actions/cache@v3
+        with:
+          path: ./python/.venv
+          key: venv-${{ hashFiles('./python/poetry.lock') }}
+        
+      - name: Install docs dependencies
+        working-directory: ./python
+        run: poetry install --with docs
+
+      - name: Build the documentation
+        working-directory: ./python
+        run: poetry run docs
+      
+      - name: Move docs to website directory
+        run: |
+          mkdir -p ./website/docs/client/
+          cp -r ./python/docs/* ./website/docs/client/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./website
+
+  # Single deploy job since we're just deploying
+  deploy:
+    needs: build-docs
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # - name: Checkout
+      #   uses: actions/checkout@v4
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v4
+      # - name: Upload artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     # Upload entire repository
+      #     path: './website'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

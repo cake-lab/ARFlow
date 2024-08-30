@@ -56,3 +56,13 @@ A library to write **concurrent** code using using the `async` and `await` synta
 A tool to build time aware visualizations of multimodal data. 
 
 ARFlow uses the Rerun Python SDK to visualize the data collected by the ARFlow server.
+
+### Documentation
+
+ARFlow uses [`pdoc`](https://pdoc.dev). You can refer to their documentation for more information on how to generate documentation. If you create a new submodule, make sure to add it to the `__all__` list defined in the `_init__.py` file of the `arflow` package.
+
+To preview the documentation locally, run:
+
+```bash
+poetry run pdoc <module_name>
+```

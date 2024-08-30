@@ -72,10 +72,10 @@ class RegisterRequest(_message.Message):
     def __init__(self, device_name: _Optional[str] = ..., camera_intrinsics: _Optional[_Union[RegisterRequest.CameraIntrinsics, _Mapping]] = ..., camera_color: _Optional[_Union[RegisterRequest.CameraColor, _Mapping]] = ..., camera_depth: _Optional[_Union[RegisterRequest.CameraDepth, _Mapping]] = ..., camera_transform: _Optional[_Union[RegisterRequest.CameraTransform, _Mapping]] = ..., camera_point_cloud: _Optional[_Union[RegisterRequest.CameraPointCloud, _Mapping]] = ...) -> None: ...
 
 class RegisterResponse(_message.Message):
-    __slots__ = ("message",)
-    MESSAGE_FIELD_NUMBER: _ClassVar[int]
-    message: str
-    def __init__(self, message: _Optional[str] = ...) -> None: ...
+    __slots__ = ("uid",)
+    UID_FIELD_NUMBER: _ClassVar[int]
+    uid: str
+    def __init__(self, uid: _Optional[str] = ...) -> None: ...
 
 class DataFrameRequest(_message.Message):
     __slots__ = ("uid", "color", "depth", "transform")
