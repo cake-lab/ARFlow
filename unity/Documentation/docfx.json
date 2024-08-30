@@ -23,7 +23,7 @@
                 "files": ["images/**"]
             }
         ],
-        "output": "../../website/docs/client",
+        "output": "../client",
         "template": ["default", "modern"],
         "globalMetadata": {
             "_appName": "ARFlow",
