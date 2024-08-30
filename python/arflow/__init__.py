@@ -1,3 +1,7 @@
+"""
+.. include:: ../README.md
+"""
+
 from arflow.core import *  # noqa
 from arflow.replay import *  # noqa
 from arflow.serve import *  # noqa
