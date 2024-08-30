@@ -34,5 +34,3 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 serve = "arflow.serve:serve"
 docs = "arflow.docs:make_docs"
-simple-server = "examples.simple_server:main"
-simple-replay = "examples.simple_replay:main"
