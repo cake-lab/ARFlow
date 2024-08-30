@@ -33,4 +33,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 serve = "arflow.serve:serve"
-docs = "arflow.docs:make_docs"
+make-docs = "arflow.docs:make_docs"
