@@ -1,0 +1,57 @@
+### YamlMime:ManagedReference
+items:
+- uid: ARFlow.RegisterRequest.Types
+  commentId: T:ARFlow.RegisterRequest.Types
+  id: RegisterRequest.Types
+  parent: ARFlow
+  children: []
+  langs:
+  - csharp
+  - vb
+  name: RegisterRequest.Types
+  nameWithType: RegisterRequest.Types
+  fullName: ARFlow.RegisterRequest.Types
+  type: Class
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Types
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 489
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Container for nested types declared in the RegisterRequest message type.
+  example: []
+  syntax:
+    content: public static class RegisterRequest.Types
+    content.vb: Public Module RegisterRequest.Types
+  inheritance:
+  - System.Object
+references:
+- uid: ARFlow
+  commentId: N:ARFlow
+  href: ARFlow.html
+  name: ARFlow
+  nameWithType: ARFlow
+  fullName: ARFlow
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System

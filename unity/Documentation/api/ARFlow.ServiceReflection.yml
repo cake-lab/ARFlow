@@ -1,0 +1,132 @@
+### YamlMime:ManagedReference
+items:
+- uid: ARFlow.ServiceReflection
+  commentId: T:ARFlow.ServiceReflection
+  id: ServiceReflection
+  parent: ARFlow
+  children:
+  - ARFlow.ServiceReflection.Descriptor
+  langs:
+  - csharp
+  - vb
+  name: ServiceReflection
+  nameWithType: ServiceReflection
+  fullName: ARFlow.ServiceReflection
+  type: Class
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ServiceReflection
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 14
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Holder for reflection information generated from protos/arflow/service.proto
+  example: []
+  syntax:
+    content: public static class ServiceReflection
+    content.vb: Public Module ServiceReflection
+  inheritance:
+  - System.Object
+- uid: ARFlow.ServiceReflection.Descriptor
+  commentId: P:ARFlow.ServiceReflection.Descriptor
+  id: Descriptor
+  parent: ARFlow.ServiceReflection
+  langs:
+  - csharp
+  - vb
+  name: Descriptor
+  nameWithType: ServiceReflection.Descriptor
+  fullName: ARFlow.ServiceReflection.Descriptor
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Descriptor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 18
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: File descriptor for protos/arflow/service.proto
+  example: []
+  syntax:
+    content: public static FileDescriptor Descriptor { get; }
+    parameters: []
+    return:
+      type: Google.Protobuf.Reflection.FileDescriptor
+    content.vb: Public Shared ReadOnly Property Descriptor As FileDescriptor
+  overload: ARFlow.ServiceReflection.Descriptor*
+references:
+- uid: ARFlow
+  commentId: N:ARFlow
+  href: ARFlow.html
+  name: ARFlow
+  nameWithType: ARFlow
+  fullName: ARFlow
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: ARFlow.ServiceReflection.Descriptor*
+  commentId: Overload:ARFlow.ServiceReflection.Descriptor
+  href: ARFlow.ServiceReflection.html#ARFlow_ServiceReflection_Descriptor
+  name: Descriptor
+  nameWithType: ServiceReflection.Descriptor
+  fullName: ARFlow.ServiceReflection.Descriptor
+- uid: Google.Protobuf.Reflection.FileDescriptor
+  commentId: T:Google.Protobuf.Reflection.FileDescriptor
+  parent: Google.Protobuf.Reflection
+  isExternal: true
+  name: FileDescriptor
+  nameWithType: FileDescriptor
+  fullName: Google.Protobuf.Reflection.FileDescriptor
+- uid: Google.Protobuf.Reflection
+  commentId: N:Google.Protobuf.Reflection
+  isExternal: true
+  name: Google.Protobuf.Reflection
+  nameWithType: Google.Protobuf.Reflection
+  fullName: Google.Protobuf.Reflection
+  spec.csharp:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true
+  spec.vb:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true

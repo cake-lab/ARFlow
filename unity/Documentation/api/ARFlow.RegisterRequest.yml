@@ -1,0 +1,1340 @@
+### YamlMime:ManagedReference
+items:
+- uid: ARFlow.RegisterRequest
+  commentId: T:ARFlow.RegisterRequest
+  id: RegisterRequest
+  parent: ARFlow
+  children:
+  - ARFlow.RegisterRequest.#ctor
+  - ARFlow.RegisterRequest.#ctor(ARFlow.RegisterRequest)
+  - ARFlow.RegisterRequest.CalculateSize
+  - ARFlow.RegisterRequest.CameraColor
+  - ARFlow.RegisterRequest.CameraColorFieldNumber
+  - ARFlow.RegisterRequest.CameraDepth
+  - ARFlow.RegisterRequest.CameraDepthFieldNumber
+  - ARFlow.RegisterRequest.CameraIntrinsics
+  - ARFlow.RegisterRequest.CameraIntrinsicsFieldNumber
+  - ARFlow.RegisterRequest.CameraPointCloud
+  - ARFlow.RegisterRequest.CameraPointCloudFieldNumber
+  - ARFlow.RegisterRequest.CameraTransform
+  - ARFlow.RegisterRequest.CameraTransformFieldNumber
+  - ARFlow.RegisterRequest.Clone
+  - ARFlow.RegisterRequest.Descriptor
+  - ARFlow.RegisterRequest.DeviceName
+  - ARFlow.RegisterRequest.DeviceNameFieldNumber
+  - ARFlow.RegisterRequest.Equals(ARFlow.RegisterRequest)
+  - ARFlow.RegisterRequest.Equals(System.Object)
+  - ARFlow.RegisterRequest.GetHashCode
+  - ARFlow.RegisterRequest.MergeFrom(ARFlow.RegisterRequest)
+  - ARFlow.RegisterRequest.MergeFrom(Google.Protobuf.CodedInputStream)
+  - ARFlow.RegisterRequest.Parser
+  - ARFlow.RegisterRequest.ToString
+  - ARFlow.RegisterRequest.WriteTo(Google.Protobuf.CodedOutputStream)
+  langs:
+  - csharp
+  - vb
+  name: RegisterRequest
+  nameWithType: RegisterRequest
+  fullName: ARFlow.RegisterRequest
+  type: Class
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: RegisterRequest
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 69
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public sealed class RegisterRequest
+    content.vb: Public NotInheritable Class RegisterRequest
+  inheritance:
+  - System.Object
+- uid: ARFlow.RegisterRequest.Parser
+  commentId: P:ARFlow.RegisterRequest.Parser
+  id: Parser
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: Parser
+  nameWithType: RegisterRequest.Parser
+  fullName: ARFlow.RegisterRequest.Parser
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Parser
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 77
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public static MessageParser<RegisterRequest> Parser { get; }
+    parameters: []
+    return:
+      type: Google.Protobuf.MessageParser{ARFlow.RegisterRequest}
+    content.vb: Public Shared ReadOnly Property Parser As MessageParser(Of RegisterRequest)
+  overload: ARFlow.RegisterRequest.Parser*
+- uid: ARFlow.RegisterRequest.Descriptor
+  commentId: P:ARFlow.RegisterRequest.Descriptor
+  id: Descriptor
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: Descriptor
+  nameWithType: RegisterRequest.Descriptor
+  fullName: ARFlow.RegisterRequest.Descriptor
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Descriptor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 81
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public static MessageDescriptor Descriptor { get; }
+    parameters: []
+    return:
+      type: Google.Protobuf.Reflection.MessageDescriptor
+    content.vb: Public Shared ReadOnly Property Descriptor As MessageDescriptor
+  overload: ARFlow.RegisterRequest.Descriptor*
+- uid: ARFlow.RegisterRequest.#ctor
+  commentId: M:ARFlow.RegisterRequest.#ctor
+  id: '#ctor'
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: RegisterRequest()
+  nameWithType: RegisterRequest.RegisterRequest()
+  fullName: ARFlow.RegisterRequest.RegisterRequest()
+  type: Constructor
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: .ctor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 93
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public RegisterRequest()
+    content.vb: Public Sub New()
+  overload: ARFlow.RegisterRequest.#ctor*
+  nameWithType.vb: RegisterRequest.New()
+  fullName.vb: ARFlow.RegisterRequest.New()
+  name.vb: New()
+- uid: ARFlow.RegisterRequest.#ctor(ARFlow.RegisterRequest)
+  commentId: M:ARFlow.RegisterRequest.#ctor(ARFlow.RegisterRequest)
+  id: '#ctor(ARFlow.RegisterRequest)'
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: RegisterRequest(RegisterRequest)
+  nameWithType: RegisterRequest.RegisterRequest(RegisterRequest)
+  fullName: ARFlow.RegisterRequest.RegisterRequest(ARFlow.RegisterRequest)
+  type: Constructor
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: .ctor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 101
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public RegisterRequest(RegisterRequest other)
+    parameters:
+    - id: other
+      type: ARFlow.RegisterRequest
+    content.vb: Public Sub New(other As RegisterRequest)
+  overload: ARFlow.RegisterRequest.#ctor*
+  nameWithType.vb: RegisterRequest.New(RegisterRequest)
+  fullName.vb: ARFlow.RegisterRequest.New(ARFlow.RegisterRequest)
+  name.vb: New(RegisterRequest)
+- uid: ARFlow.RegisterRequest.Clone
+  commentId: M:ARFlow.RegisterRequest.Clone
+  id: Clone
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: Clone()
+  nameWithType: RegisterRequest.Clone()
+  fullName: ARFlow.RegisterRequest.Clone()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Clone
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 113
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Creates a deep clone of this object.
+  example: []
+  syntax:
+    content: public RegisterRequest Clone()
+    return:
+      type: ARFlow.RegisterRequest
+      description: A deep clone of this object.
+    content.vb: Public Function Clone() As RegisterRequest
+  overload: ARFlow.RegisterRequest.Clone*
+- uid: ARFlow.RegisterRequest.DeviceNameFieldNumber
+  commentId: F:ARFlow.RegisterRequest.DeviceNameFieldNumber
+  id: DeviceNameFieldNumber
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: DeviceNameFieldNumber
+  nameWithType: RegisterRequest.DeviceNameFieldNumber
+  fullName: ARFlow.RegisterRequest.DeviceNameFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: DeviceNameFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 120
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "device_name" field.
+  example: []
+  syntax:
+    content: public const int DeviceNameFieldNumber = 1
+    return:
+      type: System.Int32
+    content.vb: Public Const DeviceNameFieldNumber As Integer = 1
+- uid: ARFlow.RegisterRequest.DeviceName
+  commentId: P:ARFlow.RegisterRequest.DeviceName
+  id: DeviceName
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: DeviceName
+  nameWithType: RegisterRequest.DeviceName
+  fullName: ARFlow.RegisterRequest.DeviceName
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: DeviceName
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 122
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public string DeviceName { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DeviceName As String
+  overload: ARFlow.RegisterRequest.DeviceName*
+- uid: ARFlow.RegisterRequest.CameraIntrinsicsFieldNumber
+  commentId: F:ARFlow.RegisterRequest.CameraIntrinsicsFieldNumber
+  id: CameraIntrinsicsFieldNumber
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraIntrinsicsFieldNumber
+  nameWithType: RegisterRequest.CameraIntrinsicsFieldNumber
+  fullName: ARFlow.RegisterRequest.CameraIntrinsicsFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraIntrinsicsFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 132
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "camera_intrinsics" field.
+  example: []
+  syntax:
+    content: public const int CameraIntrinsicsFieldNumber = 2
+    return:
+      type: System.Int32
+    content.vb: Public Const CameraIntrinsicsFieldNumber As Integer = 2
+- uid: ARFlow.RegisterRequest.CameraIntrinsics
+  commentId: P:ARFlow.RegisterRequest.CameraIntrinsics
+  id: CameraIntrinsics
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraIntrinsics
+  nameWithType: RegisterRequest.CameraIntrinsics
+  fullName: ARFlow.RegisterRequest.CameraIntrinsics
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraIntrinsics
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 134
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public RegisterRequest.Types.CameraIntrinsics CameraIntrinsics { get; set; }
+    parameters: []
+    return:
+      type: ARFlow.RegisterRequest.Types.CameraIntrinsics
+    content.vb: Public Property CameraIntrinsics As RegisterRequest.Types.CameraIntrinsics
+  overload: ARFlow.RegisterRequest.CameraIntrinsics*
+- uid: ARFlow.RegisterRequest.CameraColorFieldNumber
+  commentId: F:ARFlow.RegisterRequest.CameraColorFieldNumber
+  id: CameraColorFieldNumber
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraColorFieldNumber
+  nameWithType: RegisterRequest.CameraColorFieldNumber
+  fullName: ARFlow.RegisterRequest.CameraColorFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraColorFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 144
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "camera_color" field.
+  example: []
+  syntax:
+    content: public const int CameraColorFieldNumber = 3
+    return:
+      type: System.Int32
+    content.vb: Public Const CameraColorFieldNumber As Integer = 3
+- uid: ARFlow.RegisterRequest.CameraColor
+  commentId: P:ARFlow.RegisterRequest.CameraColor
+  id: CameraColor
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraColor
+  nameWithType: RegisterRequest.CameraColor
+  fullName: ARFlow.RegisterRequest.CameraColor
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraColor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 146
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public RegisterRequest.Types.CameraColor CameraColor { get; set; }
+    parameters: []
+    return:
+      type: ARFlow.RegisterRequest.Types.CameraColor
+    content.vb: Public Property CameraColor As RegisterRequest.Types.CameraColor
+  overload: ARFlow.RegisterRequest.CameraColor*
+- uid: ARFlow.RegisterRequest.CameraDepthFieldNumber
+  commentId: F:ARFlow.RegisterRequest.CameraDepthFieldNumber
+  id: CameraDepthFieldNumber
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraDepthFieldNumber
+  nameWithType: RegisterRequest.CameraDepthFieldNumber
+  fullName: ARFlow.RegisterRequest.CameraDepthFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraDepthFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 156
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "camera_depth" field.
+  example: []
+  syntax:
+    content: public const int CameraDepthFieldNumber = 4
+    return:
+      type: System.Int32
+    content.vb: Public Const CameraDepthFieldNumber As Integer = 4
+- uid: ARFlow.RegisterRequest.CameraDepth
+  commentId: P:ARFlow.RegisterRequest.CameraDepth
+  id: CameraDepth
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraDepth
+  nameWithType: RegisterRequest.CameraDepth
+  fullName: ARFlow.RegisterRequest.CameraDepth
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraDepth
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 158
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public RegisterRequest.Types.CameraDepth CameraDepth { get; set; }
+    parameters: []
+    return:
+      type: ARFlow.RegisterRequest.Types.CameraDepth
+    content.vb: Public Property CameraDepth As RegisterRequest.Types.CameraDepth
+  overload: ARFlow.RegisterRequest.CameraDepth*
+- uid: ARFlow.RegisterRequest.CameraTransformFieldNumber
+  commentId: F:ARFlow.RegisterRequest.CameraTransformFieldNumber
+  id: CameraTransformFieldNumber
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraTransformFieldNumber
+  nameWithType: RegisterRequest.CameraTransformFieldNumber
+  fullName: ARFlow.RegisterRequest.CameraTransformFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraTransformFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 168
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "camera_transform" field.
+  example: []
+  syntax:
+    content: public const int CameraTransformFieldNumber = 5
+    return:
+      type: System.Int32
+    content.vb: Public Const CameraTransformFieldNumber As Integer = 5
+- uid: ARFlow.RegisterRequest.CameraTransform
+  commentId: P:ARFlow.RegisterRequest.CameraTransform
+  id: CameraTransform
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraTransform
+  nameWithType: RegisterRequest.CameraTransform
+  fullName: ARFlow.RegisterRequest.CameraTransform
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraTransform
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 170
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public RegisterRequest.Types.CameraTransform CameraTransform { get; set; }
+    parameters: []
+    return:
+      type: ARFlow.RegisterRequest.Types.CameraTransform
+    content.vb: Public Property CameraTransform As RegisterRequest.Types.CameraTransform
+  overload: ARFlow.RegisterRequest.CameraTransform*
+- uid: ARFlow.RegisterRequest.CameraPointCloudFieldNumber
+  commentId: F:ARFlow.RegisterRequest.CameraPointCloudFieldNumber
+  id: CameraPointCloudFieldNumber
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraPointCloudFieldNumber
+  nameWithType: RegisterRequest.CameraPointCloudFieldNumber
+  fullName: ARFlow.RegisterRequest.CameraPointCloudFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraPointCloudFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 180
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "camera_point_cloud" field.
+  example: []
+  syntax:
+    content: public const int CameraPointCloudFieldNumber = 6
+    return:
+      type: System.Int32
+    content.vb: Public Const CameraPointCloudFieldNumber As Integer = 6
+- uid: ARFlow.RegisterRequest.CameraPointCloud
+  commentId: P:ARFlow.RegisterRequest.CameraPointCloud
+  id: CameraPointCloud
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CameraPointCloud
+  nameWithType: RegisterRequest.CameraPointCloud
+  fullName: ARFlow.RegisterRequest.CameraPointCloud
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraPointCloud
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 182
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public RegisterRequest.Types.CameraPointCloud CameraPointCloud { get; set; }
+    parameters: []
+    return:
+      type: ARFlow.RegisterRequest.Types.CameraPointCloud
+    content.vb: Public Property CameraPointCloud As RegisterRequest.Types.CameraPointCloud
+  overload: ARFlow.RegisterRequest.CameraPointCloud*
+- uid: ARFlow.RegisterRequest.Equals(System.Object)
+  commentId: M:ARFlow.RegisterRequest.Equals(System.Object)
+  id: Equals(System.Object)
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: Equals(object)
+  nameWithType: RegisterRequest.Equals(object)
+  fullName: ARFlow.RegisterRequest.Equals(object)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Equals
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 191
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public override bool Equals(object other)
+    parameters:
+    - id: other
+      type: System.Object
+    return:
+      type: System.Boolean
+    content.vb: Public Overrides Function Equals(other As Object) As Boolean
+  overridden: System.Object.Equals(System.Object)
+  overload: ARFlow.RegisterRequest.Equals*
+  nameWithType.vb: RegisterRequest.Equals(Object)
+  fullName.vb: ARFlow.RegisterRequest.Equals(Object)
+  name.vb: Equals(Object)
+- uid: ARFlow.RegisterRequest.Equals(ARFlow.RegisterRequest)
+  commentId: M:ARFlow.RegisterRequest.Equals(ARFlow.RegisterRequest)
+  id: Equals(ARFlow.RegisterRequest)
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: Equals(RegisterRequest)
+  nameWithType: RegisterRequest.Equals(RegisterRequest)
+  fullName: ARFlow.RegisterRequest.Equals(ARFlow.RegisterRequest)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Equals
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 197
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public bool Equals(RegisterRequest other)
+    parameters:
+    - id: other
+      type: ARFlow.RegisterRequest
+    return:
+      type: System.Boolean
+    content.vb: Public Function Equals(other As RegisterRequest) As Boolean
+  overload: ARFlow.RegisterRequest.Equals*
+- uid: ARFlow.RegisterRequest.GetHashCode
+  commentId: M:ARFlow.RegisterRequest.GetHashCode
+  id: GetHashCode
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: GetHashCode()
+  nameWithType: RegisterRequest.GetHashCode()
+  fullName: ARFlow.RegisterRequest.GetHashCode()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: GetHashCode
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 215
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public override int GetHashCode()
+    return:
+      type: System.Int32
+    content.vb: Public Overrides Function GetHashCode() As Integer
+  overridden: System.Object.GetHashCode
+  overload: ARFlow.RegisterRequest.GetHashCode*
+- uid: ARFlow.RegisterRequest.ToString
+  commentId: M:ARFlow.RegisterRequest.ToString
+  id: ToString
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: RegisterRequest.ToString()
+  fullName: ARFlow.RegisterRequest.ToString()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ToString
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 231
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+    content.vb: Public Overrides Function ToString() As String
+  overridden: System.Object.ToString
+  overload: ARFlow.RegisterRequest.ToString*
+- uid: ARFlow.RegisterRequest.WriteTo(Google.Protobuf.CodedOutputStream)
+  commentId: M:ARFlow.RegisterRequest.WriteTo(Google.Protobuf.CodedOutputStream)
+  id: WriteTo(Google.Protobuf.CodedOutputStream)
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: WriteTo(CodedOutputStream)
+  nameWithType: RegisterRequest.WriteTo(CodedOutputStream)
+  fullName: ARFlow.RegisterRequest.WriteTo(Google.Protobuf.CodedOutputStream)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: WriteTo
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 237
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Writes the data to the given coded output stream.
+  example: []
+  syntax:
+    content: public void WriteTo(CodedOutputStream output)
+    parameters:
+    - id: output
+      type: Google.Protobuf.CodedOutputStream
+      description: Coded output stream to write the data to. Must not be null.
+    content.vb: Public Sub WriteTo(output As CodedOutputStream)
+  overload: ARFlow.RegisterRequest.WriteTo*
+- uid: ARFlow.RegisterRequest.CalculateSize
+  commentId: M:ARFlow.RegisterRequest.CalculateSize
+  id: CalculateSize
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: CalculateSize()
+  nameWithType: RegisterRequest.CalculateSize()
+  fullName: ARFlow.RegisterRequest.CalculateSize()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CalculateSize
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 307
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Calculates the size of this message in Protocol Buffer wire format, in bytes.
+  example: []
+  syntax:
+    content: public int CalculateSize()
+    return:
+      type: System.Int32
+      description: >-
+        The number of bytes required to write this message
+                    to a coded output stream.
+    content.vb: Public Function CalculateSize() As Integer
+  overload: ARFlow.RegisterRequest.CalculateSize*
+- uid: ARFlow.RegisterRequest.MergeFrom(ARFlow.RegisterRequest)
+  commentId: M:ARFlow.RegisterRequest.MergeFrom(ARFlow.RegisterRequest)
+  id: MergeFrom(ARFlow.RegisterRequest)
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: MergeFrom(RegisterRequest)
+  nameWithType: RegisterRequest.MergeFrom(RegisterRequest)
+  fullName: ARFlow.RegisterRequest.MergeFrom(ARFlow.RegisterRequest)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: MergeFrom
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 335
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Merges the given message into this one.
+  remarks: See the user guide for precise merge semantics.
+  example: []
+  syntax:
+    content: public void MergeFrom(RegisterRequest other)
+    parameters:
+    - id: other
+      type: ARFlow.RegisterRequest
+    content.vb: Public Sub MergeFrom(other As RegisterRequest)
+  overload: ARFlow.RegisterRequest.MergeFrom*
+- uid: ARFlow.RegisterRequest.MergeFrom(Google.Protobuf.CodedInputStream)
+  commentId: M:ARFlow.RegisterRequest.MergeFrom(Google.Protobuf.CodedInputStream)
+  id: MergeFrom(Google.Protobuf.CodedInputStream)
+  parent: ARFlow.RegisterRequest
+  langs:
+  - csharp
+  - vb
+  name: MergeFrom(CodedInputStream)
+  nameWithType: RegisterRequest.MergeFrom(CodedInputStream)
+  fullName: ARFlow.RegisterRequest.MergeFrom(Google.Protobuf.CodedInputStream)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: MergeFrom
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 377
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Merges the data from the specified coded input stream with the current message.
+  remarks: See the user guide for precise merge semantics.
+  example: []
+  syntax:
+    content: public void MergeFrom(CodedInputStream input)
+    parameters:
+    - id: input
+      type: Google.Protobuf.CodedInputStream
+      description: ''
+    content.vb: Public Sub MergeFrom(input As CodedInputStream)
+  overload: ARFlow.RegisterRequest.MergeFrom*
+references:
+- uid: ARFlow
+  commentId: N:ARFlow
+  href: ARFlow.html
+  name: ARFlow
+  nameWithType: ARFlow
+  fullName: ARFlow
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: ARFlow.RegisterRequest.Parser*
+  commentId: Overload:ARFlow.RegisterRequest.Parser
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_Parser
+  name: Parser
+  nameWithType: RegisterRequest.Parser
+  fullName: ARFlow.RegisterRequest.Parser
+- uid: Google.Protobuf.MessageParser{ARFlow.RegisterRequest}
+  commentId: T:Google.Protobuf.MessageParser{ARFlow.RegisterRequest}
+  parent: Google.Protobuf
+  definition: Google.Protobuf.MessageParser`1
+  href: ARFlow.RegisterRequest.html
+  name: MessageParser<RegisterRequest>
+  nameWithType: MessageParser<RegisterRequest>
+  fullName: Google.Protobuf.MessageParser<ARFlow.RegisterRequest>
+  nameWithType.vb: MessageParser(Of RegisterRequest)
+  fullName.vb: Google.Protobuf.MessageParser(Of ARFlow.RegisterRequest)
+  name.vb: MessageParser(Of RegisterRequest)
+  spec.csharp:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: <
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: '>'
+  spec.vb:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: )
+- uid: Google.Protobuf.MessageParser`1
+  commentId: T:Google.Protobuf.MessageParser`1
+  isExternal: true
+  name: MessageParser<T>
+  nameWithType: MessageParser<T>
+  fullName: Google.Protobuf.MessageParser<T>
+  nameWithType.vb: MessageParser(Of T)
+  fullName.vb: Google.Protobuf.MessageParser(Of T)
+  name.vb: MessageParser(Of T)
+  spec.csharp:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: Google.Protobuf
+  commentId: N:Google.Protobuf
+  isExternal: true
+  name: Google.Protobuf
+  nameWithType: Google.Protobuf
+  fullName: Google.Protobuf
+  spec.csharp:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  spec.vb:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+- uid: ARFlow.RegisterRequest.Descriptor*
+  commentId: Overload:ARFlow.RegisterRequest.Descriptor
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_Descriptor
+  name: Descriptor
+  nameWithType: RegisterRequest.Descriptor
+  fullName: ARFlow.RegisterRequest.Descriptor
+- uid: Google.Protobuf.Reflection.MessageDescriptor
+  commentId: T:Google.Protobuf.Reflection.MessageDescriptor
+  parent: Google.Protobuf.Reflection
+  isExternal: true
+  name: MessageDescriptor
+  nameWithType: MessageDescriptor
+  fullName: Google.Protobuf.Reflection.MessageDescriptor
+- uid: Google.Protobuf.Reflection
+  commentId: N:Google.Protobuf.Reflection
+  isExternal: true
+  name: Google.Protobuf.Reflection
+  nameWithType: Google.Protobuf.Reflection
+  fullName: Google.Protobuf.Reflection
+  spec.csharp:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true
+  spec.vb:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true
+- uid: ARFlow.RegisterRequest.#ctor*
+  commentId: Overload:ARFlow.RegisterRequest.#ctor
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest__ctor
+  name: RegisterRequest
+  nameWithType: RegisterRequest.RegisterRequest
+  fullName: ARFlow.RegisterRequest.RegisterRequest
+  nameWithType.vb: RegisterRequest.New
+  fullName.vb: ARFlow.RegisterRequest.New
+  name.vb: New
+- uid: ARFlow.RegisterRequest
+  commentId: T:ARFlow.RegisterRequest
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest
+  nameWithType: RegisterRequest
+  fullName: ARFlow.RegisterRequest
+- uid: ARFlow.RegisterRequest.Clone*
+  commentId: Overload:ARFlow.RegisterRequest.Clone
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_Clone
+  name: Clone
+  nameWithType: RegisterRequest.Clone
+  fullName: ARFlow.RegisterRequest.Clone
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: ARFlow.RegisterRequest.DeviceName*
+  commentId: Overload:ARFlow.RegisterRequest.DeviceName
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_DeviceName
+  name: DeviceName
+  nameWithType: RegisterRequest.DeviceName
+  fullName: ARFlow.RegisterRequest.DeviceName
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: ARFlow.RegisterRequest.CameraIntrinsics*
+  commentId: Overload:ARFlow.RegisterRequest.CameraIntrinsics
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_CameraIntrinsics
+  name: CameraIntrinsics
+  nameWithType: RegisterRequest.CameraIntrinsics
+  fullName: ARFlow.RegisterRequest.CameraIntrinsics
+- uid: ARFlow.RegisterRequest.Types.CameraIntrinsics
+  commentId: T:ARFlow.RegisterRequest.Types.CameraIntrinsics
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraIntrinsics
+  nameWithType: RegisterRequest.Types.CameraIntrinsics
+  fullName: ARFlow.RegisterRequest.Types.CameraIntrinsics
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraIntrinsics
+    name: CameraIntrinsics
+    href: ARFlow.RegisterRequest.Types.CameraIntrinsics.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraIntrinsics
+    name: CameraIntrinsics
+    href: ARFlow.RegisterRequest.Types.CameraIntrinsics.html
+- uid: ARFlow.RegisterRequest.CameraColor*
+  commentId: Overload:ARFlow.RegisterRequest.CameraColor
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_CameraColor
+  name: CameraColor
+  nameWithType: RegisterRequest.CameraColor
+  fullName: ARFlow.RegisterRequest.CameraColor
+- uid: ARFlow.RegisterRequest.Types.CameraColor
+  commentId: T:ARFlow.RegisterRequest.Types.CameraColor
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraColor
+  nameWithType: RegisterRequest.Types.CameraColor
+  fullName: ARFlow.RegisterRequest.Types.CameraColor
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraColor
+    name: CameraColor
+    href: ARFlow.RegisterRequest.Types.CameraColor.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraColor
+    name: CameraColor
+    href: ARFlow.RegisterRequest.Types.CameraColor.html
+- uid: ARFlow.RegisterRequest.CameraDepth*
+  commentId: Overload:ARFlow.RegisterRequest.CameraDepth
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_CameraDepth
+  name: CameraDepth
+  nameWithType: RegisterRequest.CameraDepth
+  fullName: ARFlow.RegisterRequest.CameraDepth
+- uid: ARFlow.RegisterRequest.Types.CameraDepth
+  commentId: T:ARFlow.RegisterRequest.Types.CameraDepth
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraDepth
+  nameWithType: RegisterRequest.Types.CameraDepth
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraDepth
+    name: CameraDepth
+    href: ARFlow.RegisterRequest.Types.CameraDepth.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraDepth
+    name: CameraDepth
+    href: ARFlow.RegisterRequest.Types.CameraDepth.html
+- uid: ARFlow.RegisterRequest.CameraTransform*
+  commentId: Overload:ARFlow.RegisterRequest.CameraTransform
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_CameraTransform
+  name: CameraTransform
+  nameWithType: RegisterRequest.CameraTransform
+  fullName: ARFlow.RegisterRequest.CameraTransform
+- uid: ARFlow.RegisterRequest.Types.CameraTransform
+  commentId: T:ARFlow.RegisterRequest.Types.CameraTransform
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraTransform
+  nameWithType: RegisterRequest.Types.CameraTransform
+  fullName: ARFlow.RegisterRequest.Types.CameraTransform
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraTransform
+    name: CameraTransform
+    href: ARFlow.RegisterRequest.Types.CameraTransform.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraTransform
+    name: CameraTransform
+    href: ARFlow.RegisterRequest.Types.CameraTransform.html
+- uid: ARFlow.RegisterRequest.CameraPointCloud*
+  commentId: Overload:ARFlow.RegisterRequest.CameraPointCloud
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_CameraPointCloud
+  name: CameraPointCloud
+  nameWithType: RegisterRequest.CameraPointCloud
+  fullName: ARFlow.RegisterRequest.CameraPointCloud
+- uid: ARFlow.RegisterRequest.Types.CameraPointCloud
+  commentId: T:ARFlow.RegisterRequest.Types.CameraPointCloud
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraPointCloud
+  nameWithType: RegisterRequest.Types.CameraPointCloud
+  fullName: ARFlow.RegisterRequest.Types.CameraPointCloud
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraPointCloud
+    name: CameraPointCloud
+    href: ARFlow.RegisterRequest.Types.CameraPointCloud.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraPointCloud
+    name: CameraPointCloud
+    href: ARFlow.RegisterRequest.Types.CameraPointCloud.html
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: ARFlow.RegisterRequest.Equals*
+  commentId: Overload:ARFlow.RegisterRequest.Equals
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_Equals_System_Object_
+  name: Equals
+  nameWithType: RegisterRequest.Equals
+  fullName: ARFlow.RegisterRequest.Equals
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: ARFlow.RegisterRequest.GetHashCode*
+  commentId: Overload:ARFlow.RegisterRequest.GetHashCode
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_GetHashCode
+  name: GetHashCode
+  nameWithType: RegisterRequest.GetHashCode
+  fullName: ARFlow.RegisterRequest.GetHashCode
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: ARFlow.RegisterRequest.ToString*
+  commentId: Overload:ARFlow.RegisterRequest.ToString
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_ToString
+  name: ToString
+  nameWithType: RegisterRequest.ToString
+  fullName: ARFlow.RegisterRequest.ToString
+- uid: ARFlow.RegisterRequest.WriteTo*
+  commentId: Overload:ARFlow.RegisterRequest.WriteTo
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_WriteTo_Google_Protobuf_CodedOutputStream_
+  name: WriteTo
+  nameWithType: RegisterRequest.WriteTo
+  fullName: ARFlow.RegisterRequest.WriteTo
+- uid: Google.Protobuf.CodedOutputStream
+  commentId: T:Google.Protobuf.CodedOutputStream
+  parent: Google.Protobuf
+  isExternal: true
+  name: CodedOutputStream
+  nameWithType: CodedOutputStream
+  fullName: Google.Protobuf.CodedOutputStream
+- uid: ARFlow.RegisterRequest.CalculateSize*
+  commentId: Overload:ARFlow.RegisterRequest.CalculateSize
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_CalculateSize
+  name: CalculateSize
+  nameWithType: RegisterRequest.CalculateSize
+  fullName: ARFlow.RegisterRequest.CalculateSize
+- uid: ARFlow.RegisterRequest.MergeFrom*
+  commentId: Overload:ARFlow.RegisterRequest.MergeFrom
+  href: ARFlow.RegisterRequest.html#ARFlow_RegisterRequest_MergeFrom_ARFlow_RegisterRequest_
+  name: MergeFrom
+  nameWithType: RegisterRequest.MergeFrom
+  fullName: ARFlow.RegisterRequest.MergeFrom
+- uid: Google.Protobuf.CodedInputStream
+  commentId: T:Google.Protobuf.CodedInputStream
+  parent: Google.Protobuf
+  isExternal: true
+  name: CodedInputStream
+  nameWithType: CodedInputStream
+  fullName: Google.Protobuf.CodedInputStream

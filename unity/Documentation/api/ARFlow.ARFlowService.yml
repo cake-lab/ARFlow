@@ -1,0 +1,268 @@
+### YamlMime:ManagedReference
+items:
+- uid: ARFlow.ARFlowService
+  commentId: T:ARFlow.ARFlowService
+  id: ARFlowService
+  parent: ARFlow
+  children:
+  - ARFlow.ARFlowService.BindService(ARFlow.ARFlowService.ARFlowServiceBase)
+  - ARFlow.ARFlowService.BindService(Grpc.Core.ServiceBinderBase,ARFlow.ARFlowService.ARFlowServiceBase)
+  - ARFlow.ARFlowService.Descriptor
+  langs:
+  - csharp
+  - vb
+  name: ARFlowService
+  nameWithType: ARFlowService
+  fullName: ARFlow.ARFlowService
+  type: Class
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/ServiceGrpc.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ARFlowService
+    path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
+    startLine: 10
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public static class ARFlowService
+    content.vb: Public Module ARFlowService
+  inheritance:
+  - System.Object
+- uid: ARFlow.ARFlowService.Descriptor
+  commentId: P:ARFlow.ARFlowService.Descriptor
+  id: Descriptor
+  parent: ARFlow.ARFlowService
+  langs:
+  - csharp
+  - vb
+  name: Descriptor
+  nameWithType: ARFlowService.Descriptor
+  fullName: ARFlow.ARFlowService.Descriptor
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/ServiceGrpc.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Descriptor
+    path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
+    startLine: 73
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Service descriptor
+  example: []
+  syntax:
+    content: public static ServiceDescriptor Descriptor { get; }
+    parameters: []
+    return:
+      type: Google.Protobuf.Reflection.ServiceDescriptor
+    content.vb: Public Shared ReadOnly Property Descriptor As ServiceDescriptor
+  overload: ARFlow.ARFlowService.Descriptor*
+- uid: ARFlow.ARFlowService.BindService(ARFlow.ARFlowService.ARFlowServiceBase)
+  commentId: M:ARFlow.ARFlowService.BindService(ARFlow.ARFlowService.ARFlowServiceBase)
+  id: BindService(ARFlow.ARFlowService.ARFlowServiceBase)
+  parent: ARFlow.ARFlowService
+  langs:
+  - csharp
+  - vb
+  name: BindService(ARFlowServiceBase)
+  nameWithType: ARFlowService.BindService(ARFlowService.ARFlowServiceBase)
+  fullName: ARFlow.ARFlowService.BindService(ARFlow.ARFlowService.ARFlowServiceBase)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/ServiceGrpc.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: BindService
+    path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
+    startLine: 173
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Creates service definition that can be registered with a server
+  example: []
+  syntax:
+    content: public static ServerServiceDefinition BindService(ARFlowService.ARFlowServiceBase serviceImpl)
+    parameters:
+    - id: serviceImpl
+      type: ARFlow.ARFlowService.ARFlowServiceBase
+      description: An object implementing the server-side handling logic.
+    return:
+      type: Grpc.Core.ServerServiceDefinition
+    content.vb: Public Shared Function BindService(serviceImpl As ARFlowService.ARFlowServiceBase) As ServerServiceDefinition
+  overload: ARFlow.ARFlowService.BindService*
+- uid: ARFlow.ARFlowService.BindService(Grpc.Core.ServiceBinderBase,ARFlow.ARFlowService.ARFlowServiceBase)
+  commentId: M:ARFlow.ARFlowService.BindService(Grpc.Core.ServiceBinderBase,ARFlow.ARFlowService.ARFlowServiceBase)
+  id: BindService(Grpc.Core.ServiceBinderBase,ARFlow.ARFlowService.ARFlowServiceBase)
+  parent: ARFlow.ARFlowService
+  langs:
+  - csharp
+  - vb
+  name: BindService(ServiceBinderBase, ARFlowServiceBase)
+  nameWithType: ARFlowService.BindService(ServiceBinderBase, ARFlowService.ARFlowServiceBase)
+  fullName: ARFlow.ARFlowService.BindService(Grpc.Core.ServiceBinderBase, ARFlow.ARFlowService.ARFlowServiceBase)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/ServiceGrpc.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: BindService
+    path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
+    startLine: 185
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: >-
+    Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
+        Note: this method is part of an experimental API that can change or be removed without any prior notice.
+  example: []
+  syntax:
+    content: public static void BindService(ServiceBinderBase serviceBinder, ARFlowService.ARFlowServiceBase serviceImpl)
+    parameters:
+    - id: serviceBinder
+      type: Grpc.Core.ServiceBinderBase
+      description: Service methods will be bound by calling <code>AddMethod</code> on this object.
+    - id: serviceImpl
+      type: ARFlow.ARFlowService.ARFlowServiceBase
+      description: An object implementing the server-side handling logic.
+    content.vb: Public Shared Sub BindService(serviceBinder As ServiceBinderBase, serviceImpl As ARFlowService.ARFlowServiceBase)
+  overload: ARFlow.ARFlowService.BindService*
+references:
+- uid: ARFlow
+  commentId: N:ARFlow
+  href: ARFlow.html
+  name: ARFlow
+  nameWithType: ARFlow
+  fullName: ARFlow
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: ARFlow.ARFlowService.Descriptor*
+  commentId: Overload:ARFlow.ARFlowService.Descriptor
+  href: ARFlow.ARFlowService.html#ARFlow_ARFlowService_Descriptor
+  name: Descriptor
+  nameWithType: ARFlowService.Descriptor
+  fullName: ARFlow.ARFlowService.Descriptor
+- uid: Google.Protobuf.Reflection.ServiceDescriptor
+  commentId: T:Google.Protobuf.Reflection.ServiceDescriptor
+  parent: Google.Protobuf.Reflection
+  isExternal: true
+  name: ServiceDescriptor
+  nameWithType: ServiceDescriptor
+  fullName: Google.Protobuf.Reflection.ServiceDescriptor
+- uid: Google.Protobuf.Reflection
+  commentId: N:Google.Protobuf.Reflection
+  isExternal: true
+  name: Google.Protobuf.Reflection
+  nameWithType: Google.Protobuf.Reflection
+  fullName: Google.Protobuf.Reflection
+  spec.csharp:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true
+  spec.vb:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true
+- uid: ARFlow.ARFlowService.BindService*
+  commentId: Overload:ARFlow.ARFlowService.BindService
+  href: ARFlow.ARFlowService.html#ARFlow_ARFlowService_BindService_ARFlow_ARFlowService_ARFlowServiceBase_
+  name: BindService
+  nameWithType: ARFlowService.BindService
+  fullName: ARFlow.ARFlowService.BindService
+- uid: ARFlow.ARFlowService.ARFlowServiceBase
+  commentId: T:ARFlow.ARFlowService.ARFlowServiceBase
+  parent: ARFlow
+  href: ARFlow.ARFlowService.html
+  name: ARFlowService.ARFlowServiceBase
+  nameWithType: ARFlowService.ARFlowServiceBase
+  fullName: ARFlow.ARFlowService.ARFlowServiceBase
+  spec.csharp:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceBase
+    name: ARFlowServiceBase
+    href: ARFlow.ARFlowService.ARFlowServiceBase.html
+  spec.vb:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceBase
+    name: ARFlowServiceBase
+    href: ARFlow.ARFlowService.ARFlowServiceBase.html
+- uid: Grpc.Core.ServerServiceDefinition
+  commentId: T:Grpc.Core.ServerServiceDefinition
+  parent: Grpc.Core
+  isExternal: true
+  name: ServerServiceDefinition
+  nameWithType: ServerServiceDefinition
+  fullName: Grpc.Core.ServerServiceDefinition
+- uid: Grpc.Core
+  commentId: N:Grpc.Core
+  isExternal: true
+  name: Grpc.Core
+  nameWithType: Grpc.Core
+  fullName: Grpc.Core
+  spec.csharp:
+  - uid: Grpc
+    name: Grpc
+    isExternal: true
+  - name: .
+  - uid: Grpc.Core
+    name: Core
+    isExternal: true
+  spec.vb:
+  - uid: Grpc
+    name: Grpc
+    isExternal: true
+  - name: .
+  - uid: Grpc.Core
+    name: Core
+    isExternal: true
+- uid: Grpc.Core.ServiceBinderBase
+  commentId: T:Grpc.Core.ServiceBinderBase
+  parent: Grpc.Core
+  isExternal: true
+  name: ServiceBinderBase
+  nameWithType: ServiceBinderBase
+  fullName: Grpc.Core.ServiceBinderBase

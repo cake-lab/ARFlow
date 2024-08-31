@@ -1,0 +1,307 @@
+### YamlMime:ManagedReference
+items:
+- uid: ARFlow
+  commentId: N:ARFlow
+  id: ARFlow
+  children:
+  - ARFlow.ARFlowClient
+  - ARFlow.ARFlowService
+  - ARFlow.ARFlowService.ARFlowServiceBase
+  - ARFlow.ARFlowService.ARFlowServiceClient
+  - ARFlow.DataFrameRequest
+  - ARFlow.DataFrameResponse
+  - ARFlow.RegisterRequest
+  - ARFlow.RegisterRequest.Types
+  - ARFlow.RegisterRequest.Types.CameraColor
+  - ARFlow.RegisterRequest.Types.CameraDepth
+  - ARFlow.RegisterRequest.Types.CameraIntrinsics
+  - ARFlow.RegisterRequest.Types.CameraPointCloud
+  - ARFlow.RegisterRequest.Types.CameraTransform
+  - ARFlow.RegisterResponse
+  - ARFlow.ServiceReflection
+  langs:
+  - csharp
+  - vb
+  name: ARFlow
+  nameWithType: ARFlow
+  fullName: ARFlow
+  type: Namespace
+  assemblies:
+  - Assembly-CSharp
+references:
+- uid: ARFlow.ARFlowService
+  commentId: T:ARFlow.ARFlowService
+  parent: ARFlow
+  href: ARFlow.ARFlowService.html
+  name: ARFlowService
+  nameWithType: ARFlowService
+  fullName: ARFlow.ARFlowService
+- uid: ARFlow.ARFlowService.ARFlowServiceBase
+  commentId: T:ARFlow.ARFlowService.ARFlowServiceBase
+  parent: ARFlow
+  href: ARFlow.ARFlowService.html
+  name: ARFlowService.ARFlowServiceBase
+  nameWithType: ARFlowService.ARFlowServiceBase
+  fullName: ARFlow.ARFlowService.ARFlowServiceBase
+  spec.csharp:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceBase
+    name: ARFlowServiceBase
+    href: ARFlow.ARFlowService.ARFlowServiceBase.html
+  spec.vb:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceBase
+    name: ARFlowServiceBase
+    href: ARFlow.ARFlowService.ARFlowServiceBase.html
+- uid: ARFlow.ARFlowService.ARFlowServiceClient
+  commentId: T:ARFlow.ARFlowService.ARFlowServiceClient
+  parent: ARFlow
+  href: ARFlow.ARFlowService.html
+  name: ARFlowService.ARFlowServiceClient
+  nameWithType: ARFlowService.ARFlowServiceClient
+  fullName: ARFlow.ARFlowService.ARFlowServiceClient
+  spec.csharp:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceClient
+    name: ARFlowServiceClient
+    href: ARFlow.ARFlowService.ARFlowServiceClient.html
+  spec.vb:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceClient
+    name: ARFlowServiceClient
+    href: ARFlow.ARFlowService.ARFlowServiceClient.html
+- uid: ARFlow.ARFlowClient
+  commentId: T:ARFlow.ARFlowClient
+  href: ARFlow.ARFlowClient.html
+  name: ARFlowClient
+  nameWithType: ARFlowClient
+  fullName: ARFlow.ARFlowClient
+- uid: ARFlow.ServiceReflection
+  commentId: T:ARFlow.ServiceReflection
+  href: ARFlow.ServiceReflection.html
+  name: ServiceReflection
+  nameWithType: ServiceReflection
+  fullName: ARFlow.ServiceReflection
+- uid: ARFlow.RegisterRequest
+  commentId: T:ARFlow.RegisterRequest
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest
+  nameWithType: RegisterRequest
+  fullName: ARFlow.RegisterRequest
+- uid: ARFlow.RegisterRequest.Types
+  commentId: T:ARFlow.RegisterRequest.Types
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types
+  nameWithType: RegisterRequest.Types
+  fullName: ARFlow.RegisterRequest.Types
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+- uid: ARFlow.RegisterRequest.Types.CameraIntrinsics
+  commentId: T:ARFlow.RegisterRequest.Types.CameraIntrinsics
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraIntrinsics
+  nameWithType: RegisterRequest.Types.CameraIntrinsics
+  fullName: ARFlow.RegisterRequest.Types.CameraIntrinsics
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraIntrinsics
+    name: CameraIntrinsics
+    href: ARFlow.RegisterRequest.Types.CameraIntrinsics.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraIntrinsics
+    name: CameraIntrinsics
+    href: ARFlow.RegisterRequest.Types.CameraIntrinsics.html
+- uid: ARFlow.RegisterRequest.Types.CameraColor
+  commentId: T:ARFlow.RegisterRequest.Types.CameraColor
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraColor
+  nameWithType: RegisterRequest.Types.CameraColor
+  fullName: ARFlow.RegisterRequest.Types.CameraColor
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraColor
+    name: CameraColor
+    href: ARFlow.RegisterRequest.Types.CameraColor.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraColor
+    name: CameraColor
+    href: ARFlow.RegisterRequest.Types.CameraColor.html
+- uid: ARFlow.RegisterRequest.Types.CameraDepth
+  commentId: T:ARFlow.RegisterRequest.Types.CameraDepth
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraDepth
+  nameWithType: RegisterRequest.Types.CameraDepth
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraDepth
+    name: CameraDepth
+    href: ARFlow.RegisterRequest.Types.CameraDepth.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraDepth
+    name: CameraDepth
+    href: ARFlow.RegisterRequest.Types.CameraDepth.html
+- uid: ARFlow.RegisterRequest.Types.CameraTransform
+  commentId: T:ARFlow.RegisterRequest.Types.CameraTransform
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraTransform
+  nameWithType: RegisterRequest.Types.CameraTransform
+  fullName: ARFlow.RegisterRequest.Types.CameraTransform
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraTransform
+    name: CameraTransform
+    href: ARFlow.RegisterRequest.Types.CameraTransform.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraTransform
+    name: CameraTransform
+    href: ARFlow.RegisterRequest.Types.CameraTransform.html
+- uid: ARFlow.RegisterRequest.Types.CameraPointCloud
+  commentId: T:ARFlow.RegisterRequest.Types.CameraPointCloud
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraPointCloud
+  nameWithType: RegisterRequest.Types.CameraPointCloud
+  fullName: ARFlow.RegisterRequest.Types.CameraPointCloud
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraPointCloud
+    name: CameraPointCloud
+    href: ARFlow.RegisterRequest.Types.CameraPointCloud.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraPointCloud
+    name: CameraPointCloud
+    href: ARFlow.RegisterRequest.Types.CameraPointCloud.html
+- uid: ARFlow.RegisterResponse
+  commentId: T:ARFlow.RegisterResponse
+  parent: ARFlow
+  href: ARFlow.RegisterResponse.html
+  name: RegisterResponse
+  nameWithType: RegisterResponse
+  fullName: ARFlow.RegisterResponse
+- uid: ARFlow.DataFrameRequest
+  commentId: T:ARFlow.DataFrameRequest
+  parent: ARFlow
+  href: ARFlow.DataFrameRequest.html
+  name: DataFrameRequest
+  nameWithType: DataFrameRequest
+  fullName: ARFlow.DataFrameRequest
+- uid: ARFlow.DataFrameResponse
+  commentId: T:ARFlow.DataFrameResponse
+  parent: ARFlow
+  href: ARFlow.DataFrameResponse.html
+  name: DataFrameResponse
+  nameWithType: DataFrameResponse
+  fullName: ARFlow.DataFrameResponse
+- uid: ARFlow
+  commentId: N:ARFlow
+  href: ARFlow.html
+  name: ARFlow
+  nameWithType: ARFlow
+  fullName: ARFlow

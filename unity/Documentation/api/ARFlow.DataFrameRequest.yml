@@ -1,0 +1,1060 @@
+### YamlMime:ManagedReference
+items:
+- uid: ARFlow.DataFrameRequest
+  commentId: T:ARFlow.DataFrameRequest
+  id: DataFrameRequest
+  parent: ARFlow
+  children:
+  - ARFlow.DataFrameRequest.#ctor
+  - ARFlow.DataFrameRequest.#ctor(ARFlow.DataFrameRequest)
+  - ARFlow.DataFrameRequest.CalculateSize
+  - ARFlow.DataFrameRequest.Clone
+  - ARFlow.DataFrameRequest.Color
+  - ARFlow.DataFrameRequest.ColorFieldNumber
+  - ARFlow.DataFrameRequest.Depth
+  - ARFlow.DataFrameRequest.DepthFieldNumber
+  - ARFlow.DataFrameRequest.Descriptor
+  - ARFlow.DataFrameRequest.Equals(ARFlow.DataFrameRequest)
+  - ARFlow.DataFrameRequest.Equals(System.Object)
+  - ARFlow.DataFrameRequest.GetHashCode
+  - ARFlow.DataFrameRequest.MergeFrom(ARFlow.DataFrameRequest)
+  - ARFlow.DataFrameRequest.MergeFrom(Google.Protobuf.CodedInputStream)
+  - ARFlow.DataFrameRequest.Parser
+  - ARFlow.DataFrameRequest.ToString
+  - ARFlow.DataFrameRequest.Transform
+  - ARFlow.DataFrameRequest.TransformFieldNumber
+  - ARFlow.DataFrameRequest.Uid
+  - ARFlow.DataFrameRequest.UidFieldNumber
+  - ARFlow.DataFrameRequest.WriteTo(Google.Protobuf.CodedOutputStream)
+  langs:
+  - csharp
+  - vb
+  name: DataFrameRequest
+  nameWithType: DataFrameRequest
+  fullName: ARFlow.DataFrameRequest
+  type: Class
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: DataFrameRequest
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2118
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public sealed class DataFrameRequest
+    content.vb: Public NotInheritable Class DataFrameRequest
+  inheritance:
+  - System.Object
+- uid: ARFlow.DataFrameRequest.Parser
+  commentId: P:ARFlow.DataFrameRequest.Parser
+  id: Parser
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: Parser
+  nameWithType: DataFrameRequest.Parser
+  fullName: ARFlow.DataFrameRequest.Parser
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Parser
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2126
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public static MessageParser<DataFrameRequest> Parser { get; }
+    parameters: []
+    return:
+      type: Google.Protobuf.MessageParser{ARFlow.DataFrameRequest}
+    content.vb: Public Shared ReadOnly Property Parser As MessageParser(Of DataFrameRequest)
+  overload: ARFlow.DataFrameRequest.Parser*
+- uid: ARFlow.DataFrameRequest.Descriptor
+  commentId: P:ARFlow.DataFrameRequest.Descriptor
+  id: Descriptor
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: Descriptor
+  nameWithType: DataFrameRequest.Descriptor
+  fullName: ARFlow.DataFrameRequest.Descriptor
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Descriptor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2130
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public static MessageDescriptor Descriptor { get; }
+    parameters: []
+    return:
+      type: Google.Protobuf.Reflection.MessageDescriptor
+    content.vb: Public Shared ReadOnly Property Descriptor As MessageDescriptor
+  overload: ARFlow.DataFrameRequest.Descriptor*
+- uid: ARFlow.DataFrameRequest.#ctor
+  commentId: M:ARFlow.DataFrameRequest.#ctor
+  id: '#ctor'
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: DataFrameRequest()
+  nameWithType: DataFrameRequest.DataFrameRequest()
+  fullName: ARFlow.DataFrameRequest.DataFrameRequest()
+  type: Constructor
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: .ctor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2142
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public DataFrameRequest()
+    content.vb: Public Sub New()
+  overload: ARFlow.DataFrameRequest.#ctor*
+  nameWithType.vb: DataFrameRequest.New()
+  fullName.vb: ARFlow.DataFrameRequest.New()
+  name.vb: New()
+- uid: ARFlow.DataFrameRequest.#ctor(ARFlow.DataFrameRequest)
+  commentId: M:ARFlow.DataFrameRequest.#ctor(ARFlow.DataFrameRequest)
+  id: '#ctor(ARFlow.DataFrameRequest)'
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: DataFrameRequest(DataFrameRequest)
+  nameWithType: DataFrameRequest.DataFrameRequest(DataFrameRequest)
+  fullName: ARFlow.DataFrameRequest.DataFrameRequest(ARFlow.DataFrameRequest)
+  type: Constructor
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: .ctor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2150
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public DataFrameRequest(DataFrameRequest other)
+    parameters:
+    - id: other
+      type: ARFlow.DataFrameRequest
+    content.vb: Public Sub New(other As DataFrameRequest)
+  overload: ARFlow.DataFrameRequest.#ctor*
+  nameWithType.vb: DataFrameRequest.New(DataFrameRequest)
+  fullName.vb: ARFlow.DataFrameRequest.New(ARFlow.DataFrameRequest)
+  name.vb: New(DataFrameRequest)
+- uid: ARFlow.DataFrameRequest.Clone
+  commentId: M:ARFlow.DataFrameRequest.Clone
+  id: Clone
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: Clone()
+  nameWithType: DataFrameRequest.Clone()
+  fullName: ARFlow.DataFrameRequest.Clone()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Clone
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2160
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Creates a deep clone of this object.
+  example: []
+  syntax:
+    content: public DataFrameRequest Clone()
+    return:
+      type: ARFlow.DataFrameRequest
+      description: A deep clone of this object.
+    content.vb: Public Function Clone() As DataFrameRequest
+  overload: ARFlow.DataFrameRequest.Clone*
+- uid: ARFlow.DataFrameRequest.UidFieldNumber
+  commentId: F:ARFlow.DataFrameRequest.UidFieldNumber
+  id: UidFieldNumber
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: UidFieldNumber
+  nameWithType: DataFrameRequest.UidFieldNumber
+  fullName: ARFlow.DataFrameRequest.UidFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: UidFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2167
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "uid" field.
+  example: []
+  syntax:
+    content: public const int UidFieldNumber = 1
+    return:
+      type: System.Int32
+    content.vb: Public Const UidFieldNumber As Integer = 1
+- uid: ARFlow.DataFrameRequest.Uid
+  commentId: P:ARFlow.DataFrameRequest.Uid
+  id: Uid
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: Uid
+  nameWithType: DataFrameRequest.Uid
+  fullName: ARFlow.DataFrameRequest.Uid
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Uid
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2169
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public string Uid { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Uid As String
+  overload: ARFlow.DataFrameRequest.Uid*
+- uid: ARFlow.DataFrameRequest.ColorFieldNumber
+  commentId: F:ARFlow.DataFrameRequest.ColorFieldNumber
+  id: ColorFieldNumber
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: ColorFieldNumber
+  nameWithType: DataFrameRequest.ColorFieldNumber
+  fullName: ARFlow.DataFrameRequest.ColorFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ColorFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2179
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "color" field.
+  example: []
+  syntax:
+    content: public const int ColorFieldNumber = 2
+    return:
+      type: System.Int32
+    content.vb: Public Const ColorFieldNumber As Integer = 2
+- uid: ARFlow.DataFrameRequest.Color
+  commentId: P:ARFlow.DataFrameRequest.Color
+  id: Color
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: Color
+  nameWithType: DataFrameRequest.Color
+  fullName: ARFlow.DataFrameRequest.Color
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Color
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2181
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public ByteString Color { get; set; }
+    parameters: []
+    return:
+      type: Google.Protobuf.ByteString
+    content.vb: Public Property Color As ByteString
+  overload: ARFlow.DataFrameRequest.Color*
+- uid: ARFlow.DataFrameRequest.DepthFieldNumber
+  commentId: F:ARFlow.DataFrameRequest.DepthFieldNumber
+  id: DepthFieldNumber
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: DepthFieldNumber
+  nameWithType: DataFrameRequest.DepthFieldNumber
+  fullName: ARFlow.DataFrameRequest.DepthFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: DepthFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2191
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "depth" field.
+  example: []
+  syntax:
+    content: public const int DepthFieldNumber = 3
+    return:
+      type: System.Int32
+    content.vb: Public Const DepthFieldNumber As Integer = 3
+- uid: ARFlow.DataFrameRequest.Depth
+  commentId: P:ARFlow.DataFrameRequest.Depth
+  id: Depth
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: Depth
+  nameWithType: DataFrameRequest.Depth
+  fullName: ARFlow.DataFrameRequest.Depth
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Depth
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2193
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public ByteString Depth { get; set; }
+    parameters: []
+    return:
+      type: Google.Protobuf.ByteString
+    content.vb: Public Property Depth As ByteString
+  overload: ARFlow.DataFrameRequest.Depth*
+- uid: ARFlow.DataFrameRequest.TransformFieldNumber
+  commentId: F:ARFlow.DataFrameRequest.TransformFieldNumber
+  id: TransformFieldNumber
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: TransformFieldNumber
+  nameWithType: DataFrameRequest.TransformFieldNumber
+  fullName: ARFlow.DataFrameRequest.TransformFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: TransformFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2203
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "transform" field.
+  example: []
+  syntax:
+    content: public const int TransformFieldNumber = 4
+    return:
+      type: System.Int32
+    content.vb: Public Const TransformFieldNumber As Integer = 4
+- uid: ARFlow.DataFrameRequest.Transform
+  commentId: P:ARFlow.DataFrameRequest.Transform
+  id: Transform
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: Transform
+  nameWithType: DataFrameRequest.Transform
+  fullName: ARFlow.DataFrameRequest.Transform
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Transform
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2205
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public ByteString Transform { get; set; }
+    parameters: []
+    return:
+      type: Google.Protobuf.ByteString
+    content.vb: Public Property Transform As ByteString
+  overload: ARFlow.DataFrameRequest.Transform*
+- uid: ARFlow.DataFrameRequest.Equals(System.Object)
+  commentId: M:ARFlow.DataFrameRequest.Equals(System.Object)
+  id: Equals(System.Object)
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: Equals(object)
+  nameWithType: DataFrameRequest.Equals(object)
+  fullName: ARFlow.DataFrameRequest.Equals(object)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Equals
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2214
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public override bool Equals(object other)
+    parameters:
+    - id: other
+      type: System.Object
+    return:
+      type: System.Boolean
+    content.vb: Public Overrides Function Equals(other As Object) As Boolean
+  overridden: System.Object.Equals(System.Object)
+  overload: ARFlow.DataFrameRequest.Equals*
+  nameWithType.vb: DataFrameRequest.Equals(Object)
+  fullName.vb: ARFlow.DataFrameRequest.Equals(Object)
+  name.vb: Equals(Object)
+- uid: ARFlow.DataFrameRequest.Equals(ARFlow.DataFrameRequest)
+  commentId: M:ARFlow.DataFrameRequest.Equals(ARFlow.DataFrameRequest)
+  id: Equals(ARFlow.DataFrameRequest)
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: Equals(DataFrameRequest)
+  nameWithType: DataFrameRequest.Equals(DataFrameRequest)
+  fullName: ARFlow.DataFrameRequest.Equals(ARFlow.DataFrameRequest)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Equals
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2220
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public bool Equals(DataFrameRequest other)
+    parameters:
+    - id: other
+      type: ARFlow.DataFrameRequest
+    return:
+      type: System.Boolean
+    content.vb: Public Function Equals(other As DataFrameRequest) As Boolean
+  overload: ARFlow.DataFrameRequest.Equals*
+- uid: ARFlow.DataFrameRequest.GetHashCode
+  commentId: M:ARFlow.DataFrameRequest.GetHashCode
+  id: GetHashCode
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: GetHashCode()
+  nameWithType: DataFrameRequest.GetHashCode()
+  fullName: ARFlow.DataFrameRequest.GetHashCode()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: GetHashCode
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2236
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public override int GetHashCode()
+    return:
+      type: System.Int32
+    content.vb: Public Overrides Function GetHashCode() As Integer
+  overridden: System.Object.GetHashCode
+  overload: ARFlow.DataFrameRequest.GetHashCode*
+- uid: ARFlow.DataFrameRequest.ToString
+  commentId: M:ARFlow.DataFrameRequest.ToString
+  id: ToString
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: DataFrameRequest.ToString()
+  fullName: ARFlow.DataFrameRequest.ToString()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ToString
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2250
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+    content.vb: Public Overrides Function ToString() As String
+  overridden: System.Object.ToString
+  overload: ARFlow.DataFrameRequest.ToString*
+- uid: ARFlow.DataFrameRequest.WriteTo(Google.Protobuf.CodedOutputStream)
+  commentId: M:ARFlow.DataFrameRequest.WriteTo(Google.Protobuf.CodedOutputStream)
+  id: WriteTo(Google.Protobuf.CodedOutputStream)
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: WriteTo(CodedOutputStream)
+  nameWithType: DataFrameRequest.WriteTo(CodedOutputStream)
+  fullName: ARFlow.DataFrameRequest.WriteTo(Google.Protobuf.CodedOutputStream)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: WriteTo
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2256
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Writes the data to the given coded output stream.
+  example: []
+  syntax:
+    content: public void WriteTo(CodedOutputStream output)
+    parameters:
+    - id: output
+      type: Google.Protobuf.CodedOutputStream
+      description: Coded output stream to write the data to. Must not be null.
+    content.vb: Public Sub WriteTo(output As CodedOutputStream)
+  overload: ARFlow.DataFrameRequest.WriteTo*
+- uid: ARFlow.DataFrameRequest.CalculateSize
+  commentId: M:ARFlow.DataFrameRequest.CalculateSize
+  id: CalculateSize
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: CalculateSize()
+  nameWithType: DataFrameRequest.CalculateSize()
+  fullName: ARFlow.DataFrameRequest.CalculateSize()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CalculateSize
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2310
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Calculates the size of this message in Protocol Buffer wire format, in bytes.
+  example: []
+  syntax:
+    content: public int CalculateSize()
+    return:
+      type: System.Int32
+      description: >-
+        The number of bytes required to write this message
+                    to a coded output stream.
+    content.vb: Public Function CalculateSize() As Integer
+  overload: ARFlow.DataFrameRequest.CalculateSize*
+- uid: ARFlow.DataFrameRequest.MergeFrom(ARFlow.DataFrameRequest)
+  commentId: M:ARFlow.DataFrameRequest.MergeFrom(ARFlow.DataFrameRequest)
+  id: MergeFrom(ARFlow.DataFrameRequest)
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: MergeFrom(DataFrameRequest)
+  nameWithType: DataFrameRequest.MergeFrom(DataFrameRequest)
+  fullName: ARFlow.DataFrameRequest.MergeFrom(ARFlow.DataFrameRequest)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: MergeFrom
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2332
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Merges the given message into this one.
+  remarks: See the user guide for precise merge semantics.
+  example: []
+  syntax:
+    content: public void MergeFrom(DataFrameRequest other)
+    parameters:
+    - id: other
+      type: ARFlow.DataFrameRequest
+    content.vb: Public Sub MergeFrom(other As DataFrameRequest)
+  overload: ARFlow.DataFrameRequest.MergeFrom*
+- uid: ARFlow.DataFrameRequest.MergeFrom(Google.Protobuf.CodedInputStream)
+  commentId: M:ARFlow.DataFrameRequest.MergeFrom(Google.Protobuf.CodedInputStream)
+  id: MergeFrom(Google.Protobuf.CodedInputStream)
+  parent: ARFlow.DataFrameRequest
+  langs:
+  - csharp
+  - vb
+  name: MergeFrom(CodedInputStream)
+  nameWithType: DataFrameRequest.MergeFrom(CodedInputStream)
+  fullName: ARFlow.DataFrameRequest.MergeFrom(Google.Protobuf.CodedInputStream)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: MergeFrom
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 2353
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Merges the data from the specified coded input stream with the current message.
+  remarks: See the user guide for precise merge semantics.
+  example: []
+  syntax:
+    content: public void MergeFrom(CodedInputStream input)
+    parameters:
+    - id: input
+      type: Google.Protobuf.CodedInputStream
+      description: ''
+    content.vb: Public Sub MergeFrom(input As CodedInputStream)
+  overload: ARFlow.DataFrameRequest.MergeFrom*
+references:
+- uid: ARFlow
+  commentId: N:ARFlow
+  href: ARFlow.html
+  name: ARFlow
+  nameWithType: ARFlow
+  fullName: ARFlow
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: ARFlow.DataFrameRequest.Parser*
+  commentId: Overload:ARFlow.DataFrameRequest.Parser
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_Parser
+  name: Parser
+  nameWithType: DataFrameRequest.Parser
+  fullName: ARFlow.DataFrameRequest.Parser
+- uid: Google.Protobuf.MessageParser{ARFlow.DataFrameRequest}
+  commentId: T:Google.Protobuf.MessageParser{ARFlow.DataFrameRequest}
+  parent: Google.Protobuf
+  definition: Google.Protobuf.MessageParser`1
+  href: ARFlow.DataFrameRequest.html
+  name: MessageParser<DataFrameRequest>
+  nameWithType: MessageParser<DataFrameRequest>
+  fullName: Google.Protobuf.MessageParser<ARFlow.DataFrameRequest>
+  nameWithType.vb: MessageParser(Of DataFrameRequest)
+  fullName.vb: Google.Protobuf.MessageParser(Of ARFlow.DataFrameRequest)
+  name.vb: MessageParser(Of DataFrameRequest)
+  spec.csharp:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: <
+  - uid: ARFlow.DataFrameRequest
+    name: DataFrameRequest
+    href: ARFlow.DataFrameRequest.html
+  - name: '>'
+  spec.vb:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: ARFlow.DataFrameRequest
+    name: DataFrameRequest
+    href: ARFlow.DataFrameRequest.html
+  - name: )
+- uid: Google.Protobuf.MessageParser`1
+  commentId: T:Google.Protobuf.MessageParser`1
+  isExternal: true
+  name: MessageParser<T>
+  nameWithType: MessageParser<T>
+  fullName: Google.Protobuf.MessageParser<T>
+  nameWithType.vb: MessageParser(Of T)
+  fullName.vb: Google.Protobuf.MessageParser(Of T)
+  name.vb: MessageParser(Of T)
+  spec.csharp:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: Google.Protobuf
+  commentId: N:Google.Protobuf
+  isExternal: true
+  name: Google.Protobuf
+  nameWithType: Google.Protobuf
+  fullName: Google.Protobuf
+  spec.csharp:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  spec.vb:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+- uid: ARFlow.DataFrameRequest.Descriptor*
+  commentId: Overload:ARFlow.DataFrameRequest.Descriptor
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_Descriptor
+  name: Descriptor
+  nameWithType: DataFrameRequest.Descriptor
+  fullName: ARFlow.DataFrameRequest.Descriptor
+- uid: Google.Protobuf.Reflection.MessageDescriptor
+  commentId: T:Google.Protobuf.Reflection.MessageDescriptor
+  parent: Google.Protobuf.Reflection
+  isExternal: true
+  name: MessageDescriptor
+  nameWithType: MessageDescriptor
+  fullName: Google.Protobuf.Reflection.MessageDescriptor
+- uid: Google.Protobuf.Reflection
+  commentId: N:Google.Protobuf.Reflection
+  isExternal: true
+  name: Google.Protobuf.Reflection
+  nameWithType: Google.Protobuf.Reflection
+  fullName: Google.Protobuf.Reflection
+  spec.csharp:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true
+  spec.vb:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true
+- uid: ARFlow.DataFrameRequest.#ctor*
+  commentId: Overload:ARFlow.DataFrameRequest.#ctor
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest__ctor
+  name: DataFrameRequest
+  nameWithType: DataFrameRequest.DataFrameRequest
+  fullName: ARFlow.DataFrameRequest.DataFrameRequest
+  nameWithType.vb: DataFrameRequest.New
+  fullName.vb: ARFlow.DataFrameRequest.New
+  name.vb: New
+- uid: ARFlow.DataFrameRequest
+  commentId: T:ARFlow.DataFrameRequest
+  parent: ARFlow
+  href: ARFlow.DataFrameRequest.html
+  name: DataFrameRequest
+  nameWithType: DataFrameRequest
+  fullName: ARFlow.DataFrameRequest
+- uid: ARFlow.DataFrameRequest.Clone*
+  commentId: Overload:ARFlow.DataFrameRequest.Clone
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_Clone
+  name: Clone
+  nameWithType: DataFrameRequest.Clone
+  fullName: ARFlow.DataFrameRequest.Clone
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: ARFlow.DataFrameRequest.Uid*
+  commentId: Overload:ARFlow.DataFrameRequest.Uid
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_Uid
+  name: Uid
+  nameWithType: DataFrameRequest.Uid
+  fullName: ARFlow.DataFrameRequest.Uid
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: ARFlow.DataFrameRequest.Color*
+  commentId: Overload:ARFlow.DataFrameRequest.Color
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_Color
+  name: Color
+  nameWithType: DataFrameRequest.Color
+  fullName: ARFlow.DataFrameRequest.Color
+- uid: Google.Protobuf.ByteString
+  commentId: T:Google.Protobuf.ByteString
+  parent: Google.Protobuf
+  isExternal: true
+  name: ByteString
+  nameWithType: ByteString
+  fullName: Google.Protobuf.ByteString
+- uid: ARFlow.DataFrameRequest.Depth*
+  commentId: Overload:ARFlow.DataFrameRequest.Depth
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_Depth
+  name: Depth
+  nameWithType: DataFrameRequest.Depth
+  fullName: ARFlow.DataFrameRequest.Depth
+- uid: ARFlow.DataFrameRequest.Transform*
+  commentId: Overload:ARFlow.DataFrameRequest.Transform
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_Transform
+  name: Transform
+  nameWithType: DataFrameRequest.Transform
+  fullName: ARFlow.DataFrameRequest.Transform
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: ARFlow.DataFrameRequest.Equals*
+  commentId: Overload:ARFlow.DataFrameRequest.Equals
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_Equals_System_Object_
+  name: Equals
+  nameWithType: DataFrameRequest.Equals
+  fullName: ARFlow.DataFrameRequest.Equals
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: ARFlow.DataFrameRequest.GetHashCode*
+  commentId: Overload:ARFlow.DataFrameRequest.GetHashCode
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_GetHashCode
+  name: GetHashCode
+  nameWithType: DataFrameRequest.GetHashCode
+  fullName: ARFlow.DataFrameRequest.GetHashCode
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: ARFlow.DataFrameRequest.ToString*
+  commentId: Overload:ARFlow.DataFrameRequest.ToString
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_ToString
+  name: ToString
+  nameWithType: DataFrameRequest.ToString
+  fullName: ARFlow.DataFrameRequest.ToString
+- uid: ARFlow.DataFrameRequest.WriteTo*
+  commentId: Overload:ARFlow.DataFrameRequest.WriteTo
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_WriteTo_Google_Protobuf_CodedOutputStream_
+  name: WriteTo
+  nameWithType: DataFrameRequest.WriteTo
+  fullName: ARFlow.DataFrameRequest.WriteTo
+- uid: Google.Protobuf.CodedOutputStream
+  commentId: T:Google.Protobuf.CodedOutputStream
+  parent: Google.Protobuf
+  isExternal: true
+  name: CodedOutputStream
+  nameWithType: CodedOutputStream
+  fullName: Google.Protobuf.CodedOutputStream
+- uid: ARFlow.DataFrameRequest.CalculateSize*
+  commentId: Overload:ARFlow.DataFrameRequest.CalculateSize
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_CalculateSize
+  name: CalculateSize
+  nameWithType: DataFrameRequest.CalculateSize
+  fullName: ARFlow.DataFrameRequest.CalculateSize
+- uid: ARFlow.DataFrameRequest.MergeFrom*
+  commentId: Overload:ARFlow.DataFrameRequest.MergeFrom
+  href: ARFlow.DataFrameRequest.html#ARFlow_DataFrameRequest_MergeFrom_ARFlow_DataFrameRequest_
+  name: MergeFrom
+  nameWithType: DataFrameRequest.MergeFrom
+  fullName: ARFlow.DataFrameRequest.MergeFrom
+- uid: Google.Protobuf.CodedInputStream
+  commentId: T:Google.Protobuf.CodedInputStream
+  parent: Google.Protobuf
+  isExternal: true
+  name: CodedInputStream
+  nameWithType: CodedInputStream
+  fullName: Google.Protobuf.CodedInputStream

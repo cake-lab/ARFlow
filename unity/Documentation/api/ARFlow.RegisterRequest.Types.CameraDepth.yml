@@ -1,0 +1,1159 @@
+### YamlMime:ManagedReference
+items:
+- uid: ARFlow.RegisterRequest.Types.CameraDepth
+  commentId: T:ARFlow.RegisterRequest.Types.CameraDepth
+  id: RegisterRequest.Types.CameraDepth
+  parent: ARFlow
+  children:
+  - ARFlow.RegisterRequest.Types.CameraDepth.#ctor
+  - ARFlow.RegisterRequest.Types.CameraDepth.#ctor(ARFlow.RegisterRequest.Types.CameraDepth)
+  - ARFlow.RegisterRequest.Types.CameraDepth.CalculateSize
+  - ARFlow.RegisterRequest.Types.CameraDepth.Clone
+  - ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel
+  - ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevelFieldNumber
+  - ARFlow.RegisterRequest.Types.CameraDepth.DataType
+  - ARFlow.RegisterRequest.Types.CameraDepth.DataTypeFieldNumber
+  - ARFlow.RegisterRequest.Types.CameraDepth.Descriptor
+  - ARFlow.RegisterRequest.Types.CameraDepth.Enabled
+  - ARFlow.RegisterRequest.Types.CameraDepth.EnabledFieldNumber
+  - ARFlow.RegisterRequest.Types.CameraDepth.Equals(ARFlow.RegisterRequest.Types.CameraDepth)
+  - ARFlow.RegisterRequest.Types.CameraDepth.Equals(System.Object)
+  - ARFlow.RegisterRequest.Types.CameraDepth.GetHashCode
+  - ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom(ARFlow.RegisterRequest.Types.CameraDepth)
+  - ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom(Google.Protobuf.CodedInputStream)
+  - ARFlow.RegisterRequest.Types.CameraDepth.Parser
+  - ARFlow.RegisterRequest.Types.CameraDepth.ResolutionX
+  - ARFlow.RegisterRequest.Types.CameraDepth.ResolutionXFieldNumber
+  - ARFlow.RegisterRequest.Types.CameraDepth.ResolutionY
+  - ARFlow.RegisterRequest.Types.CameraDepth.ResolutionYFieldNumber
+  - ARFlow.RegisterRequest.Types.CameraDepth.ToString
+  - ARFlow.RegisterRequest.Types.CameraDepth.WriteTo(Google.Protobuf.CodedOutputStream)
+  langs:
+  - csharp
+  - vb
+  name: RegisterRequest.Types.CameraDepth
+  nameWithType: RegisterRequest.Types.CameraDepth
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth
+  type: Class
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CameraDepth
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1168
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public sealed class RegisterRequest.Types.CameraDepth
+    content.vb: Public NotInheritable Class RegisterRequest.Types.CameraDepth
+  inheritance:
+  - System.Object
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Parser
+  commentId: P:ARFlow.RegisterRequest.Types.CameraDepth.Parser
+  id: Parser
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: Parser
+  nameWithType: RegisterRequest.Types.CameraDepth.Parser
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Parser
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Parser
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1176
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public static MessageParser<RegisterRequest.Types.CameraDepth> Parser { get; }
+    parameters: []
+    return:
+      type: Google.Protobuf.MessageParser{ARFlow.RegisterRequest.Types.CameraDepth}
+    content.vb: Public Shared ReadOnly Property Parser As MessageParser(Of RegisterRequest.Types.CameraDepth)
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.Parser*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Descriptor
+  commentId: P:ARFlow.RegisterRequest.Types.CameraDepth.Descriptor
+  id: Descriptor
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: Descriptor
+  nameWithType: RegisterRequest.Types.CameraDepth.Descriptor
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Descriptor
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Descriptor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1180
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public static MessageDescriptor Descriptor { get; }
+    parameters: []
+    return:
+      type: Google.Protobuf.Reflection.MessageDescriptor
+    content.vb: Public Shared ReadOnly Property Descriptor As MessageDescriptor
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.Descriptor*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.#ctor
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.#ctor
+  id: '#ctor'
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: CameraDepth()
+  nameWithType: RegisterRequest.Types.CameraDepth.CameraDepth()
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.CameraDepth()
+  type: Constructor
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: .ctor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1192
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public CameraDepth()
+    content.vb: Public Sub New()
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.#ctor*
+  nameWithType.vb: RegisterRequest.Types.CameraDepth.New()
+  fullName.vb: ARFlow.RegisterRequest.Types.CameraDepth.New()
+  name.vb: New()
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.#ctor(ARFlow.RegisterRequest.Types.CameraDepth)
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.#ctor(ARFlow.RegisterRequest.Types.CameraDepth)
+  id: '#ctor(ARFlow.RegisterRequest.Types.CameraDepth)'
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: CameraDepth(CameraDepth)
+  nameWithType: RegisterRequest.Types.CameraDepth.CameraDepth(RegisterRequest.Types.CameraDepth)
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.CameraDepth(ARFlow.RegisterRequest.Types.CameraDepth)
+  type: Constructor
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: .ctor
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1200
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public CameraDepth(RegisterRequest.Types.CameraDepth other)
+    parameters:
+    - id: other
+      type: ARFlow.RegisterRequest.Types.CameraDepth
+    content.vb: Public Sub New(other As RegisterRequest.Types.CameraDepth)
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.#ctor*
+  nameWithType.vb: RegisterRequest.Types.CameraDepth.New(RegisterRequest.Types.CameraDepth)
+  fullName.vb: ARFlow.RegisterRequest.Types.CameraDepth.New(ARFlow.RegisterRequest.Types.CameraDepth)
+  name.vb: New(CameraDepth)
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Clone
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.Clone
+  id: Clone
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: Clone()
+  nameWithType: RegisterRequest.Types.CameraDepth.Clone()
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Clone()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Clone
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1211
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Creates a deep clone of this object.
+  example: []
+  syntax:
+    content: public RegisterRequest.Types.CameraDepth Clone()
+    return:
+      type: ARFlow.RegisterRequest.Types.CameraDepth
+      description: A deep clone of this object.
+    content.vb: Public Function Clone() As RegisterRequest.Types.CameraDepth
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.Clone*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.EnabledFieldNumber
+  commentId: F:ARFlow.RegisterRequest.Types.CameraDepth.EnabledFieldNumber
+  id: EnabledFieldNumber
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: EnabledFieldNumber
+  nameWithType: RegisterRequest.Types.CameraDepth.EnabledFieldNumber
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.EnabledFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: EnabledFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1218
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "enabled" field.
+  example: []
+  syntax:
+    content: public const int EnabledFieldNumber = 1
+    return:
+      type: System.Int32
+    content.vb: Public Const EnabledFieldNumber As Integer = 1
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Enabled
+  commentId: P:ARFlow.RegisterRequest.Types.CameraDepth.Enabled
+  id: Enabled
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: Enabled
+  nameWithType: RegisterRequest.Types.CameraDepth.Enabled
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Enabled
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Enabled
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1220
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public bool Enabled { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property Enabled As Boolean
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.Enabled*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.DataTypeFieldNumber
+  commentId: F:ARFlow.RegisterRequest.Types.CameraDepth.DataTypeFieldNumber
+  id: DataTypeFieldNumber
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: DataTypeFieldNumber
+  nameWithType: RegisterRequest.Types.CameraDepth.DataTypeFieldNumber
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.DataTypeFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: DataTypeFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1230
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "data_type" field.
+  example: []
+  syntax:
+    content: public const int DataTypeFieldNumber = 2
+    return:
+      type: System.Int32
+    content.vb: Public Const DataTypeFieldNumber As Integer = 2
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.DataType
+  commentId: P:ARFlow.RegisterRequest.Types.CameraDepth.DataType
+  id: DataType
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: DataType
+  nameWithType: RegisterRequest.Types.CameraDepth.DataType
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.DataType
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: DataType
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1232
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public string DataType { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DataType As String
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.DataType*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevelFieldNumber
+  commentId: F:ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevelFieldNumber
+  id: ConfidenceFilteringLevelFieldNumber
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: ConfidenceFilteringLevelFieldNumber
+  nameWithType: RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevelFieldNumber
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevelFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ConfidenceFilteringLevelFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1242
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "confidence_filtering_level" field.
+  example: []
+  syntax:
+    content: public const int ConfidenceFilteringLevelFieldNumber = 3
+    return:
+      type: System.Int32
+    content.vb: Public Const ConfidenceFilteringLevelFieldNumber As Integer = 3
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel
+  commentId: P:ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel
+  id: ConfidenceFilteringLevel
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: ConfidenceFilteringLevel
+  nameWithType: RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ConfidenceFilteringLevel
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1244
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public int ConfidenceFilteringLevel { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property ConfidenceFilteringLevel As Integer
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionXFieldNumber
+  commentId: F:ARFlow.RegisterRequest.Types.CameraDepth.ResolutionXFieldNumber
+  id: ResolutionXFieldNumber
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: ResolutionXFieldNumber
+  nameWithType: RegisterRequest.Types.CameraDepth.ResolutionXFieldNumber
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionXFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ResolutionXFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1254
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "resolution_x" field.
+  example: []
+  syntax:
+    content: public const int ResolutionXFieldNumber = 4
+    return:
+      type: System.Int32
+    content.vb: Public Const ResolutionXFieldNumber As Integer = 4
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionX
+  commentId: P:ARFlow.RegisterRequest.Types.CameraDepth.ResolutionX
+  id: ResolutionX
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: ResolutionX
+  nameWithType: RegisterRequest.Types.CameraDepth.ResolutionX
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionX
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ResolutionX
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1256
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public int ResolutionX { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property ResolutionX As Integer
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionX*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionYFieldNumber
+  commentId: F:ARFlow.RegisterRequest.Types.CameraDepth.ResolutionYFieldNumber
+  id: ResolutionYFieldNumber
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: ResolutionYFieldNumber
+  nameWithType: RegisterRequest.Types.CameraDepth.ResolutionYFieldNumber
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionYFieldNumber
+  type: Field
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ResolutionYFieldNumber
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1266
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Field number for the "resolution_y" field.
+  example: []
+  syntax:
+    content: public const int ResolutionYFieldNumber = 5
+    return:
+      type: System.Int32
+    content.vb: Public Const ResolutionYFieldNumber As Integer = 5
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionY
+  commentId: P:ARFlow.RegisterRequest.Types.CameraDepth.ResolutionY
+  id: ResolutionY
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: ResolutionY
+  nameWithType: RegisterRequest.Types.CameraDepth.ResolutionY
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionY
+  type: Property
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ResolutionY
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1268
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  syntax:
+    content: public int ResolutionY { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property ResolutionY As Integer
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionY*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Equals(System.Object)
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.Equals(System.Object)
+  id: Equals(System.Object)
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: Equals(object)
+  nameWithType: RegisterRequest.Types.CameraDepth.Equals(object)
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Equals(object)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Equals
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1277
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public override bool Equals(object other)
+    parameters:
+    - id: other
+      type: System.Object
+    return:
+      type: System.Boolean
+    content.vb: Public Overrides Function Equals(other As Object) As Boolean
+  overridden: System.Object.Equals(System.Object)
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.Equals*
+  nameWithType.vb: RegisterRequest.Types.CameraDepth.Equals(Object)
+  fullName.vb: ARFlow.RegisterRequest.Types.CameraDepth.Equals(Object)
+  name.vb: Equals(Object)
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Equals(ARFlow.RegisterRequest.Types.CameraDepth)
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.Equals(ARFlow.RegisterRequest.Types.CameraDepth)
+  id: Equals(ARFlow.RegisterRequest.Types.CameraDepth)
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: Equals(CameraDepth)
+  nameWithType: RegisterRequest.Types.CameraDepth.Equals(RegisterRequest.Types.CameraDepth)
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Equals(ARFlow.RegisterRequest.Types.CameraDepth)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: Equals
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1283
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public bool Equals(RegisterRequest.Types.CameraDepth other)
+    parameters:
+    - id: other
+      type: ARFlow.RegisterRequest.Types.CameraDepth
+    return:
+      type: System.Boolean
+    content.vb: Public Function Equals(other As RegisterRequest.Types.CameraDepth) As Boolean
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.Equals*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.GetHashCode
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.GetHashCode
+  id: GetHashCode
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: GetHashCode()
+  nameWithType: RegisterRequest.Types.CameraDepth.GetHashCode()
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.GetHashCode()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: GetHashCode
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1300
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public override int GetHashCode()
+    return:
+      type: System.Int32
+    content.vb: Public Overrides Function GetHashCode() As Integer
+  overridden: System.Object.GetHashCode
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.GetHashCode*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ToString
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.ToString
+  id: ToString
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: RegisterRequest.Types.CameraDepth.ToString()
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ToString()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: ToString
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1315
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+    content.vb: Public Overrides Function ToString() As String
+  overridden: System.Object.ToString
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.ToString*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.WriteTo(Google.Protobuf.CodedOutputStream)
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.WriteTo(Google.Protobuf.CodedOutputStream)
+  id: WriteTo(Google.Protobuf.CodedOutputStream)
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: WriteTo(CodedOutputStream)
+  nameWithType: RegisterRequest.Types.CameraDepth.WriteTo(CodedOutputStream)
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.WriteTo(Google.Protobuf.CodedOutputStream)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: WriteTo
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1321
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Writes the data to the given coded output stream.
+  example: []
+  syntax:
+    content: public void WriteTo(CodedOutputStream output)
+    parameters:
+    - id: output
+      type: Google.Protobuf.CodedOutputStream
+      description: Coded output stream to write the data to. Must not be null.
+    content.vb: Public Sub WriteTo(output As CodedOutputStream)
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.WriteTo*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.CalculateSize
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.CalculateSize
+  id: CalculateSize
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: CalculateSize()
+  nameWithType: RegisterRequest.Types.CameraDepth.CalculateSize()
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.CalculateSize()
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: CalculateSize
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1383
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Calculates the size of this message in Protocol Buffer wire format, in bytes.
+  example: []
+  syntax:
+    content: public int CalculateSize()
+    return:
+      type: System.Int32
+      description: >-
+        The number of bytes required to write this message
+                    to a coded output stream.
+    content.vb: Public Function CalculateSize() As Integer
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.CalculateSize*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom(ARFlow.RegisterRequest.Types.CameraDepth)
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom(ARFlow.RegisterRequest.Types.CameraDepth)
+  id: MergeFrom(ARFlow.RegisterRequest.Types.CameraDepth)
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: MergeFrom(CameraDepth)
+  nameWithType: RegisterRequest.Types.CameraDepth.MergeFrom(RegisterRequest.Types.CameraDepth)
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom(ARFlow.RegisterRequest.Types.CameraDepth)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: MergeFrom
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1408
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Merges the given message into this one.
+  remarks: See the user guide for precise merge semantics.
+  example: []
+  syntax:
+    content: public void MergeFrom(RegisterRequest.Types.CameraDepth other)
+    parameters:
+    - id: other
+      type: ARFlow.RegisterRequest.Types.CameraDepth
+    content.vb: Public Sub MergeFrom(other As RegisterRequest.Types.CameraDepth)
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom*
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom(Google.Protobuf.CodedInputStream)
+  commentId: M:ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom(Google.Protobuf.CodedInputStream)
+  id: MergeFrom(Google.Protobuf.CodedInputStream)
+  parent: ARFlow.RegisterRequest.Types.CameraDepth
+  langs:
+  - csharp
+  - vb
+  name: MergeFrom(CodedInputStream)
+  nameWithType: RegisterRequest.Types.CameraDepth.MergeFrom(CodedInputStream)
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom(Google.Protobuf.CodedInputStream)
+  type: Method
+  source:
+    remote:
+      path: unity/Assets/Scripts/ARFlow/Service.cs
+      branch: main
+      repo: https://github.com/legoeruro/ARFlow.git
+    id: MergeFrom
+    path: ../Assets/Scripts/ARFlow/Service.cs
+    startLine: 1432
+  assemblies:
+  - Assembly-CSharp
+  namespace: ARFlow
+  summary: Merges the data from the specified coded input stream with the current message.
+  remarks: See the user guide for precise merge semantics.
+  example: []
+  syntax:
+    content: public void MergeFrom(CodedInputStream input)
+    parameters:
+    - id: input
+      type: Google.Protobuf.CodedInputStream
+      description: ''
+    content.vb: Public Sub MergeFrom(input As CodedInputStream)
+  overload: ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom*
+references:
+- uid: ARFlow
+  commentId: N:ARFlow
+  href: ARFlow.html
+  name: ARFlow
+  nameWithType: ARFlow
+  fullName: ARFlow
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Parser*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.Parser
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_Parser
+  name: Parser
+  nameWithType: RegisterRequest.Types.CameraDepth.Parser
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Parser
+- uid: Google.Protobuf.MessageParser{ARFlow.RegisterRequest.Types.CameraDepth}
+  commentId: T:Google.Protobuf.MessageParser{ARFlow.RegisterRequest.Types.CameraDepth}
+  parent: Google.Protobuf
+  definition: Google.Protobuf.MessageParser`1
+  href: ARFlow.RegisterRequest.html
+  name: MessageParser<RegisterRequest.Types.CameraDepth>
+  nameWithType: MessageParser<RegisterRequest.Types.CameraDepth>
+  fullName: Google.Protobuf.MessageParser<ARFlow.RegisterRequest.Types.CameraDepth>
+  nameWithType.vb: MessageParser(Of RegisterRequest.Types.CameraDepth)
+  fullName.vb: Google.Protobuf.MessageParser(Of ARFlow.RegisterRequest.Types.CameraDepth)
+  name.vb: MessageParser(Of RegisterRequest.Types.CameraDepth)
+  spec.csharp:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: <
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraDepth
+    name: CameraDepth
+    href: ARFlow.RegisterRequest.Types.CameraDepth.html
+  - name: '>'
+  spec.vb:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraDepth
+    name: CameraDepth
+    href: ARFlow.RegisterRequest.Types.CameraDepth.html
+  - name: )
+- uid: Google.Protobuf.MessageParser`1
+  commentId: T:Google.Protobuf.MessageParser`1
+  isExternal: true
+  name: MessageParser<T>
+  nameWithType: MessageParser<T>
+  fullName: Google.Protobuf.MessageParser<T>
+  nameWithType.vb: MessageParser(Of T)
+  fullName.vb: Google.Protobuf.MessageParser(Of T)
+  name.vb: MessageParser(Of T)
+  spec.csharp:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: Google.Protobuf.MessageParser`1
+    name: MessageParser
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: Google.Protobuf
+  commentId: N:Google.Protobuf
+  isExternal: true
+  name: Google.Protobuf
+  nameWithType: Google.Protobuf
+  fullName: Google.Protobuf
+  spec.csharp:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  spec.vb:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Descriptor*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.Descriptor
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_Descriptor
+  name: Descriptor
+  nameWithType: RegisterRequest.Types.CameraDepth.Descriptor
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Descriptor
+- uid: Google.Protobuf.Reflection.MessageDescriptor
+  commentId: T:Google.Protobuf.Reflection.MessageDescriptor
+  parent: Google.Protobuf.Reflection
+  isExternal: true
+  name: MessageDescriptor
+  nameWithType: MessageDescriptor
+  fullName: Google.Protobuf.Reflection.MessageDescriptor
+- uid: Google.Protobuf.Reflection
+  commentId: N:Google.Protobuf.Reflection
+  isExternal: true
+  name: Google.Protobuf.Reflection
+  nameWithType: Google.Protobuf.Reflection
+  fullName: Google.Protobuf.Reflection
+  spec.csharp:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true
+  spec.vb:
+  - uid: Google
+    name: Google
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf
+    name: Protobuf
+    isExternal: true
+  - name: .
+  - uid: Google.Protobuf.Reflection
+    name: Reflection
+    isExternal: true
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.#ctor*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.#ctor
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth__ctor
+  name: CameraDepth
+  nameWithType: RegisterRequest.Types.CameraDepth.CameraDepth
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.CameraDepth
+  nameWithType.vb: RegisterRequest.Types.CameraDepth.New
+  fullName.vb: ARFlow.RegisterRequest.Types.CameraDepth.New
+  name.vb: New
+- uid: ARFlow.RegisterRequest.Types.CameraDepth
+  commentId: T:ARFlow.RegisterRequest.Types.CameraDepth
+  parent: ARFlow
+  href: ARFlow.RegisterRequest.html
+  name: RegisterRequest.Types.CameraDepth
+  nameWithType: RegisterRequest.Types.CameraDepth
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth
+  spec.csharp:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraDepth
+    name: CameraDepth
+    href: ARFlow.RegisterRequest.Types.CameraDepth.html
+  spec.vb:
+  - uid: ARFlow.RegisterRequest
+    name: RegisterRequest
+    href: ARFlow.RegisterRequest.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types
+    name: Types
+    href: ARFlow.RegisterRequest.Types.html
+  - name: .
+  - uid: ARFlow.RegisterRequest.Types.CameraDepth
+    name: CameraDepth
+    href: ARFlow.RegisterRequest.Types.CameraDepth.html
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Clone*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.Clone
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_Clone
+  name: Clone
+  nameWithType: RegisterRequest.Types.CameraDepth.Clone
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Clone
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Enabled*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.Enabled
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_Enabled
+  name: Enabled
+  nameWithType: RegisterRequest.Types.CameraDepth.Enabled
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Enabled
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.DataType*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.DataType
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_DataType
+  name: DataType
+  nameWithType: RegisterRequest.Types.CameraDepth.DataType
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.DataType
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_ConfidenceFilteringLevel
+  name: ConfidenceFilteringLevel
+  nameWithType: RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ConfidenceFilteringLevel
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionX*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.ResolutionX
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_ResolutionX
+  name: ResolutionX
+  nameWithType: RegisterRequest.Types.CameraDepth.ResolutionX
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionX
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionY*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.ResolutionY
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_ResolutionY
+  name: ResolutionY
+  nameWithType: RegisterRequest.Types.CameraDepth.ResolutionY
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ResolutionY
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.Equals*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.Equals
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_Equals_System_Object_
+  name: Equals
+  nameWithType: RegisterRequest.Types.CameraDepth.Equals
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.Equals
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.GetHashCode*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.GetHashCode
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_GetHashCode
+  name: GetHashCode
+  nameWithType: RegisterRequest.Types.CameraDepth.GetHashCode
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.GetHashCode
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.ToString*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.ToString
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_ToString
+  name: ToString
+  nameWithType: RegisterRequest.Types.CameraDepth.ToString
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.ToString
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.WriteTo*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.WriteTo
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_WriteTo_Google_Protobuf_CodedOutputStream_
+  name: WriteTo
+  nameWithType: RegisterRequest.Types.CameraDepth.WriteTo
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.WriteTo
+- uid: Google.Protobuf.CodedOutputStream
+  commentId: T:Google.Protobuf.CodedOutputStream
+  parent: Google.Protobuf
+  isExternal: true
+  name: CodedOutputStream
+  nameWithType: CodedOutputStream
+  fullName: Google.Protobuf.CodedOutputStream
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.CalculateSize*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.CalculateSize
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_CalculateSize
+  name: CalculateSize
+  nameWithType: RegisterRequest.Types.CameraDepth.CalculateSize
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.CalculateSize
+- uid: ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom*
+  commentId: Overload:ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom
+  href: ARFlow.RegisterRequest.Types.CameraDepth.html#ARFlow_RegisterRequest_Types_CameraDepth_MergeFrom_ARFlow_RegisterRequest_Types_CameraDepth_
+  name: MergeFrom
+  nameWithType: RegisterRequest.Types.CameraDepth.MergeFrom
+  fullName: ARFlow.RegisterRequest.Types.CameraDepth.MergeFrom
+- uid: Google.Protobuf.CodedInputStream
+  commentId: T:Google.Protobuf.CodedInputStream
+  parent: Google.Protobuf
+  isExternal: true
+  name: CodedInputStream
+  nameWithType: CodedInputStream
+  fullName: Google.Protobuf.CodedInputStream
