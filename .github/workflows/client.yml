@@ -32,7 +32,7 @@ jobs:
 
       - name: Run script to build the documentation
         working-directory: ./unity/Documentation
-        run: .\build.cmd
+        run: ./build.cmd
 
       - name: Move docs to website directory
         run: |
