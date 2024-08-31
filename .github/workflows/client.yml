@@ -45,7 +45,7 @@ jobs:
   # Single deploy job since we're just deploying
   deploy:
     needs: build-docs
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       pages: write
       id-token: write

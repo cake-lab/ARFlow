@@ -1,3 +1,4 @@
+### YamlMime:ManagedReference
 apiRules:
 - include: # The namespaces to generate
     uidRegex: ^ARFlow
