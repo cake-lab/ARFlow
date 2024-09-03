@@ -25,6 +25,7 @@
         "Xihe"
     ],
     "conventionalCommits.scopes": [
-        "server"
+        "server",
+        "client"
     ],
 }
