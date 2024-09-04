@@ -2,8 +2,12 @@ syntax = "proto3";
 
 option csharp_namespace = "ARFlow";
 
+// The ARFlowService service definition.
 service ARFlowService {
+    // Registers a device with the given specifications.
     rpc register(RegisterRequest) returns (RegisterResponse);
+
+    // Sends a data frame from a device.
     rpc data_frame(DataFrameRequest) returns (DataFrameResponse);
 }
 
@@ -55,7 +59,7 @@ message RegisterRequest {
 }
 
 message RegisterResponse {
-    string message = 1;
+    string uid = 1;
 }
 
 message DataFrameRequest {
