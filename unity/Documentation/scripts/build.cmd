@@ -3,6 +3,9 @@ SETLOCAL
 SETLOCAL ENABLEEXTENSIONS
 rmdir /s /q api
 rmdir /s /q clientHTMLOutput
+
+dir
+
 docfx metadata
 docfx build docfx.json > docfx.log
 @IF NOT %ERRORLEVEL% == 0 (

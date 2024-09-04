@@ -3,4 +3,4 @@
 
 # Client docs directory inside documentation is for local environment. 
 # When running github workflows the files will be moved into the website/docs directory (in root)
-/client
+/clientHTMLOutput

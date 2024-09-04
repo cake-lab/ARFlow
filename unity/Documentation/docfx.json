@@ -4,7 +4,7 @@
             "src": [
                 {
                     "src": "../",
-                    "files": ["unity.sln"]
+                    "files": ["*.{sln, csproj}"]
                 }
             ],
             "dest": "api",
