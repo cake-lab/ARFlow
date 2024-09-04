@@ -43,7 +43,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: client-docs
-          path: ./unity/Documentation/client
+          path: ./unity/Documentation/clientHTMLOutput
+
   build-server-docs:
     needs: build-client-docs-as-artifact
     runs-on: ubuntu-latest
@@ -89,7 +90,16 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: client-docs
-          path: ./website/docs/
+          path: ./website/docs/client
+      
+      # # cleanup client docs artifacts
+      # - name: Delete client docs artifact
+      #   run: |
+      #     github.rest.actions.deleteArtifact({
+      #       owner: context.repo.owner,
+      #       repo: context.repo.repo,
+      #       artifact_id: ${{ steps.artifact-download.outputs.artifact-id }}
+      #     });
 
       - uses: actions/upload-pages-artifact@v3
         with:

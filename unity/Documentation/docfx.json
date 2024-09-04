@@ -18,7 +18,7 @@
                 "exclude": ["_site/**"]
             }
         ],
-        "output": "./client",
+        "output": "./clientHTMLOutput",
         "template": ["default", "modern"],
         "globalMetadata": {
             "_appName": "ARFlow",
