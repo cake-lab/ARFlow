@@ -15,10 +15,10 @@ items:
   - ARFlow.RegisterResponse.GetHashCode
   - ARFlow.RegisterResponse.MergeFrom(ARFlow.RegisterResponse)
   - ARFlow.RegisterResponse.MergeFrom(Google.Protobuf.CodedInputStream)
-  - ARFlow.RegisterResponse.Message
-  - ARFlow.RegisterResponse.MessageFieldNumber
   - ARFlow.RegisterResponse.Parser
   - ARFlow.RegisterResponse.ToString
+  - ARFlow.RegisterResponse.Uid
+  - ARFlow.RegisterResponse.UidFieldNumber
   - ARFlow.RegisterResponse.WriteTo(Google.Protobuf.CodedOutputStream)
   langs:
   - csharp
@@ -193,64 +193,64 @@ items:
       description: A deep clone of this object.
     content.vb: Public Function Clone() As RegisterResponse
   overload: ARFlow.RegisterResponse.Clone*
-- uid: ARFlow.RegisterResponse.MessageFieldNumber
-  commentId: F:ARFlow.RegisterResponse.MessageFieldNumber
-  id: MessageFieldNumber
+- uid: ARFlow.RegisterResponse.UidFieldNumber
+  commentId: F:ARFlow.RegisterResponse.UidFieldNumber
+  id: UidFieldNumber
   parent: ARFlow.RegisterResponse
   langs:
   - csharp
   - vb
-  name: MessageFieldNumber
-  nameWithType: RegisterResponse.MessageFieldNumber
-  fullName: ARFlow.RegisterResponse.MessageFieldNumber
+  name: UidFieldNumber
+  nameWithType: RegisterResponse.UidFieldNumber
+  fullName: ARFlow.RegisterResponse.UidFieldNumber
   type: Field
   source:
     remote:
       path: unity/Assets/Scripts/ARFlow/Service.cs
       branch: main
       repo: https://github.com/legoeruro/ARFlow.git
-    id: MessageFieldNumber
+    id: UidFieldNumber
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1974
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
-  summary: Field number for the "message" field.
+  summary: Field number for the "uid" field.
   example: []
   syntax:
-    content: public const int MessageFieldNumber = 1
+    content: public const int UidFieldNumber = 1
     return:
       type: System.Int32
-    content.vb: Public Const MessageFieldNumber As Integer = 1
-- uid: ARFlow.RegisterResponse.Message
-  commentId: P:ARFlow.RegisterResponse.Message
-  id: Message
+    content.vb: Public Const UidFieldNumber As Integer = 1
+- uid: ARFlow.RegisterResponse.Uid
+  commentId: P:ARFlow.RegisterResponse.Uid
+  id: Uid
   parent: ARFlow.RegisterResponse
   langs:
   - csharp
   - vb
-  name: Message
-  nameWithType: RegisterResponse.Message
-  fullName: ARFlow.RegisterResponse.Message
+  name: Uid
+  nameWithType: RegisterResponse.Uid
+  fullName: ARFlow.RegisterResponse.Uid
   type: Property
   source:
     remote:
       path: unity/Assets/Scripts/ARFlow/Service.cs
       branch: main
       repo: https://github.com/legoeruro/ARFlow.git
-    id: Message
+    id: Uid
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1976
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
   syntax:
-    content: public string Message { get; set; }
+    content: public string Uid { get; set; }
     parameters: []
     return:
       type: System.String
-    content.vb: Public Property Message As String
-  overload: ARFlow.RegisterResponse.Message*
+    content.vb: Public Property Uid As String
+  overload: ARFlow.RegisterResponse.Uid*
 - uid: ARFlow.RegisterResponse.Equals(System.Object)
   commentId: M:ARFlow.RegisterResponse.Equals(System.Object)
   id: Equals(System.Object)
@@ -694,12 +694,12 @@ references:
   nameWithType.vb: Integer
   fullName.vb: Integer
   name.vb: Integer
-- uid: ARFlow.RegisterResponse.Message*
-  commentId: Overload:ARFlow.RegisterResponse.Message
-  href: ARFlow.RegisterResponse.html#ARFlow_RegisterResponse_Message
-  name: Message
-  nameWithType: RegisterResponse.Message
-  fullName: ARFlow.RegisterResponse.Message
+- uid: ARFlow.RegisterResponse.Uid*
+  commentId: Overload:ARFlow.RegisterResponse.Uid
+  href: ARFlow.RegisterResponse.html#ARFlow_RegisterResponse_Uid
+  name: Uid
+  nameWithType: RegisterResponse.Uid
+  fullName: ARFlow.RegisterResponse.Uid
 - uid: System.String
   commentId: T:System.String
   parent: System

@@ -21,7 +21,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: ARFlowServiceBase
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 79
+    startLine: 82
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
@@ -64,19 +64,24 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: register
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 82
+    startLine: 91
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Registers a device with the given specifications.
+  example: []
   syntax:
     content: public virtual Task<RegisterResponse> register(RegisterRequest request, ServerCallContext context)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
+      description: The request received from the client.
     - id: context
       type: Grpc.Core.ServerCallContext
+      description: The context of the server-side call handler being invoked.
     return:
       type: System.Threading.Tasks.Task{ARFlow.RegisterResponse}
+      description: The response to send back to the client (wrapped by a task).
     content.vb: Public Overridable Function register(request As RegisterRequest, context As ServerCallContext) As Task(Of RegisterResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceBase.register*
 - uid: ARFlow.ARFlowService.ARFlowServiceBase.data_frame(ARFlow.DataFrameRequest,Grpc.Core.ServerCallContext)
@@ -97,19 +102,24 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: data_frame
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 88
+    startLine: 103
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Sends a data frame from a device.
+  example: []
   syntax:
     content: public virtual Task<DataFrameResponse> data_frame(DataFrameRequest request, ServerCallContext context)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
+      description: The request received from the client.
     - id: context
       type: Grpc.Core.ServerCallContext
+      description: The context of the server-side call handler being invoked.
     return:
       type: System.Threading.Tasks.Task{ARFlow.DataFrameResponse}
+      description: The response to send back to the client (wrapped by a task).
     content.vb: Public Overridable Function data_frame(request As DataFrameRequest, context As ServerCallContext) As Task(Of DataFrameResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceBase.data_frame*
 references:

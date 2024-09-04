@@ -22,10 +22,12 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: ARFlowService
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 10
+    startLine: 13
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: The ARFlowService service definition.
+  example: []
   syntax:
     content: public static class ARFlowService
     content.vb: Public Module ARFlowService
@@ -49,7 +51,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: Descriptor
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 73
+    startLine: 76
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
@@ -80,7 +82,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: BindService
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 173
+    startLine: 244
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
@@ -114,7 +116,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: BindService
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 185
+    startLine: 256
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow

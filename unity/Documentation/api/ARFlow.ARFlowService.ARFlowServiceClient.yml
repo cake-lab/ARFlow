@@ -32,7 +32,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: ARFlowServiceClient
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 97
+    startLine: 112
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
@@ -63,7 +63,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: .ctor
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 101
+    startLine: 116
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
@@ -98,7 +98,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: .ctor
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 107
+    startLine: 122
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
@@ -133,7 +133,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: .ctor
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 112
+    startLine: 127
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
@@ -164,7 +164,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: .ctor
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 118
+    startLine: 133
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
@@ -199,23 +199,30 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: register
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 123
+    startLine: 146
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Registers a device with the given specifications.
+  example: []
   syntax:
     content: public virtual RegisterResponse register(RegisterRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
+      description: The request to send to the server.
     - id: headers
       type: Grpc.Core.Metadata
+      description: The initial metadata to send with the call. This parameter is optional.
     - id: deadline
       type: System.Nullable{System.DateTime}
+      description: An optional deadline for the call. The call will be cancelled if deadline is hit.
     - id: cancellationToken
       type: System.Threading.CancellationToken
+      description: An optional token for canceling the call.
     return:
       type: ARFlow.RegisterResponse
+      description: The response received from the server.
     content.vb: Public Overridable Function register(request As RegisterRequest, headers As Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As RegisterResponse
   overload: ARFlow.ARFlowService.ARFlowServiceClient.register*
   nameWithType.vb: ARFlowService.ARFlowServiceClient.register(RegisterRequest, Metadata, Date?, CancellationToken)
@@ -239,19 +246,24 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: register
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 128
+    startLine: 157
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Registers a device with the given specifications.
+  example: []
   syntax:
     content: public virtual RegisterResponse register(RegisterRequest request, CallOptions options)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
+      description: The request to send to the server.
     - id: options
       type: Grpc.Core.CallOptions
+      description: The options for the call.
     return:
       type: ARFlow.RegisterResponse
+      description: The response received from the server.
     content.vb: Public Overridable Function register(request As RegisterRequest, options As CallOptions) As RegisterResponse
   overload: ARFlow.ARFlowService.ARFlowServiceClient.register*
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync(ARFlow.RegisterRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
@@ -272,23 +284,30 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: registerAsync
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 133
+    startLine: 170
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Registers a device with the given specifications.
+  example: []
   syntax:
     content: public virtual AsyncUnaryCall<RegisterResponse> registerAsync(RegisterRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
+      description: The request to send to the server.
     - id: headers
       type: Grpc.Core.Metadata
+      description: The initial metadata to send with the call. This parameter is optional.
     - id: deadline
       type: System.Nullable{System.DateTime}
+      description: An optional deadline for the call. The call will be cancelled if deadline is hit.
     - id: cancellationToken
       type: System.Threading.CancellationToken
+      description: An optional token for canceling the call.
     return:
       type: Grpc.Core.AsyncUnaryCall{ARFlow.RegisterResponse}
+      description: The call object.
     content.vb: Public Overridable Function registerAsync(request As RegisterRequest, headers As Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As AsyncUnaryCall(Of RegisterResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync*
   nameWithType.vb: ARFlowService.ARFlowServiceClient.registerAsync(RegisterRequest, Metadata, Date?, CancellationToken)
@@ -312,19 +331,24 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: registerAsync
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 138
+    startLine: 181
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Registers a device with the given specifications.
+  example: []
   syntax:
     content: public virtual AsyncUnaryCall<RegisterResponse> registerAsync(RegisterRequest request, CallOptions options)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
+      description: The request to send to the server.
     - id: options
       type: Grpc.Core.CallOptions
+      description: The options for the call.
     return:
       type: Grpc.Core.AsyncUnaryCall{ARFlow.RegisterResponse}
+      description: The call object.
     content.vb: Public Overridable Function registerAsync(request As RegisterRequest, options As CallOptions) As AsyncUnaryCall(Of RegisterResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync*
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.data_frame(ARFlow.DataFrameRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
@@ -345,23 +369,30 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: data_frame
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 143
+    startLine: 194
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Sends a data frame from a device.
+  example: []
   syntax:
     content: public virtual DataFrameResponse data_frame(DataFrameRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
+      description: The request to send to the server.
     - id: headers
       type: Grpc.Core.Metadata
+      description: The initial metadata to send with the call. This parameter is optional.
     - id: deadline
       type: System.Nullable{System.DateTime}
+      description: An optional deadline for the call. The call will be cancelled if deadline is hit.
     - id: cancellationToken
       type: System.Threading.CancellationToken
+      description: An optional token for canceling the call.
     return:
       type: ARFlow.DataFrameResponse
+      description: The response received from the server.
     content.vb: Public Overridable Function data_frame(request As DataFrameRequest, headers As Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As DataFrameResponse
   overload: ARFlow.ARFlowService.ARFlowServiceClient.data_frame*
   nameWithType.vb: ARFlowService.ARFlowServiceClient.data_frame(DataFrameRequest, Metadata, Date?, CancellationToken)
@@ -385,19 +416,24 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: data_frame
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 148
+    startLine: 205
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Sends a data frame from a device.
+  example: []
   syntax:
     content: public virtual DataFrameResponse data_frame(DataFrameRequest request, CallOptions options)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
+      description: The request to send to the server.
     - id: options
       type: Grpc.Core.CallOptions
+      description: The options for the call.
     return:
       type: ARFlow.DataFrameResponse
+      description: The response received from the server.
     content.vb: Public Overridable Function data_frame(request As DataFrameRequest, options As CallOptions) As DataFrameResponse
   overload: ARFlow.ARFlowService.ARFlowServiceClient.data_frame*
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync(ARFlow.DataFrameRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
@@ -418,23 +454,30 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: data_frameAsync
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 153
+    startLine: 218
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Sends a data frame from a device.
+  example: []
   syntax:
     content: public virtual AsyncUnaryCall<DataFrameResponse> data_frameAsync(DataFrameRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
+      description: The request to send to the server.
     - id: headers
       type: Grpc.Core.Metadata
+      description: The initial metadata to send with the call. This parameter is optional.
     - id: deadline
       type: System.Nullable{System.DateTime}
+      description: An optional deadline for the call. The call will be cancelled if deadline is hit.
     - id: cancellationToken
       type: System.Threading.CancellationToken
+      description: An optional token for canceling the call.
     return:
       type: Grpc.Core.AsyncUnaryCall{ARFlow.DataFrameResponse}
+      description: The call object.
     content.vb: Public Overridable Function data_frameAsync(request As DataFrameRequest, headers As Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As AsyncUnaryCall(Of DataFrameResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync*
   nameWithType.vb: ARFlowService.ARFlowServiceClient.data_frameAsync(DataFrameRequest, Metadata, Date?, CancellationToken)
@@ -458,19 +501,24 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: data_frameAsync
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 158
+    startLine: 229
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow
+  summary: Sends a data frame from a device.
+  example: []
   syntax:
     content: public virtual AsyncUnaryCall<DataFrameResponse> data_frameAsync(DataFrameRequest request, CallOptions options)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
+      description: The request to send to the server.
     - id: options
       type: Grpc.Core.CallOptions
+      description: The options for the call.
     return:
       type: Grpc.Core.AsyncUnaryCall{ARFlow.DataFrameResponse}
+      description: The call object.
     content.vb: Public Overridable Function data_frameAsync(request As DataFrameRequest, options As CallOptions) As AsyncUnaryCall(Of DataFrameResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync*
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
@@ -491,7 +539,7 @@ items:
       repo: https://github.com/legoeruro/ARFlow.git
     id: NewInstance
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
-    startLine: 164
+    startLine: 235
   assemblies:
   - Assembly-CSharp
   namespace: ARFlow

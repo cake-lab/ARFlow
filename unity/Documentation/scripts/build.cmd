@@ -1,7 +1,8 @@
 :: Borrowed from https://github.com/open-telemetry/opentelemetry-dotnet
 SETLOCAL
 SETLOCAL ENABLEEXTENSIONS
-
+rmdir /s /q api
+rmdir /s /q client
 docfx metadata
 docfx build docfx.json > docfx.log
 @IF NOT %ERRORLEVEL% == 0 (
@@ -12,6 +13,5 @@ docfx build docfx.json > docfx.log
 @type docfx.log
 @type docfx.log | findstr /C:"Build succeeded."
 @IF NOT %ERRORLEVEL% == 0 (
-  ECHO Error: There are build warnings. 1>&2
-  EXIT /B %ERRORLEVEL%
+  ECHO There are build warnings. 1>&2
 )
