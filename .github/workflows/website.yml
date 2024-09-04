@@ -10,6 +10,7 @@ on:
       - 'python/**'
       - '.github/workflows/website.yml'
       - 'website/**'
+      - 'unity/**'
     
     # Alternative: only build for tags.
     # tags:

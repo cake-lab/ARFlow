@@ -242,7 +242,8 @@ ExportedObj/
 .consulo/
 *.csproj
 *.unityproj
-*.sln
+# add .sln files to build documentation
+# *.sln
 *.suo
 *.tmp
 *.user
