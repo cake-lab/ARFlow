@@ -1,10 +1,15 @@
 :: Borrowed from https://github.com/open-telemetry/opentelemetry-dotnet
 SETLOCAL
 SETLOCAL ENABLEEXTENSIONS
+
+cd ../
+dir
+cd Documentation
+
 rmdir /s /q api
 rmdir /s /q clientHTMLOutput
 
-dir
+
 
 docfx metadata
 docfx build docfx.json > docfx.log
