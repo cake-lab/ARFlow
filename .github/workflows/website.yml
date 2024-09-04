@@ -40,7 +40,7 @@ jobs:
       #     mkdir -p ./website/docs/client/
       #     cp -r ./unity/Documentation/clientHTMLOutput/* ./website/docs/client/
       # Upload the website directory as an artifact
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: client-docs
           path: ./unity/Documentation/client
