@@ -34,7 +34,8 @@ ExportedObj/
 .consulo/
 *.csproj
 *.unityproj
-*.sln
+# solution file is uploaded for doc building
+# *.sln
 *.suo
 *.tmp
 *.user
