@@ -32,9 +32,9 @@ namespace ARFlow
             try
             {
                 var response = _client.register(requestData);
-                _sessionId = response.Message;
+                _sessionId = response.Uid;
 
-                Debug.Log(response.Message);
+                Debug.Log(response.Uid);
             }
             catch (Exception e)
             {

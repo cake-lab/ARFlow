@@ -1,11 +1,12 @@
 """A library for replaying ARFlow data."""
+
 import pickle
 import threading
 import time
 from typing import List
 
-from .serve import ARFlowService
-from .service_pb2 import DataFrameRequest, RegisterRequest
+from arflow.core import ARFlowService
+from arflow.service_pb2 import DataFrameRequest, RegisterRequest
 
 
 class ARFlowPlayer(threading.Thread):

@@ -6,7 +6,8 @@ from arflow import service_pb2 as arflow_dot_service__pb2
 
 
 class ARFlowServiceStub(object):
-    """Missing associated documentation comment in .proto file."""
+    """The ARFlowService service definition.
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -27,16 +28,19 @@ class ARFlowServiceStub(object):
 
 
 class ARFlowServiceServicer(object):
-    """Missing associated documentation comment in .proto file."""
+    """The ARFlowService service definition.
+    """
 
     def register(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Registers a device with the given specifications.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def data_frame(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Sends a data frame from a device.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -62,7 +66,8 @@ def add_ARFlowServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class ARFlowService(object):
-    """Missing associated documentation comment in .proto file."""
+    """The ARFlowService service definition.
+    """
 
     @staticmethod
     def register(request,

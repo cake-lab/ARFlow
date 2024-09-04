@@ -6,3 +6,9 @@ extend-ignore:
   E231,
   # line too long (conflicts with Black)
   E501,
+
+; exclude:
+;   # gRPC-generated files
+;   ./python/arflow/service_pb2_grpc.py,
+;   ./python/arflow/service_pb2.py,
+;   ./python/arflow/service_pb2.pyi,

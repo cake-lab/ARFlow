@@ -43,13 +43,13 @@ namespace ARFlow {
             "ZXNvbHV0aW9uX3gYBCABKAUSFAoMcmVzb2x1dGlvbl95GAUgASgFGiIKD0Nh",
             "bWVyYVRyYW5zZm9ybRIPCgdlbmFibGVkGAEgASgIGkEKEENhbWVyYVBvaW50",
             "Q2xvdWQSDwoHZW5hYmxlZBgBIAEoCBIcChRkZXB0aF91cHNjYWxlX2ZhY3Rv",
-            "chgCIAEoAiIjChBSZWdpc3RlclJlc3BvbnNlEg8KB21lc3NhZ2UYASABKAki",
-            "UAoQRGF0YUZyYW1lUmVxdWVzdBILCgN1aWQYASABKAkSDQoFY29sb3IYAiAB",
-            "KAwSDQoFZGVwdGgYAyABKAwSEQoJdHJhbnNmb3JtGAQgASgMIiQKEURhdGFG",
-            "cmFtZVJlc3BvbnNlEg8KB21lc3NhZ2UYASABKAkydQoNQVJGbG93U2Vydmlj",
-            "ZRIvCghyZWdpc3RlchIQLlJlZ2lzdGVyUmVxdWVzdBoRLlJlZ2lzdGVyUmVz",
-            "cG9uc2USMwoKZGF0YV9mcmFtZRIRLkRhdGFGcmFtZVJlcXVlc3QaEi5EYXRh",
-            "RnJhbWVSZXNwb25zZUIJqgIGQVJGbG93YgZwcm90bzM="));
+            "chgCIAEoAiIfChBSZWdpc3RlclJlc3BvbnNlEgsKA3VpZBgBIAEoCSJQChBE",
+            "YXRhRnJhbWVSZXF1ZXN0EgsKA3VpZBgBIAEoCRINCgVjb2xvchgCIAEoDBIN",
+            "CgVkZXB0aBgDIAEoDBIRCgl0cmFuc2Zvcm0YBCABKAwiJAoRRGF0YUZyYW1l",
+            "UmVzcG9uc2USDwoHbWVzc2FnZRgBIAEoCTJ1Cg1BUkZsb3dTZXJ2aWNlEi8K",
+            "CHJlZ2lzdGVyEhAuUmVnaXN0ZXJSZXF1ZXN0GhEuUmVnaXN0ZXJSZXNwb25z",
+            "ZRIzCgpkYXRhX2ZyYW1lEhEuRGF0YUZyYW1lUmVxdWVzdBoSLkRhdGFGcmFt",
+            "ZVJlc3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -58,7 +58,7 @@ namespace ARFlow {
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraDepth), global::ARFlow.RegisterRequest.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraTransform), global::ARFlow.RegisterRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPointCloud), global::ARFlow.RegisterRequest.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterResponse), global::ARFlow.RegisterResponse.Parser, new[]{ "Message" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterResponse), global::ARFlow.RegisterResponse.Parser, new[]{ "Uid" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameResponse), global::ARFlow.DataFrameResponse.Parser, new[]{ "Message" }, null, null, null, null)
           }));
@@ -1961,7 +1961,7 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public RegisterResponse(RegisterResponse other) : this() {
-      message_ = other.message_;
+      uid_ = other.uid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1971,15 +1971,15 @@ namespace ARFlow {
       return new RegisterResponse(this);
     }
 
-    /// <summary>Field number for the "message" field.</summary>
-    public const int MessageFieldNumber = 1;
-    private string message_ = "";
+    /// <summary>Field number for the "uid" field.</summary>
+    public const int UidFieldNumber = 1;
+    private string uid_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Message {
-      get { return message_; }
+    public string Uid {
+      get { return uid_; }
       set {
-        message_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        uid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -1998,7 +1998,7 @@ namespace ARFlow {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Message != other.Message) return false;
+      if (Uid != other.Uid) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2006,7 +2006,7 @@ namespace ARFlow {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (Message.Length != 0) hash ^= Message.GetHashCode();
+      if (Uid.Length != 0) hash ^= Uid.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2025,9 +2025,9 @@ namespace ARFlow {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Message.Length != 0) {
+      if (Uid.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(Message);
+        output.WriteString(Uid);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2039,9 +2039,9 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Message.Length != 0) {
+      if (Uid.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(Message);
+        output.WriteString(Uid);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -2053,8 +2053,8 @@ namespace ARFlow {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (Message.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Message);
+      if (Uid.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Uid);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2068,8 +2068,8 @@ namespace ARFlow {
       if (other == null) {
         return;
       }
-      if (other.Message.Length != 0) {
-        Message = other.Message;
+      if (other.Uid.Length != 0) {
+        Uid = other.Uid;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2087,7 +2087,7 @@ namespace ARFlow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            Message = input.ReadString();
+            Uid = input.ReadString();
             break;
           }
         }
@@ -2106,7 +2106,7 @@ namespace ARFlow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            Message = input.ReadString();
+            Uid = input.ReadString();
             break;
           }
         }

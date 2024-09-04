@@ -24,4 +24,8 @@
         "thecakelab",
         "Xihe"
     ],
+    "conventionalCommits.scopes": [
+        "server",
+        "client"
+    ],
 }
