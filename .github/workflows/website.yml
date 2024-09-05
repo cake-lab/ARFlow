@@ -10,6 +10,7 @@ on:
       - 'python/**'
       - '.github/workflows/website.yml'
       - 'website/**'
+      - 'unity/**'
     
     # Alternative: only build for tags.
     # tags:
@@ -23,7 +24,30 @@ permissions:
   contents: read
 
 jobs:
-  build-docs:
+  build-client-docs-as-artifact:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install docfx
+        run: dotnet tool install -g docfx
+
+      - name: Run script to build the documentation
+        working-directory: ./unity/Documentation
+        run: ./scripts/build.cmd
+
+      # - name: Move docs to website directory
+      #   run: |
+      #     mkdir -p ./website/docs/client/
+      #     cp -r ./unity/Documentation/clientHTMLOutput/* ./website/docs/client/
+      # Upload the website directory as an artifact
+      - uses: actions/upload-artifact@v4
+        with:
+          name: client-docs
+          path: ./unity/Documentation/clientHTMLOutput
+
+  build-server-docs:
+    needs: build-client-docs-as-artifact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,13 +87,28 @@ jobs:
           mkdir -p ./website/docs/server/
           cp -r ./python/docs/* ./website/docs/server/
 
+      # Get client docs to use as part of pages artifact
+      - uses: actions/download-artifact@v4
+        with:
+          name: client-docs
+          path: ./website/docs/client
+      
+      # # cleanup client docs artifacts
+      # - name: Delete client docs artifact
+      #   run: |
+      #     github.rest.actions.deleteArtifact({
+      #       owner: context.repo.owner,
+      #       repo: context.repo.repo,
+      #       artifact_id: ${{ steps.artifact-download.outputs.artifact-id }}
+      #     });
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./website
 
   # Single deploy job since we're just deploying
   deploy:
-    needs: build-docs
+    needs: build-server-docs
     runs-on: ubuntu-latest
     permissions:
       pages: write

@@ -8,7 +8,13 @@ using UnityEngine.XR.ARFoundation;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
+    /// <summary>
+    /// Camera image data's manager from the device camera
+    /// </summary>
     public ARCameraManager cameraManager;
+    /// <summary>
+    /// Depth data's manager from the device camera
+    /// </summary>
     public AROcclusionManager occlusionManager;
 
     public Button connectButton;
@@ -37,7 +43,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Application.targetFrameRate = 30;
     }
 
-
+    /// <summary>
+    /// Get register request data from camera and send to server.
+    /// Image and depth info is acquired once to get information for the request, and is disposed afterwards.
+    /// </summary>
     private void OnConnectButtonClick()
     {
         try
@@ -98,6 +107,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// On pause, pressing the button changes the _enabled flag to true  (and text display) and data starts sending in Update()
+    /// On start, pressing the button changes the _enabled flag to false and data stops sending
+    /// </summary>
     private void OnStartPauseButtonClick()
     {
         Debug.Log($"Current framerate: {Application.targetFrameRate}");
@@ -113,6 +126,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         UploadFrame();
     }
 
+    /// <summary>
+    /// Get color image and depth information, and copy camera's transform from float to bytes. 
+    /// This data is sent over the server.
+    /// </summary>
     private void UploadFrame()
     {
         var colorImage = new XRYCbCrColorImage(cameraManager, _sampleSize);
