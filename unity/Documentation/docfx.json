@@ -3,8 +3,8 @@
         {
             "src": [
                 {
-                    "src": "../",
-                    "files": ["unity.sln"]
+                    "src": "../Assets/Scripts",
+                    "files": ["**/*.cs"]
                 }
             ],
             "dest": "api",
