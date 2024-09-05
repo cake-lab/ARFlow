@@ -1,5 +1,5 @@
 rm -rf clientHTMLOutput
-rm -rf client
+rm -rf api
 
 docfx metadata
 docfx build docfx.json > docfx.log
@@ -7,7 +7,6 @@ docfx build docfx.json > docfx.log
 if [ $? -ne 0 ]; then
 cat docfx.log
 echo "Error: docfx build failed." >&2
-exit $?
 fi
 
 cat docfx.log

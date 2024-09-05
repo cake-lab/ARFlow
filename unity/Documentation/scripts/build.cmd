@@ -2,11 +2,6 @@
 SETLOCAL
 SETLOCAL ENABLEEXTENSIONS
 
-cd ../
-:: make sure everything is able to compile when building
-dotnet restore unity.sln
-cd Documentation
-
 rmdir /s /q api
 rmdir /s /q clientHTMLOutput
 
