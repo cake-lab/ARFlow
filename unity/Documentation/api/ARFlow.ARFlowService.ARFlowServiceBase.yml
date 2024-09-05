@@ -22,30 +22,14 @@ items:
     id: ARFlowServiceBase
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 82
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Base class for server-side implementations of ARFlowService
   example: []
   syntax:
-    content: >-
-      [BindServiceMethod(typeof(ARFlowService), "BindService")]
-
-      public abstract class ARFlowService.ARFlowServiceBase
-    content.vb: >-
-      <BindServiceMethod(GetType(ARFlowService), "BindService")>
-
-      Public MustInherit Class ARFlowService.ARFlowServiceBase
+    content: public abstract class ARFlowService.ARFlowServiceBase
+    content.vb: Public MustInherit Class ARFlowService.ARFlowServiceBase
   inheritance:
   - System.Object
-  attributes:
-  - type: Grpc.Core.BindServiceMethodAttribute
-    ctor: Grpc.Core.BindServiceMethodAttribute.#ctor(System.Type,System.String)
-    arguments:
-    - type: System.Type
-      value: ARFlow.ARFlowService
-    - type: System.String
-      value: BindService
 - uid: ARFlow.ARFlowService.ARFlowServiceBase.register(ARFlow.RegisterRequest,Grpc.Core.ServerCallContext)
   commentId: M:ARFlow.ARFlowService.ARFlowServiceBase.register(ARFlow.RegisterRequest,Grpc.Core.ServerCallContext)
   id: register(ARFlow.RegisterRequest,Grpc.Core.ServerCallContext)
@@ -54,7 +38,7 @@ items:
   - csharp
   - vb
   name: register(RegisterRequest, ServerCallContext)
-  nameWithType: ARFlowService.ARFlowServiceBase.register(RegisterRequest, ServerCallContext)
+  nameWithType: ARFlowService.ARFlowServiceBase.register(RegisterRequest, Grpc.Core.ServerCallContext)
   fullName: ARFlow.ARFlowService.ARFlowServiceBase.register(ARFlow.RegisterRequest, Grpc.Core.ServerCallContext)
   type: Method
   source:
@@ -65,13 +49,11 @@ items:
     id: register
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 91
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Registers a device with the given specifications.
   example: []
   syntax:
-    content: public virtual Task<RegisterResponse> register(RegisterRequest request, ServerCallContext context)
+    content: public virtual Task<RegisterResponse> register(RegisterRequest request, Grpc.Core.ServerCallContext context)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
@@ -82,7 +64,7 @@ items:
     return:
       type: System.Threading.Tasks.Task{ARFlow.RegisterResponse}
       description: The response to send back to the client (wrapped by a task).
-    content.vb: Public Overridable Function register(request As RegisterRequest, context As ServerCallContext) As Task(Of RegisterResponse)
+    content.vb: Public Overridable Function register(request As RegisterRequest, context As Grpc.Core.ServerCallContext) As Task(Of RegisterResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceBase.register*
 - uid: ARFlow.ARFlowService.ARFlowServiceBase.data_frame(ARFlow.DataFrameRequest,Grpc.Core.ServerCallContext)
   commentId: M:ARFlow.ARFlowService.ARFlowServiceBase.data_frame(ARFlow.DataFrameRequest,Grpc.Core.ServerCallContext)
@@ -92,7 +74,7 @@ items:
   - csharp
   - vb
   name: data_frame(DataFrameRequest, ServerCallContext)
-  nameWithType: ARFlowService.ARFlowServiceBase.data_frame(DataFrameRequest, ServerCallContext)
+  nameWithType: ARFlowService.ARFlowServiceBase.data_frame(DataFrameRequest, Grpc.Core.ServerCallContext)
   fullName: ARFlow.ARFlowService.ARFlowServiceBase.data_frame(ARFlow.DataFrameRequest, Grpc.Core.ServerCallContext)
   type: Method
   source:
@@ -103,13 +85,11 @@ items:
     id: data_frame
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 103
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Sends a data frame from a device.
   example: []
   syntax:
-    content: public virtual Task<DataFrameResponse> data_frame(DataFrameRequest request, ServerCallContext context)
+    content: public virtual Task<DataFrameResponse> data_frame(DataFrameRequest request, Grpc.Core.ServerCallContext context)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
@@ -120,7 +100,7 @@ items:
     return:
       type: System.Threading.Tasks.Task{ARFlow.DataFrameResponse}
       description: The response to send back to the client (wrapped by a task).
-    content.vb: Public Overridable Function data_frame(request As DataFrameRequest, context As ServerCallContext) As Task(Of DataFrameResponse)
+    content.vb: Public Overridable Function data_frame(request As DataFrameRequest, context As Grpc.Core.ServerCallContext) As Task(Of DataFrameResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceBase.data_frame*
 references:
 - uid: ARFlow
@@ -161,11 +141,9 @@ references:
   nameWithType: RegisterRequest
   fullName: ARFlow.RegisterRequest
 - uid: Grpc.Core.ServerCallContext
-  commentId: T:Grpc.Core.ServerCallContext
-  parent: Grpc.Core
   isExternal: true
   name: ServerCallContext
-  nameWithType: ServerCallContext
+  nameWithType: Grpc.Core.ServerCallContext
   fullName: Grpc.Core.ServerCallContext
 - uid: System.Threading.Tasks.Task{ARFlow.RegisterResponse}
   commentId: T:System.Threading.Tasks.Task{ARFlow.RegisterResponse}
@@ -200,28 +178,6 @@ references:
     name: RegisterResponse
     href: ARFlow.RegisterResponse.html
   - name: )
-- uid: Grpc.Core
-  commentId: N:Grpc.Core
-  isExternal: true
-  name: Grpc.Core
-  nameWithType: Grpc.Core
-  fullName: Grpc.Core
-  spec.csharp:
-  - uid: Grpc
-    name: Grpc
-    isExternal: true
-  - name: .
-  - uid: Grpc.Core
-    name: Core
-    isExternal: true
-  spec.vb:
-  - uid: Grpc
-    name: Grpc
-    isExternal: true
-  - name: .
-  - uid: Grpc.Core
-    name: Core
-    isExternal: true
 - uid: System.Threading.Tasks.Task`1
   commentId: T:System.Threading.Tasks.Task`1
   isExternal: true

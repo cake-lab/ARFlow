@@ -4,11 +4,12 @@
             "src": [
                 {
                     "src": "../",
-                    "files": ["*.{sln, csproj}"]
+                    "files": ["unity.sln"]
                 }
             ],
             "dest": "api",
-            "filter": "filterConfig.yml"
+            "filter": "filterConfig.yml",
+            "allowCompilationErrors": true
         }
     ],
     "build": {

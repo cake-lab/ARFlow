@@ -20,8 +20,6 @@ items:
     id: Types
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 489
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Container for nested types declared in the RegisterRequest message type.
   example: []

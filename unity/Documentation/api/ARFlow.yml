@@ -26,62 +26,7 @@ items:
   nameWithType: ARFlow
   fullName: ARFlow
   type: Namespace
-  assemblies:
-  - Assembly-CSharp
 references:
-- uid: ARFlow.ARFlowService
-  commentId: T:ARFlow.ARFlowService
-  parent: ARFlow
-  href: ARFlow.ARFlowService.html
-  name: ARFlowService
-  nameWithType: ARFlowService
-  fullName: ARFlow.ARFlowService
-- uid: ARFlow.ARFlowService.ARFlowServiceBase
-  commentId: T:ARFlow.ARFlowService.ARFlowServiceBase
-  parent: ARFlow
-  href: ARFlow.ARFlowService.html
-  name: ARFlowService.ARFlowServiceBase
-  nameWithType: ARFlowService.ARFlowServiceBase
-  fullName: ARFlow.ARFlowService.ARFlowServiceBase
-  spec.csharp:
-  - uid: ARFlow.ARFlowService
-    name: ARFlowService
-    href: ARFlow.ARFlowService.html
-  - name: .
-  - uid: ARFlow.ARFlowService.ARFlowServiceBase
-    name: ARFlowServiceBase
-    href: ARFlow.ARFlowService.ARFlowServiceBase.html
-  spec.vb:
-  - uid: ARFlow.ARFlowService
-    name: ARFlowService
-    href: ARFlow.ARFlowService.html
-  - name: .
-  - uid: ARFlow.ARFlowService.ARFlowServiceBase
-    name: ARFlowServiceBase
-    href: ARFlow.ARFlowService.ARFlowServiceBase.html
-- uid: ARFlow.ARFlowService.ARFlowServiceClient
-  commentId: T:ARFlow.ARFlowService.ARFlowServiceClient
-  parent: ARFlow
-  href: ARFlow.ARFlowService.html
-  name: ARFlowService.ARFlowServiceClient
-  nameWithType: ARFlowService.ARFlowServiceClient
-  fullName: ARFlow.ARFlowService.ARFlowServiceClient
-  spec.csharp:
-  - uid: ARFlow.ARFlowService
-    name: ARFlowService
-    href: ARFlow.ARFlowService.html
-  - name: .
-  - uid: ARFlow.ARFlowService.ARFlowServiceClient
-    name: ARFlowServiceClient
-    href: ARFlow.ARFlowService.ARFlowServiceClient.html
-  spec.vb:
-  - uid: ARFlow.ARFlowService
-    name: ARFlowService
-    href: ARFlow.ARFlowService.html
-  - name: .
-  - uid: ARFlow.ARFlowService.ARFlowServiceClient
-    name: ARFlowServiceClient
-    href: ARFlow.ARFlowService.ARFlowServiceClient.html
 - uid: ARFlow.ARFlowClient
   commentId: T:ARFlow.ARFlowClient
   href: ARFlow.ARFlowClient.html
@@ -299,6 +244,58 @@ references:
   name: DataFrameResponse
   nameWithType: DataFrameResponse
   fullName: ARFlow.DataFrameResponse
+- uid: ARFlow.ARFlowService
+  commentId: T:ARFlow.ARFlowService
+  href: ARFlow.ARFlowService.html
+  name: ARFlowService
+  nameWithType: ARFlowService
+  fullName: ARFlow.ARFlowService
+- uid: ARFlow.ARFlowService.ARFlowServiceBase
+  commentId: T:ARFlow.ARFlowService.ARFlowServiceBase
+  parent: ARFlow
+  href: ARFlow.ARFlowService.html
+  name: ARFlowService.ARFlowServiceBase
+  nameWithType: ARFlowService.ARFlowServiceBase
+  fullName: ARFlow.ARFlowService.ARFlowServiceBase
+  spec.csharp:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceBase
+    name: ARFlowServiceBase
+    href: ARFlow.ARFlowService.ARFlowServiceBase.html
+  spec.vb:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceBase
+    name: ARFlowServiceBase
+    href: ARFlow.ARFlowService.ARFlowServiceBase.html
+- uid: ARFlow.ARFlowService.ARFlowServiceClient
+  commentId: T:ARFlow.ARFlowService.ARFlowServiceClient
+  parent: ARFlow
+  href: ARFlow.ARFlowService.html
+  name: ARFlowService.ARFlowServiceClient
+  nameWithType: ARFlowService.ARFlowServiceClient
+  fullName: ARFlow.ARFlowService.ARFlowServiceClient
+  spec.csharp:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceClient
+    name: ARFlowServiceClient
+    href: ARFlow.ARFlowService.ARFlowServiceClient.html
+  spec.vb:
+  - uid: ARFlow.ARFlowService
+    name: ARFlowService
+    href: ARFlow.ARFlowService.html
+  - name: .
+  - uid: ARFlow.ARFlowService.ARFlowServiceClient
+    name: ARFlowServiceClient
+    href: ARFlow.ARFlowService.ARFlowServiceClient.html
 - uid: ARFlow
   commentId: N:ARFlow
   href: ARFlow.html

@@ -35,14 +35,14 @@ items:
     id: RegisterResponse
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1928
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
-    content: public sealed class RegisterResponse
-    content.vb: Public NotInheritable Class RegisterResponse
+    content: 'public sealed class RegisterResponse : Google.Protobuf.IMessage<RegisterResponse>, Google.Protobuf.IBufferMessage'
+    content.vb: Public NotInheritable Class RegisterResponse Inherits Google.Protobuf.IMessage(Of RegisterResponse) Implements Google.Protobuf.IBufferMessage
   inheritance:
   - System.Object
+  implements:
+  - Google.Protobuf.IBufferMessage
 - uid: ARFlow.RegisterResponse.Parser
   commentId: P:ARFlow.RegisterResponse.Parser
   id: Parser
@@ -62,15 +62,13 @@ items:
     id: Parser
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1936
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
-    content: public static MessageParser<RegisterResponse> Parser { get; }
+    content: public static Google.Protobuf.MessageParser<RegisterResponse> Parser { get; }
     parameters: []
     return:
       type: Google.Protobuf.MessageParser{ARFlow.RegisterResponse}
-    content.vb: Public Shared ReadOnly Property Parser As MessageParser(Of RegisterResponse)
+    content.vb: Public Shared ReadOnly Property Parser As Google.Protobuf.MessageParser(Of RegisterResponse)
   overload: ARFlow.RegisterResponse.Parser*
 - uid: ARFlow.RegisterResponse.Descriptor
   commentId: P:ARFlow.RegisterResponse.Descriptor
@@ -91,15 +89,13 @@ items:
     id: Descriptor
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1940
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
-    content: public static MessageDescriptor Descriptor { get; }
+    content: public static Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
     parameters: []
     return:
       type: Google.Protobuf.Reflection.MessageDescriptor
-    content.vb: Public Shared ReadOnly Property Descriptor As MessageDescriptor
+    content.vb: Public Shared ReadOnly Property Descriptor As Google.Protobuf.Reflection.MessageDescriptor
   overload: ARFlow.RegisterResponse.Descriptor*
 - uid: ARFlow.RegisterResponse.#ctor
   commentId: M:ARFlow.RegisterResponse.#ctor
@@ -120,8 +116,6 @@ items:
     id: .ctor
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1952
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
     content: public RegisterResponse()
@@ -149,8 +143,6 @@ items:
     id: .ctor
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1960
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
     content: public RegisterResponse(RegisterResponse other)
@@ -181,16 +173,11 @@ items:
     id: Clone
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1967
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Creates a deep clone of this object.
-  example: []
   syntax:
     content: public RegisterResponse Clone()
     return:
       type: ARFlow.RegisterResponse
-      description: A deep clone of this object.
     content.vb: Public Function Clone() As RegisterResponse
   overload: ARFlow.RegisterResponse.Clone*
 - uid: ARFlow.RegisterResponse.UidFieldNumber
@@ -212,8 +199,6 @@ items:
     id: UidFieldNumber
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1974
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Field number for the "uid" field.
   example: []
@@ -241,8 +226,6 @@ items:
     id: Uid
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1976
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
     content: public string Uid { get; set; }
@@ -270,8 +253,6 @@ items:
     id: Equals
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1985
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   example: []
   syntax:
@@ -282,7 +263,6 @@ items:
     return:
       type: System.Boolean
     content.vb: Public Overrides Function Equals(other As Object) As Boolean
-  overridden: System.Object.Equals(System.Object)
   overload: ARFlow.RegisterResponse.Equals*
   nameWithType.vb: RegisterResponse.Equals(Object)
   fullName.vb: ARFlow.RegisterResponse.Equals(Object)
@@ -306,10 +286,7 @@ items:
     id: Equals
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1991
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  example: []
   syntax:
     content: public bool Equals(RegisterResponse other)
     parameters:
@@ -338,8 +315,6 @@ items:
     id: GetHashCode
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 2004
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   example: []
   syntax:
@@ -347,7 +322,6 @@ items:
     return:
       type: System.Int32
     content.vb: Public Overrides Function GetHashCode() As Integer
-  overridden: System.Object.GetHashCode
   overload: ARFlow.RegisterResponse.GetHashCode*
 - uid: ARFlow.RegisterResponse.ToString
   commentId: M:ARFlow.RegisterResponse.ToString
@@ -368,8 +342,6 @@ items:
     id: ToString
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 2015
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   example: []
   syntax:
@@ -377,7 +349,6 @@ items:
     return:
       type: System.String
     content.vb: Public Overrides Function ToString() As String
-  overridden: System.Object.ToString
   overload: ARFlow.RegisterResponse.ToString*
 - uid: ARFlow.RegisterResponse.WriteTo(Google.Protobuf.CodedOutputStream)
   commentId: M:ARFlow.RegisterResponse.WriteTo(Google.Protobuf.CodedOutputStream)
@@ -387,7 +358,7 @@ items:
   - csharp
   - vb
   name: WriteTo(CodedOutputStream)
-  nameWithType: RegisterResponse.WriteTo(CodedOutputStream)
+  nameWithType: RegisterResponse.WriteTo(Google.Protobuf.CodedOutputStream)
   fullName: ARFlow.RegisterResponse.WriteTo(Google.Protobuf.CodedOutputStream)
   type: Method
   source:
@@ -398,18 +369,13 @@ items:
     id: WriteTo
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 2021
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Writes the data to the given coded output stream.
-  example: []
   syntax:
-    content: public void WriteTo(CodedOutputStream output)
+    content: public void WriteTo(Google.Protobuf.CodedOutputStream output)
     parameters:
     - id: output
       type: Google.Protobuf.CodedOutputStream
-      description: Coded output stream to write the data to. Must not be null.
-    content.vb: Public Sub WriteTo(output As CodedOutputStream)
+    content.vb: Public Sub WriteTo(output As Google.Protobuf.CodedOutputStream)
   overload: ARFlow.RegisterResponse.WriteTo*
 - uid: ARFlow.RegisterResponse.CalculateSize
   commentId: M:ARFlow.RegisterResponse.CalculateSize
@@ -430,18 +396,11 @@ items:
     id: CalculateSize
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 2051
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Calculates the size of this message in Protocol Buffer wire format, in bytes.
-  example: []
   syntax:
     content: public int CalculateSize()
     return:
       type: System.Int32
-      description: >-
-        The number of bytes required to write this message
-                    to a coded output stream.
     content.vb: Public Function CalculateSize() As Integer
   overload: ARFlow.RegisterResponse.CalculateSize*
 - uid: ARFlow.RegisterResponse.MergeFrom(ARFlow.RegisterResponse)
@@ -463,12 +422,7 @@ items:
     id: MergeFrom
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 2064
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Merges the given message into this one.
-  remarks: See the user guide for precise merge semantics.
-  example: []
   syntax:
     content: public void MergeFrom(RegisterResponse other)
     parameters:
@@ -484,7 +438,7 @@ items:
   - csharp
   - vb
   name: MergeFrom(CodedInputStream)
-  nameWithType: RegisterResponse.MergeFrom(CodedInputStream)
+  nameWithType: RegisterResponse.MergeFrom(Google.Protobuf.CodedInputStream)
   fullName: ARFlow.RegisterResponse.MergeFrom(Google.Protobuf.CodedInputStream)
   type: Method
   source:
@@ -495,19 +449,13 @@ items:
     id: MergeFrom
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 2076
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Merges the data from the specified coded input stream with the current message.
-  remarks: See the user guide for precise merge semantics.
-  example: []
   syntax:
-    content: public void MergeFrom(CodedInputStream input)
+    content: public void MergeFrom(Google.Protobuf.CodedInputStream input)
     parameters:
     - id: input
       type: Google.Protobuf.CodedInputStream
-      description: ''
-    content.vb: Public Sub MergeFrom(input As CodedInputStream)
+    content.vb: Public Sub MergeFrom(input As Google.Protobuf.CodedInputStream)
   overload: ARFlow.RegisterResponse.MergeFrom*
 references:
 - uid: ARFlow
@@ -527,6 +475,11 @@ references:
   nameWithType.vb: Object
   fullName.vb: Object
   name.vb: Object
+- uid: Google.Protobuf.IBufferMessage
+  isExternal: true
+  name: IBufferMessage
+  nameWithType: Google.Protobuf.IBufferMessage
+  fullName: Google.Protobuf.IBufferMessage
 - uid: System
   commentId: N:System
   isExternal: true
@@ -541,14 +494,13 @@ references:
   nameWithType: RegisterResponse.Parser
   fullName: ARFlow.RegisterResponse.Parser
 - uid: Google.Protobuf.MessageParser{ARFlow.RegisterResponse}
-  commentId: T:Google.Protobuf.MessageParser{ARFlow.RegisterResponse}
-  parent: Google.Protobuf
+  commentId: '!:Google.Protobuf.MessageParser{ARFlow.RegisterResponse}'
   definition: Google.Protobuf.MessageParser`1
   href: ARFlow.RegisterResponse.html
   name: MessageParser<RegisterResponse>
-  nameWithType: MessageParser<RegisterResponse>
+  nameWithType: Google.Protobuf.MessageParser<RegisterResponse>
   fullName: Google.Protobuf.MessageParser<ARFlow.RegisterResponse>
-  nameWithType.vb: MessageParser(Of RegisterResponse)
+  nameWithType.vb: Google.Protobuf.MessageParser(Of RegisterResponse)
   fullName.vb: Google.Protobuf.MessageParser(Of ARFlow.RegisterResponse)
   name.vb: MessageParser(Of RegisterResponse)
   spec.csharp:
@@ -572,20 +524,19 @@ references:
     href: ARFlow.RegisterResponse.html
   - name: )
 - uid: Google.Protobuf.MessageParser`1
-  commentId: T:Google.Protobuf.MessageParser`1
   isExternal: true
-  name: MessageParser<T>
-  nameWithType: MessageParser<T>
-  fullName: Google.Protobuf.MessageParser<T>
-  nameWithType.vb: MessageParser(Of T)
-  fullName.vb: Google.Protobuf.MessageParser(Of T)
-  name.vb: MessageParser(Of T)
+  name: MessageParser<>
+  nameWithType: Google.Protobuf.MessageParser<>
+  fullName: Google.Protobuf.MessageParser<>
+  nameWithType.vb: Google.Protobuf.MessageParser(Of )
+  fullName.vb: Google.Protobuf.MessageParser(Of )
+  name.vb: MessageParser(Of )
   spec.csharp:
   - uid: Google.Protobuf.MessageParser`1
     name: MessageParser
     isExternal: true
   - name: <
-  - name: T
+  - name: ''
   - name: '>'
   spec.vb:
   - uid: Google.Protobuf.MessageParser`1
@@ -594,30 +545,8 @@ references:
   - name: (
   - name: Of
   - name: " "
-  - name: T
+  - name: ''
   - name: )
-- uid: Google.Protobuf
-  commentId: N:Google.Protobuf
-  isExternal: true
-  name: Google.Protobuf
-  nameWithType: Google.Protobuf
-  fullName: Google.Protobuf
-  spec.csharp:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
-  spec.vb:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
 - uid: ARFlow.RegisterResponse.Descriptor*
   commentId: Overload:ARFlow.RegisterResponse.Descriptor
   href: ARFlow.RegisterResponse.html#ARFlow_RegisterResponse_Descriptor
@@ -625,42 +554,10 @@ references:
   nameWithType: RegisterResponse.Descriptor
   fullName: ARFlow.RegisterResponse.Descriptor
 - uid: Google.Protobuf.Reflection.MessageDescriptor
-  commentId: T:Google.Protobuf.Reflection.MessageDescriptor
-  parent: Google.Protobuf.Reflection
   isExternal: true
   name: MessageDescriptor
-  nameWithType: MessageDescriptor
+  nameWithType: Google.Protobuf.Reflection.MessageDescriptor
   fullName: Google.Protobuf.Reflection.MessageDescriptor
-- uid: Google.Protobuf.Reflection
-  commentId: N:Google.Protobuf.Reflection
-  isExternal: true
-  name: Google.Protobuf.Reflection
-  nameWithType: Google.Protobuf.Reflection
-  fullName: Google.Protobuf.Reflection
-  spec.csharp:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf.Reflection
-    name: Reflection
-    isExternal: true
-  spec.vb:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf.Reflection
-    name: Reflection
-    isExternal: true
 - uid: ARFlow.RegisterResponse.#ctor*
   commentId: Overload:ARFlow.RegisterResponse.#ctor
   href: ARFlow.RegisterResponse.html#ARFlow_RegisterResponse__ctor
@@ -711,39 +608,6 @@ references:
   nameWithType.vb: String
   fullName.vb: String
   name.vb: String
-- uid: System.Object.Equals(System.Object)
-  commentId: M:System.Object.Equals(System.Object)
-  parent: System.Object
-  isExternal: true
-  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
-  name: Equals(object)
-  nameWithType: object.Equals(object)
-  fullName: object.Equals(object)
-  nameWithType.vb: Object.Equals(Object)
-  fullName.vb: Object.Equals(Object)
-  name.vb: Equals(Object)
-  spec.csharp:
-  - uid: System.Object.Equals(System.Object)
-    name: Equals
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
-  - name: (
-  - uid: System.Object
-    name: object
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object
-  - name: )
-  spec.vb:
-  - uid: System.Object.Equals(System.Object)
-    name: Equals
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
-  - name: (
-  - uid: System.Object
-    name: Object
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object
-  - name: )
 - uid: ARFlow.RegisterResponse.Equals*
   commentId: Overload:ARFlow.RegisterResponse.Equals
   href: ARFlow.RegisterResponse.html#ARFlow_RegisterResponse_Equals_System_Object_
@@ -761,60 +625,12 @@ references:
   nameWithType.vb: Boolean
   fullName.vb: Boolean
   name.vb: Boolean
-- uid: System.Object.GetHashCode
-  commentId: M:System.Object.GetHashCode
-  parent: System.Object
-  isExternal: true
-  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
-  name: GetHashCode()
-  nameWithType: object.GetHashCode()
-  fullName: object.GetHashCode()
-  nameWithType.vb: Object.GetHashCode()
-  fullName.vb: Object.GetHashCode()
-  spec.csharp:
-  - uid: System.Object.GetHashCode
-    name: GetHashCode
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
-  - name: (
-  - name: )
-  spec.vb:
-  - uid: System.Object.GetHashCode
-    name: GetHashCode
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
-  - name: (
-  - name: )
 - uid: ARFlow.RegisterResponse.GetHashCode*
   commentId: Overload:ARFlow.RegisterResponse.GetHashCode
   href: ARFlow.RegisterResponse.html#ARFlow_RegisterResponse_GetHashCode
   name: GetHashCode
   nameWithType: RegisterResponse.GetHashCode
   fullName: ARFlow.RegisterResponse.GetHashCode
-- uid: System.Object.ToString
-  commentId: M:System.Object.ToString
-  parent: System.Object
-  isExternal: true
-  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
-  name: ToString()
-  nameWithType: object.ToString()
-  fullName: object.ToString()
-  nameWithType.vb: Object.ToString()
-  fullName.vb: Object.ToString()
-  spec.csharp:
-  - uid: System.Object.ToString
-    name: ToString
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
-  - name: (
-  - name: )
-  spec.vb:
-  - uid: System.Object.ToString
-    name: ToString
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
-  - name: (
-  - name: )
 - uid: ARFlow.RegisterResponse.ToString*
   commentId: Overload:ARFlow.RegisterResponse.ToString
   href: ARFlow.RegisterResponse.html#ARFlow_RegisterResponse_ToString
@@ -828,11 +644,9 @@ references:
   nameWithType: RegisterResponse.WriteTo
   fullName: ARFlow.RegisterResponse.WriteTo
 - uid: Google.Protobuf.CodedOutputStream
-  commentId: T:Google.Protobuf.CodedOutputStream
-  parent: Google.Protobuf
   isExternal: true
   name: CodedOutputStream
-  nameWithType: CodedOutputStream
+  nameWithType: Google.Protobuf.CodedOutputStream
   fullName: Google.Protobuf.CodedOutputStream
 - uid: ARFlow.RegisterResponse.CalculateSize*
   commentId: Overload:ARFlow.RegisterResponse.CalculateSize
@@ -847,9 +661,7 @@ references:
   nameWithType: RegisterResponse.MergeFrom
   fullName: ARFlow.RegisterResponse.MergeFrom
 - uid: Google.Protobuf.CodedInputStream
-  commentId: T:Google.Protobuf.CodedInputStream
-  parent: Google.Protobuf
   isExternal: true
   name: CodedInputStream
-  nameWithType: CodedInputStream
+  nameWithType: Google.Protobuf.CodedInputStream
   fullName: Google.Protobuf.CodedInputStream

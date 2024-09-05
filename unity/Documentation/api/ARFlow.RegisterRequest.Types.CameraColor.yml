@@ -41,14 +41,14 @@ items:
     id: CameraColor
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 867
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
-    content: public sealed class RegisterRequest.Types.CameraColor
-    content.vb: Public NotInheritable Class RegisterRequest.Types.CameraColor
+    content: 'public sealed class RegisterRequest.Types.CameraColor : Google.Protobuf.IMessage<RegisterRequest.Types.CameraColor>, Google.Protobuf.IBufferMessage'
+    content.vb: Public NotInheritable Class RegisterRequest.Types.CameraColor Inherits Google.Protobuf.IMessage(Of RegisterRequest.Types.CameraColor) Implements Google.Protobuf.IBufferMessage
   inheritance:
   - System.Object
+  implements:
+  - Google.Protobuf.IBufferMessage
 - uid: ARFlow.RegisterRequest.Types.CameraColor.Parser
   commentId: P:ARFlow.RegisterRequest.Types.CameraColor.Parser
   id: Parser
@@ -68,15 +68,13 @@ items:
     id: Parser
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 875
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
-    content: public static MessageParser<RegisterRequest.Types.CameraColor> Parser { get; }
+    content: public static Google.Protobuf.MessageParser<RegisterRequest.Types.CameraColor> Parser { get; }
     parameters: []
     return:
       type: Google.Protobuf.MessageParser{ARFlow.RegisterRequest.Types.CameraColor}
-    content.vb: Public Shared ReadOnly Property Parser As MessageParser(Of RegisterRequest.Types.CameraColor)
+    content.vb: Public Shared ReadOnly Property Parser As Google.Protobuf.MessageParser(Of RegisterRequest.Types.CameraColor)
   overload: ARFlow.RegisterRequest.Types.CameraColor.Parser*
 - uid: ARFlow.RegisterRequest.Types.CameraColor.Descriptor
   commentId: P:ARFlow.RegisterRequest.Types.CameraColor.Descriptor
@@ -97,15 +95,13 @@ items:
     id: Descriptor
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 879
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
-    content: public static MessageDescriptor Descriptor { get; }
+    content: public static Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
     parameters: []
     return:
       type: Google.Protobuf.Reflection.MessageDescriptor
-    content.vb: Public Shared ReadOnly Property Descriptor As MessageDescriptor
+    content.vb: Public Shared ReadOnly Property Descriptor As Google.Protobuf.Reflection.MessageDescriptor
   overload: ARFlow.RegisterRequest.Types.CameraColor.Descriptor*
 - uid: ARFlow.RegisterRequest.Types.CameraColor.#ctor
   commentId: M:ARFlow.RegisterRequest.Types.CameraColor.#ctor
@@ -126,8 +122,6 @@ items:
     id: .ctor
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 891
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
     content: public CameraColor()
@@ -155,8 +149,6 @@ items:
     id: .ctor
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 899
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
     content: public CameraColor(RegisterRequest.Types.CameraColor other)
@@ -187,16 +179,11 @@ items:
     id: Clone
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 909
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Creates a deep clone of this object.
-  example: []
   syntax:
     content: public RegisterRequest.Types.CameraColor Clone()
     return:
       type: ARFlow.RegisterRequest.Types.CameraColor
-      description: A deep clone of this object.
     content.vb: Public Function Clone() As RegisterRequest.Types.CameraColor
   overload: ARFlow.RegisterRequest.Types.CameraColor.Clone*
 - uid: ARFlow.RegisterRequest.Types.CameraColor.EnabledFieldNumber
@@ -218,8 +205,6 @@ items:
     id: EnabledFieldNumber
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 916
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Field number for the "enabled" field.
   example: []
@@ -247,8 +232,6 @@ items:
     id: Enabled
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 918
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
     content: public bool Enabled { get; set; }
@@ -276,8 +259,6 @@ items:
     id: DataTypeFieldNumber
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 928
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Field number for the "data_type" field.
   example: []
@@ -305,8 +286,6 @@ items:
     id: DataType
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 930
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
     content: public string DataType { get; set; }
@@ -334,8 +313,6 @@ items:
     id: ResizeFactorXFieldNumber
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 940
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Field number for the "resize_factor_x" field.
   example: []
@@ -363,8 +340,6 @@ items:
     id: ResizeFactorX
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 942
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
     content: public float ResizeFactorX { get; set; }
@@ -392,8 +367,6 @@ items:
     id: ResizeFactorYFieldNumber
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 952
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Field number for the "resize_factor_y" field.
   example: []
@@ -421,8 +394,6 @@ items:
     id: ResizeFactorY
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 954
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   syntax:
     content: public float ResizeFactorY { get; set; }
@@ -450,8 +421,6 @@ items:
     id: Equals
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 963
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   example: []
   syntax:
@@ -462,7 +431,6 @@ items:
     return:
       type: System.Boolean
     content.vb: Public Overrides Function Equals(other As Object) As Boolean
-  overridden: System.Object.Equals(System.Object)
   overload: ARFlow.RegisterRequest.Types.CameraColor.Equals*
   nameWithType.vb: RegisterRequest.Types.CameraColor.Equals(Object)
   fullName.vb: ARFlow.RegisterRequest.Types.CameraColor.Equals(Object)
@@ -486,10 +454,7 @@ items:
     id: Equals
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 969
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  example: []
   syntax:
     content: public bool Equals(RegisterRequest.Types.CameraColor other)
     parameters:
@@ -518,8 +483,6 @@ items:
     id: GetHashCode
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 985
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   example: []
   syntax:
@@ -527,7 +490,6 @@ items:
     return:
       type: System.Int32
     content.vb: Public Overrides Function GetHashCode() As Integer
-  overridden: System.Object.GetHashCode
   overload: ARFlow.RegisterRequest.Types.CameraColor.GetHashCode*
 - uid: ARFlow.RegisterRequest.Types.CameraColor.ToString
   commentId: M:ARFlow.RegisterRequest.Types.CameraColor.ToString
@@ -548,8 +510,6 @@ items:
     id: ToString
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 999
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   example: []
   syntax:
@@ -557,7 +517,6 @@ items:
     return:
       type: System.String
     content.vb: Public Overrides Function ToString() As String
-  overridden: System.Object.ToString
   overload: ARFlow.RegisterRequest.Types.CameraColor.ToString*
 - uid: ARFlow.RegisterRequest.Types.CameraColor.WriteTo(Google.Protobuf.CodedOutputStream)
   commentId: M:ARFlow.RegisterRequest.Types.CameraColor.WriteTo(Google.Protobuf.CodedOutputStream)
@@ -567,7 +526,7 @@ items:
   - csharp
   - vb
   name: WriteTo(CodedOutputStream)
-  nameWithType: RegisterRequest.Types.CameraColor.WriteTo(CodedOutputStream)
+  nameWithType: RegisterRequest.Types.CameraColor.WriteTo(Google.Protobuf.CodedOutputStream)
   fullName: ARFlow.RegisterRequest.Types.CameraColor.WriteTo(Google.Protobuf.CodedOutputStream)
   type: Method
   source:
@@ -578,18 +537,13 @@ items:
     id: WriteTo
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1005
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Writes the data to the given coded output stream.
-  example: []
   syntax:
-    content: public void WriteTo(CodedOutputStream output)
+    content: public void WriteTo(Google.Protobuf.CodedOutputStream output)
     parameters:
     - id: output
       type: Google.Protobuf.CodedOutputStream
-      description: Coded output stream to write the data to. Must not be null.
-    content.vb: Public Sub WriteTo(output As CodedOutputStream)
+    content.vb: Public Sub WriteTo(output As Google.Protobuf.CodedOutputStream)
   overload: ARFlow.RegisterRequest.Types.CameraColor.WriteTo*
 - uid: ARFlow.RegisterRequest.Types.CameraColor.CalculateSize
   commentId: M:ARFlow.RegisterRequest.Types.CameraColor.CalculateSize
@@ -610,18 +564,11 @@ items:
     id: CalculateSize
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1059
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Calculates the size of this message in Protocol Buffer wire format, in bytes.
-  example: []
   syntax:
     content: public int CalculateSize()
     return:
       type: System.Int32
-      description: >-
-        The number of bytes required to write this message
-                    to a coded output stream.
     content.vb: Public Function CalculateSize() As Integer
   overload: ARFlow.RegisterRequest.Types.CameraColor.CalculateSize*
 - uid: ARFlow.RegisterRequest.Types.CameraColor.MergeFrom(ARFlow.RegisterRequest.Types.CameraColor)
@@ -643,12 +590,7 @@ items:
     id: MergeFrom
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1081
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Merges the given message into this one.
-  remarks: See the user guide for precise merge semantics.
-  example: []
   syntax:
     content: public void MergeFrom(RegisterRequest.Types.CameraColor other)
     parameters:
@@ -664,7 +606,7 @@ items:
   - csharp
   - vb
   name: MergeFrom(CodedInputStream)
-  nameWithType: RegisterRequest.Types.CameraColor.MergeFrom(CodedInputStream)
+  nameWithType: RegisterRequest.Types.CameraColor.MergeFrom(Google.Protobuf.CodedInputStream)
   fullName: ARFlow.RegisterRequest.Types.CameraColor.MergeFrom(Google.Protobuf.CodedInputStream)
   type: Method
   source:
@@ -675,19 +617,13 @@ items:
     id: MergeFrom
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 1102
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
-  summary: Merges the data from the specified coded input stream with the current message.
-  remarks: See the user guide for precise merge semantics.
-  example: []
   syntax:
-    content: public void MergeFrom(CodedInputStream input)
+    content: public void MergeFrom(Google.Protobuf.CodedInputStream input)
     parameters:
     - id: input
       type: Google.Protobuf.CodedInputStream
-      description: ''
-    content.vb: Public Sub MergeFrom(input As CodedInputStream)
+    content.vb: Public Sub MergeFrom(input As Google.Protobuf.CodedInputStream)
   overload: ARFlow.RegisterRequest.Types.CameraColor.MergeFrom*
 references:
 - uid: ARFlow
@@ -707,6 +643,11 @@ references:
   nameWithType.vb: Object
   fullName.vb: Object
   name.vb: Object
+- uid: Google.Protobuf.IBufferMessage
+  isExternal: true
+  name: IBufferMessage
+  nameWithType: Google.Protobuf.IBufferMessage
+  fullName: Google.Protobuf.IBufferMessage
 - uid: System
   commentId: N:System
   isExternal: true
@@ -721,29 +662,20 @@ references:
   nameWithType: RegisterRequest.Types.CameraColor.Parser
   fullName: ARFlow.RegisterRequest.Types.CameraColor.Parser
 - uid: Google.Protobuf.MessageParser{ARFlow.RegisterRequest.Types.CameraColor}
-  commentId: T:Google.Protobuf.MessageParser{ARFlow.RegisterRequest.Types.CameraColor}
-  parent: Google.Protobuf
+  commentId: '!:Google.Protobuf.MessageParser{ARFlow.RegisterRequest.Types.CameraColor}'
   definition: Google.Protobuf.MessageParser`1
-  href: ARFlow.RegisterRequest.html
-  name: MessageParser<RegisterRequest.Types.CameraColor>
-  nameWithType: MessageParser<RegisterRequest.Types.CameraColor>
+  href: ARFlow.RegisterRequest.Types.CameraColor.html
+  name: MessageParser<CameraColor>
+  nameWithType: Google.Protobuf.MessageParser<RegisterRequest.Types.CameraColor>
   fullName: Google.Protobuf.MessageParser<ARFlow.RegisterRequest.Types.CameraColor>
-  nameWithType.vb: MessageParser(Of RegisterRequest.Types.CameraColor)
+  nameWithType.vb: Google.Protobuf.MessageParser(Of RegisterRequest.Types.CameraColor)
   fullName.vb: Google.Protobuf.MessageParser(Of ARFlow.RegisterRequest.Types.CameraColor)
-  name.vb: MessageParser(Of RegisterRequest.Types.CameraColor)
+  name.vb: MessageParser(Of CameraColor)
   spec.csharp:
   - uid: Google.Protobuf.MessageParser`1
     name: MessageParser
     isExternal: true
   - name: <
-  - uid: ARFlow.RegisterRequest
-    name: RegisterRequest
-    href: ARFlow.RegisterRequest.html
-  - name: .
-  - uid: ARFlow.RegisterRequest.Types
-    name: Types
-    href: ARFlow.RegisterRequest.Types.html
-  - name: .
   - uid: ARFlow.RegisterRequest.Types.CameraColor
     name: CameraColor
     href: ARFlow.RegisterRequest.Types.CameraColor.html
@@ -755,33 +687,24 @@ references:
   - name: (
   - name: Of
   - name: " "
-  - uid: ARFlow.RegisterRequest
-    name: RegisterRequest
-    href: ARFlow.RegisterRequest.html
-  - name: .
-  - uid: ARFlow.RegisterRequest.Types
-    name: Types
-    href: ARFlow.RegisterRequest.Types.html
-  - name: .
   - uid: ARFlow.RegisterRequest.Types.CameraColor
     name: CameraColor
     href: ARFlow.RegisterRequest.Types.CameraColor.html
   - name: )
 - uid: Google.Protobuf.MessageParser`1
-  commentId: T:Google.Protobuf.MessageParser`1
   isExternal: true
-  name: MessageParser<T>
-  nameWithType: MessageParser<T>
-  fullName: Google.Protobuf.MessageParser<T>
-  nameWithType.vb: MessageParser(Of T)
-  fullName.vb: Google.Protobuf.MessageParser(Of T)
-  name.vb: MessageParser(Of T)
+  name: MessageParser<>
+  nameWithType: Google.Protobuf.MessageParser<>
+  fullName: Google.Protobuf.MessageParser<>
+  nameWithType.vb: Google.Protobuf.MessageParser(Of )
+  fullName.vb: Google.Protobuf.MessageParser(Of )
+  name.vb: MessageParser(Of )
   spec.csharp:
   - uid: Google.Protobuf.MessageParser`1
     name: MessageParser
     isExternal: true
   - name: <
-  - name: T
+  - name: ''
   - name: '>'
   spec.vb:
   - uid: Google.Protobuf.MessageParser`1
@@ -790,30 +713,8 @@ references:
   - name: (
   - name: Of
   - name: " "
-  - name: T
+  - name: ''
   - name: )
-- uid: Google.Protobuf
-  commentId: N:Google.Protobuf
-  isExternal: true
-  name: Google.Protobuf
-  nameWithType: Google.Protobuf
-  fullName: Google.Protobuf
-  spec.csharp:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
-  spec.vb:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
 - uid: ARFlow.RegisterRequest.Types.CameraColor.Descriptor*
   commentId: Overload:ARFlow.RegisterRequest.Types.CameraColor.Descriptor
   href: ARFlow.RegisterRequest.Types.CameraColor.html#ARFlow_RegisterRequest_Types_CameraColor_Descriptor
@@ -821,42 +722,10 @@ references:
   nameWithType: RegisterRequest.Types.CameraColor.Descriptor
   fullName: ARFlow.RegisterRequest.Types.CameraColor.Descriptor
 - uid: Google.Protobuf.Reflection.MessageDescriptor
-  commentId: T:Google.Protobuf.Reflection.MessageDescriptor
-  parent: Google.Protobuf.Reflection
   isExternal: true
   name: MessageDescriptor
-  nameWithType: MessageDescriptor
+  nameWithType: Google.Protobuf.Reflection.MessageDescriptor
   fullName: Google.Protobuf.Reflection.MessageDescriptor
-- uid: Google.Protobuf.Reflection
-  commentId: N:Google.Protobuf.Reflection
-  isExternal: true
-  name: Google.Protobuf.Reflection
-  nameWithType: Google.Protobuf.Reflection
-  fullName: Google.Protobuf.Reflection
-  spec.csharp:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf.Reflection
-    name: Reflection
-    isExternal: true
-  spec.vb:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf.Reflection
-    name: Reflection
-    isExternal: true
 - uid: ARFlow.RegisterRequest.Types.CameraColor.#ctor*
   commentId: Overload:ARFlow.RegisterRequest.Types.CameraColor.#ctor
   href: ARFlow.RegisterRequest.Types.CameraColor.html#ARFlow_RegisterRequest_Types_CameraColor__ctor
@@ -971,99 +840,18 @@ references:
   name: ResizeFactorY
   nameWithType: RegisterRequest.Types.CameraColor.ResizeFactorY
   fullName: ARFlow.RegisterRequest.Types.CameraColor.ResizeFactorY
-- uid: System.Object.Equals(System.Object)
-  commentId: M:System.Object.Equals(System.Object)
-  parent: System.Object
-  isExternal: true
-  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
-  name: Equals(object)
-  nameWithType: object.Equals(object)
-  fullName: object.Equals(object)
-  nameWithType.vb: Object.Equals(Object)
-  fullName.vb: Object.Equals(Object)
-  name.vb: Equals(Object)
-  spec.csharp:
-  - uid: System.Object.Equals(System.Object)
-    name: Equals
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
-  - name: (
-  - uid: System.Object
-    name: object
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object
-  - name: )
-  spec.vb:
-  - uid: System.Object.Equals(System.Object)
-    name: Equals
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
-  - name: (
-  - uid: System.Object
-    name: Object
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object
-  - name: )
 - uid: ARFlow.RegisterRequest.Types.CameraColor.Equals*
   commentId: Overload:ARFlow.RegisterRequest.Types.CameraColor.Equals
   href: ARFlow.RegisterRequest.Types.CameraColor.html#ARFlow_RegisterRequest_Types_CameraColor_Equals_System_Object_
   name: Equals
   nameWithType: RegisterRequest.Types.CameraColor.Equals
   fullName: ARFlow.RegisterRequest.Types.CameraColor.Equals
-- uid: System.Object.GetHashCode
-  commentId: M:System.Object.GetHashCode
-  parent: System.Object
-  isExternal: true
-  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
-  name: GetHashCode()
-  nameWithType: object.GetHashCode()
-  fullName: object.GetHashCode()
-  nameWithType.vb: Object.GetHashCode()
-  fullName.vb: Object.GetHashCode()
-  spec.csharp:
-  - uid: System.Object.GetHashCode
-    name: GetHashCode
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
-  - name: (
-  - name: )
-  spec.vb:
-  - uid: System.Object.GetHashCode
-    name: GetHashCode
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
-  - name: (
-  - name: )
 - uid: ARFlow.RegisterRequest.Types.CameraColor.GetHashCode*
   commentId: Overload:ARFlow.RegisterRequest.Types.CameraColor.GetHashCode
   href: ARFlow.RegisterRequest.Types.CameraColor.html#ARFlow_RegisterRequest_Types_CameraColor_GetHashCode
   name: GetHashCode
   nameWithType: RegisterRequest.Types.CameraColor.GetHashCode
   fullName: ARFlow.RegisterRequest.Types.CameraColor.GetHashCode
-- uid: System.Object.ToString
-  commentId: M:System.Object.ToString
-  parent: System.Object
-  isExternal: true
-  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
-  name: ToString()
-  nameWithType: object.ToString()
-  fullName: object.ToString()
-  nameWithType.vb: Object.ToString()
-  fullName.vb: Object.ToString()
-  spec.csharp:
-  - uid: System.Object.ToString
-    name: ToString
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
-  - name: (
-  - name: )
-  spec.vb:
-  - uid: System.Object.ToString
-    name: ToString
-    isExternal: true
-    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
-  - name: (
-  - name: )
 - uid: ARFlow.RegisterRequest.Types.CameraColor.ToString*
   commentId: Overload:ARFlow.RegisterRequest.Types.CameraColor.ToString
   href: ARFlow.RegisterRequest.Types.CameraColor.html#ARFlow_RegisterRequest_Types_CameraColor_ToString
@@ -1077,11 +865,9 @@ references:
   nameWithType: RegisterRequest.Types.CameraColor.WriteTo
   fullName: ARFlow.RegisterRequest.Types.CameraColor.WriteTo
 - uid: Google.Protobuf.CodedOutputStream
-  commentId: T:Google.Protobuf.CodedOutputStream
-  parent: Google.Protobuf
   isExternal: true
   name: CodedOutputStream
-  nameWithType: CodedOutputStream
+  nameWithType: Google.Protobuf.CodedOutputStream
   fullName: Google.Protobuf.CodedOutputStream
 - uid: ARFlow.RegisterRequest.Types.CameraColor.CalculateSize*
   commentId: Overload:ARFlow.RegisterRequest.Types.CameraColor.CalculateSize
@@ -1096,9 +882,7 @@ references:
   nameWithType: RegisterRequest.Types.CameraColor.MergeFrom
   fullName: ARFlow.RegisterRequest.Types.CameraColor.MergeFrom
 - uid: Google.Protobuf.CodedInputStream
-  commentId: T:Google.Protobuf.CodedInputStream
-  parent: Google.Protobuf
   isExternal: true
   name: CodedInputStream
-  nameWithType: CodedInputStream
+  nameWithType: Google.Protobuf.CodedInputStream
   fullName: Google.Protobuf.CodedInputStream

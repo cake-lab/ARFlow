@@ -21,8 +21,6 @@ items:
     id: ServiceReflection
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 14
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Holder for reflection information generated from protos/arflow/service.proto
   example: []
@@ -50,17 +48,15 @@ items:
     id: Descriptor
     path: ../Assets/Scripts/ARFlow/Service.cs
     startLine: 18
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: File descriptor for protos/arflow/service.proto
   example: []
   syntax:
-    content: public static FileDescriptor Descriptor { get; }
+    content: public static Google.Protobuf.Reflection.FileDescriptor Descriptor { get; }
     parameters: []
     return:
       type: Google.Protobuf.Reflection.FileDescriptor
-    content.vb: Public Shared ReadOnly Property Descriptor As FileDescriptor
+    content.vb: Public Shared ReadOnly Property Descriptor As Google.Protobuf.Reflection.FileDescriptor
   overload: ARFlow.ServiceReflection.Descriptor*
 references:
 - uid: ARFlow
@@ -94,39 +90,8 @@ references:
   nameWithType: ServiceReflection.Descriptor
   fullName: ARFlow.ServiceReflection.Descriptor
 - uid: Google.Protobuf.Reflection.FileDescriptor
-  commentId: T:Google.Protobuf.Reflection.FileDescriptor
-  parent: Google.Protobuf.Reflection
+  commentId: '!:Google.Protobuf.Reflection.FileDescriptor'
   isExternal: true
   name: FileDescriptor
-  nameWithType: FileDescriptor
+  nameWithType: Google.Protobuf.Reflection.FileDescriptor
   fullName: Google.Protobuf.Reflection.FileDescriptor
-- uid: Google.Protobuf.Reflection
-  commentId: N:Google.Protobuf.Reflection
-  isExternal: true
-  name: Google.Protobuf.Reflection
-  nameWithType: Google.Protobuf.Reflection
-  fullName: Google.Protobuf.Reflection
-  spec.csharp:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf.Reflection
-    name: Reflection
-    isExternal: true
-  spec.vb:
-  - uid: Google
-    name: Google
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf
-    name: Protobuf
-    isExternal: true
-  - name: .
-  - uid: Google.Protobuf.Reflection
-    name: Reflection
-    isExternal: true

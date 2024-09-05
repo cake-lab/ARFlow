@@ -6,10 +6,10 @@ items:
   parent: ARFlow
   children:
   - ARFlow.ARFlowService.ARFlowServiceClient.#ctor
+  - ARFlow.ARFlowService.ARFlowServiceClient.#ctor(ClientBaseConfiguration)
   - ARFlow.ARFlowService.ARFlowServiceClient.#ctor(Grpc.Core.CallInvoker)
   - ARFlow.ARFlowService.ARFlowServiceClient.#ctor(Grpc.Core.ChannelBase)
-  - ARFlow.ARFlowService.ARFlowServiceClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  - ARFlow.ARFlowService.ARFlowServiceClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
+  - ARFlow.ARFlowService.ARFlowServiceClient.NewInstance(ClientBaseConfiguration)
   - ARFlow.ARFlowService.ARFlowServiceClient.data_frame(ARFlow.DataFrameRequest,Grpc.Core.CallOptions)
   - ARFlow.ARFlowService.ARFlowServiceClient.data_frame(ARFlow.DataFrameRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
   - ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync(ARFlow.DataFrameRequest,Grpc.Core.CallOptions)
@@ -33,18 +33,14 @@ items:
     id: ARFlowServiceClient
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 112
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Client for ARFlowService
   example: []
   syntax:
-    content: 'public class ARFlowService.ARFlowServiceClient : ClientBase<ARFlowService.ARFlowServiceClient>'
-    content.vb: Public Class ARFlowService.ARFlowServiceClient Inherits ClientBase(Of ARFlowService.ARFlowServiceClient)
+    content: 'public class ARFlowService.ARFlowServiceClient : Grpc.Core.ClientBase<ARFlowService.ARFlowServiceClient>'
+    content.vb: Public Class ARFlowService.ARFlowServiceClient Inherits Grpc.Core.ClientBase(Of ARFlowService.ARFlowServiceClient)
   inheritance:
   - System.Object
-  - Grpc.Core.ClientBase
-  - Grpc.Core.ClientBase{ARFlow.ARFlowService.ARFlowServiceClient}
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.#ctor(Grpc.Core.ChannelBase)
   commentId: M:ARFlow.ARFlowService.ARFlowServiceClient.#ctor(Grpc.Core.ChannelBase)
   id: '#ctor(Grpc.Core.ChannelBase)'
@@ -53,7 +49,7 @@ items:
   - csharp
   - vb
   name: ARFlowServiceClient(ChannelBase)
-  nameWithType: ARFlowService.ARFlowServiceClient.ARFlowServiceClient(ChannelBase)
+  nameWithType: ARFlowService.ARFlowServiceClient.ARFlowServiceClient(Grpc.Core.ChannelBase)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.ARFlowServiceClient(Grpc.Core.ChannelBase)
   type: Constructor
   source:
@@ -64,20 +60,18 @@ items:
     id: .ctor
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 116
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Creates a new client for ARFlowService
   example: []
   syntax:
-    content: public ARFlowServiceClient(ChannelBase channel)
+    content: public ARFlowServiceClient(Grpc.Core.ChannelBase channel)
     parameters:
     - id: channel
       type: Grpc.Core.ChannelBase
       description: The channel to use to make remote calls.
-    content.vb: Public Sub New(channel As ChannelBase)
+    content.vb: Public Sub New(channel As Grpc.Core.ChannelBase)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.#ctor*
-  nameWithType.vb: ARFlowService.ARFlowServiceClient.New(ChannelBase)
+  nameWithType.vb: ARFlowService.ARFlowServiceClient.New(Grpc.Core.ChannelBase)
   fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.New(Grpc.Core.ChannelBase)
   name.vb: New(ChannelBase)
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.#ctor(Grpc.Core.CallInvoker)
@@ -88,7 +82,7 @@ items:
   - csharp
   - vb
   name: ARFlowServiceClient(CallInvoker)
-  nameWithType: ARFlowService.ARFlowServiceClient.ARFlowServiceClient(CallInvoker)
+  nameWithType: ARFlowService.ARFlowServiceClient.ARFlowServiceClient(Grpc.Core.CallInvoker)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.ARFlowServiceClient(Grpc.Core.CallInvoker)
   type: Constructor
   source:
@@ -99,20 +93,18 @@ items:
     id: .ctor
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 122
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Creates a new client for ARFlowService that uses a custom <code>CallInvoker</code>.
   example: []
   syntax:
-    content: public ARFlowServiceClient(CallInvoker callInvoker)
+    content: public ARFlowServiceClient(Grpc.Core.CallInvoker callInvoker)
     parameters:
     - id: callInvoker
       type: Grpc.Core.CallInvoker
       description: The callInvoker to use to make remote calls.
-    content.vb: Public Sub New(callInvoker As CallInvoker)
+    content.vb: Public Sub New(callInvoker As Grpc.Core.CallInvoker)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.#ctor*
-  nameWithType.vb: ARFlowService.ARFlowServiceClient.New(CallInvoker)
+  nameWithType.vb: ARFlowService.ARFlowServiceClient.New(Grpc.Core.CallInvoker)
   fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.New(Grpc.Core.CallInvoker)
   name.vb: New(CallInvoker)
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.#ctor
@@ -134,8 +126,6 @@ items:
     id: .ctor
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 127
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Protected parameterless constructor to allow creation of test doubles.
   example: []
@@ -146,16 +136,16 @@ items:
   nameWithType.vb: ARFlowService.ARFlowServiceClient.New()
   fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.New()
   name.vb: New()
-- uid: ARFlow.ARFlowService.ARFlowServiceClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  commentId: M:ARFlow.ARFlowService.ARFlowServiceClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  id: '#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)'
+- uid: ARFlow.ARFlowService.ARFlowServiceClient.#ctor(ClientBaseConfiguration)
+  commentId: M:ARFlow.ARFlowService.ARFlowServiceClient.#ctor(ClientBaseConfiguration)
+  id: '#ctor(ClientBaseConfiguration)'
   parent: ARFlow.ARFlowService.ARFlowServiceClient
   langs:
   - csharp
   - vb
   name: ARFlowServiceClient(ClientBaseConfiguration)
-  nameWithType: ARFlowService.ARFlowServiceClient.ARFlowServiceClient(ClientBase.ClientBaseConfiguration)
-  fullName: ARFlow.ARFlowService.ARFlowServiceClient.ARFlowServiceClient(Grpc.Core.ClientBase.ClientBaseConfiguration)
+  nameWithType: ARFlowService.ARFlowServiceClient.ARFlowServiceClient(ClientBaseConfiguration)
+  fullName: ARFlow.ARFlowService.ARFlowServiceClient.ARFlowServiceClient(ClientBaseConfiguration)
   type: Constructor
   source:
     remote:
@@ -165,21 +155,19 @@ items:
     id: .ctor
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 133
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Protected constructor to allow creation of configured clients.
   example: []
   syntax:
-    content: protected ARFlowServiceClient(ClientBase.ClientBaseConfiguration configuration)
+    content: protected ARFlowServiceClient(ClientBaseConfiguration configuration)
     parameters:
     - id: configuration
-      type: Grpc.Core.ClientBase.ClientBaseConfiguration
+      type: ClientBaseConfiguration
       description: The client configuration.
-    content.vb: Protected Sub New(configuration As ClientBase.ClientBaseConfiguration)
+    content.vb: Protected Sub New(configuration As ClientBaseConfiguration)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.#ctor*
-  nameWithType.vb: ARFlowService.ARFlowServiceClient.New(ClientBase.ClientBaseConfiguration)
-  fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.New(Grpc.Core.ClientBase.ClientBaseConfiguration)
+  nameWithType.vb: ARFlowService.ARFlowServiceClient.New(ClientBaseConfiguration)
+  fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.New(ClientBaseConfiguration)
   name.vb: New(ClientBaseConfiguration)
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.register(ARFlow.RegisterRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
   commentId: M:ARFlow.ARFlowService.ARFlowServiceClient.register(ARFlow.RegisterRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
@@ -189,7 +177,7 @@ items:
   - csharp
   - vb
   name: register(RegisterRequest, Metadata, DateTime?, CancellationToken)
-  nameWithType: ARFlowService.ARFlowServiceClient.register(RegisterRequest, Metadata, DateTime?, CancellationToken)
+  nameWithType: ARFlowService.ARFlowServiceClient.register(RegisterRequest, Grpc.Core.Metadata, DateTime?, CancellationToken)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.register(ARFlow.RegisterRequest, Grpc.Core.Metadata, System.DateTime?, System.Threading.CancellationToken)
   type: Method
   source:
@@ -200,13 +188,11 @@ items:
     id: register
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 146
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Registers a device with the given specifications.
   example: []
   syntax:
-    content: public virtual RegisterResponse register(RegisterRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+    content: public virtual RegisterResponse register(RegisterRequest request, Grpc.Core.Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
@@ -223,9 +209,9 @@ items:
     return:
       type: ARFlow.RegisterResponse
       description: The response received from the server.
-    content.vb: Public Overridable Function register(request As RegisterRequest, headers As Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As RegisterResponse
+    content.vb: Public Overridable Function register(request As RegisterRequest, headers As Grpc.Core.Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As RegisterResponse
   overload: ARFlow.ARFlowService.ARFlowServiceClient.register*
-  nameWithType.vb: ARFlowService.ARFlowServiceClient.register(RegisterRequest, Metadata, Date?, CancellationToken)
+  nameWithType.vb: ARFlowService.ARFlowServiceClient.register(RegisterRequest, Grpc.Core.Metadata, Date?, CancellationToken)
   fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.register(ARFlow.RegisterRequest, Grpc.Core.Metadata, Date?, System.Threading.CancellationToken)
   name.vb: register(RegisterRequest, Metadata, Date?, CancellationToken)
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.register(ARFlow.RegisterRequest,Grpc.Core.CallOptions)
@@ -236,7 +222,7 @@ items:
   - csharp
   - vb
   name: register(RegisterRequest, CallOptions)
-  nameWithType: ARFlowService.ARFlowServiceClient.register(RegisterRequest, CallOptions)
+  nameWithType: ARFlowService.ARFlowServiceClient.register(RegisterRequest, Grpc.Core.CallOptions)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.register(ARFlow.RegisterRequest, Grpc.Core.CallOptions)
   type: Method
   source:
@@ -247,13 +233,11 @@ items:
     id: register
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 157
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Registers a device with the given specifications.
   example: []
   syntax:
-    content: public virtual RegisterResponse register(RegisterRequest request, CallOptions options)
+    content: public virtual RegisterResponse register(RegisterRequest request, Grpc.Core.CallOptions options)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
@@ -264,7 +248,7 @@ items:
     return:
       type: ARFlow.RegisterResponse
       description: The response received from the server.
-    content.vb: Public Overridable Function register(request As RegisterRequest, options As CallOptions) As RegisterResponse
+    content.vb: Public Overridable Function register(request As RegisterRequest, options As Grpc.Core.CallOptions) As RegisterResponse
   overload: ARFlow.ARFlowService.ARFlowServiceClient.register*
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync(ARFlow.RegisterRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
   commentId: M:ARFlow.ARFlowService.ARFlowServiceClient.registerAsync(ARFlow.RegisterRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
@@ -274,7 +258,7 @@ items:
   - csharp
   - vb
   name: registerAsync(RegisterRequest, Metadata, DateTime?, CancellationToken)
-  nameWithType: ARFlowService.ARFlowServiceClient.registerAsync(RegisterRequest, Metadata, DateTime?, CancellationToken)
+  nameWithType: ARFlowService.ARFlowServiceClient.registerAsync(RegisterRequest, Grpc.Core.Metadata, DateTime?, CancellationToken)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync(ARFlow.RegisterRequest, Grpc.Core.Metadata, System.DateTime?, System.Threading.CancellationToken)
   type: Method
   source:
@@ -285,13 +269,11 @@ items:
     id: registerAsync
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 170
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Registers a device with the given specifications.
   example: []
   syntax:
-    content: public virtual AsyncUnaryCall<RegisterResponse> registerAsync(RegisterRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+    content: public virtual Grpc.Core.AsyncUnaryCall<RegisterResponse> registerAsync(RegisterRequest request, Grpc.Core.Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
@@ -308,9 +290,9 @@ items:
     return:
       type: Grpc.Core.AsyncUnaryCall{ARFlow.RegisterResponse}
       description: The call object.
-    content.vb: Public Overridable Function registerAsync(request As RegisterRequest, headers As Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As AsyncUnaryCall(Of RegisterResponse)
+    content.vb: Public Overridable Function registerAsync(request As RegisterRequest, headers As Grpc.Core.Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As Grpc.Core.AsyncUnaryCall(Of RegisterResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync*
-  nameWithType.vb: ARFlowService.ARFlowServiceClient.registerAsync(RegisterRequest, Metadata, Date?, CancellationToken)
+  nameWithType.vb: ARFlowService.ARFlowServiceClient.registerAsync(RegisterRequest, Grpc.Core.Metadata, Date?, CancellationToken)
   fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync(ARFlow.RegisterRequest, Grpc.Core.Metadata, Date?, System.Threading.CancellationToken)
   name.vb: registerAsync(RegisterRequest, Metadata, Date?, CancellationToken)
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync(ARFlow.RegisterRequest,Grpc.Core.CallOptions)
@@ -321,7 +303,7 @@ items:
   - csharp
   - vb
   name: registerAsync(RegisterRequest, CallOptions)
-  nameWithType: ARFlowService.ARFlowServiceClient.registerAsync(RegisterRequest, CallOptions)
+  nameWithType: ARFlowService.ARFlowServiceClient.registerAsync(RegisterRequest, Grpc.Core.CallOptions)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync(ARFlow.RegisterRequest, Grpc.Core.CallOptions)
   type: Method
   source:
@@ -332,13 +314,11 @@ items:
     id: registerAsync
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 181
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Registers a device with the given specifications.
   example: []
   syntax:
-    content: public virtual AsyncUnaryCall<RegisterResponse> registerAsync(RegisterRequest request, CallOptions options)
+    content: public virtual Grpc.Core.AsyncUnaryCall<RegisterResponse> registerAsync(RegisterRequest request, Grpc.Core.CallOptions options)
     parameters:
     - id: request
       type: ARFlow.RegisterRequest
@@ -349,7 +329,7 @@ items:
     return:
       type: Grpc.Core.AsyncUnaryCall{ARFlow.RegisterResponse}
       description: The call object.
-    content.vb: Public Overridable Function registerAsync(request As RegisterRequest, options As CallOptions) As AsyncUnaryCall(Of RegisterResponse)
+    content.vb: Public Overridable Function registerAsync(request As RegisterRequest, options As Grpc.Core.CallOptions) As Grpc.Core.AsyncUnaryCall(Of RegisterResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync*
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.data_frame(ARFlow.DataFrameRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
   commentId: M:ARFlow.ARFlowService.ARFlowServiceClient.data_frame(ARFlow.DataFrameRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
@@ -359,7 +339,7 @@ items:
   - csharp
   - vb
   name: data_frame(DataFrameRequest, Metadata, DateTime?, CancellationToken)
-  nameWithType: ARFlowService.ARFlowServiceClient.data_frame(DataFrameRequest, Metadata, DateTime?, CancellationToken)
+  nameWithType: ARFlowService.ARFlowServiceClient.data_frame(DataFrameRequest, Grpc.Core.Metadata, DateTime?, CancellationToken)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.data_frame(ARFlow.DataFrameRequest, Grpc.Core.Metadata, System.DateTime?, System.Threading.CancellationToken)
   type: Method
   source:
@@ -370,13 +350,11 @@ items:
     id: data_frame
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 194
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Sends a data frame from a device.
   example: []
   syntax:
-    content: public virtual DataFrameResponse data_frame(DataFrameRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+    content: public virtual DataFrameResponse data_frame(DataFrameRequest request, Grpc.Core.Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
@@ -393,9 +371,9 @@ items:
     return:
       type: ARFlow.DataFrameResponse
       description: The response received from the server.
-    content.vb: Public Overridable Function data_frame(request As DataFrameRequest, headers As Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As DataFrameResponse
+    content.vb: Public Overridable Function data_frame(request As DataFrameRequest, headers As Grpc.Core.Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As DataFrameResponse
   overload: ARFlow.ARFlowService.ARFlowServiceClient.data_frame*
-  nameWithType.vb: ARFlowService.ARFlowServiceClient.data_frame(DataFrameRequest, Metadata, Date?, CancellationToken)
+  nameWithType.vb: ARFlowService.ARFlowServiceClient.data_frame(DataFrameRequest, Grpc.Core.Metadata, Date?, CancellationToken)
   fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.data_frame(ARFlow.DataFrameRequest, Grpc.Core.Metadata, Date?, System.Threading.CancellationToken)
   name.vb: data_frame(DataFrameRequest, Metadata, Date?, CancellationToken)
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.data_frame(ARFlow.DataFrameRequest,Grpc.Core.CallOptions)
@@ -406,7 +384,7 @@ items:
   - csharp
   - vb
   name: data_frame(DataFrameRequest, CallOptions)
-  nameWithType: ARFlowService.ARFlowServiceClient.data_frame(DataFrameRequest, CallOptions)
+  nameWithType: ARFlowService.ARFlowServiceClient.data_frame(DataFrameRequest, Grpc.Core.CallOptions)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.data_frame(ARFlow.DataFrameRequest, Grpc.Core.CallOptions)
   type: Method
   source:
@@ -417,13 +395,11 @@ items:
     id: data_frame
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 205
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Sends a data frame from a device.
   example: []
   syntax:
-    content: public virtual DataFrameResponse data_frame(DataFrameRequest request, CallOptions options)
+    content: public virtual DataFrameResponse data_frame(DataFrameRequest request, Grpc.Core.CallOptions options)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
@@ -434,7 +410,7 @@ items:
     return:
       type: ARFlow.DataFrameResponse
       description: The response received from the server.
-    content.vb: Public Overridable Function data_frame(request As DataFrameRequest, options As CallOptions) As DataFrameResponse
+    content.vb: Public Overridable Function data_frame(request As DataFrameRequest, options As Grpc.Core.CallOptions) As DataFrameResponse
   overload: ARFlow.ARFlowService.ARFlowServiceClient.data_frame*
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync(ARFlow.DataFrameRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
   commentId: M:ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync(ARFlow.DataFrameRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)
@@ -444,7 +420,7 @@ items:
   - csharp
   - vb
   name: data_frameAsync(DataFrameRequest, Metadata, DateTime?, CancellationToken)
-  nameWithType: ARFlowService.ARFlowServiceClient.data_frameAsync(DataFrameRequest, Metadata, DateTime?, CancellationToken)
+  nameWithType: ARFlowService.ARFlowServiceClient.data_frameAsync(DataFrameRequest, Grpc.Core.Metadata, DateTime?, CancellationToken)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync(ARFlow.DataFrameRequest, Grpc.Core.Metadata, System.DateTime?, System.Threading.CancellationToken)
   type: Method
   source:
@@ -455,13 +431,11 @@ items:
     id: data_frameAsync
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 218
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Sends a data frame from a device.
   example: []
   syntax:
-    content: public virtual AsyncUnaryCall<DataFrameResponse> data_frameAsync(DataFrameRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+    content: public virtual Grpc.Core.AsyncUnaryCall<DataFrameResponse> data_frameAsync(DataFrameRequest request, Grpc.Core.Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
@@ -478,9 +452,9 @@ items:
     return:
       type: Grpc.Core.AsyncUnaryCall{ARFlow.DataFrameResponse}
       description: The call object.
-    content.vb: Public Overridable Function data_frameAsync(request As DataFrameRequest, headers As Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As AsyncUnaryCall(Of DataFrameResponse)
+    content.vb: Public Overridable Function data_frameAsync(request As DataFrameRequest, headers As Grpc.Core.Metadata = Nothing, deadline As Date? = Nothing, cancellationToken As CancellationToken = Nothing) As Grpc.Core.AsyncUnaryCall(Of DataFrameResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync*
-  nameWithType.vb: ARFlowService.ARFlowServiceClient.data_frameAsync(DataFrameRequest, Metadata, Date?, CancellationToken)
+  nameWithType.vb: ARFlowService.ARFlowServiceClient.data_frameAsync(DataFrameRequest, Grpc.Core.Metadata, Date?, CancellationToken)
   fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync(ARFlow.DataFrameRequest, Grpc.Core.Metadata, Date?, System.Threading.CancellationToken)
   name.vb: data_frameAsync(DataFrameRequest, Metadata, Date?, CancellationToken)
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync(ARFlow.DataFrameRequest,Grpc.Core.CallOptions)
@@ -491,7 +465,7 @@ items:
   - csharp
   - vb
   name: data_frameAsync(DataFrameRequest, CallOptions)
-  nameWithType: ARFlowService.ARFlowServiceClient.data_frameAsync(DataFrameRequest, CallOptions)
+  nameWithType: ARFlowService.ARFlowServiceClient.data_frameAsync(DataFrameRequest, Grpc.Core.CallOptions)
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync(ARFlow.DataFrameRequest, Grpc.Core.CallOptions)
   type: Method
   source:
@@ -502,13 +476,11 @@ items:
     id: data_frameAsync
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 229
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Sends a data frame from a device.
   example: []
   syntax:
-    content: public virtual AsyncUnaryCall<DataFrameResponse> data_frameAsync(DataFrameRequest request, CallOptions options)
+    content: public virtual Grpc.Core.AsyncUnaryCall<DataFrameResponse> data_frameAsync(DataFrameRequest request, Grpc.Core.CallOptions options)
     parameters:
     - id: request
       type: ARFlow.DataFrameRequest
@@ -519,18 +491,18 @@ items:
     return:
       type: Grpc.Core.AsyncUnaryCall{ARFlow.DataFrameResponse}
       description: The call object.
-    content.vb: Public Overridable Function data_frameAsync(request As DataFrameRequest, options As CallOptions) As AsyncUnaryCall(Of DataFrameResponse)
+    content.vb: Public Overridable Function data_frameAsync(request As DataFrameRequest, options As Grpc.Core.CallOptions) As Grpc.Core.AsyncUnaryCall(Of DataFrameResponse)
   overload: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync*
-- uid: ARFlow.ARFlowService.ARFlowServiceClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  commentId: M:ARFlow.ARFlowService.ARFlowServiceClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  id: NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
+- uid: ARFlow.ARFlowService.ARFlowServiceClient.NewInstance(ClientBaseConfiguration)
+  commentId: M:ARFlow.ARFlowService.ARFlowServiceClient.NewInstance(ClientBaseConfiguration)
+  id: NewInstance(ClientBaseConfiguration)
   parent: ARFlow.ARFlowService.ARFlowServiceClient
   langs:
   - csharp
   - vb
   name: NewInstance(ClientBaseConfiguration)
-  nameWithType: ARFlowService.ARFlowServiceClient.NewInstance(ClientBase.ClientBaseConfiguration)
-  fullName: ARFlow.ARFlowService.ARFlowServiceClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
+  nameWithType: ARFlowService.ARFlowServiceClient.NewInstance(ClientBaseConfiguration)
+  fullName: ARFlow.ARFlowService.ARFlowServiceClient.NewInstance(ClientBaseConfiguration)
   type: Method
   source:
     remote:
@@ -540,20 +512,17 @@ items:
     id: NewInstance
     path: ../Assets/Scripts/ARFlow/ServiceGrpc.cs
     startLine: 235
-  assemblies:
-  - Assembly-CSharp
   namespace: ARFlow
   summary: Creates a new instance of client from given <code>ClientBaseConfiguration</code>.
   example: []
   syntax:
-    content: protected override ARFlowService.ARFlowServiceClient NewInstance(ClientBase.ClientBaseConfiguration configuration)
+    content: protected override ARFlowService.ARFlowServiceClient NewInstance(ClientBaseConfiguration configuration)
     parameters:
     - id: configuration
-      type: Grpc.Core.ClientBase.ClientBaseConfiguration
+      type: ClientBaseConfiguration
     return:
       type: ARFlow.ARFlowService.ARFlowServiceClient
-    content.vb: Protected Overrides Function NewInstance(configuration As ClientBase.ClientBaseConfiguration) As ARFlowService.ARFlowServiceClient
-  overridden: Grpc.Core.ClientBase{ARFlow.ARFlowService.ARFlowServiceClient}.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
+    content.vb: Protected Overrides Function NewInstance(configuration As ClientBaseConfiguration) As ARFlowService.ARFlowServiceClient
   overload: ARFlow.ARFlowService.ARFlowServiceClient.NewInstance*
 references:
 - uid: ARFlow
@@ -573,52 +542,6 @@ references:
   nameWithType.vb: Object
   fullName.vb: Object
   name.vb: Object
-- uid: Grpc.Core.ClientBase
-  commentId: T:Grpc.Core.ClientBase
-  parent: Grpc.Core
-  isExternal: true
-  name: ClientBase
-  nameWithType: ClientBase
-  fullName: Grpc.Core.ClientBase
-- uid: Grpc.Core.ClientBase{ARFlow.ARFlowService.ARFlowServiceClient}
-  commentId: T:Grpc.Core.ClientBase{ARFlow.ARFlowService.ARFlowServiceClient}
-  parent: Grpc.Core
-  definition: Grpc.Core.ClientBase`1
-  href: ARFlow.ARFlowService.html
-  name: ClientBase<ARFlowService.ARFlowServiceClient>
-  nameWithType: ClientBase<ARFlowService.ARFlowServiceClient>
-  fullName: Grpc.Core.ClientBase<ARFlow.ARFlowService.ARFlowServiceClient>
-  nameWithType.vb: ClientBase(Of ARFlowService.ARFlowServiceClient)
-  fullName.vb: Grpc.Core.ClientBase(Of ARFlow.ARFlowService.ARFlowServiceClient)
-  name.vb: ClientBase(Of ARFlowService.ARFlowServiceClient)
-  spec.csharp:
-  - uid: Grpc.Core.ClientBase`1
-    name: ClientBase
-    isExternal: true
-  - name: <
-  - uid: ARFlow.ARFlowService
-    name: ARFlowService
-    href: ARFlow.ARFlowService.html
-  - name: .
-  - uid: ARFlow.ARFlowService.ARFlowServiceClient
-    name: ARFlowServiceClient
-    href: ARFlow.ARFlowService.ARFlowServiceClient.html
-  - name: '>'
-  spec.vb:
-  - uid: Grpc.Core.ClientBase`1
-    name: ClientBase
-    isExternal: true
-  - name: (
-  - name: Of
-  - name: " "
-  - uid: ARFlow.ARFlowService
-    name: ARFlowService
-    href: ARFlow.ARFlowService.html
-  - name: .
-  - uid: ARFlow.ARFlowService.ARFlowServiceClient
-    name: ARFlowServiceClient
-    href: ARFlow.ARFlowService.ARFlowServiceClient.html
-  - name: )
 - uid: System
   commentId: N:System
   isExternal: true
@@ -626,53 +549,6 @@ references:
   name: System
   nameWithType: System
   fullName: System
-- uid: Grpc.Core
-  commentId: N:Grpc.Core
-  isExternal: true
-  name: Grpc.Core
-  nameWithType: Grpc.Core
-  fullName: Grpc.Core
-  spec.csharp:
-  - uid: Grpc
-    name: Grpc
-    isExternal: true
-  - name: .
-  - uid: Grpc.Core
-    name: Core
-    isExternal: true
-  spec.vb:
-  - uid: Grpc
-    name: Grpc
-    isExternal: true
-  - name: .
-  - uid: Grpc.Core
-    name: Core
-    isExternal: true
-- uid: Grpc.Core.ClientBase`1
-  commentId: T:Grpc.Core.ClientBase`1
-  isExternal: true
-  name: ClientBase<T>
-  nameWithType: ClientBase<T>
-  fullName: Grpc.Core.ClientBase<T>
-  nameWithType.vb: ClientBase(Of T)
-  fullName.vb: Grpc.Core.ClientBase(Of T)
-  name.vb: ClientBase(Of T)
-  spec.csharp:
-  - uid: Grpc.Core.ClientBase`1
-    name: ClientBase
-    isExternal: true
-  - name: <
-  - name: T
-  - name: '>'
-  spec.vb:
-  - uid: Grpc.Core.ClientBase`1
-    name: ClientBase
-    isExternal: true
-  - name: (
-  - name: Of
-  - name: " "
-  - name: T
-  - name: )
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.#ctor*
   commentId: Overload:ARFlow.ARFlowService.ARFlowServiceClient.#ctor
   href: ARFlow.ARFlowService.ARFlowServiceClient.html#ARFlow_ARFlowService_ARFlowServiceClient__ctor_Grpc_Core_ChannelBase_
@@ -683,42 +559,22 @@ references:
   fullName.vb: ARFlow.ARFlowService.ARFlowServiceClient.New
   name.vb: New
 - uid: Grpc.Core.ChannelBase
-  commentId: T:Grpc.Core.ChannelBase
-  parent: Grpc.Core
+  commentId: '!:Grpc.Core.ChannelBase'
   isExternal: true
   name: ChannelBase
-  nameWithType: ChannelBase
+  nameWithType: Grpc.Core.ChannelBase
   fullName: Grpc.Core.ChannelBase
 - uid: Grpc.Core.CallInvoker
-  commentId: T:Grpc.Core.CallInvoker
-  parent: Grpc.Core
+  commentId: '!:Grpc.Core.CallInvoker'
   isExternal: true
   name: CallInvoker
-  nameWithType: CallInvoker
+  nameWithType: Grpc.Core.CallInvoker
   fullName: Grpc.Core.CallInvoker
-- uid: Grpc.Core.ClientBase.ClientBaseConfiguration
-  commentId: T:Grpc.Core.ClientBase.ClientBaseConfiguration
-  parent: Grpc.Core
+- uid: ClientBaseConfiguration
   isExternal: true
-  name: ClientBase.ClientBaseConfiguration
-  nameWithType: ClientBase.ClientBaseConfiguration
-  fullName: Grpc.Core.ClientBase.ClientBaseConfiguration
-  spec.csharp:
-  - uid: Grpc.Core.ClientBase
-    name: ClientBase
-    isExternal: true
-  - name: .
-  - uid: Grpc.Core.ClientBase.ClientBaseConfiguration
-    name: ClientBaseConfiguration
-    isExternal: true
-  spec.vb:
-  - uid: Grpc.Core.ClientBase
-    name: ClientBase
-    isExternal: true
-  - name: .
-  - uid: Grpc.Core.ClientBase.ClientBaseConfiguration
-    name: ClientBaseConfiguration
-    isExternal: true
+  name: ClientBaseConfiguration
+  nameWithType: ClientBaseConfiguration
+  fullName: ClientBaseConfiguration
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.register*
   commentId: Overload:ARFlow.ARFlowService.ARFlowServiceClient.register
   href: ARFlow.ARFlowService.ARFlowServiceClient.html#ARFlow_ARFlowService_ARFlowServiceClient_register_ARFlow_RegisterRequest_Grpc_Core_Metadata_System_Nullable_System_DateTime__System_Threading_CancellationToken_
@@ -733,11 +589,9 @@ references:
   nameWithType: RegisterRequest
   fullName: ARFlow.RegisterRequest
 - uid: Grpc.Core.Metadata
-  commentId: T:Grpc.Core.Metadata
-  parent: Grpc.Core
   isExternal: true
   name: Metadata
-  nameWithType: Metadata
+  nameWithType: Grpc.Core.Metadata
   fullName: Grpc.Core.Metadata
 - uid: System.Nullable{System.DateTime}
   commentId: T:System.Nullable{System.DateTime}
@@ -833,11 +687,9 @@ references:
     isExternal: true
     href: https://learn.microsoft.com/dotnet/api/system.threading
 - uid: Grpc.Core.CallOptions
-  commentId: T:Grpc.Core.CallOptions
-  parent: Grpc.Core
   isExternal: true
   name: CallOptions
-  nameWithType: CallOptions
+  nameWithType: Grpc.Core.CallOptions
   fullName: Grpc.Core.CallOptions
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync*
   commentId: Overload:ARFlow.ARFlowService.ARFlowServiceClient.registerAsync
@@ -846,14 +698,13 @@ references:
   nameWithType: ARFlowService.ARFlowServiceClient.registerAsync
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.registerAsync
 - uid: Grpc.Core.AsyncUnaryCall{ARFlow.RegisterResponse}
-  commentId: T:Grpc.Core.AsyncUnaryCall{ARFlow.RegisterResponse}
-  parent: Grpc.Core
+  commentId: '!:Grpc.Core.AsyncUnaryCall{ARFlow.RegisterResponse}'
   definition: Grpc.Core.AsyncUnaryCall`1
   href: ARFlow.RegisterResponse.html
   name: AsyncUnaryCall<RegisterResponse>
-  nameWithType: AsyncUnaryCall<RegisterResponse>
+  nameWithType: Grpc.Core.AsyncUnaryCall<RegisterResponse>
   fullName: Grpc.Core.AsyncUnaryCall<ARFlow.RegisterResponse>
-  nameWithType.vb: AsyncUnaryCall(Of RegisterResponse)
+  nameWithType.vb: Grpc.Core.AsyncUnaryCall(Of RegisterResponse)
   fullName.vb: Grpc.Core.AsyncUnaryCall(Of ARFlow.RegisterResponse)
   name.vb: AsyncUnaryCall(Of RegisterResponse)
   spec.csharp:
@@ -877,20 +728,19 @@ references:
     href: ARFlow.RegisterResponse.html
   - name: )
 - uid: Grpc.Core.AsyncUnaryCall`1
-  commentId: T:Grpc.Core.AsyncUnaryCall`1
   isExternal: true
-  name: AsyncUnaryCall<TResponse>
-  nameWithType: AsyncUnaryCall<TResponse>
-  fullName: Grpc.Core.AsyncUnaryCall<TResponse>
-  nameWithType.vb: AsyncUnaryCall(Of TResponse)
-  fullName.vb: Grpc.Core.AsyncUnaryCall(Of TResponse)
-  name.vb: AsyncUnaryCall(Of TResponse)
+  name: AsyncUnaryCall<>
+  nameWithType: Grpc.Core.AsyncUnaryCall<>
+  fullName: Grpc.Core.AsyncUnaryCall<>
+  nameWithType.vb: Grpc.Core.AsyncUnaryCall(Of )
+  fullName.vb: Grpc.Core.AsyncUnaryCall(Of )
+  name.vb: AsyncUnaryCall(Of )
   spec.csharp:
   - uid: Grpc.Core.AsyncUnaryCall`1
     name: AsyncUnaryCall
     isExternal: true
   - name: <
-  - name: TResponse
+  - name: ''
   - name: '>'
   spec.vb:
   - uid: Grpc.Core.AsyncUnaryCall`1
@@ -899,7 +749,7 @@ references:
   - name: (
   - name: Of
   - name: " "
-  - name: TResponse
+  - name: ''
   - name: )
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.data_frame*
   commentId: Overload:ARFlow.ARFlowService.ARFlowServiceClient.data_frame
@@ -928,14 +778,13 @@ references:
   nameWithType: ARFlowService.ARFlowServiceClient.data_frameAsync
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.data_frameAsync
 - uid: Grpc.Core.AsyncUnaryCall{ARFlow.DataFrameResponse}
-  commentId: T:Grpc.Core.AsyncUnaryCall{ARFlow.DataFrameResponse}
-  parent: Grpc.Core
+  commentId: '!:Grpc.Core.AsyncUnaryCall{ARFlow.DataFrameResponse}'
   definition: Grpc.Core.AsyncUnaryCall`1
   href: ARFlow.DataFrameResponse.html
   name: AsyncUnaryCall<DataFrameResponse>
-  nameWithType: AsyncUnaryCall<DataFrameResponse>
+  nameWithType: Grpc.Core.AsyncUnaryCall<DataFrameResponse>
   fullName: Grpc.Core.AsyncUnaryCall<ARFlow.DataFrameResponse>
-  nameWithType.vb: AsyncUnaryCall(Of DataFrameResponse)
+  nameWithType.vb: Grpc.Core.AsyncUnaryCall(Of DataFrameResponse)
   fullName.vb: Grpc.Core.AsyncUnaryCall(Of ARFlow.DataFrameResponse)
   name.vb: AsyncUnaryCall(Of DataFrameResponse)
   spec.csharp:
@@ -958,36 +807,9 @@ references:
     name: DataFrameResponse
     href: ARFlow.DataFrameResponse.html
   - name: )
-- uid: Grpc.Core.ClientBase{ARFlow.ARFlowService.ARFlowServiceClient}.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  commentId: M:Grpc.Core.ClientBase{ARFlow.ARFlowService.ARFlowServiceClient}.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  parent: Grpc.Core.ClientBase{ARFlow.ARFlowService.ARFlowServiceClient}
-  definition: Grpc.Core.ClientBase`1.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  name: NewInstance(ClientBaseConfiguration)
-  nameWithType: ClientBase<ARFlowService.ARFlowServiceClient>.NewInstance(ClientBase.ClientBaseConfiguration)
-  fullName: Grpc.Core.ClientBase<ARFlow.ARFlowService.ARFlowServiceClient>.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  nameWithType.vb: ClientBase(Of ARFlowService.ARFlowServiceClient).NewInstance(ClientBase.ClientBaseConfiguration)
-  fullName.vb: Grpc.Core.ClientBase(Of ARFlow.ARFlowService.ARFlowServiceClient).NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  spec.csharp:
-  - uid: Grpc.Core.ClientBase{ARFlow.ARFlowService.ARFlowServiceClient}.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-    name: NewInstance
-    isExternal: true
-  - name: (
-  - uid: Grpc.Core.ClientBase.ClientBaseConfiguration
-    name: ClientBaseConfiguration
-    isExternal: true
-  - name: )
-  spec.vb:
-  - uid: Grpc.Core.ClientBase{ARFlow.ARFlowService.ARFlowServiceClient}.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-    name: NewInstance
-    isExternal: true
-  - name: (
-  - uid: Grpc.Core.ClientBase.ClientBaseConfiguration
-    name: ClientBaseConfiguration
-    isExternal: true
-  - name: )
 - uid: ARFlow.ARFlowService.ARFlowServiceClient.NewInstance*
   commentId: Overload:ARFlow.ARFlowService.ARFlowServiceClient.NewInstance
-  href: ARFlow.ARFlowService.ARFlowServiceClient.html#ARFlow_ARFlowService_ARFlowServiceClient_NewInstance_Grpc_Core_ClientBase_ClientBaseConfiguration_
+  href: ARFlow.ARFlowService.ARFlowServiceClient.html#ARFlow_ARFlowService_ARFlowServiceClient_NewInstance_ClientBaseConfiguration_
   name: NewInstance
   nameWithType: ARFlowService.ARFlowServiceClient.NewInstance
   fullName: ARFlow.ARFlowService.ARFlowServiceClient.NewInstance
@@ -1014,29 +836,3 @@ references:
   - uid: ARFlow.ARFlowService.ARFlowServiceClient
     name: ARFlowServiceClient
     href: ARFlow.ARFlowService.ARFlowServiceClient.html
-- uid: Grpc.Core.ClientBase`1.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  commentId: M:Grpc.Core.ClientBase`1.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  isExternal: true
-  name: NewInstance(ClientBaseConfiguration)
-  nameWithType: ClientBase<T>.NewInstance(ClientBase.ClientBaseConfiguration)
-  fullName: Grpc.Core.ClientBase<T>.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  nameWithType.vb: ClientBase(Of T).NewInstance(ClientBase.ClientBaseConfiguration)
-  fullName.vb: Grpc.Core.ClientBase(Of T).NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-  spec.csharp:
-  - uid: Grpc.Core.ClientBase`1.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-    name: NewInstance
-    isExternal: true
-  - name: (
-  - uid: Grpc.Core.ClientBase.ClientBaseConfiguration
-    name: ClientBaseConfiguration
-    isExternal: true
-  - name: )
-  spec.vb:
-  - uid: Grpc.Core.ClientBase`1.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)
-    name: NewInstance
-    isExternal: true
-  - name: (
-  - uid: Grpc.Core.ClientBase.ClientBaseConfiguration
-    name: ClientBaseConfiguration
-    isExternal: true
-  - name: )
