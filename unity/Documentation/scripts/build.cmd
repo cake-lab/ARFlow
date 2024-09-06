@@ -5,7 +5,11 @@ SETLOCAL ENABLEEXTENSIONS
 rmdir /s /q api
 rmdir /s /q clientHTMLOutput
 
+del index.md
 
+chdir ../
+type "README.md" > "Documentation/index.md"
+chdir Documentation
 
 docfx metadata
 docfx build docfx.json > docfx.log
