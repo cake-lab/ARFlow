@@ -1,4 +1,8 @@
-# Get Started With the ARFlow Server
+# The ARFlow Python Server
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Checked with pyright](https://microsoft.github.io/pyright/img/pyright_badge.svg)](https://microsoft.github.io/pyright/)
 
 ARFlow server can be simply installed via `pip`:
 
@@ -25,44 +29,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-```
-
-## Development
-
-### Important Packages & Tools
-
-#### [`poetry`](https://python-poetry.org)
-
-Python dependency management. 
-
-ARFlow uses `poetry` to manage dependencies and run commands. Commands can be found in the `pyproject.toml` file in the `[tool.poetry.scripts]` section and can be run via `poetry run <command>`.
-
-#### [`protobuf`](https://protobuf.dev)
-
-A language-neutral, platform-neutral, extensible mechanism for serializing structured data.
-
-ARFlow uses `protobuf` to define the communication protocol between the server and the client. The protocol is defined in [`service.proto`](../protos/arflow/service.proto) and can be compiled using [`compile.sh`](../protos/scripts/compile.sh).
-
-#### [`pickle`](https://docs.python.org/3/library/pickle.html)
-
-Implements binary protocols for serializing and deserializing Python objects. Pickling is the same as serialization, marshalling, or flattening in other languages. The inverse operation is called unpickling.
-
-#### [`asyncio`](https://docs.python.org/3/library/asyncio.html)
-
-A library to write **concurrent** code using using the `async` and `await` syntax. Perfect for writing IO-bound and high-level structured network code.
-
-#### [`rerun.io`](https://github.com/rerun-io/rerun)
-
-A tool to build time aware visualizations of multimodal data. 
-
-ARFlow uses the Rerun Python SDK to visualize the data collected by the ARFlow server.
-
-### Documentation
-
-ARFlow uses [`pdoc`](https://pdoc.dev). You can refer to their documentation for more information on how to generate documentation. If you create a new submodule, make sure to add it to the `__all__` list defined in the `_init__.py` file of the `arflow` package.
-
-To preview the documentation locally, run:
-
-```bash
-poetry run pdoc <module_name>
 ```
