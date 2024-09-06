@@ -1,18 +1,13 @@
 """A simple example of replaying saved ARFlow data."""
 
 import arflow
-
-
-class CustomService(arflow.ARFlowService):
-    def on_frame_received(self, frame: dict):
-        """Called when a frame is received."""
-        print(frame)
+from examples.simple_server import CustomService
 
 
 def main():
     """Run the example."""
     player = arflow.ARFlowPlayer(
-        CustomService, frame_data_path="frames_2024_08_30_03_08_21.pkl"
+        CustomService, frame_data_path="frames_2024_09_06_18_21_17.pkl"
     )
     player.run()
 
