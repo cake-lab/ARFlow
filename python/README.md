@@ -82,4 +82,4 @@ python3 simple_replay.py
 
 ## Contributing
 
-We welcome contributions to ARFlow! Please refer to the [CONTRIBUTING.md](https://github.com/cake-lab/ARFlow/tree/main/CONTRIBUTING.md) file for more information.
+We welcome contributions to ARFlow! Please refer to the [CONTRIBUTING.md](https://github.com/cake-lab/ARFlow/blob/main/CONTRIBUTING.md) file for more information.
