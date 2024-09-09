@@ -30,7 +30,8 @@ public class ARFlowDeviceSample : MonoBehaviour
         // const string serverURL = "http://192.168.1.100:8500";
         // const string serverURL = "http://169.254.189.74:8500";
         // const string serverURL = "http://192.168.1.139:8500";
-        const string serverURL = "http://192.168.1.100:8500";
+        // const string serverURL = "http://192.168.1.100:8500";
+        const string serverURL = "http://192.168.1.26:8500";
         _client = new ARFlowClient(serverURL);
 
         connectButton.onClick.AddListener(OnConnectButtonClick);
