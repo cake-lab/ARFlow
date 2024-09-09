@@ -1,8 +1,9 @@
 {
     "recommendations": [
         "ms-python.python",
-        "ms-python.black-formatter",
-        "ms-python.flake8",
+        "ms-python.vscode-pylance",
+        "redhat.vscode-yaml",
+        "charliermarsh.ruff",
         "ms-toolsai.jupyter",
         "streetsidesoftware.code-spell-checker",
         "visualstudiotoolsforunity.vstuc",
