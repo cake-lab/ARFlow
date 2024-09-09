@@ -14,10 +14,14 @@ repository = "https://github.com/cake-lab/ARFlow"
 "Video" = "https://youtu.be/mml8YrCgfTk"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
+python = ">=3.9,<3.11"
 rerun-sdk = "^0.12.1"
 grpcio = "*"
 grpcio-tools = "*"
+torch = "^2.2.1"
+pandas = "^2.2.1"
+imageio = "^2.34.0"
+ipykernel = "^6.29.3"
 
 [tool.poetry.group.docs.dependencies]
 pdoc = "^14.6.1"
