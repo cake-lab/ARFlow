@@ -63,7 +63,7 @@ from .simple_server import CustomService
 def main():
     """Run the example."""
     player = arflow.ARFlowPlayer(
-        CustomService, frame_data_path="frames_2024_09_06_18_21_17.pkl"
+        CustomService, frame_data_path="FRAME_DATA_PATH.pkl"
     )
     player.run()
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
 ```
 
-Save the above code to a file, e.g., `simple_replay.py`, replace `frame_data_path` with the path to your saved `pickle` file, and run it:
+Save the above code to a file, e.g., `simple_replay.py`, replace `FRAME_DATA_PATH` with the path to your saved `pickle` file, and run it:
 
 
 ```bash
