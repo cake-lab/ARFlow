@@ -26,6 +26,7 @@
     ],
     "conventionalCommits.scopes": [
         "server",
-        "client"
+        "client",
+        "others"
     ],
 }
