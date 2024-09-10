@@ -12,13 +12,7 @@ Watch our demo video:
 
 Please refer to the individual [server](./python/README.md) and [client](./unity/README.md) installation guides.
 
-
 ## Contributors 
-
-<style>
-td { border: none !important; }
-td img { border-radius: 50px; }
-</style>
 
 <!-- readme: contributors -start -->
 <table>
