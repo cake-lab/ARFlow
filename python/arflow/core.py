@@ -27,7 +27,7 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     _loop = asyncio.get_event_loop()
 
     _start_time = time.time_ns()
-    _frame_data: List = []
+    _frame_data: List[Dict[str, float | bytes]] = []
 
     def __init__(self) -> None:
         super().__init__()

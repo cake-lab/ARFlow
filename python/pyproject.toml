@@ -10,22 +10,23 @@ homepage = "https://cake.wpi.edu/ARFlow/"
 repository = "https://github.com/cake-lab/ARFlow"
 
 [tool.poetry.urls]
-"Paper"  = "https://doi.org/10.1145/3638550.3643617"
+"Paper" = "https://doi.org/10.1145/3638550.3643617"
 "Video" = "https://youtu.be/mml8YrCgfTk"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
+python = ">=3.9,<3.13"
 rerun-sdk = "^0.12.1"
-grpcio = "*"
-grpcio-tools = "*"
+grpcio = "^1.60.1"
+grpcio-tools = "^1.60.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.4"
+pyright = "^1.1.379"
+pytest = "^8.3.2"
+pre-commit = "^3.8.0"
 
 [tool.poetry.group.docs.dependencies]
 pdoc = "^14.6.1"
-
-# [tool.poetry.group.legacy.dependencies]
-# grpcio-tools = "==1.28.1"
-# protobuf = "==3.19.6"
-# mypy-protobuf = "==1.16.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -34,3 +35,29 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 serve = "arflow.serve:serve"
 make-docs = "arflow.docs:make_docs"
+
+[tool.ruff]
+# gRPC generated files
+extend-exclude = [
+    "arflow/service_pb2.py",
+    "arflow/service_pb2_grpc.py",
+    "arflow/service_pb2.pyi",
+]
+
+[tool.ruff.lint]
+# https://github.com/astral-sh/ruff-vscode/blob/main/README.md#configuring-vs-code
+extend-select = ["I"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pyright]
+typeCheckingMode = "off" # TODO: Enable strict type checking
+ignore = [
+    "arflow/service_pb2.py",
+    "arflow/service_pb2_grpc.py",
+    "arflow/service_pb2.pyi",
+]
+# https://github.com/RobertCraigie/pyright-python#pre-commit
+venvPath = "."
+venv = ".venv"
