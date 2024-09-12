@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using ARFlow;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
@@ -25,16 +26,16 @@ public class ARFlowDeviceSample : MonoBehaviour
     private Vector2Int _sampleSize;
     private bool _enabled = false;
 
-    public TMP_InputField inputField;
+    public TMP_InputField ipField;
+    public TMP_InputField portField;
 
     // Start is called before the first frame update
     void Start()
     {
-        // const string serverURL = "http://192.168.1.100:8500";
-        // const string serverURL = "http://169.254.189.74:8500";
-        // const string serverURL = "http://192.168.1.139:8500";
-        const string serverURL = "http://192.168.1.219:8500";
-        inputField.text = serverURL;
+        const string initServerURL = "192.168.1.219";
+        const string initPort= "8500";
+        ipField.text = initServerURL;
+        portField.text = initPort;
 
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
@@ -52,12 +53,8 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void OnConnectButtonClick()
     {
-        var serverURL = inputField.text;
-        if (!serverURL.StartsWith("http://"))
-        {
-            serverURL = "http://" + serverURL;
-            inputField.text = serverURL;
-        }
+        var serverURL = "http://" + ipField.text + ":" +portField;
+        serverURL = Regex.Replace(serverURL, @"\s+", "");
         // destructor dispose old client when we reconnect
         _client = new ARFlowClient(serverURL);
 

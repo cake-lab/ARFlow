@@ -14,7 +14,7 @@ Please compile the Unity code for your target deployment platform and install th
 Currently, we support the following platforms:
 
 - iOS (iPhone, iPad)
-- Android (Android Phone)
+- Android (Android Phone) (*1)
 
 <!-- TODO: client side address input and screenshot. -->
 
@@ -25,3 +25,14 @@ To get started on building the document:
 2. Change directory into `Documentation` and run either `scripts/build.cmd` or `scripts/build.sh`
 
 (If you want to have the web page served locally, instead of the script run `docfx docfx.json --serve`)
+
+# FAQ
+### (*1) I encountered a problem with building the android application/running it on my device. How do I resolve it?
+Building on Android is prone to some issues, regarding target SDK version (Android version), graphics API, and more. 
+Below are some build configuration that has worked on our devices:
+- In Build Settings, add Scenes/DeviceData to the scenes in Build.
+- In Player Settings, uncheck Auto Graphics API, remove Vulkan.
+- In Player Settings, change Android minimal SDK version to at least 24 (Android 7.0).
+- In Player Settings, change Scripting Backend to IL2CPP
+- In Player Settings, check ARMv7 and ARM64 in Target Architectures. (Check any other architectures if needed).
+- In Player Settings, change Active Input Handling to Input System Package (New).
