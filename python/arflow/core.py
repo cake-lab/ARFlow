@@ -1,6 +1,5 @@
 """Data exchanging service."""
 
-import asyncio
 import os
 import pickle
 import sys
@@ -23,13 +22,11 @@ sessions: Dict[str, service_pb2.RegisterRequest] = {}
 class ARFlowService(service_pb2_grpc.ARFlowService):
     """ARFlow gRPC service."""
 
-    _num_frame: int = 0
-    _loop = asyncio.get_event_loop()
-
     _start_time = time.time_ns()
     _frame_data: List[Dict[str, float | bytes]] = []
 
     def __init__(self) -> None:
+        self.recorder = rr
         super().__init__()
 
     def _save_frame_data(
@@ -42,7 +39,7 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
         )
 
     def register(
-        self, request: service_pb2.RegisterRequest, context, uid: str | None = None
+        self, request: service_pb2.RegisterRequest, uid: str | None = None
     ) -> service_pb2.RegisterResponse:
         """Register a client."""
 
@@ -54,14 +51,17 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
 
         sessions[uid] = request
 
-        rr.init(f"{request.device_name} - ARFlow", spawn=True)
-
+        self.recorder.init(f"{request.device_name} - ARFlow", spawn=True)
         print("Registered a client with UUID: %s" % uid, request)
+
+        # Call the for user extension code.
+        self.on_register(request)
 
         return service_pb2.RegisterResponse(uid=uid)
 
     def data_frame(
-        self, request: service_pb2.DataFrameRequest, context
+        self,
+        request: service_pb2.DataFrameRequest,
     ) -> service_pb2.DataFrameResponse:
         """Process an incoming frame."""
 
@@ -75,17 +75,17 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             color_rgb = ARFlowService.decode_rgb_image(session_configs, request.color)
             decoded_data["color_rgb"] = color_rgb
             color_rgb = np.flipud(color_rgb)
-            rr.log("rgb", rr.Image(color_rgb))
+            self.recorder.log("rgb", rr.Image(color_rgb))
 
         if session_configs.camera_depth.enabled:
             depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
             decoded_data["depth_img"] = depth_img
             depth_img = np.flipud(depth_img)
-            rr.log("depth", rr.DepthImage(depth_img, meter=1.0))
+            self.recorder.log("depth", rr.DepthImage(depth_img, meter=1.0))
 
         if session_configs.camera_transform.enabled:
-            rr.log("world/origin", rr.ViewCoordinates.RIGHT_HAND_Y_DOWN)
-            # rr.log(
+            self.recorder.log("world/origin", rr.ViewCoordinates.RIGHT_HAND_Y_DOWN)
+            # self.logger.log(
             #     "world/xyz",
             #     rr.Arrows3D(
             #         vectors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
@@ -95,14 +95,16 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
 
             transform = ARFlowService.decode_transform(request.transform)
             decoded_data["transform"] = transform
-            rr.log(
+            self.recorder.log(
                 "world/camera",
-                rr.Transform3D(mat3x3=transform[:3, :3], translation=transform[:3, 3]),
+                self.recorder.Transform3D(
+                    mat3x3=transform[:3, :3], translation=transform[:3, 3]
+                ),
             )
 
             k = ARFlowService.decode_intrinsic(session_configs)
-            rr.log("world/camera", rr.Pinhole(image_from_camera=k))
-            rr.log("world/camera", rr.Image(np.flipud(color_rgb)))
+            self.recorder.log("world/camera", rr.Pinhole(image_from_camera=k))
+            self.recorder.log("world/camera", rr.Image(np.flipud(color_rgb)))
 
         if session_configs.camera_point_cloud.enabled:
             pcd, clr = ARFlowService.decode_point_cloud(
@@ -110,19 +112,25 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             )
             decoded_data["point_cloud_pcd"] = pcd
             decoded_data["point_cloud_clr"] = clr
-            rr.log("world/point_cloud", rr.Points3D(pcd, colors=clr))
+            self.recorder.log("world/point_cloud", rr.Points3D(pcd, colors=clr))
 
         # Call the for user extension code.
         self.on_frame_received(decoded_data)
 
         return service_pb2.DataFrameResponse(message="OK")
 
+    def on_register(self, request: service_pb2.RegisterRequest):
+        """Called when a new device is registered. Override this method to process the data."""
+        pass
+
     def on_frame_received(self, frame_data: service_pb2.DataFrameRequest):
         """Called when a frame is received. Override this method to process the data."""
         pass
 
-    def on_program_exit(self, path_to_save: str):
+    def on_program_exit(self, path_to_save: str | None):
         """Save the data and exit."""
+        if path_to_save is None:
+            return
         print("Saving the data...")
         f_name = strftime("%Y_%m_%d_%H_%M_%S", gmtime())
         save_path = os.path.join(path_to_save, f"frames_{f_name}.pkl")
@@ -290,8 +298,7 @@ def create_server(
         print(f"Register server started on port {port}")
         server.wait_for_termination()
     except KeyboardInterrupt:
-        if path_to_save is not None:
-            service.on_program_exit(path_to_save)
+        service.on_program_exit(path_to_save)
         sys.exit(0)
 
     # except Exception as e:
