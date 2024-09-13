@@ -30,8 +30,8 @@ class DepthAnythingV2Service(arflow.ARFlowService):
 
     def on_frame_received(self, frame_data: Dict[str, Any]):
         color_rgb = frame_data["color_rgb"]
-        if self.num_frame % 100 == 0:
-            thread = Thread(target=lambda: self.run_depth_estimation(color_rgb.copy()).start() )
+        if self.num_frame % 50 == 0:
+            thread = Thread(target=lambda: (self.run_depth_estimation(color_rgb.copy())) )
             thread.start()
 
         self.num_frame = self.num_frame + 1
@@ -44,21 +44,12 @@ class DepthAnythingV2Service(arflow.ARFlowService):
         image = Image.fromarray(np.flipud(color_rgb))
 
         predictions = self.pipe(image)
-        print(predictions)
         self.record_predictions(predictions)
         return predictions
 
     def record_predictions(self, predictions: dict):
         self.recorder.log(
-            "DepthAnythingV2/predicted_depth",
-            self.recorder.Tensor(predictions["predicted_depth"]),
-        )
-        self.recorder.log(
             "DepthAnythingV2/depth", self.recorder.Image(predictions["depth"])
-        )
-        self.recorder.log(
-            "DepthAnythingV2/predicted_depth",
-            self.recorder.Image(predictions["predicted_depth"]),
         )
 
 
