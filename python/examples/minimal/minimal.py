@@ -12,18 +12,18 @@ import arflow
 
 class MinimalService(arflow.ARFlowService):
     def on_register(self, request: arflow.RegisterRequest):
-        # positions = np.vstack(
-        #     [xyz.ravel() for xyz in np.mgrid[3 * [slice(-10, 10, 10j)]]]
-        # ).T
-        # colors = (
-        #     np.vstack([rgb.ravel() for rgb in np.mgrid[3 * [slice(0, 255, 10j)]]])
-        #     .astype(np.uint8)
-        #     .T
-        # )
+        positions = np.vstack(
+            [xyz.ravel() for xyz in np.mgrid[3 * [slice(-10, 10, 10j)]]]
+        ).T
+        colors = (
+            np.vstack([rgb.ravel() for rgb in np.mgrid[3 * [slice(0, 255, 10j)]]])
+            .astype(np.uint8)
+            .T
+        )
 
-        # self.recorder.log(
-        #     "my_points", self.recorder.Points3D(positions, colors=colors, radii=0.5)
-        # )
+        self.recorder.log(
+            "my_points", self.recorder.Points3D(positions, colors=colors, radii=0.5)
+        )
         pass
 
     def on_frame_received(self, frame_data: arflow.DataFrameRequest):

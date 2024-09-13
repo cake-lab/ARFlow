@@ -17,7 +17,7 @@ import arflow
 
 class DepthAnythingV2Service(arflow.ARFlowService):
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__()
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.pipe = pipeline(
             "depth-estimation",
@@ -25,13 +25,13 @@ class DepthAnythingV2Service(arflow.ARFlowService):
             device=self.device,
         )
 
-    def on_register(self):
+    def on_register(self, request: arflow.RegisterRequest):
         self.num_frame = 0
 
     def on_frame_received(self, frame_data: Dict[str, Any]):
         color_rgb = frame_data["color_rgb"]
         if self.num_frame % 100 == 0:
-            thread = Thread(target=self.run_depth_estimation, args=(color_rgb.copy()))
+            thread = Thread(target=lambda: self.run_depth_estimation(color_rgb.copy()).start() )
             thread.start()
 
         self.num_frame = self.num_frame + 1
