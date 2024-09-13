@@ -29,7 +29,7 @@ import arflow
 
 class XiheService(arflow.ARFlowService):
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__()
 
         self.xihenet = torch.jit.load("xihenet.pt")
         self.xihenet.eval()
@@ -39,7 +39,7 @@ class XiheService(arflow.ARFlowService):
 
         self.calculator = xihenet_utils.JointEntropyCalculator()
 
-    def on_register(self):
+    def on_register(self, request: arflow.RegisterRequest):
         self.num_frame = 0
 
     def on_frame_received(self, frame_data: Dict[str, Any]):
