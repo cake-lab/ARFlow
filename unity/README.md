@@ -27,7 +27,13 @@ To get started on building the document:
 (If you want to have the web page served locally, instead of the script run `docfx docfx.json --serve`)
 
 # FAQ
-### (*1) I encountered a problem with building the android application/running it on my device. How do I resolve it?
+### When opening the app, I only see a black screen
+In Build Settings, add Scenes/DeviceData to the scenes in Build. Add the corresponding scene of which you want to run
+- Sample data to test cameras (depth, RGB): add the DeviceData scene to build
+- Demos: add the corresponding demo scene to build.
+
+### (*1) I encountered a problem with building the android application. How do I resolve it?
+### Upon building the android application, I got a message saying uncompatible android version. Or the app crashes immediately
 Building on Android is prone to some issues, regarding target SDK version (Android version), graphics API, and more. 
 Below are some build configuration that has worked on our devices:
 - In Build Settings, add Scenes/DeviceData to the scenes in Build.
