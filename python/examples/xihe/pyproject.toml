@@ -9,8 +9,9 @@ readme = "README.md"
 python = ">=3.10, <3.13"
 pandas = "^2.2.2"
 imageio = "^2.35.1"
-torch = "^2.4.1"
 arflow = { path = "../.." }
+torch = "2.4.0"
+torch-cluster = "^1.6.3"
 
 [build-system]
 requires = ["poetry-core"]

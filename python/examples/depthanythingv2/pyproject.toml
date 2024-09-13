@@ -7,10 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10, <3.13"
-torch = "^2.4.1"
 torchvision = "^0.19.1"
 arflow = { path = "../.." }
 transformers = "^4.44.2"
+torch = "^2.4.1"
 
 [build-system]
 requires = ["poetry-core"]
