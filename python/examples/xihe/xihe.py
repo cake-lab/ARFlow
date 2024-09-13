@@ -19,7 +19,9 @@ import xihenet_utils
 
 # This import is necessary to avoid an "operator not found" error when loading
 # DO NOT REMOVE (please)
-# To install this (workaround currently), enter "poetry shell" and run "pip install torch-cluster -f https://data.pyg.org/whl/torch-2.4.0+${CUDA}.html"
+# To install this (workaround currently), enter "poetry shell" and run:
+# pip install wheel
+# pip install torch-cluster -f https://data.pyg.org/whl/torch-2.4.0+${CUDA}.html (this will take very long).
 import torch_cluster
 
 import arflow
