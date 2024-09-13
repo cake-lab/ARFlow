@@ -39,7 +39,7 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
         )
 
     def register(
-        self, request: service_pb2.RegisterRequest, uid: str | None = None
+        self, request: service_pb2.RegisterRequest, context, uid: str | None = None
     ) -> service_pb2.RegisterResponse:
         """Register a client."""
 
@@ -62,6 +62,7 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     def data_frame(
         self,
         request: service_pb2.DataFrameRequest,
+        context,
     ) -> service_pb2.DataFrameResponse:
         """Process an incoming frame."""
 

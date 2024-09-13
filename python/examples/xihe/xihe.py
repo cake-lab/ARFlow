@@ -17,6 +17,9 @@ import torch
 import utils3d as u3d
 import xihenet_utils
 
+# This import is necessary to avoid a segmentation fault when loading
+import torch_cluster
+
 import arflow
 
 
