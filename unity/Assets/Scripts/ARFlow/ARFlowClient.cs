@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Net.Http;
 using Grpc.Net.Client;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 namespace ARFlow
@@ -21,6 +22,7 @@ namespace ARFlow
         /// <param name="address">The address (AKA server URL) to connect to</param>
         public ARFlowClient(string address)
         {
+            Debug.Log("Initialize client for " + address);
             var handler = new YetAnotherHttpHandler() { Http2Only = true };
             _channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions()
             {

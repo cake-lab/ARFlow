@@ -29,14 +29,11 @@ public class ARFlowDeviceSample : MonoBehaviour
     public TMP_InputField ipField;
     public TMP_InputField portField;
 
+    private string _defaultConnection = "http://192.168.1.219:8500";
+
     // Start is called before the first frame update
     void Start()
     {
-        const string initServerURL = "192.168.1.219";
-        const string initPort= "8500";
-        ipField.text = initServerURL;
-        portField.text = initPort;
-
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
 
@@ -47,13 +44,27 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Application.targetFrameRate = 30;
     }
 
+    bool validIP (string ipField)
+    {
+        return Regex.IsMatch(ipField, @"(\d){1,3}\.(\d){1,3}\.(\d){1,3}\.(\d){1,3}");
+    }
+
+    bool validPort(string portField)
+    {
+        return Regex.IsMatch(portField, @"(\d){1,5}");
+    }
+
     /// <summary>
     /// Get register request data from camera and send to server.
     /// Image and depth info is acquired once to get information for the request, and is disposed afterwards.
     /// </summary>
     private void OnConnectButtonClick()
     {
-        var serverURL = "http://" + ipField.text + ":" + portField.text;
+        var serverURL = _defaultConnection;
+        if (validIP(ipField.text) && validPort(portField.text))
+        {
+            serverURL = "http://" + ipField.text + ":" + portField.text;
+        }
         serverURL = Regex.Replace(serverURL, @"\s+", "");
         // destructor dispose old client when we reconnect
         _client = new ARFlowClient(serverURL);
