@@ -73,7 +73,6 @@ namespace ARFlow
                 // });
                 var response = _client.data_frame(frameData); ;
                 res = response.Message;
-
             }
             catch (Exception e)
             {
