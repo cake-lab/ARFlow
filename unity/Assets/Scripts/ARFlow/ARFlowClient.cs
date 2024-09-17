@@ -71,7 +71,7 @@ namespace ARFlow
                 // {
                 //     Debug.Log(response);
                 // });
-                var response = _client.data_frame(frameData); ;
+                var response = _client.data_frame(frameData);
                 res = response.Message;
 
             }

@@ -53,7 +53,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void OnConnectButtonClick()
     {
-        var serverURL = "http://" + ipField.text + ":" +portField;
+        var serverURL = "http://" + ipField.text + ":" + portField.text;
         serverURL = Regex.Replace(serverURL, @"\s+", "");
         // destructor dispose old client when we reconnect
         _client = new ARFlowClient(serverURL);
