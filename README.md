@@ -2,7 +2,7 @@
 
 [ARFlow: A Framework for Simplifying AR Experimentation Workflow](https://doi.org/10.1145/3638550.3643617)
 
-[Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#bibtex) | [Project Page](https://cake.wpi.edu/ARFlow/) | [Video](https://youtu.be/mml8YrCgfTk)
+[Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#how-to-cite-arflow) | [Project Page](https://cake.wpi.edu/ARFlow/) | [Video](https://youtu.be/mml8YrCgfTk)
 
 Watch our demo video:
 
