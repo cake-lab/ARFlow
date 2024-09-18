@@ -136,11 +136,6 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
         session_configs: service_pb2.RegisterRequest, buffer: bytes
     ) -> np.ndarray:
         # Calculate the size of the image.
-        print(session_configs.camera_intrinsics.resolution_x)
-        print(session_configs.camera_color.resize_factor_x)
-
-        print(session_configs.camera_intrinsics.resolution_y)
-        print(session_configs.camera_color.resize_factor_y)
         color_img_w = int(
             session_configs.camera_intrinsics.resolution_x
             * session_configs.camera_color.resize_factor_x

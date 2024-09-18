@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DeviceData.unity
     guid: a85ce1c6384d24c2a8e016dbf92ebe5c
+  - enabled: 0
+    path: Assets/Scenes/XiheDemo.unity
+    guid: 16bf2390a4afb41c48a28fbea06c2cdd
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 5850c4e49d84e4c6e97e1ed136f38b54, type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: f92edc93773e74a58b3bcd43fb72f7f1, type: 2}
