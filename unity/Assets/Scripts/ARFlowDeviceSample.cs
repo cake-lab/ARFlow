@@ -177,4 +177,5 @@ public class ARFlowDeviceSample : MonoBehaviour
         colorImage.Dispose();
         depthImage.Dispose();
     }
+
 }
