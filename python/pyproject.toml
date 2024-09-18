@@ -34,7 +34,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 serve = "arflow.serve:serve"
-make-docs = "arflow.docs:make_docs"
 
 [tool.ruff]
 # gRPC generated files
