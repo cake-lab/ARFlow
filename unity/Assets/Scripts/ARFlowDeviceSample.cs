@@ -44,7 +44,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Application.targetFrameRate = 30;
     }
 
-    bool validIP (string ipField)
+    bool validIP(string ipField)
     {
         return Regex.IsMatch(ipField, @"(\d){1,3}\.(\d){1,3}\.(\d){1,3}\.(\d){1,3}");
     }
@@ -99,7 +99,12 @@ public class ARFlowDeviceSample : MonoBehaviour
                 CameraDepth = new RegisterRequest.Types.CameraDepth()
                 {
                     Enabled = true,
+#if UNITY_ANDROID
                     DataType = "u16", // f32 for iOS, u16 for Android
+#endif
+#if (UNITY_IOS || UNITY_VISIONOS)
+                    DataType = "f32",
+#endif
                     ConfidenceFilteringLevel = 0,
                     ResolutionX = depthImage.dimensions.x,
                     ResolutionY = depthImage.dimensions.y
