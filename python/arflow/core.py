@@ -3,14 +3,11 @@
 import asyncio
 import os
 import pickle
-import sys
 import time
 import uuid
-from concurrent import futures
 from time import gmtime, strftime
 from typing import Dict, List
 
-import grpc
 import numpy as np
 import rerun as rr
 
@@ -268,31 +265,3 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
         clr = color_rgb.reshape(-1, 3)
 
         return pcd, clr
-
-
-def create_server(
-    service: ARFlowService, port: int = 8500, path_to_save: str | None = "./"
-):
-    """Run gRPC server."""
-    try:
-        service = service()
-        server = grpc.server(
-            futures.ThreadPoolExecutor(max_workers=10),
-            options=[
-                ("grpc.max_send_message_length", -1),
-                ("grpc.max_receive_message_length", -1),
-            ],
-        )
-        service_pb2_grpc.add_ARFlowServiceServicer_to_server(service, server)
-        server.add_insecure_port("[::]:%s" % port)
-        server.start()
-
-        print(f"Register server started on port {port}")
-        server.wait_for_termination()
-    except KeyboardInterrupt:
-        if path_to_save is not None:
-            service.on_program_exit(path_to_save)
-        sys.exit(0)
-
-    # except Exception as e:
-    #     print(e)
