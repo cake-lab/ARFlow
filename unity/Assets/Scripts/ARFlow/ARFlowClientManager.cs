@@ -22,6 +22,7 @@ namespace ARFlow
         private ARFlowClient _client;
         private ARCameraManager _cameraManager;
         private AROcclusionManager _occlusionManager;
+        private ARPointCloudManager _pointCloudManager;
         private Vector2Int _sampleSize;
         private Dictionary<string, bool> _activatedDataModalities;
 
@@ -30,7 +31,7 @@ namespace ARFlow
             ["CameraColor"] = true,
             ["CameraDepth"] = true,
             ["CameraTransform"] = true,
-            ["CameraPointCloud"] = true,
+            ["CameraPointCloud"] = false,
         };
 
         public static readonly List<string> MODALITIES = new List<string>
@@ -42,11 +43,13 @@ namespace ARFlow
         /// <param name="address">The address (AKA server URL) to connect to</param>
         public ARFlowClientManager(
             ARCameraManager cameraManager,
-            AROcclusionManager occlusionManager
+            AROcclusionManager occlusionManager,
+            ARPointCloudManager pointCloudManager = null
         )
         {
             _cameraManager = cameraManager;
             _occlusionManager = occlusionManager;
+            _pointCloudManager = pointCloudManager;
         }
 
 
