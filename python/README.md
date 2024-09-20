@@ -80,7 +80,7 @@ Save the above code to a file, e.g., `simple_replay.py`, replace `FRAME_DATA_PAT
 python3 simple_replay.py
 ```
 
-For more examples, check out the [examples](examples) directory.
+For more examples, check out the [examples](https://github.com/cake-lab/ARFlow/tree/main/python/examples) directory.
 
 ## Contributing
 
