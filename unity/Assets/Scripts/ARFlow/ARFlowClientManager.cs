@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using System.Collections.Generic;
 using static ARFlow.RegisterRequest.Types;
+using UnityEngine.InputSystem;
 
 namespace ARFlow
 {
@@ -27,9 +28,9 @@ namespace ARFlow
 
         private readonly Dictionary<string, bool> DEFAULT_MODALITIES = new Dictionary<string, bool>
         {
-            ["CameraColor"] = true,
-            ["CameraDepth"] = true,
-            ["CameraTransform"] = true,
+            ["CameraColor"] = false,
+            ["CameraDepth"] = false,
+            ["CameraTransform"] = false,
             ["CameraPointCloud"] = false,
             ["PlaneDetection"] = false,
             ["Gyroscope"] = false,
@@ -45,10 +46,26 @@ namespace ARFlow
         /// </summary>
         /// <param name="address">The address (AKA server URL) to connect to</param>
         public ARFlowClientManager(
-            ARCameraManager cameraManager,
-            AROcclusionManager occlusionManager
+            ARCameraManager cameraManager = null,
+            AROcclusionManager occlusionManager = null
         )
         {
+            if (UnityEngine.InputSystem.Gyroscope.current != null)
+            {
+                InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
+            }
+            if (AttitudeSensor.current != null)
+            {
+                InputSystem.EnableDevice(AttitudeSensor.current);
+            }
+            if (Accelerometer.current != null)
+            {
+                InputSystem.EnableDevice(Accelerometer.current);
+            }
+            if (GravitySensor.current != null)
+            {
+                InputSystem.EnableDevice(GravitySensor.current);
+            }
             _cameraManager = cameraManager;
             _occlusionManager = occlusionManager;
         }
@@ -194,7 +211,7 @@ namespace ARFlow
         /// <returns></returns>
         DataFrameRequest.Types.Vector3 unityVector3ToProto(Vector3 a)
         {
-            return new DataFrameRequest.Types.Vector3
+            return new DataFrameRequest.Types.Vector3 ()
             {
                 X = a.x,
                 Y = a.y,
@@ -204,7 +221,8 @@ namespace ARFlow
 
         DataFrameRequest.Types.Quaternion unityQuaternionToProto(Quaternion a)
         {
-            return new DataFrameRequest.Types.Quaternion
+            Debug.Log("hai");
+            return new DataFrameRequest.Types.Quaternion ()
             {
                 X = a.x,
                 Y = a.y,
@@ -265,10 +283,11 @@ namespace ARFlow
 
             if (_activatedDataModalities["Gyroscope"])
             {
-                Quaternion attitude = Input.gyro.attitude;
-                Vector3 rotation_rate = Input.gyro.rotationRateUnbiased;
-                Vector3 gravity = Input.gyro.gravity;
-                Vector3 acceleration = Input.gyro.userAcceleration;
+                dataFrameRequest.Gyroscope = new DataFrameRequest.Types.gyroscope_data();
+                Quaternion attitude = AttitudeSensor.current.attitude.ReadValue();
+                Vector3 rotation_rate = UnityEngine.InputSystem.Gyroscope.current.angularVelocity.ReadValue();
+                Vector3 gravity = GravitySensor.current.gravity.ReadValue();
+                Vector3 acceleration = Accelerometer.current.acceleration.ReadValue();
 
                 dataFrameRequest.Gyroscope.Attitude = unityQuaternionToProto(attitude);
                 dataFrameRequest.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);

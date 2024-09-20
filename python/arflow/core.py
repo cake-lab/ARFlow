@@ -23,6 +23,7 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     _frame_data: List[Dict[str, float | bytes]] = []
 
     def __init__(self) -> None:
+        print("here 1:33")
         self.recorder = rr
         super().__init__()
 
@@ -116,20 +117,31 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             pass
 
         if session_configs.gyroscope.enabled:
-            gyroscope_data = request.gyroscope
-            attitude = rr.Quaternion(gyroscope_data.attitude)
-            rotation_rate = rr.Vector3(gyroscope_data.rotation_rate)
-            gravity = rr.Vector3(gyroscope_data.gravity)
-            acceleration = rr.Vector3(gyroscope_data.acceleration)
+            gyro_data = request.gyroscope
+            
+            attitude = rr.Quaternion(xyzw=[gyro_data.attitude.x, gyro_data.attitude.y, gyro_data.attitude.z, gyro_data.attitude.w])
+            rotation_rate = rr.datatypes.Vec3D([gyro_data.rotation_rate.x, gyro_data.rotation_rate.y, gyro_data.rotation_rate.z])
+            gravity = rr.datatypes.Vec3D([gyro_data.gravity.x, gyro_data.gravity.y, gyro_data.gravity.z])
+            acceleration = rr.datatypes.Vec3D([gyro_data.acceleration.x, gyro_data.acceleration.y, gyro_data.acceleration.z])
+
+            # Attitute is displayed as a box, and the other acceleration variables are displayed as arrows.
             rr.log(
-                "world/gyroscope/rotations",
-                rr.Arrows3D(attitude, colors=[[255, 0, 0]]),
-                rr.Arrows3D(rotation_rate, colors=[[0, 255, 0]]),
+                "rotations/gyroscope/attitude",
+                rr.Boxes3D(half_sizes=[0.5, 0.5, 0.5], quaternions=[attitude]),
             )
             rr.log(
-                "world/gyroscope/acceleration",
-                rr.Arrows3D(gravity, colors=[[0, 0, 255]]),
-                rr.Arrows3D(acceleration, colors=[[255, 255, 0]]),
+                "rotations/gyroscope/rotation_rate",
+                rr.Arrows3D(vectors=[rotation_rate], colors=[[0, 255, 0]]),
+            )
+            rr.log(
+                "rotations/gyroscope/gravity",
+                rr.Arrows3D(vectors=[gravity], 
+                            colors=[[0, 0, 255]]),
+            )
+            rr.log(
+                "rotations/gyroscope/acceleration",
+                rr.Arrows3D(vectors=[acceleration], 
+                            colors=[[255, 255, 0]]),
             )
 
         # Call the for user extension code.
@@ -294,3 +306,26 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
         clr = color_rgb.reshape(-1, 3)
 
         return pcd, clr
+    
+    @staticmethod
+    def euler_from_quaternion(x, y, z, w):
+        """
+        Convert a quaternion into euler angles (roll, pitch, yaw)
+        roll is rotation around x in radians (counterclockwise)
+        pitch is rotation around y in radians (counterclockwise)
+        yaw is rotation around z in radians (counterclockwise)
+        """
+        t0 = +2.0 * (w * x + y * z)
+        t1 = +1.0 - 2.0 * (x * x + y * y)
+        roll_x = np.arctan2(t0, t1)
+     
+        t2 = +2.0 * (w * y - z * x)
+        t2 = +1.0 if t2 > +1.0 else t2
+        t2 = -1.0 if t2 < -1.0 else t2
+        pitch_y = np.arcsin(t2)
+     
+        t3 = +2.0 * (w * z + x * y)
+        t4 = +1.0 - 2.0 * (y * y + z * z)
+        yaw_z = np.arctan2(t3, t4)
+     
+        return roll_x, pitch_y, yaw_z # in radians

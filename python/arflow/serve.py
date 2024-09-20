@@ -10,7 +10,7 @@ from arflow.core import ARFlowService
 
 
 def create_server(
-    service: ARFlowService, port: int = 8500, path_to_save: str | None = "./"
+    service: ARFlowService, port: int = 8500, path_to_save: str | None = None
 ):
     """Run gRPC server."""
     try:
