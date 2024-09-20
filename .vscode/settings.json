@@ -1,42 +1,38 @@
 {
-    "notebook.formatOnSave.enabled": true,
-    "notebook.codeActionsOnSave": {
-        "notebook.source.fixAll":"explicit",
-        "notebook.source.organizeImports": "explicit"
+  "notebook.formatOnSave.enabled": true,
+  "notebook.codeActionsOnSave": {
+    "notebook.source.fixAll": "explicit",
+    "notebook.source.organizeImports": "explicit"
+  },
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
     },
-    "[python]": {
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.fixAll": "explicit",
-            "source.organizeImports": "explicit"
-        },
-        "editor.defaultFormatter": "charliermarsh.ruff",
-    },
-    "python.analysis.typeCheckingMode": "off", // TODO: Enable strict type checking
-    "python.analysis.autoImportCompletions": true,
-    "[csharp]": {
-        "editor.formatOnSave": true,
-        "editor.maxTokenizationLineLength": 2500,
-        "editor.inlineSuggest.suppressSuggestions": false
-    },
-    "cSpell.words": [
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "python.analysis.typeCheckingMode": "off", // TODO: Enable strict type checking
+  "python.analysis.autoImportCompletions": true,
+  "[csharp]": {
+    "editor.formatOnSave": true,
+    "editor.maxTokenizationLineLength": 2500,
+    "editor.inlineSuggest.suppressSuggestions": false
+  },
+  "cSpell.words": [
         "arange",
-        "arflow",
-        "astype",
-        "Behaviour",
+    "arflow",
+    "astype",
+    "Behaviour",
         "dtype",
-        "flipud",
-        "frombuffer",
-        "gmtime",
+    "flipud",
+    "frombuffer",
+    "gmtime",
         "meshgrid",
-        "ndarray",
-        "Protobuf",
-        "thecakelab",
-        "Xihe"
-    ],
-    "conventionalCommits.scopes": [
-        "server",
-        "client",
-        "others"
-    ],
+    "ndarray",
+    "Protobuf",
+    "thecakelab",
+    "Xihe"
+  ],
+  "conventionalCommits.scopes": ["server", "client", "examples", "others"]
 }

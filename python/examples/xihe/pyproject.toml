@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "xihe"
+version = "0.1.0"
+description = ""
+authors = ["Yiqin Zhao <yiqinzhao@outlook.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.13"
+pandas = "^2.2.2"
+imageio = "^2.35.1"
+arflow = { path = "../.." }
+torch = "^2.4.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+xihe = "xihe:main"
