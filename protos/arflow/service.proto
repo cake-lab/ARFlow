@@ -56,6 +56,15 @@ message RegisterRequest {
         float depth_upscale_factor = 2;
     }
     CameraPointCloud camera_point_cloud = 6;
+
+    message CameraPlaneDetection {
+        bool enabled = 1;
+    }
+    CameraPlaneDetection camera_plane_detection = 7;
+
+    message Gyroscope {
+        bool enabled = 1;
+    } 
 }
 
 message RegisterResponse {
@@ -67,6 +76,42 @@ message DataFrameRequest {
     bytes color = 2;
     bytes depth = 3;
     bytes transform = 4;
+
+    message Vector3 {
+        float x = 1;
+        float y = 2;
+        float z = 3;
+    }
+
+    message PointInCloud {
+        Vector3 point = 1;
+        float confidence = 2;
+    }
+    repeated PointInCloud point_cloud = 5;
+
+    message Vector2 {
+        float x = 1;
+        float y = 2;
+    }
+    message Planes {
+        Vector3 center = 1;
+        Vector3 normal = 2;
+        Vector2 size = 3;
+    }
+    repeated Planes plane_detection = 6;
+    
+
+    message Quaternion {
+        float x = 1;
+        float y = 2;
+        float z = 3;
+        float w = 4;
+    }
+
+    Quaternion gyroscope_attitude = 7;
+    Vector3 gyroscope_rotation_rate = 8;
+    Vector3 gyroscope_gravity = 9;
+    Vector3 gyroscope_acceleration = 10;
 }
 
 message DataFrameResponse {
