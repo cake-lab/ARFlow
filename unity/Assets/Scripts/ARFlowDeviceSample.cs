@@ -21,8 +21,6 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     public AROcclusionManager occlusionManager;
 
-    public ARPointCloudManager pointCloudManager;
-
     public Button connectButton;
     public Button startPauseButton;
 
@@ -44,7 +42,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
-        _clientManager = new ARFlowClientManager(cameraManager, occlusionManager, pointCloudManager);
+        _clientManager = new ARFlowClientManager(cameraManager, occlusionManager);
 
         addModalityOptionsToConfig();
 

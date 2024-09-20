@@ -24,7 +24,7 @@ namespace ARFlow {
     static ServiceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8izAcKD1JlZ2lzdGVyUmVx",
+            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8igwkKD1JlZ2lzdGVyUmVx",
             "dWVzdBITCgtkZXZpY2VfbmFtZRgBIAEoCRI8ChFjYW1lcmFfaW50cmluc2lj",
             "cxgCIAEoCzIhLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFJbnRyaW5zaWNzEjIK",
             "DGNhbWVyYV9jb2xvchgDIAEoCzIcLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFD",
@@ -33,50 +33,56 @@ namespace ARFlow {
             "dGVyUmVxdWVzdC5DYW1lcmFUcmFuc2Zvcm0SPQoSY2FtZXJhX3BvaW50X2Ns",
             "b3VkGAYgASgLMiEuUmVnaXN0ZXJSZXF1ZXN0LkNhbWVyYVBvaW50Q2xvdWQS",
             "RQoWY2FtZXJhX3BsYW5lX2RldGVjdGlvbhgHIAEoCzIlLlJlZ2lzdGVyUmVx",
-            "dWVzdC5DYW1lcmFQbGFuZURldGVjdGlvbhqkAQoQQ2FtZXJhSW50cmluc2lj",
-            "cxIWCg5mb2NhbF9sZW5ndGhfeBgBIAEoAhIWCg5mb2NhbF9sZW5ndGhfeRgC",
-            "IAEoAhIZChFwcmluY2lwYWxfcG9pbnRfeBgDIAEoAhIZChFwcmluY2lwYWxf",
-            "cG9pbnRfeRgEIAEoAhIUCgxyZXNvbHV0aW9uX3gYBSABKAUSFAoMcmVzb2x1",
-            "dGlvbl95GAYgASgFGmMKC0NhbWVyYUNvbG9yEg8KB2VuYWJsZWQYASABKAgS",
-            "EQoJZGF0YV90eXBlGAIgASgJEhcKD3Jlc2l6ZV9mYWN0b3JfeBgDIAEoAhIX",
-            "Cg9yZXNpemVfZmFjdG9yX3kYBCABKAIagQEKC0NhbWVyYURlcHRoEg8KB2Vu",
-            "YWJsZWQYASABKAgSEQoJZGF0YV90eXBlGAIgASgJEiIKGmNvbmZpZGVuY2Vf",
-            "ZmlsdGVyaW5nX2xldmVsGAMgASgFEhQKDHJlc29sdXRpb25feBgEIAEoBRIU",
-            "CgxyZXNvbHV0aW9uX3kYBSABKAUaIgoPQ2FtZXJhVHJhbnNmb3JtEg8KB2Vu",
-            "YWJsZWQYASABKAgaQQoQQ2FtZXJhUG9pbnRDbG91ZBIPCgdlbmFibGVkGAEg",
-            "ASgIEhwKFGRlcHRoX3Vwc2NhbGVfZmFjdG9yGAIgASgCGicKFENhbWVyYVBs",
-            "YW5lRGV0ZWN0aW9uEg8KB2VuYWJsZWQYASABKAgaHAoJR3lyb3Njb3BlEg8K",
-            "B2VuYWJsZWQYASABKAgiHwoQUmVnaXN0ZXJSZXNwb25zZRILCgN1aWQYASAB",
-            "KAkiuwUKEERhdGFGcmFtZVJlcXVlc3QSCwoDdWlkGAEgASgJEg0KBWNvbG9y",
-            "GAIgASgMEg0KBWRlcHRoGAMgASgMEhEKCXRyYW5zZm9ybRgEIAEoDBIxCg9w",
-            "bGFuZV9kZXRlY3Rpb24YBSADKAsyGC5EYXRhRnJhbWVSZXF1ZXN0LlBsYW5l",
-            "cxIzCglneXJvc2NvcGUYBiABKAsyIC5EYXRhRnJhbWVSZXF1ZXN0Lmd5cm9z",
-            "Y29wZV9kYXRhEg0KBWF1ZGlvGAggASgMEg8KB21lc2hpbmcYCSABKAwaKgoH",
-            "VmVjdG9yMxIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAhofCgdW",
-            "ZWN0b3IyEgkKAXgYASABKAISCQoBeRgCIAEoAhqHAQoGUGxhbmVzEikKBmNl",
-            "bnRlchgBIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxIpCgZub3Jt",
-            "YWwYAiABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMSJwoEc2l6ZRgD",
-            "IAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMho4CgpRdWF0ZXJuaW9u",
-            "EgkKAXgYASABKAISCQoBeRgCIAEoAhIJCgF6GAMgASgCEgkKAXcYBCABKAIa",
-            "zwEKDmd5cm9zY29wZV9kYXRhEi4KCGF0dGl0dWRlGAEgASgLMhwuRGF0YUZy",
-            "YW1lUmVxdWVzdC5RdWF0ZXJuaW9uEjAKDXJvdGF0aW9uX3JhdGUYAiABKAsy",
-            "GS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMSKgoHZ3Jhdml0eRgDIAEoCzIZ",
-            "LkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxIvCgxhY2NlbGVyYXRpb24YBCAB",
-            "KAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMiJAoRRGF0YUZyYW1lUmVz",
-            "cG9uc2USDwoHbWVzc2FnZRgBIAEoCTJ1Cg1BUkZsb3dTZXJ2aWNlEi8KCHJl",
-            "Z2lzdGVyEhAuUmVnaXN0ZXJSZXF1ZXN0GhEuUmVnaXN0ZXJSZXNwb25zZRIz",
-            "CgpkYXRhX2ZyYW1lEhEuRGF0YUZyYW1lUmVxdWVzdBoSLkRhdGFGcmFtZVJl",
-            "c3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
+            "dWVzdC5DYW1lcmFQbGFuZURldGVjdGlvbhItCglneXJvc2NvcGUYCCABKAsy",
+            "Gi5SZWdpc3RlclJlcXVlc3QuR3lyb3Njb3BlEiUKBWF1ZGlvGAkgASgLMhYu",
+            "UmVnaXN0ZXJSZXF1ZXN0LkF1ZGlvEikKB21lc2hpbmcYCiABKAsyGC5SZWdp",
+            "c3RlclJlcXVlc3QuTWVzaGluZxqkAQoQQ2FtZXJhSW50cmluc2ljcxIWCg5m",
+            "b2NhbF9sZW5ndGhfeBgBIAEoAhIWCg5mb2NhbF9sZW5ndGhfeRgCIAEoAhIZ",
+            "ChFwcmluY2lwYWxfcG9pbnRfeBgDIAEoAhIZChFwcmluY2lwYWxfcG9pbnRf",
+            "eRgEIAEoAhIUCgxyZXNvbHV0aW9uX3gYBSABKAUSFAoMcmVzb2x1dGlvbl95",
+            "GAYgASgFGmMKC0NhbWVyYUNvbG9yEg8KB2VuYWJsZWQYASABKAgSEQoJZGF0",
+            "YV90eXBlGAIgASgJEhcKD3Jlc2l6ZV9mYWN0b3JfeBgDIAEoAhIXCg9yZXNp",
+            "emVfZmFjdG9yX3kYBCABKAIagQEKC0NhbWVyYURlcHRoEg8KB2VuYWJsZWQY",
+            "ASABKAgSEQoJZGF0YV90eXBlGAIgASgJEiIKGmNvbmZpZGVuY2VfZmlsdGVy",
+            "aW5nX2xldmVsGAMgASgFEhQKDHJlc29sdXRpb25feBgEIAEoBRIUCgxyZXNv",
+            "bHV0aW9uX3kYBSABKAUaIgoPQ2FtZXJhVHJhbnNmb3JtEg8KB2VuYWJsZWQY",
+            "ASABKAgaQQoQQ2FtZXJhUG9pbnRDbG91ZBIPCgdlbmFibGVkGAEgASgIEhwK",
+            "FGRlcHRoX3Vwc2NhbGVfZmFjdG9yGAIgASgCGicKFENhbWVyYVBsYW5lRGV0",
+            "ZWN0aW9uEg8KB2VuYWJsZWQYASABKAgaHAoJR3lyb3Njb3BlEg8KB2VuYWJs",
+            "ZWQYASABKAgaGAoFQXVkaW8SDwoHZW5hYmxlZBgBIAEoCBoaCgdNZXNoaW5n",
+            "Eg8KB2VuYWJsZWQYASABKAgiHwoQUmVnaXN0ZXJSZXNwb25zZRILCgN1aWQY",
+            "ASABKAkiuwUKEERhdGFGcmFtZVJlcXVlc3QSCwoDdWlkGAEgASgJEg0KBWNv",
+            "bG9yGAIgASgMEg0KBWRlcHRoGAMgASgMEhEKCXRyYW5zZm9ybRgEIAEoDBIx",
+            "Cg9wbGFuZV9kZXRlY3Rpb24YBSADKAsyGC5EYXRhRnJhbWVSZXF1ZXN0LlBs",
+            "YW5lcxIzCglneXJvc2NvcGUYBiABKAsyIC5EYXRhRnJhbWVSZXF1ZXN0Lmd5",
+            "cm9zY29wZV9kYXRhEg0KBWF1ZGlvGAggASgMEg8KB21lc2hpbmcYCSABKAwa",
+            "KgoHVmVjdG9yMxIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAhof",
+            "CgdWZWN0b3IyEgkKAXgYASABKAISCQoBeRgCIAEoAhqHAQoGUGxhbmVzEikK",
+            "BmNlbnRlchgBIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxIpCgZu",
+            "b3JtYWwYAiABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMSJwoEc2l6",
+            "ZRgDIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMho4CgpRdWF0ZXJu",
+            "aW9uEgkKAXgYASABKAISCQoBeRgCIAEoAhIJCgF6GAMgASgCEgkKAXcYBCAB",
+            "KAIazwEKDmd5cm9zY29wZV9kYXRhEi4KCGF0dGl0dWRlGAEgASgLMhwuRGF0",
+            "YUZyYW1lUmVxdWVzdC5RdWF0ZXJuaW9uEjAKDXJvdGF0aW9uX3JhdGUYAiAB",
+            "KAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMSKgoHZ3Jhdml0eRgDIAEo",
+            "CzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxIvCgxhY2NlbGVyYXRpb24Y",
+            "BCABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMiJAoRRGF0YUZyYW1l",
+            "UmVzcG9uc2USDwoHbWVzc2FnZRgBIAEoCTJ1Cg1BUkZsb3dTZXJ2aWNlEi8K",
+            "CHJlZ2lzdGVyEhAuUmVnaXN0ZXJSZXF1ZXN0GhEuUmVnaXN0ZXJSZXNwb25z",
+            "ZRIzCgpkYXRhX2ZyYW1lEhEuRGF0YUZyYW1lUmVxdWVzdBoSLkRhdGFGcmFt",
+            "ZVJlc3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest), global::ARFlow.RegisterRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud", "CameraPlaneDetection" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraIntrinsics), global::ARFlow.RegisterRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest), global::ARFlow.RegisterRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud", "CameraPlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraIntrinsics), global::ARFlow.RegisterRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraColor), global::ARFlow.RegisterRequest.Types.CameraColor.Parser, new[]{ "Enabled", "DataType", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraDepth), global::ARFlow.RegisterRequest.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraTransform), global::ARFlow.RegisterRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPointCloud), global::ARFlow.RegisterRequest.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPlaneDetection), global::ARFlow.RegisterRequest.Types.CameraPlaneDetection.Parser, new[]{ "Enabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.Gyroscope), global::ARFlow.RegisterRequest.Types.Gyroscope.Parser, new[]{ "Enabled" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.Gyroscope), global::ARFlow.RegisterRequest.Types.Gyroscope.Parser, new[]{ "Enabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.Audio), global::ARFlow.RegisterRequest.Types.Audio.Parser, new[]{ "Enabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.Meshing), global::ARFlow.RegisterRequest.Types.Meshing.Parser, new[]{ "Enabled" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterResponse), global::ARFlow.RegisterResponse.Parser, new[]{ "Uid" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Vector3), global::ARFlow.DataFrameRequest.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Vector2), global::ARFlow.DataFrameRequest.Types.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
@@ -132,6 +138,9 @@ namespace ARFlow {
       cameraTransform_ = other.cameraTransform_ != null ? other.cameraTransform_.Clone() : null;
       cameraPointCloud_ = other.cameraPointCloud_ != null ? other.cameraPointCloud_.Clone() : null;
       cameraPlaneDetection_ = other.cameraPlaneDetection_ != null ? other.cameraPlaneDetection_.Clone() : null;
+      gyroscope_ = other.gyroscope_ != null ? other.gyroscope_.Clone() : null;
+      audio_ = other.audio_ != null ? other.audio_.Clone() : null;
+      meshing_ = other.meshing_ != null ? other.meshing_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -225,6 +234,42 @@ namespace ARFlow {
       }
     }
 
+    /// <summary>Field number for the "gyroscope" field.</summary>
+    public const int GyroscopeFieldNumber = 8;
+    private global::ARFlow.RegisterRequest.Types.Gyroscope gyroscope_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.RegisterRequest.Types.Gyroscope Gyroscope {
+      get { return gyroscope_; }
+      set {
+        gyroscope_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "audio" field.</summary>
+    public const int AudioFieldNumber = 9;
+    private global::ARFlow.RegisterRequest.Types.Audio audio_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.RegisterRequest.Types.Audio Audio {
+      get { return audio_; }
+      set {
+        audio_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "meshing" field.</summary>
+    public const int MeshingFieldNumber = 10;
+    private global::ARFlow.RegisterRequest.Types.Meshing meshing_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.RegisterRequest.Types.Meshing Meshing {
+      get { return meshing_; }
+      set {
+        meshing_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -247,6 +292,9 @@ namespace ARFlow {
       if (!object.Equals(CameraTransform, other.CameraTransform)) return false;
       if (!object.Equals(CameraPointCloud, other.CameraPointCloud)) return false;
       if (!object.Equals(CameraPlaneDetection, other.CameraPlaneDetection)) return false;
+      if (!object.Equals(Gyroscope, other.Gyroscope)) return false;
+      if (!object.Equals(Audio, other.Audio)) return false;
+      if (!object.Equals(Meshing, other.Meshing)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -261,6 +309,9 @@ namespace ARFlow {
       if (cameraTransform_ != null) hash ^= CameraTransform.GetHashCode();
       if (cameraPointCloud_ != null) hash ^= CameraPointCloud.GetHashCode();
       if (cameraPlaneDetection_ != null) hash ^= CameraPlaneDetection.GetHashCode();
+      if (gyroscope_ != null) hash ^= Gyroscope.GetHashCode();
+      if (audio_ != null) hash ^= Audio.GetHashCode();
+      if (meshing_ != null) hash ^= Meshing.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -307,6 +358,18 @@ namespace ARFlow {
         output.WriteRawTag(58);
         output.WriteMessage(CameraPlaneDetection);
       }
+      if (gyroscope_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(Gyroscope);
+      }
+      if (audio_ != null) {
+        output.WriteRawTag(74);
+        output.WriteMessage(Audio);
+      }
+      if (meshing_ != null) {
+        output.WriteRawTag(82);
+        output.WriteMessage(Meshing);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -345,6 +408,18 @@ namespace ARFlow {
         output.WriteRawTag(58);
         output.WriteMessage(CameraPlaneDetection);
       }
+      if (gyroscope_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(Gyroscope);
+      }
+      if (audio_ != null) {
+        output.WriteRawTag(74);
+        output.WriteMessage(Audio);
+      }
+      if (meshing_ != null) {
+        output.WriteRawTag(82);
+        output.WriteMessage(Meshing);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -375,6 +450,15 @@ namespace ARFlow {
       }
       if (cameraPlaneDetection_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(CameraPlaneDetection);
+      }
+      if (gyroscope_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Gyroscope);
+      }
+      if (audio_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Audio);
+      }
+      if (meshing_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Meshing);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -426,6 +510,24 @@ namespace ARFlow {
           CameraPlaneDetection = new global::ARFlow.RegisterRequest.Types.CameraPlaneDetection();
         }
         CameraPlaneDetection.MergeFrom(other.CameraPlaneDetection);
+      }
+      if (other.gyroscope_ != null) {
+        if (gyroscope_ == null) {
+          Gyroscope = new global::ARFlow.RegisterRequest.Types.Gyroscope();
+        }
+        Gyroscope.MergeFrom(other.Gyroscope);
+      }
+      if (other.audio_ != null) {
+        if (audio_ == null) {
+          Audio = new global::ARFlow.RegisterRequest.Types.Audio();
+        }
+        Audio.MergeFrom(other.Audio);
+      }
+      if (other.meshing_ != null) {
+        if (meshing_ == null) {
+          Meshing = new global::ARFlow.RegisterRequest.Types.Meshing();
+        }
+        Meshing.MergeFrom(other.Meshing);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -488,6 +590,27 @@ namespace ARFlow {
             input.ReadMessage(CameraPlaneDetection);
             break;
           }
+          case 66: {
+            if (gyroscope_ == null) {
+              Gyroscope = new global::ARFlow.RegisterRequest.Types.Gyroscope();
+            }
+            input.ReadMessage(Gyroscope);
+            break;
+          }
+          case 74: {
+            if (audio_ == null) {
+              Audio = new global::ARFlow.RegisterRequest.Types.Audio();
+            }
+            input.ReadMessage(Audio);
+            break;
+          }
+          case 82: {
+            if (meshing_ == null) {
+              Meshing = new global::ARFlow.RegisterRequest.Types.Meshing();
+            }
+            input.ReadMessage(Meshing);
+            break;
+          }
         }
       }
     #endif
@@ -547,6 +670,27 @@ namespace ARFlow {
               CameraPlaneDetection = new global::ARFlow.RegisterRequest.Types.CameraPlaneDetection();
             }
             input.ReadMessage(CameraPlaneDetection);
+            break;
+          }
+          case 66: {
+            if (gyroscope_ == null) {
+              Gyroscope = new global::ARFlow.RegisterRequest.Types.Gyroscope();
+            }
+            input.ReadMessage(Gyroscope);
+            break;
+          }
+          case 74: {
+            if (audio_ == null) {
+              Audio = new global::ARFlow.RegisterRequest.Types.Audio();
+            }
+            input.ReadMessage(Audio);
+            break;
+          }
+          case 82: {
+            if (meshing_ == null) {
+              Meshing = new global::ARFlow.RegisterRequest.Types.Meshing();
+            }
+            input.ReadMessage(Meshing);
             break;
           }
         }
@@ -2319,6 +2463,386 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(Gyroscope other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Enabled != false) {
+            Enabled = other.Enabled;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class Audio : pb::IMessage<Audio>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<Audio> _parser = new pb::MessageParser<Audio>(() => new Audio());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<Audio> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[7]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Audio() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Audio(Audio other) : this() {
+          enabled_ = other.enabled_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Audio Clone() {
+          return new Audio(this);
+        }
+
+        /// <summary>Field number for the "enabled" field.</summary>
+        public const int EnabledFieldNumber = 1;
+        private bool enabled_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Enabled {
+          get { return enabled_; }
+          set {
+            enabled_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as Audio);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(Audio other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Enabled != other.Enabled) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Enabled != false) hash ^= Enabled.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (Enabled != false) {
+            size += 1 + 1;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(Audio other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Enabled != false) {
+            Enabled = other.Enabled;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class Meshing : pb::IMessage<Meshing>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<Meshing> _parser = new pb::MessageParser<Meshing>(() => new Meshing());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<Meshing> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[8]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Meshing() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Meshing(Meshing other) : this() {
+          enabled_ = other.enabled_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Meshing Clone() {
+          return new Meshing(this);
+        }
+
+        /// <summary>Field number for the "enabled" field.</summary>
+        public const int EnabledFieldNumber = 1;
+        private bool enabled_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Enabled {
+          get { return enabled_; }
+          set {
+            enabled_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as Meshing);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(Meshing other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Enabled != other.Enabled) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Enabled != false) hash ^= Enabled.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (Enabled != false) {
+            size += 1 + 1;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(Meshing other) {
           if (other == null) {
             return;
           }

@@ -22,7 +22,6 @@ namespace ARFlow
         private ARFlowClient _client;
         private ARCameraManager _cameraManager;
         private AROcclusionManager _occlusionManager;
-        private ARPointCloudManager _pointCloudManager;
         private Vector2Int _sampleSize;
         private Dictionary<string, bool> _activatedDataModalities;
 
@@ -32,10 +31,14 @@ namespace ARFlow
             ["CameraDepth"] = true,
             ["CameraTransform"] = true,
             ["CameraPointCloud"] = false,
+            ["PlaneDetection"] = false,
+            ["Gyroscope"] = false,
+            ["Audio"] = false,
+            ["Meshing"] = false
         };
 
         public static readonly List<string> MODALITIES = new List<string>
-            { "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud"};
+            { "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud", "PlaneDetection", "Gyroscope", "Audio", "Meshing"};
 
         /// <summary>
         /// Initialize the client
@@ -43,13 +46,11 @@ namespace ARFlow
         /// <param name="address">The address (AKA server URL) to connect to</param>
         public ARFlowClientManager(
             ARCameraManager cameraManager,
-            AROcclusionManager occlusionManager,
-            ARPointCloudManager pointCloudManager = null
+            AROcclusionManager occlusionManager
         )
         {
             _cameraManager = cameraManager;
             _occlusionManager = occlusionManager;
-            _pointCloudManager = pointCloudManager;
         }
 
 
@@ -138,6 +139,42 @@ namespace ARFlow
                     requestData.CameraPointCloud = CameraPointCloud;
                 };
 
+                if (_activatedDataModalities["PlaneDetection"])
+                {
+                    var CameraPlaneDetection = new RegisterRequest.Types.CameraPlaneDetection()
+                    {
+                        Enabled = true
+                    };
+                    requestData.CameraPlaneDetection = CameraPlaneDetection;
+                }
+
+                if (_activatedDataModalities["Gyroscope"])
+                {
+                    var Gyroscope = new RegisterRequest.Types.Gyroscope()
+                    {
+                        Enabled = true
+                    };
+                    requestData.Gyroscope = Gyroscope;
+                }
+
+                if (_activatedDataModalities["Audio"])
+                {
+                    var Audio = new RegisterRequest.Types.Audio()
+                    {
+                        Enabled = true
+                    };
+                    requestData.Audio = Audio;
+                }
+
+                if (_activatedDataModalities["Meshing"])
+                {
+                    var Meshing = new RegisterRequest.Types.Meshing()
+                    {
+                        Enabled = true
+                    };
+                    requestData.Meshing = Meshing;
+                }
+
                 colorImage.Dispose();
                 depthImage.Dispose();
 
@@ -148,6 +185,32 @@ namespace ARFlow
             {
                 Debug.LogError(e);
             }
+        }
+
+        /// <summary>
+        /// Helper function to convert from unity data types to custom proto types
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        DataFrameRequest.Types.Vector3 unityVector3ToProto(Vector3 a)
+        {
+            return new DataFrameRequest.Types.Vector3
+            {
+                X = a.x,
+                Y = a.y,
+                Z = a.z
+            };
+        }
+
+        DataFrameRequest.Types.Quaternion unityQuaternionToProto(Quaternion a)
+        {
+            return new DataFrameRequest.Types.Quaternion
+            {
+                X = a.x,
+                Y = a.y,
+                Z = a.z,
+                W = a.w
+            };
         }
 
 
@@ -191,8 +254,52 @@ namespace ARFlow
                 dataFrameRequest.Transform = ByteString.CopyFrom(cameraTransformBytes);
             }
 
+            //if (_activatedDataModalities["CameraPlaneDetection"])
+            //{
+            //    var CameraPlaneDetection = new RegisterRequest.Types.CameraPlaneDetection()
+            //    {
+            //        Enabled = true
+            //    };
+            //    requestData.CameraPlaneDetection = CameraPlaneDetection;
+            //}
+
+            if (_activatedDataModalities["Gyroscope"])
+            {
+                Quaternion attitude = Input.gyro.attitude;
+                Vector3 rotation_rate = Input.gyro.rotationRateUnbiased;
+                Vector3 gravity = Input.gyro.gravity;
+                Vector3 acceleration = Input.gyro.userAcceleration;
+
+                dataFrameRequest.Gyroscope.Attitude = unityQuaternionToProto(attitude);
+                dataFrameRequest.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);
+                dataFrameRequest.Gyroscope.Gravity = unityVector3ToProto(gravity);
+                dataFrameRequest.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
+            }
+
+            //if (_activatedDataModalities["Audio"])
+            //{
+            //    var Audio = new RegisterRequest.Types.Audio()
+            //    {
+            //        Enabled = true
+            //    };
+            //    requestData.Audio = Audio;
+            //}
+
+            //if (_activatedDataModalities["Meshing"])
+            //{
+            //    var Meshing = new RegisterRequest.Types.Meshing()
+            //    {
+            //        Enabled = true
+            //    };
+            //    requestData.Meshing = Meshing;
+            //}
+
+
+
             string serverMessage = _client.SendFrame(dataFrameRequest);
             return serverMessage;
         }
     }
 }
+
+

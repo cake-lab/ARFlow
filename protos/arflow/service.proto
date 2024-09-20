@@ -65,6 +65,17 @@ message RegisterRequest {
     message Gyroscope {
         bool enabled = 1;
     } 
+    Gyroscope gyroscope = 8;
+
+    message Audio {
+        bool enabled = 1;
+    }
+    Audio audio = 9;
+
+    message Meshing {
+        bool enabled = 1;
+    }
+    Meshing meshing = 10;
 }
 
 message RegisterResponse {

@@ -109,6 +109,26 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             decoded_data["point_cloud_clr"] = clr
             rr.log("world/point_cloud", rr.Points3D(pcd, colors=clr))
 
+        if session_configs.camera_plane_detection.enabled:
+            pass
+
+        if session_configs.gyroscope.enabled:
+            gyroscope_data = request.gyroscope
+            attitude = rr.Quaternion(gyroscope_data.attitude)
+            rotation_rate = rr.Vector3(gyroscope_data.rotation_rate)
+            gravity = rr.Vector3(gyroscope_data.gravity)
+            acceleration = rr.Vector3(gyroscope_data.acceleration)
+            rr.log(
+                "world/gyroscope/rotations",
+                rr.Arrows3D(attitude, colors=[[255, 0, 0]]),
+                rr.Arrows3D(rotation_rate, colors=[[0, 255, 0]]),
+            )
+            rr.log(
+                "world/gyroscope/acceleration",
+                rr.Arrows3D(gravity, colors=[[0, 0, 255]]),
+                rr.Arrows3D(acceleration, colors=[[255, 255, 0]]),
+            )
+
         # Call the for user extension code.
         self.on_frame_received(decoded_data)
 
