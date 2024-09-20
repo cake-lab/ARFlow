@@ -52,8 +52,10 @@ python simple_arflow_server.py
 
 ### Client Setup
 
-Next, follow the client application installation [guide](./unity/README.md) to build the ARFlow client app and install it on your device.
-Following the onscreen instruction to input the server address and port (8500 for the previous example) information, then tap **connect** and **start**. 
+Next, go to the [releases](https://github.com/cake-lab/ARFlow/releases) page and find the prebuilt items for Android and iOS.
+For Android, directly install the prebuilt apk on your device. For iOS, compile the generated Xcode project to deploy the ARFlow client app to your iOS device. Note that you will need to configure the developer credentials in the Xcode project.
+
+After lunching the ARFlow client app, follow the onscreen instruction to input the server address and port (8500 for the previous example) information, then tap **connect** and **start**. 
 
 Watch our demo video:
 
