@@ -78,7 +78,6 @@ public class ARFlowXiheDemo : MonoBehaviour
 
     private void UpdatePlacementPose()
     {
-        print(Camera.current);
         var screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
         var hits = new List<ARRaycastHit>();
         raycastManager.Raycast(screenCenter, hits, TrackableType.AllTypes);
