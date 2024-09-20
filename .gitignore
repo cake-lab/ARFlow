@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,python,unity
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,visualstudiocode,python,unity
 
+#additional files
+.grpc_tools
+
 ### macOS ###
 # General
 .DS_Store

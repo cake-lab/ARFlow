@@ -24,42 +24,67 @@ namespace ARFlow {
     static ServiceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8ivgYKD1JlZ2lzdGVyUmVx",
+            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8izAcKD1JlZ2lzdGVyUmVx",
             "dWVzdBITCgtkZXZpY2VfbmFtZRgBIAEoCRI8ChFjYW1lcmFfaW50cmluc2lj",
             "cxgCIAEoCzIhLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFJbnRyaW5zaWNzEjIK",
             "DGNhbWVyYV9jb2xvchgDIAEoCzIcLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFD",
             "b2xvchIyCgxjYW1lcmFfZGVwdGgYBCABKAsyHC5SZWdpc3RlclJlcXVlc3Qu",
             "Q2FtZXJhRGVwdGgSOgoQY2FtZXJhX3RyYW5zZm9ybRgFIAEoCzIgLlJlZ2lz",
             "dGVyUmVxdWVzdC5DYW1lcmFUcmFuc2Zvcm0SPQoSY2FtZXJhX3BvaW50X2Ns",
-            "b3VkGAYgASgLMiEuUmVnaXN0ZXJSZXF1ZXN0LkNhbWVyYVBvaW50Q2xvdWQa",
-            "pAEKEENhbWVyYUludHJpbnNpY3MSFgoOZm9jYWxfbGVuZ3RoX3gYASABKAIS",
-            "FgoOZm9jYWxfbGVuZ3RoX3kYAiABKAISGQoRcHJpbmNpcGFsX3BvaW50X3gY",
-            "AyABKAISGQoRcHJpbmNpcGFsX3BvaW50X3kYBCABKAISFAoMcmVzb2x1dGlv",
-            "bl94GAUgASgFEhQKDHJlc29sdXRpb25feRgGIAEoBRpjCgtDYW1lcmFDb2xv",
-            "chIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgCIAEoCRIXCg9yZXNp",
-            "emVfZmFjdG9yX3gYAyABKAISFwoPcmVzaXplX2ZhY3Rvcl95GAQgASgCGoEB",
-            "CgtDYW1lcmFEZXB0aBIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgC",
-            "IAEoCRIiChpjb25maWRlbmNlX2ZpbHRlcmluZ19sZXZlbBgDIAEoBRIUCgxy",
-            "ZXNvbHV0aW9uX3gYBCABKAUSFAoMcmVzb2x1dGlvbl95GAUgASgFGiIKD0Nh",
-            "bWVyYVRyYW5zZm9ybRIPCgdlbmFibGVkGAEgASgIGkEKEENhbWVyYVBvaW50",
-            "Q2xvdWQSDwoHZW5hYmxlZBgBIAEoCBIcChRkZXB0aF91cHNjYWxlX2ZhY3Rv",
-            "chgCIAEoAiIfChBSZWdpc3RlclJlc3BvbnNlEgsKA3VpZBgBIAEoCSJQChBE",
-            "YXRhRnJhbWVSZXF1ZXN0EgsKA3VpZBgBIAEoCRINCgVjb2xvchgCIAEoDBIN",
-            "CgVkZXB0aBgDIAEoDBIRCgl0cmFuc2Zvcm0YBCABKAwiJAoRRGF0YUZyYW1l",
-            "UmVzcG9uc2USDwoHbWVzc2FnZRgBIAEoCTJ1Cg1BUkZsb3dTZXJ2aWNlEi8K",
-            "CHJlZ2lzdGVyEhAuUmVnaXN0ZXJSZXF1ZXN0GhEuUmVnaXN0ZXJSZXNwb25z",
-            "ZRIzCgpkYXRhX2ZyYW1lEhEuRGF0YUZyYW1lUmVxdWVzdBoSLkRhdGFGcmFt",
-            "ZVJlc3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
+            "b3VkGAYgASgLMiEuUmVnaXN0ZXJSZXF1ZXN0LkNhbWVyYVBvaW50Q2xvdWQS",
+            "RQoWY2FtZXJhX3BsYW5lX2RldGVjdGlvbhgHIAEoCzIlLlJlZ2lzdGVyUmVx",
+            "dWVzdC5DYW1lcmFQbGFuZURldGVjdGlvbhqkAQoQQ2FtZXJhSW50cmluc2lj",
+            "cxIWCg5mb2NhbF9sZW5ndGhfeBgBIAEoAhIWCg5mb2NhbF9sZW5ndGhfeRgC",
+            "IAEoAhIZChFwcmluY2lwYWxfcG9pbnRfeBgDIAEoAhIZChFwcmluY2lwYWxf",
+            "cG9pbnRfeRgEIAEoAhIUCgxyZXNvbHV0aW9uX3gYBSABKAUSFAoMcmVzb2x1",
+            "dGlvbl95GAYgASgFGmMKC0NhbWVyYUNvbG9yEg8KB2VuYWJsZWQYASABKAgS",
+            "EQoJZGF0YV90eXBlGAIgASgJEhcKD3Jlc2l6ZV9mYWN0b3JfeBgDIAEoAhIX",
+            "Cg9yZXNpemVfZmFjdG9yX3kYBCABKAIagQEKC0NhbWVyYURlcHRoEg8KB2Vu",
+            "YWJsZWQYASABKAgSEQoJZGF0YV90eXBlGAIgASgJEiIKGmNvbmZpZGVuY2Vf",
+            "ZmlsdGVyaW5nX2xldmVsGAMgASgFEhQKDHJlc29sdXRpb25feBgEIAEoBRIU",
+            "CgxyZXNvbHV0aW9uX3kYBSABKAUaIgoPQ2FtZXJhVHJhbnNmb3JtEg8KB2Vu",
+            "YWJsZWQYASABKAgaQQoQQ2FtZXJhUG9pbnRDbG91ZBIPCgdlbmFibGVkGAEg",
+            "ASgIEhwKFGRlcHRoX3Vwc2NhbGVfZmFjdG9yGAIgASgCGicKFENhbWVyYVBs",
+            "YW5lRGV0ZWN0aW9uEg8KB2VuYWJsZWQYASABKAgaHAoJR3lyb3Njb3BlEg8K",
+            "B2VuYWJsZWQYASABKAgiHwoQUmVnaXN0ZXJSZXNwb25zZRILCgN1aWQYASAB",
+            "KAki/gUKEERhdGFGcmFtZVJlcXVlc3QSCwoDdWlkGAEgASgJEg0KBWNvbG9y",
+            "GAIgASgMEg0KBWRlcHRoGAMgASgMEhEKCXRyYW5zZm9ybRgEIAEoDBIzCgtw",
+            "b2ludF9jbG91ZBgFIAMoCzIeLkRhdGFGcmFtZVJlcXVlc3QuUG9pbnRJbkNs",
+            "b3VkEjEKD3BsYW5lX2RldGVjdGlvbhgGIAMoCzIYLkRhdGFGcmFtZVJlcXVl",
+            "c3QuUGxhbmVzEjgKEmd5cm9zY29wZV9hdHRpdHVkZRgHIAEoCzIcLkRhdGFG",
+            "cmFtZVJlcXVlc3QuUXVhdGVybmlvbhI6ChdneXJvc2NvcGVfcm90YXRpb25f",
+            "cmF0ZRgIIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxI0ChFneXJv",
+            "c2NvcGVfZ3Jhdml0eRgJIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9y",
+            "MxI5ChZneXJvc2NvcGVfYWNjZWxlcmF0aW9uGAogASgLMhkuRGF0YUZyYW1l",
+            "UmVxdWVzdC5WZWN0b3IzGioKB1ZlY3RvcjMSCQoBeBgBIAEoAhIJCgF5GAIg",
+            "ASgCEgkKAXoYAyABKAIaTAoMUG9pbnRJbkNsb3VkEigKBXBvaW50GAEgASgL",
+            "MhkuRGF0YUZyYW1lUmVxdWVzdC5WZWN0b3IzEhIKCmNvbmZpZGVuY2UYAiAB",
+            "KAIaHwoHVmVjdG9yMhIJCgF4GAEgASgCEgkKAXkYAiABKAIahwEKBlBsYW5l",
+            "cxIpCgZjZW50ZXIYASABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMS",
+            "KQoGbm9ybWFsGAIgASgLMhkuRGF0YUZyYW1lUmVxdWVzdC5WZWN0b3IzEicK",
+            "BHNpemUYAyABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjIaOAoKUXVh",
+            "dGVybmlvbhIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAhIJCgF3",
+            "GAQgASgCIiQKEURhdGFGcmFtZVJlc3BvbnNlEg8KB21lc3NhZ2UYASABKAky",
+            "dQoNQVJGbG93U2VydmljZRIvCghyZWdpc3RlchIQLlJlZ2lzdGVyUmVxdWVz",
+            "dBoRLlJlZ2lzdGVyUmVzcG9uc2USMwoKZGF0YV9mcmFtZRIRLkRhdGFGcmFt",
+            "ZVJlcXVlc3QaEi5EYXRhRnJhbWVSZXNwb25zZUIJqgIGQVJGbG93YgZwcm90",
+            "bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest), global::ARFlow.RegisterRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraIntrinsics), global::ARFlow.RegisterRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest), global::ARFlow.RegisterRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud", "CameraPlaneDetection" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraIntrinsics), global::ARFlow.RegisterRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraColor), global::ARFlow.RegisterRequest.Types.CameraColor.Parser, new[]{ "Enabled", "DataType", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraDepth), global::ARFlow.RegisterRequest.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraTransform), global::ARFlow.RegisterRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPointCloud), global::ARFlow.RegisterRequest.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPointCloud), global::ARFlow.RegisterRequest.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPlaneDetection), global::ARFlow.RegisterRequest.Types.CameraPlaneDetection.Parser, new[]{ "Enabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.Gyroscope), global::ARFlow.RegisterRequest.Types.Gyroscope.Parser, new[]{ "Enabled" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterResponse), global::ARFlow.RegisterResponse.Parser, new[]{ "Uid" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PointCloud", "PlaneDetection", "GyroscopeAttitude", "GyroscopeRotationRate", "GyroscopeGravity", "GyroscopeAcceleration" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Vector3), global::ARFlow.DataFrameRequest.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.PointInCloud), global::ARFlow.DataFrameRequest.Types.PointInCloud.Parser, new[]{ "Point", "Confidence" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Vector2), global::ARFlow.DataFrameRequest.Types.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Planes), global::ARFlow.DataFrameRequest.Types.Planes.Parser, new[]{ "Center", "Normal", "Size" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Quaternion), global::ARFlow.DataFrameRequest.Types.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameResponse), global::ARFlow.DataFrameResponse.Parser, new[]{ "Message" }, null, null, null, null)
           }));
     }
@@ -108,6 +133,7 @@ namespace ARFlow {
       cameraDepth_ = other.cameraDepth_ != null ? other.cameraDepth_.Clone() : null;
       cameraTransform_ = other.cameraTransform_ != null ? other.cameraTransform_.Clone() : null;
       cameraPointCloud_ = other.cameraPointCloud_ != null ? other.cameraPointCloud_.Clone() : null;
+      cameraPlaneDetection_ = other.cameraPlaneDetection_ != null ? other.cameraPlaneDetection_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -189,6 +215,18 @@ namespace ARFlow {
       }
     }
 
+    /// <summary>Field number for the "camera_plane_detection" field.</summary>
+    public const int CameraPlaneDetectionFieldNumber = 7;
+    private global::ARFlow.RegisterRequest.Types.CameraPlaneDetection cameraPlaneDetection_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.RegisterRequest.Types.CameraPlaneDetection CameraPlaneDetection {
+      get { return cameraPlaneDetection_; }
+      set {
+        cameraPlaneDetection_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -210,6 +248,7 @@ namespace ARFlow {
       if (!object.Equals(CameraDepth, other.CameraDepth)) return false;
       if (!object.Equals(CameraTransform, other.CameraTransform)) return false;
       if (!object.Equals(CameraPointCloud, other.CameraPointCloud)) return false;
+      if (!object.Equals(CameraPlaneDetection, other.CameraPlaneDetection)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -223,6 +262,7 @@ namespace ARFlow {
       if (cameraDepth_ != null) hash ^= CameraDepth.GetHashCode();
       if (cameraTransform_ != null) hash ^= CameraTransform.GetHashCode();
       if (cameraPointCloud_ != null) hash ^= CameraPointCloud.GetHashCode();
+      if (cameraPlaneDetection_ != null) hash ^= CameraPlaneDetection.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -265,6 +305,10 @@ namespace ARFlow {
         output.WriteRawTag(50);
         output.WriteMessage(CameraPointCloud);
       }
+      if (cameraPlaneDetection_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(CameraPlaneDetection);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -299,6 +343,10 @@ namespace ARFlow {
         output.WriteRawTag(50);
         output.WriteMessage(CameraPointCloud);
       }
+      if (cameraPlaneDetection_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(CameraPlaneDetection);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -326,6 +374,9 @@ namespace ARFlow {
       }
       if (cameraPointCloud_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(CameraPointCloud);
+      }
+      if (cameraPlaneDetection_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CameraPlaneDetection);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -371,6 +422,12 @@ namespace ARFlow {
           CameraPointCloud = new global::ARFlow.RegisterRequest.Types.CameraPointCloud();
         }
         CameraPointCloud.MergeFrom(other.CameraPointCloud);
+      }
+      if (other.cameraPlaneDetection_ != null) {
+        if (cameraPlaneDetection_ == null) {
+          CameraPlaneDetection = new global::ARFlow.RegisterRequest.Types.CameraPlaneDetection();
+        }
+        CameraPlaneDetection.MergeFrom(other.CameraPlaneDetection);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -426,6 +483,13 @@ namespace ARFlow {
             input.ReadMessage(CameraPointCloud);
             break;
           }
+          case 58: {
+            if (cameraPlaneDetection_ == null) {
+              CameraPlaneDetection = new global::ARFlow.RegisterRequest.Types.CameraPlaneDetection();
+            }
+            input.ReadMessage(CameraPlaneDetection);
+            break;
+          }
         }
       }
     #endif
@@ -478,6 +542,13 @@ namespace ARFlow {
               CameraPointCloud = new global::ARFlow.RegisterRequest.Types.CameraPointCloud();
             }
             input.ReadMessage(CameraPointCloud);
+            break;
+          }
+          case 58: {
+            if (cameraPlaneDetection_ == null) {
+              CameraPlaneDetection = new global::ARFlow.RegisterRequest.Types.CameraPlaneDetection();
+            }
+            input.ReadMessage(CameraPlaneDetection);
             break;
           }
         }
@@ -1921,6 +1992,386 @@ namespace ARFlow {
 
       }
 
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class CameraPlaneDetection : pb::IMessage<CameraPlaneDetection>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<CameraPlaneDetection> _parser = new pb::MessageParser<CameraPlaneDetection>(() => new CameraPlaneDetection());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<CameraPlaneDetection> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[5]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public CameraPlaneDetection() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public CameraPlaneDetection(CameraPlaneDetection other) : this() {
+          enabled_ = other.enabled_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public CameraPlaneDetection Clone() {
+          return new CameraPlaneDetection(this);
+        }
+
+        /// <summary>Field number for the "enabled" field.</summary>
+        public const int EnabledFieldNumber = 1;
+        private bool enabled_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Enabled {
+          get { return enabled_; }
+          set {
+            enabled_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as CameraPlaneDetection);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(CameraPlaneDetection other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Enabled != other.Enabled) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Enabled != false) hash ^= Enabled.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (Enabled != false) {
+            size += 1 + 1;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(CameraPlaneDetection other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Enabled != false) {
+            Enabled = other.Enabled;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class Gyroscope : pb::IMessage<Gyroscope>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<Gyroscope> _parser = new pb::MessageParser<Gyroscope>(() => new Gyroscope());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<Gyroscope> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[6]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Gyroscope() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Gyroscope(Gyroscope other) : this() {
+          enabled_ = other.enabled_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Gyroscope Clone() {
+          return new Gyroscope(this);
+        }
+
+        /// <summary>Field number for the "enabled" field.</summary>
+        public const int EnabledFieldNumber = 1;
+        private bool enabled_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Enabled {
+          get { return enabled_; }
+          set {
+            enabled_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as Gyroscope);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(Gyroscope other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Enabled != other.Enabled) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Enabled != false) hash ^= Enabled.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (Enabled != false) {
+            size += 1 + 1;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(Gyroscope other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Enabled != false) {
+            Enabled = other.Enabled;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
     }
     #endregion
 
@@ -2155,6 +2606,12 @@ namespace ARFlow {
       color_ = other.color_;
       depth_ = other.depth_;
       transform_ = other.transform_;
+      pointCloud_ = other.pointCloud_.Clone();
+      planeDetection_ = other.planeDetection_.Clone();
+      gyroscopeAttitude_ = other.gyroscopeAttitude_ != null ? other.gyroscopeAttitude_.Clone() : null;
+      gyroscopeRotationRate_ = other.gyroscopeRotationRate_ != null ? other.gyroscopeRotationRate_.Clone() : null;
+      gyroscopeGravity_ = other.gyroscopeGravity_ != null ? other.gyroscopeGravity_.Clone() : null;
+      gyroscopeAcceleration_ = other.gyroscopeAcceleration_ != null ? other.gyroscopeAcceleration_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2212,6 +2669,76 @@ namespace ARFlow {
       }
     }
 
+    /// <summary>Field number for the "point_cloud" field.</summary>
+    public const int PointCloudFieldNumber = 5;
+    private static readonly pb::FieldCodec<global::ARFlow.DataFrameRequest.Types.PointInCloud> _repeated_pointCloud_codec
+        = pb::FieldCodec.ForMessage(42, global::ARFlow.DataFrameRequest.Types.PointInCloud.Parser);
+    private readonly pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.PointInCloud> pointCloud_ = new pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.PointInCloud>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.PointInCloud> PointCloud {
+      get { return pointCloud_; }
+    }
+
+    /// <summary>Field number for the "plane_detection" field.</summary>
+    public const int PlaneDetectionFieldNumber = 6;
+    private static readonly pb::FieldCodec<global::ARFlow.DataFrameRequest.Types.Planes> _repeated_planeDetection_codec
+        = pb::FieldCodec.ForMessage(50, global::ARFlow.DataFrameRequest.Types.Planes.Parser);
+    private readonly pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.Planes> planeDetection_ = new pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.Planes>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.Planes> PlaneDetection {
+      get { return planeDetection_; }
+    }
+
+    /// <summary>Field number for the "gyroscope_attitude" field.</summary>
+    public const int GyroscopeAttitudeFieldNumber = 7;
+    private global::ARFlow.DataFrameRequest.Types.Quaternion gyroscopeAttitude_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.DataFrameRequest.Types.Quaternion GyroscopeAttitude {
+      get { return gyroscopeAttitude_; }
+      set {
+        gyroscopeAttitude_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gyroscope_rotation_rate" field.</summary>
+    public const int GyroscopeRotationRateFieldNumber = 8;
+    private global::ARFlow.DataFrameRequest.Types.Vector3 gyroscopeRotationRate_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.DataFrameRequest.Types.Vector3 GyroscopeRotationRate {
+      get { return gyroscopeRotationRate_; }
+      set {
+        gyroscopeRotationRate_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gyroscope_gravity" field.</summary>
+    public const int GyroscopeGravityFieldNumber = 9;
+    private global::ARFlow.DataFrameRequest.Types.Vector3 gyroscopeGravity_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.DataFrameRequest.Types.Vector3 GyroscopeGravity {
+      get { return gyroscopeGravity_; }
+      set {
+        gyroscopeGravity_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gyroscope_acceleration" field.</summary>
+    public const int GyroscopeAccelerationFieldNumber = 10;
+    private global::ARFlow.DataFrameRequest.Types.Vector3 gyroscopeAcceleration_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.DataFrameRequest.Types.Vector3 GyroscopeAcceleration {
+      get { return gyroscopeAcceleration_; }
+      set {
+        gyroscopeAcceleration_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2231,6 +2758,12 @@ namespace ARFlow {
       if (Color != other.Color) return false;
       if (Depth != other.Depth) return false;
       if (Transform != other.Transform) return false;
+      if(!pointCloud_.Equals(other.pointCloud_)) return false;
+      if(!planeDetection_.Equals(other.planeDetection_)) return false;
+      if (!object.Equals(GyroscopeAttitude, other.GyroscopeAttitude)) return false;
+      if (!object.Equals(GyroscopeRotationRate, other.GyroscopeRotationRate)) return false;
+      if (!object.Equals(GyroscopeGravity, other.GyroscopeGravity)) return false;
+      if (!object.Equals(GyroscopeAcceleration, other.GyroscopeAcceleration)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2242,6 +2775,12 @@ namespace ARFlow {
       if (Color.Length != 0) hash ^= Color.GetHashCode();
       if (Depth.Length != 0) hash ^= Depth.GetHashCode();
       if (Transform.Length != 0) hash ^= Transform.GetHashCode();
+      hash ^= pointCloud_.GetHashCode();
+      hash ^= planeDetection_.GetHashCode();
+      if (gyroscopeAttitude_ != null) hash ^= GyroscopeAttitude.GetHashCode();
+      if (gyroscopeRotationRate_ != null) hash ^= GyroscopeRotationRate.GetHashCode();
+      if (gyroscopeGravity_ != null) hash ^= GyroscopeGravity.GetHashCode();
+      if (gyroscopeAcceleration_ != null) hash ^= GyroscopeAcceleration.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2276,6 +2815,24 @@ namespace ARFlow {
         output.WriteRawTag(34);
         output.WriteBytes(Transform);
       }
+      pointCloud_.WriteTo(output, _repeated_pointCloud_codec);
+      planeDetection_.WriteTo(output, _repeated_planeDetection_codec);
+      if (gyroscopeAttitude_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(GyroscopeAttitude);
+      }
+      if (gyroscopeRotationRate_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(GyroscopeRotationRate);
+      }
+      if (gyroscopeGravity_ != null) {
+        output.WriteRawTag(74);
+        output.WriteMessage(GyroscopeGravity);
+      }
+      if (gyroscopeAcceleration_ != null) {
+        output.WriteRawTag(82);
+        output.WriteMessage(GyroscopeAcceleration);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2302,6 +2859,24 @@ namespace ARFlow {
         output.WriteRawTag(34);
         output.WriteBytes(Transform);
       }
+      pointCloud_.WriteTo(ref output, _repeated_pointCloud_codec);
+      planeDetection_.WriteTo(ref output, _repeated_planeDetection_codec);
+      if (gyroscopeAttitude_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(GyroscopeAttitude);
+      }
+      if (gyroscopeRotationRate_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(GyroscopeRotationRate);
+      }
+      if (gyroscopeGravity_ != null) {
+        output.WriteRawTag(74);
+        output.WriteMessage(GyroscopeGravity);
+      }
+      if (gyroscopeAcceleration_ != null) {
+        output.WriteRawTag(82);
+        output.WriteMessage(GyroscopeAcceleration);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2323,6 +2898,20 @@ namespace ARFlow {
       }
       if (Transform.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(Transform);
+      }
+      size += pointCloud_.CalculateSize(_repeated_pointCloud_codec);
+      size += planeDetection_.CalculateSize(_repeated_planeDetection_codec);
+      if (gyroscopeAttitude_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GyroscopeAttitude);
+      }
+      if (gyroscopeRotationRate_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GyroscopeRotationRate);
+      }
+      if (gyroscopeGravity_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GyroscopeGravity);
+      }
+      if (gyroscopeAcceleration_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GyroscopeAcceleration);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2347,6 +2936,32 @@ namespace ARFlow {
       }
       if (other.Transform.Length != 0) {
         Transform = other.Transform;
+      }
+      pointCloud_.Add(other.pointCloud_);
+      planeDetection_.Add(other.planeDetection_);
+      if (other.gyroscopeAttitude_ != null) {
+        if (gyroscopeAttitude_ == null) {
+          GyroscopeAttitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+        }
+        GyroscopeAttitude.MergeFrom(other.GyroscopeAttitude);
+      }
+      if (other.gyroscopeRotationRate_ != null) {
+        if (gyroscopeRotationRate_ == null) {
+          GyroscopeRotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
+        }
+        GyroscopeRotationRate.MergeFrom(other.GyroscopeRotationRate);
+      }
+      if (other.gyroscopeGravity_ != null) {
+        if (gyroscopeGravity_ == null) {
+          GyroscopeGravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
+        }
+        GyroscopeGravity.MergeFrom(other.GyroscopeGravity);
+      }
+      if (other.gyroscopeAcceleration_ != null) {
+        if (gyroscopeAcceleration_ == null) {
+          GyroscopeAcceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
+        }
+        GyroscopeAcceleration.MergeFrom(other.GyroscopeAcceleration);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2377,6 +2992,42 @@ namespace ARFlow {
           }
           case 34: {
             Transform = input.ReadBytes();
+            break;
+          }
+          case 42: {
+            pointCloud_.AddEntriesFrom(input, _repeated_pointCloud_codec);
+            break;
+          }
+          case 50: {
+            planeDetection_.AddEntriesFrom(input, _repeated_planeDetection_codec);
+            break;
+          }
+          case 58: {
+            if (gyroscopeAttitude_ == null) {
+              GyroscopeAttitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+            }
+            input.ReadMessage(GyroscopeAttitude);
+            break;
+          }
+          case 66: {
+            if (gyroscopeRotationRate_ == null) {
+              GyroscopeRotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            input.ReadMessage(GyroscopeRotationRate);
+            break;
+          }
+          case 74: {
+            if (gyroscopeGravity_ == null) {
+              GyroscopeGravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            input.ReadMessage(GyroscopeGravity);
+            break;
+          }
+          case 82: {
+            if (gyroscopeAcceleration_ == null) {
+              GyroscopeAcceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            input.ReadMessage(GyroscopeAcceleration);
             break;
           }
         }
@@ -2410,10 +3061,1373 @@ namespace ARFlow {
             Transform = input.ReadBytes();
             break;
           }
+          case 42: {
+            pointCloud_.AddEntriesFrom(ref input, _repeated_pointCloud_codec);
+            break;
+          }
+          case 50: {
+            planeDetection_.AddEntriesFrom(ref input, _repeated_planeDetection_codec);
+            break;
+          }
+          case 58: {
+            if (gyroscopeAttitude_ == null) {
+              GyroscopeAttitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+            }
+            input.ReadMessage(GyroscopeAttitude);
+            break;
+          }
+          case 66: {
+            if (gyroscopeRotationRate_ == null) {
+              GyroscopeRotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            input.ReadMessage(GyroscopeRotationRate);
+            break;
+          }
+          case 74: {
+            if (gyroscopeGravity_ == null) {
+              GyroscopeGravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            input.ReadMessage(GyroscopeGravity);
+            break;
+          }
+          case 82: {
+            if (gyroscopeAcceleration_ == null) {
+              GyroscopeAcceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            input.ReadMessage(GyroscopeAcceleration);
+            break;
+          }
         }
       }
     }
     #endif
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the DataFrameRequest message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static partial class Types {
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class Vector3 : pb::IMessage<Vector3>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<Vector3> _parser = new pb::MessageParser<Vector3>(() => new Vector3());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<Vector3> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[0]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Vector3() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Vector3(Vector3 other) : this() {
+          x_ = other.x_;
+          y_ = other.y_;
+          z_ = other.z_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Vector3 Clone() {
+          return new Vector3(this);
+        }
+
+        /// <summary>Field number for the "x" field.</summary>
+        public const int XFieldNumber = 1;
+        private float x_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float X {
+          get { return x_; }
+          set {
+            x_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "y" field.</summary>
+        public const int YFieldNumber = 2;
+        private float y_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float Y {
+          get { return y_; }
+          set {
+            y_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "z" field.</summary>
+        public const int ZFieldNumber = 3;
+        private float z_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float Z {
+          get { return z_; }
+          set {
+            z_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as Vector3);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(Vector3 other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(X, other.X)) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Y, other.Y)) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Z, other.Z)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (X != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(X);
+          if (Y != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Y);
+          if (Z != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Z);
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (X != 0F) {
+            output.WriteRawTag(13);
+            output.WriteFloat(X);
+          }
+          if (Y != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(Y);
+          }
+          if (Z != 0F) {
+            output.WriteRawTag(29);
+            output.WriteFloat(Z);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (X != 0F) {
+            output.WriteRawTag(13);
+            output.WriteFloat(X);
+          }
+          if (Y != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(Y);
+          }
+          if (Z != 0F) {
+            output.WriteRawTag(29);
+            output.WriteFloat(Z);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (X != 0F) {
+            size += 1 + 4;
+          }
+          if (Y != 0F) {
+            size += 1 + 4;
+          }
+          if (Z != 0F) {
+            size += 1 + 4;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(Vector3 other) {
+          if (other == null) {
+            return;
+          }
+          if (other.X != 0F) {
+            X = other.X;
+          }
+          if (other.Y != 0F) {
+            Y = other.Y;
+          }
+          if (other.Z != 0F) {
+            Z = other.Z;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 13: {
+                X = input.ReadFloat();
+                break;
+              }
+              case 21: {
+                Y = input.ReadFloat();
+                break;
+              }
+              case 29: {
+                Z = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 13: {
+                X = input.ReadFloat();
+                break;
+              }
+              case 21: {
+                Y = input.ReadFloat();
+                break;
+              }
+              case 29: {
+                Z = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class PointInCloud : pb::IMessage<PointInCloud>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<PointInCloud> _parser = new pb::MessageParser<PointInCloud>(() => new PointInCloud());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<PointInCloud> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[1]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public PointInCloud() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public PointInCloud(PointInCloud other) : this() {
+          point_ = other.point_ != null ? other.point_.Clone() : null;
+          confidence_ = other.confidence_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public PointInCloud Clone() {
+          return new PointInCloud(this);
+        }
+
+        /// <summary>Field number for the "point" field.</summary>
+        public const int PointFieldNumber = 1;
+        private global::ARFlow.DataFrameRequest.Types.Vector3 point_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::ARFlow.DataFrameRequest.Types.Vector3 Point {
+          get { return point_; }
+          set {
+            point_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "confidence" field.</summary>
+        public const int ConfidenceFieldNumber = 2;
+        private float confidence_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float Confidence {
+          get { return confidence_; }
+          set {
+            confidence_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as PointInCloud);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(PointInCloud other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (!object.Equals(Point, other.Point)) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Confidence, other.Confidence)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (point_ != null) hash ^= Point.GetHashCode();
+          if (Confidence != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Confidence);
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (point_ != null) {
+            output.WriteRawTag(10);
+            output.WriteMessage(Point);
+          }
+          if (Confidence != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(Confidence);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (point_ != null) {
+            output.WriteRawTag(10);
+            output.WriteMessage(Point);
+          }
+          if (Confidence != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(Confidence);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (point_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Point);
+          }
+          if (Confidence != 0F) {
+            size += 1 + 4;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(PointInCloud other) {
+          if (other == null) {
+            return;
+          }
+          if (other.point_ != null) {
+            if (point_ == null) {
+              Point = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            Point.MergeFrom(other.Point);
+          }
+          if (other.Confidence != 0F) {
+            Confidence = other.Confidence;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                if (point_ == null) {
+                  Point = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Point);
+                break;
+              }
+              case 21: {
+                Confidence = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                if (point_ == null) {
+                  Point = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Point);
+                break;
+              }
+              case 21: {
+                Confidence = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class Vector2 : pb::IMessage<Vector2>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<Vector2> _parser = new pb::MessageParser<Vector2>(() => new Vector2());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<Vector2> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[2]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Vector2() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Vector2(Vector2 other) : this() {
+          x_ = other.x_;
+          y_ = other.y_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Vector2 Clone() {
+          return new Vector2(this);
+        }
+
+        /// <summary>Field number for the "x" field.</summary>
+        public const int XFieldNumber = 1;
+        private float x_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float X {
+          get { return x_; }
+          set {
+            x_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "y" field.</summary>
+        public const int YFieldNumber = 2;
+        private float y_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float Y {
+          get { return y_; }
+          set {
+            y_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as Vector2);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(Vector2 other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(X, other.X)) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Y, other.Y)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (X != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(X);
+          if (Y != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Y);
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (X != 0F) {
+            output.WriteRawTag(13);
+            output.WriteFloat(X);
+          }
+          if (Y != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(Y);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (X != 0F) {
+            output.WriteRawTag(13);
+            output.WriteFloat(X);
+          }
+          if (Y != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(Y);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (X != 0F) {
+            size += 1 + 4;
+          }
+          if (Y != 0F) {
+            size += 1 + 4;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(Vector2 other) {
+          if (other == null) {
+            return;
+          }
+          if (other.X != 0F) {
+            X = other.X;
+          }
+          if (other.Y != 0F) {
+            Y = other.Y;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 13: {
+                X = input.ReadFloat();
+                break;
+              }
+              case 21: {
+                Y = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 13: {
+                X = input.ReadFloat();
+                break;
+              }
+              case 21: {
+                Y = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class Planes : pb::IMessage<Planes>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<Planes> _parser = new pb::MessageParser<Planes>(() => new Planes());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<Planes> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[3]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Planes() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Planes(Planes other) : this() {
+          center_ = other.center_ != null ? other.center_.Clone() : null;
+          normal_ = other.normal_ != null ? other.normal_.Clone() : null;
+          size_ = other.size_ != null ? other.size_.Clone() : null;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Planes Clone() {
+          return new Planes(this);
+        }
+
+        /// <summary>Field number for the "center" field.</summary>
+        public const int CenterFieldNumber = 1;
+        private global::ARFlow.DataFrameRequest.Types.Vector3 center_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::ARFlow.DataFrameRequest.Types.Vector3 Center {
+          get { return center_; }
+          set {
+            center_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "normal" field.</summary>
+        public const int NormalFieldNumber = 2;
+        private global::ARFlow.DataFrameRequest.Types.Vector3 normal_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::ARFlow.DataFrameRequest.Types.Vector3 Normal {
+          get { return normal_; }
+          set {
+            normal_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "size" field.</summary>
+        public const int SizeFieldNumber = 3;
+        private global::ARFlow.DataFrameRequest.Types.Vector2 size_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::ARFlow.DataFrameRequest.Types.Vector2 Size {
+          get { return size_; }
+          set {
+            size_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as Planes);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(Planes other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (!object.Equals(Center, other.Center)) return false;
+          if (!object.Equals(Normal, other.Normal)) return false;
+          if (!object.Equals(Size, other.Size)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (center_ != null) hash ^= Center.GetHashCode();
+          if (normal_ != null) hash ^= Normal.GetHashCode();
+          if (size_ != null) hash ^= Size.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (center_ != null) {
+            output.WriteRawTag(10);
+            output.WriteMessage(Center);
+          }
+          if (normal_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(Normal);
+          }
+          if (size_ != null) {
+            output.WriteRawTag(26);
+            output.WriteMessage(Size);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (center_ != null) {
+            output.WriteRawTag(10);
+            output.WriteMessage(Center);
+          }
+          if (normal_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(Normal);
+          }
+          if (size_ != null) {
+            output.WriteRawTag(26);
+            output.WriteMessage(Size);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (center_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Center);
+          }
+          if (normal_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Normal);
+          }
+          if (size_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Size);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(Planes other) {
+          if (other == null) {
+            return;
+          }
+          if (other.center_ != null) {
+            if (center_ == null) {
+              Center = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            Center.MergeFrom(other.Center);
+          }
+          if (other.normal_ != null) {
+            if (normal_ == null) {
+              Normal = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            Normal.MergeFrom(other.Normal);
+          }
+          if (other.size_ != null) {
+            if (size_ == null) {
+              Size = new global::ARFlow.DataFrameRequest.Types.Vector2();
+            }
+            Size.MergeFrom(other.Size);
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                if (center_ == null) {
+                  Center = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Center);
+                break;
+              }
+              case 18: {
+                if (normal_ == null) {
+                  Normal = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Normal);
+                break;
+              }
+              case 26: {
+                if (size_ == null) {
+                  Size = new global::ARFlow.DataFrameRequest.Types.Vector2();
+                }
+                input.ReadMessage(Size);
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                if (center_ == null) {
+                  Center = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Center);
+                break;
+              }
+              case 18: {
+                if (normal_ == null) {
+                  Normal = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Normal);
+                break;
+              }
+              case 26: {
+                if (size_ == null) {
+                  Size = new global::ARFlow.DataFrameRequest.Types.Vector2();
+                }
+                input.ReadMessage(Size);
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class Quaternion : pb::IMessage<Quaternion>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<Quaternion> _parser = new pb::MessageParser<Quaternion>(() => new Quaternion());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<Quaternion> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[4]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Quaternion() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Quaternion(Quaternion other) : this() {
+          x_ = other.x_;
+          y_ = other.y_;
+          z_ = other.z_;
+          w_ = other.w_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public Quaternion Clone() {
+          return new Quaternion(this);
+        }
+
+        /// <summary>Field number for the "x" field.</summary>
+        public const int XFieldNumber = 1;
+        private float x_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float X {
+          get { return x_; }
+          set {
+            x_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "y" field.</summary>
+        public const int YFieldNumber = 2;
+        private float y_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float Y {
+          get { return y_; }
+          set {
+            y_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "z" field.</summary>
+        public const int ZFieldNumber = 3;
+        private float z_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float Z {
+          get { return z_; }
+          set {
+            z_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "w" field.</summary>
+        public const int WFieldNumber = 4;
+        private float w_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public float W {
+          get { return w_; }
+          set {
+            w_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as Quaternion);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(Quaternion other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(X, other.X)) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Y, other.Y)) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Z, other.Z)) return false;
+          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(W, other.W)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (X != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(X);
+          if (Y != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Y);
+          if (Z != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Z);
+          if (W != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(W);
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (X != 0F) {
+            output.WriteRawTag(13);
+            output.WriteFloat(X);
+          }
+          if (Y != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(Y);
+          }
+          if (Z != 0F) {
+            output.WriteRawTag(29);
+            output.WriteFloat(Z);
+          }
+          if (W != 0F) {
+            output.WriteRawTag(37);
+            output.WriteFloat(W);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (X != 0F) {
+            output.WriteRawTag(13);
+            output.WriteFloat(X);
+          }
+          if (Y != 0F) {
+            output.WriteRawTag(21);
+            output.WriteFloat(Y);
+          }
+          if (Z != 0F) {
+            output.WriteRawTag(29);
+            output.WriteFloat(Z);
+          }
+          if (W != 0F) {
+            output.WriteRawTag(37);
+            output.WriteFloat(W);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (X != 0F) {
+            size += 1 + 4;
+          }
+          if (Y != 0F) {
+            size += 1 + 4;
+          }
+          if (Z != 0F) {
+            size += 1 + 4;
+          }
+          if (W != 0F) {
+            size += 1 + 4;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(Quaternion other) {
+          if (other == null) {
+            return;
+          }
+          if (other.X != 0F) {
+            X = other.X;
+          }
+          if (other.Y != 0F) {
+            Y = other.Y;
+          }
+          if (other.Z != 0F) {
+            Z = other.Z;
+          }
+          if (other.W != 0F) {
+            W = other.W;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 13: {
+                X = input.ReadFloat();
+                break;
+              }
+              case 21: {
+                Y = input.ReadFloat();
+                break;
+              }
+              case 29: {
+                Z = input.ReadFloat();
+                break;
+              }
+              case 37: {
+                W = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 13: {
+                X = input.ReadFloat();
+                break;
+              }
+              case 21: {
+                Y = input.ReadFloat();
+                break;
+              }
+              case 29: {
+                Z = input.ReadFloat();
+                break;
+              }
+              case 37: {
+                W = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+    }
+    #endregion
 
   }
 
