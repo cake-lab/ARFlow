@@ -91,7 +91,7 @@ class RegisterResponse(_message.Message):
     def __init__(self, uid: _Optional[str] = ...) -> None: ...
 
 class DataFrameRequest(_message.Message):
-    __slots__ = ("uid", "color", "depth", "transform", "point_cloud", "plane_detection", "gyroscope_attitude", "gyroscope_rotation_rate", "gyroscope_gravity", "gyroscope_acceleration")
+    __slots__ = ("uid", "color", "depth", "transform", "plane_detection", "gyroscope", "audio", "meshing")
     class Vector3(_message.Message):
         __slots__ = ("x", "y", "z")
         X_FIELD_NUMBER: _ClassVar[int]
@@ -101,13 +101,6 @@ class DataFrameRequest(_message.Message):
         y: float
         z: float
         def __init__(self, x: _Optional[float] = ..., y: _Optional[float] = ..., z: _Optional[float] = ...) -> None: ...
-    class PointInCloud(_message.Message):
-        __slots__ = ("point", "confidence")
-        POINT_FIELD_NUMBER: _ClassVar[int]
-        CONFIDENCE_FIELD_NUMBER: _ClassVar[int]
-        point: DataFrameRequest.Vector3
-        confidence: float
-        def __init__(self, point: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ..., confidence: _Optional[float] = ...) -> None: ...
     class Vector2(_message.Message):
         __slots__ = ("x", "y")
         X_FIELD_NUMBER: _ClassVar[int]
@@ -135,27 +128,34 @@ class DataFrameRequest(_message.Message):
         z: float
         w: float
         def __init__(self, x: _Optional[float] = ..., y: _Optional[float] = ..., z: _Optional[float] = ..., w: _Optional[float] = ...) -> None: ...
+    class gyroscope_data(_message.Message):
+        __slots__ = ("attitude", "rotation_rate", "gravity", "acceleration")
+        ATTITUDE_FIELD_NUMBER: _ClassVar[int]
+        ROTATION_RATE_FIELD_NUMBER: _ClassVar[int]
+        GRAVITY_FIELD_NUMBER: _ClassVar[int]
+        ACCELERATION_FIELD_NUMBER: _ClassVar[int]
+        attitude: DataFrameRequest.Quaternion
+        rotation_rate: DataFrameRequest.Vector3
+        gravity: DataFrameRequest.Vector3
+        acceleration: DataFrameRequest.Vector3
+        def __init__(self, attitude: _Optional[_Union[DataFrameRequest.Quaternion, _Mapping]] = ..., rotation_rate: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ..., gravity: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ..., acceleration: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ...) -> None: ...
     UID_FIELD_NUMBER: _ClassVar[int]
     COLOR_FIELD_NUMBER: _ClassVar[int]
     DEPTH_FIELD_NUMBER: _ClassVar[int]
     TRANSFORM_FIELD_NUMBER: _ClassVar[int]
-    POINT_CLOUD_FIELD_NUMBER: _ClassVar[int]
     PLANE_DETECTION_FIELD_NUMBER: _ClassVar[int]
-    GYROSCOPE_ATTITUDE_FIELD_NUMBER: _ClassVar[int]
-    GYROSCOPE_ROTATION_RATE_FIELD_NUMBER: _ClassVar[int]
-    GYROSCOPE_GRAVITY_FIELD_NUMBER: _ClassVar[int]
-    GYROSCOPE_ACCELERATION_FIELD_NUMBER: _ClassVar[int]
+    GYROSCOPE_FIELD_NUMBER: _ClassVar[int]
+    AUDIO_FIELD_NUMBER: _ClassVar[int]
+    MESHING_FIELD_NUMBER: _ClassVar[int]
     uid: str
     color: bytes
     depth: bytes
     transform: bytes
-    point_cloud: _containers.RepeatedCompositeFieldContainer[DataFrameRequest.PointInCloud]
     plane_detection: _containers.RepeatedCompositeFieldContainer[DataFrameRequest.Planes]
-    gyroscope_attitude: DataFrameRequest.Quaternion
-    gyroscope_rotation_rate: DataFrameRequest.Vector3
-    gyroscope_gravity: DataFrameRequest.Vector3
-    gyroscope_acceleration: DataFrameRequest.Vector3
-    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., point_cloud: _Optional[_Iterable[_Union[DataFrameRequest.PointInCloud, _Mapping]]] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrameRequest.Planes, _Mapping]]] = ..., gyroscope_attitude: _Optional[_Union[DataFrameRequest.Quaternion, _Mapping]] = ..., gyroscope_rotation_rate: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ..., gyroscope_gravity: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ..., gyroscope_acceleration: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ...) -> None: ...
+    gyroscope: DataFrameRequest.gyroscope_data
+    audio: bytes
+    meshing: bytes
+    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrameRequest.Planes, _Mapping]]] = ..., gyroscope: _Optional[_Union[DataFrameRequest.gyroscope_data, _Mapping]] = ..., audio: _Optional[bytes] = ..., meshing: _Optional[bytes] = ...) -> None: ...
 
 class DataFrameResponse(_message.Message):
     __slots__ = ("message",)

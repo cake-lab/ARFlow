@@ -47,28 +47,26 @@ namespace ARFlow {
             "ASgIEhwKFGRlcHRoX3Vwc2NhbGVfZmFjdG9yGAIgASgCGicKFENhbWVyYVBs",
             "YW5lRGV0ZWN0aW9uEg8KB2VuYWJsZWQYASABKAgaHAoJR3lyb3Njb3BlEg8K",
             "B2VuYWJsZWQYASABKAgiHwoQUmVnaXN0ZXJSZXNwb25zZRILCgN1aWQYASAB",
-            "KAki/gUKEERhdGFGcmFtZVJlcXVlc3QSCwoDdWlkGAEgASgJEg0KBWNvbG9y",
-            "GAIgASgMEg0KBWRlcHRoGAMgASgMEhEKCXRyYW5zZm9ybRgEIAEoDBIzCgtw",
-            "b2ludF9jbG91ZBgFIAMoCzIeLkRhdGFGcmFtZVJlcXVlc3QuUG9pbnRJbkNs",
-            "b3VkEjEKD3BsYW5lX2RldGVjdGlvbhgGIAMoCzIYLkRhdGFGcmFtZVJlcXVl",
-            "c3QuUGxhbmVzEjgKEmd5cm9zY29wZV9hdHRpdHVkZRgHIAEoCzIcLkRhdGFG",
-            "cmFtZVJlcXVlc3QuUXVhdGVybmlvbhI6ChdneXJvc2NvcGVfcm90YXRpb25f",
-            "cmF0ZRgIIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxI0ChFneXJv",
-            "c2NvcGVfZ3Jhdml0eRgJIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9y",
-            "MxI5ChZneXJvc2NvcGVfYWNjZWxlcmF0aW9uGAogASgLMhkuRGF0YUZyYW1l",
-            "UmVxdWVzdC5WZWN0b3IzGioKB1ZlY3RvcjMSCQoBeBgBIAEoAhIJCgF5GAIg",
-            "ASgCEgkKAXoYAyABKAIaTAoMUG9pbnRJbkNsb3VkEigKBXBvaW50GAEgASgL",
-            "MhkuRGF0YUZyYW1lUmVxdWVzdC5WZWN0b3IzEhIKCmNvbmZpZGVuY2UYAiAB",
-            "KAIaHwoHVmVjdG9yMhIJCgF4GAEgASgCEgkKAXkYAiABKAIahwEKBlBsYW5l",
-            "cxIpCgZjZW50ZXIYASABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMS",
-            "KQoGbm9ybWFsGAIgASgLMhkuRGF0YUZyYW1lUmVxdWVzdC5WZWN0b3IzEicK",
-            "BHNpemUYAyABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjIaOAoKUXVh",
-            "dGVybmlvbhIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAhIJCgF3",
-            "GAQgASgCIiQKEURhdGFGcmFtZVJlc3BvbnNlEg8KB21lc3NhZ2UYASABKAky",
-            "dQoNQVJGbG93U2VydmljZRIvCghyZWdpc3RlchIQLlJlZ2lzdGVyUmVxdWVz",
-            "dBoRLlJlZ2lzdGVyUmVzcG9uc2USMwoKZGF0YV9mcmFtZRIRLkRhdGFGcmFt",
-            "ZVJlcXVlc3QaEi5EYXRhRnJhbWVSZXNwb25zZUIJqgIGQVJGbG93YgZwcm90",
-            "bzM="));
+            "KAkiuwUKEERhdGFGcmFtZVJlcXVlc3QSCwoDdWlkGAEgASgJEg0KBWNvbG9y",
+            "GAIgASgMEg0KBWRlcHRoGAMgASgMEhEKCXRyYW5zZm9ybRgEIAEoDBIxCg9w",
+            "bGFuZV9kZXRlY3Rpb24YBSADKAsyGC5EYXRhRnJhbWVSZXF1ZXN0LlBsYW5l",
+            "cxIzCglneXJvc2NvcGUYBiABKAsyIC5EYXRhRnJhbWVSZXF1ZXN0Lmd5cm9z",
+            "Y29wZV9kYXRhEg0KBWF1ZGlvGAggASgMEg8KB21lc2hpbmcYCSABKAwaKgoH",
+            "VmVjdG9yMxIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAhofCgdW",
+            "ZWN0b3IyEgkKAXgYASABKAISCQoBeRgCIAEoAhqHAQoGUGxhbmVzEikKBmNl",
+            "bnRlchgBIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxIpCgZub3Jt",
+            "YWwYAiABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMSJwoEc2l6ZRgD",
+            "IAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMho4CgpRdWF0ZXJuaW9u",
+            "EgkKAXgYASABKAISCQoBeRgCIAEoAhIJCgF6GAMgASgCEgkKAXcYBCABKAIa",
+            "zwEKDmd5cm9zY29wZV9kYXRhEi4KCGF0dGl0dWRlGAEgASgLMhwuRGF0YUZy",
+            "YW1lUmVxdWVzdC5RdWF0ZXJuaW9uEjAKDXJvdGF0aW9uX3JhdGUYAiABKAsy",
+            "GS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMSKgoHZ3Jhdml0eRgDIAEoCzIZ",
+            "LkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxIvCgxhY2NlbGVyYXRpb24YBCAB",
+            "KAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMiJAoRRGF0YUZyYW1lUmVz",
+            "cG9uc2USDwoHbWVzc2FnZRgBIAEoCTJ1Cg1BUkZsb3dTZXJ2aWNlEi8KCHJl",
+            "Z2lzdGVyEhAuUmVnaXN0ZXJSZXF1ZXN0GhEuUmVnaXN0ZXJSZXNwb25zZRIz",
+            "CgpkYXRhX2ZyYW1lEhEuRGF0YUZyYW1lUmVxdWVzdBoSLkRhdGFGcmFtZVJl",
+            "c3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -80,11 +78,11 @@ namespace ARFlow {
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPlaneDetection), global::ARFlow.RegisterRequest.Types.CameraPlaneDetection.Parser, new[]{ "Enabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.Gyroscope), global::ARFlow.RegisterRequest.Types.Gyroscope.Parser, new[]{ "Enabled" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterResponse), global::ARFlow.RegisterResponse.Parser, new[]{ "Uid" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PointCloud", "PlaneDetection", "GyroscopeAttitude", "GyroscopeRotationRate", "GyroscopeGravity", "GyroscopeAcceleration" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Vector3), global::ARFlow.DataFrameRequest.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.PointInCloud), global::ARFlow.DataFrameRequest.Types.PointInCloud.Parser, new[]{ "Point", "Confidence" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Vector3), global::ARFlow.DataFrameRequest.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Vector2), global::ARFlow.DataFrameRequest.Types.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Planes), global::ARFlow.DataFrameRequest.Types.Planes.Parser, new[]{ "Center", "Normal", "Size" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Quaternion), global::ARFlow.DataFrameRequest.Types.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Quaternion), global::ARFlow.DataFrameRequest.Types.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.gyroscope_data), global::ARFlow.DataFrameRequest.Types.gyroscope_data.Parser, new[]{ "Attitude", "RotationRate", "Gravity", "Acceleration" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameResponse), global::ARFlow.DataFrameResponse.Parser, new[]{ "Message" }, null, null, null, null)
           }));
     }
@@ -2606,12 +2604,10 @@ namespace ARFlow {
       color_ = other.color_;
       depth_ = other.depth_;
       transform_ = other.transform_;
-      pointCloud_ = other.pointCloud_.Clone();
       planeDetection_ = other.planeDetection_.Clone();
-      gyroscopeAttitude_ = other.gyroscopeAttitude_ != null ? other.gyroscopeAttitude_.Clone() : null;
-      gyroscopeRotationRate_ = other.gyroscopeRotationRate_ != null ? other.gyroscopeRotationRate_.Clone() : null;
-      gyroscopeGravity_ = other.gyroscopeGravity_ != null ? other.gyroscopeGravity_.Clone() : null;
-      gyroscopeAcceleration_ = other.gyroscopeAcceleration_ != null ? other.gyroscopeAcceleration_.Clone() : null;
+      gyroscope_ = other.gyroscope_ != null ? other.gyroscope_.Clone() : null;
+      audio_ = other.audio_;
+      meshing_ = other.meshing_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2669,21 +2665,10 @@ namespace ARFlow {
       }
     }
 
-    /// <summary>Field number for the "point_cloud" field.</summary>
-    public const int PointCloudFieldNumber = 5;
-    private static readonly pb::FieldCodec<global::ARFlow.DataFrameRequest.Types.PointInCloud> _repeated_pointCloud_codec
-        = pb::FieldCodec.ForMessage(42, global::ARFlow.DataFrameRequest.Types.PointInCloud.Parser);
-    private readonly pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.PointInCloud> pointCloud_ = new pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.PointInCloud>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.PointInCloud> PointCloud {
-      get { return pointCloud_; }
-    }
-
     /// <summary>Field number for the "plane_detection" field.</summary>
-    public const int PlaneDetectionFieldNumber = 6;
+    public const int PlaneDetectionFieldNumber = 5;
     private static readonly pb::FieldCodec<global::ARFlow.DataFrameRequest.Types.Planes> _repeated_planeDetection_codec
-        = pb::FieldCodec.ForMessage(50, global::ARFlow.DataFrameRequest.Types.Planes.Parser);
+        = pb::FieldCodec.ForMessage(42, global::ARFlow.DataFrameRequest.Types.Planes.Parser);
     private readonly pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.Planes> planeDetection_ = new pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.Planes>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2691,51 +2676,39 @@ namespace ARFlow {
       get { return planeDetection_; }
     }
 
-    /// <summary>Field number for the "gyroscope_attitude" field.</summary>
-    public const int GyroscopeAttitudeFieldNumber = 7;
-    private global::ARFlow.DataFrameRequest.Types.Quaternion gyroscopeAttitude_;
+    /// <summary>Field number for the "gyroscope" field.</summary>
+    public const int GyroscopeFieldNumber = 6;
+    private global::ARFlow.DataFrameRequest.Types.gyroscope_data gyroscope_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.DataFrameRequest.Types.Quaternion GyroscopeAttitude {
-      get { return gyroscopeAttitude_; }
+    public global::ARFlow.DataFrameRequest.Types.gyroscope_data Gyroscope {
+      get { return gyroscope_; }
       set {
-        gyroscopeAttitude_ = value;
+        gyroscope_ = value;
       }
     }
 
-    /// <summary>Field number for the "gyroscope_rotation_rate" field.</summary>
-    public const int GyroscopeRotationRateFieldNumber = 8;
-    private global::ARFlow.DataFrameRequest.Types.Vector3 gyroscopeRotationRate_;
+    /// <summary>Field number for the "audio" field.</summary>
+    public const int AudioFieldNumber = 8;
+    private pb::ByteString audio_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.DataFrameRequest.Types.Vector3 GyroscopeRotationRate {
-      get { return gyroscopeRotationRate_; }
+    public pb::ByteString Audio {
+      get { return audio_; }
       set {
-        gyroscopeRotationRate_ = value;
+        audio_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
-    /// <summary>Field number for the "gyroscope_gravity" field.</summary>
-    public const int GyroscopeGravityFieldNumber = 9;
-    private global::ARFlow.DataFrameRequest.Types.Vector3 gyroscopeGravity_;
+    /// <summary>Field number for the "meshing" field.</summary>
+    public const int MeshingFieldNumber = 9;
+    private pb::ByteString meshing_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.DataFrameRequest.Types.Vector3 GyroscopeGravity {
-      get { return gyroscopeGravity_; }
+    public pb::ByteString Meshing {
+      get { return meshing_; }
       set {
-        gyroscopeGravity_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "gyroscope_acceleration" field.</summary>
-    public const int GyroscopeAccelerationFieldNumber = 10;
-    private global::ARFlow.DataFrameRequest.Types.Vector3 gyroscopeAcceleration_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.DataFrameRequest.Types.Vector3 GyroscopeAcceleration {
-      get { return gyroscopeAcceleration_; }
-      set {
-        gyroscopeAcceleration_ = value;
+        meshing_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -2758,12 +2731,10 @@ namespace ARFlow {
       if (Color != other.Color) return false;
       if (Depth != other.Depth) return false;
       if (Transform != other.Transform) return false;
-      if(!pointCloud_.Equals(other.pointCloud_)) return false;
       if(!planeDetection_.Equals(other.planeDetection_)) return false;
-      if (!object.Equals(GyroscopeAttitude, other.GyroscopeAttitude)) return false;
-      if (!object.Equals(GyroscopeRotationRate, other.GyroscopeRotationRate)) return false;
-      if (!object.Equals(GyroscopeGravity, other.GyroscopeGravity)) return false;
-      if (!object.Equals(GyroscopeAcceleration, other.GyroscopeAcceleration)) return false;
+      if (!object.Equals(Gyroscope, other.Gyroscope)) return false;
+      if (Audio != other.Audio) return false;
+      if (Meshing != other.Meshing) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2775,12 +2746,10 @@ namespace ARFlow {
       if (Color.Length != 0) hash ^= Color.GetHashCode();
       if (Depth.Length != 0) hash ^= Depth.GetHashCode();
       if (Transform.Length != 0) hash ^= Transform.GetHashCode();
-      hash ^= pointCloud_.GetHashCode();
       hash ^= planeDetection_.GetHashCode();
-      if (gyroscopeAttitude_ != null) hash ^= GyroscopeAttitude.GetHashCode();
-      if (gyroscopeRotationRate_ != null) hash ^= GyroscopeRotationRate.GetHashCode();
-      if (gyroscopeGravity_ != null) hash ^= GyroscopeGravity.GetHashCode();
-      if (gyroscopeAcceleration_ != null) hash ^= GyroscopeAcceleration.GetHashCode();
+      if (gyroscope_ != null) hash ^= Gyroscope.GetHashCode();
+      if (Audio.Length != 0) hash ^= Audio.GetHashCode();
+      if (Meshing.Length != 0) hash ^= Meshing.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2815,23 +2784,18 @@ namespace ARFlow {
         output.WriteRawTag(34);
         output.WriteBytes(Transform);
       }
-      pointCloud_.WriteTo(output, _repeated_pointCloud_codec);
       planeDetection_.WriteTo(output, _repeated_planeDetection_codec);
-      if (gyroscopeAttitude_ != null) {
-        output.WriteRawTag(58);
-        output.WriteMessage(GyroscopeAttitude);
+      if (gyroscope_ != null) {
+        output.WriteRawTag(50);
+        output.WriteMessage(Gyroscope);
       }
-      if (gyroscopeRotationRate_ != null) {
+      if (Audio.Length != 0) {
         output.WriteRawTag(66);
-        output.WriteMessage(GyroscopeRotationRate);
+        output.WriteBytes(Audio);
       }
-      if (gyroscopeGravity_ != null) {
+      if (Meshing.Length != 0) {
         output.WriteRawTag(74);
-        output.WriteMessage(GyroscopeGravity);
-      }
-      if (gyroscopeAcceleration_ != null) {
-        output.WriteRawTag(82);
-        output.WriteMessage(GyroscopeAcceleration);
+        output.WriteBytes(Meshing);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2859,23 +2823,18 @@ namespace ARFlow {
         output.WriteRawTag(34);
         output.WriteBytes(Transform);
       }
-      pointCloud_.WriteTo(ref output, _repeated_pointCloud_codec);
       planeDetection_.WriteTo(ref output, _repeated_planeDetection_codec);
-      if (gyroscopeAttitude_ != null) {
-        output.WriteRawTag(58);
-        output.WriteMessage(GyroscopeAttitude);
+      if (gyroscope_ != null) {
+        output.WriteRawTag(50);
+        output.WriteMessage(Gyroscope);
       }
-      if (gyroscopeRotationRate_ != null) {
+      if (Audio.Length != 0) {
         output.WriteRawTag(66);
-        output.WriteMessage(GyroscopeRotationRate);
+        output.WriteBytes(Audio);
       }
-      if (gyroscopeGravity_ != null) {
+      if (Meshing.Length != 0) {
         output.WriteRawTag(74);
-        output.WriteMessage(GyroscopeGravity);
-      }
-      if (gyroscopeAcceleration_ != null) {
-        output.WriteRawTag(82);
-        output.WriteMessage(GyroscopeAcceleration);
+        output.WriteBytes(Meshing);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -2899,19 +2858,15 @@ namespace ARFlow {
       if (Transform.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(Transform);
       }
-      size += pointCloud_.CalculateSize(_repeated_pointCloud_codec);
       size += planeDetection_.CalculateSize(_repeated_planeDetection_codec);
-      if (gyroscopeAttitude_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GyroscopeAttitude);
+      if (gyroscope_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Gyroscope);
       }
-      if (gyroscopeRotationRate_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GyroscopeRotationRate);
+      if (Audio.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Audio);
       }
-      if (gyroscopeGravity_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GyroscopeGravity);
-      }
-      if (gyroscopeAcceleration_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GyroscopeAcceleration);
+      if (Meshing.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Meshing);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2937,31 +2892,18 @@ namespace ARFlow {
       if (other.Transform.Length != 0) {
         Transform = other.Transform;
       }
-      pointCloud_.Add(other.pointCloud_);
       planeDetection_.Add(other.planeDetection_);
-      if (other.gyroscopeAttitude_ != null) {
-        if (gyroscopeAttitude_ == null) {
-          GyroscopeAttitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+      if (other.gyroscope_ != null) {
+        if (gyroscope_ == null) {
+          Gyroscope = new global::ARFlow.DataFrameRequest.Types.gyroscope_data();
         }
-        GyroscopeAttitude.MergeFrom(other.GyroscopeAttitude);
+        Gyroscope.MergeFrom(other.Gyroscope);
       }
-      if (other.gyroscopeRotationRate_ != null) {
-        if (gyroscopeRotationRate_ == null) {
-          GyroscopeRotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
-        }
-        GyroscopeRotationRate.MergeFrom(other.GyroscopeRotationRate);
+      if (other.Audio.Length != 0) {
+        Audio = other.Audio;
       }
-      if (other.gyroscopeGravity_ != null) {
-        if (gyroscopeGravity_ == null) {
-          GyroscopeGravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
-        }
-        GyroscopeGravity.MergeFrom(other.GyroscopeGravity);
-      }
-      if (other.gyroscopeAcceleration_ != null) {
-        if (gyroscopeAcceleration_ == null) {
-          GyroscopeAcceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
-        }
-        GyroscopeAcceleration.MergeFrom(other.GyroscopeAcceleration);
+      if (other.Meshing.Length != 0) {
+        Meshing = other.Meshing;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2995,39 +2937,22 @@ namespace ARFlow {
             break;
           }
           case 42: {
-            pointCloud_.AddEntriesFrom(input, _repeated_pointCloud_codec);
-            break;
-          }
-          case 50: {
             planeDetection_.AddEntriesFrom(input, _repeated_planeDetection_codec);
             break;
           }
-          case 58: {
-            if (gyroscopeAttitude_ == null) {
-              GyroscopeAttitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+          case 50: {
+            if (gyroscope_ == null) {
+              Gyroscope = new global::ARFlow.DataFrameRequest.Types.gyroscope_data();
             }
-            input.ReadMessage(GyroscopeAttitude);
+            input.ReadMessage(Gyroscope);
             break;
           }
           case 66: {
-            if (gyroscopeRotationRate_ == null) {
-              GyroscopeRotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
-            }
-            input.ReadMessage(GyroscopeRotationRate);
+            Audio = input.ReadBytes();
             break;
           }
           case 74: {
-            if (gyroscopeGravity_ == null) {
-              GyroscopeGravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
-            }
-            input.ReadMessage(GyroscopeGravity);
-            break;
-          }
-          case 82: {
-            if (gyroscopeAcceleration_ == null) {
-              GyroscopeAcceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
-            }
-            input.ReadMessage(GyroscopeAcceleration);
+            Meshing = input.ReadBytes();
             break;
           }
         }
@@ -3062,39 +2987,22 @@ namespace ARFlow {
             break;
           }
           case 42: {
-            pointCloud_.AddEntriesFrom(ref input, _repeated_pointCloud_codec);
-            break;
-          }
-          case 50: {
             planeDetection_.AddEntriesFrom(ref input, _repeated_planeDetection_codec);
             break;
           }
-          case 58: {
-            if (gyroscopeAttitude_ == null) {
-              GyroscopeAttitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+          case 50: {
+            if (gyroscope_ == null) {
+              Gyroscope = new global::ARFlow.DataFrameRequest.Types.gyroscope_data();
             }
-            input.ReadMessage(GyroscopeAttitude);
+            input.ReadMessage(Gyroscope);
             break;
           }
           case 66: {
-            if (gyroscopeRotationRate_ == null) {
-              GyroscopeRotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
-            }
-            input.ReadMessage(GyroscopeRotationRate);
+            Audio = input.ReadBytes();
             break;
           }
           case 74: {
-            if (gyroscopeGravity_ == null) {
-              GyroscopeGravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
-            }
-            input.ReadMessage(GyroscopeGravity);
-            break;
-          }
-          case 82: {
-            if (gyroscopeAcceleration_ == null) {
-              GyroscopeAcceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
-            }
-            input.ReadMessage(GyroscopeAcceleration);
+            Meshing = input.ReadBytes();
             break;
           }
         }
@@ -3372,242 +3280,6 @@ namespace ARFlow {
       }
 
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-      public sealed partial class PointInCloud : pb::IMessage<PointInCloud>
-      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-          , pb::IBufferMessage
-      #endif
-      {
-        private static readonly pb::MessageParser<PointInCloud> _parser = new pb::MessageParser<PointInCloud>(() => new PointInCloud());
-        private pb::UnknownFieldSet _unknownFields;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public static pb::MessageParser<PointInCloud> Parser { get { return _parser; } }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[1]; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
-          get { return Descriptor; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public PointInCloud() {
-          OnConstruction();
-        }
-
-        partial void OnConstruction();
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public PointInCloud(PointInCloud other) : this() {
-          point_ = other.point_ != null ? other.point_.Clone() : null;
-          confidence_ = other.confidence_;
-          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public PointInCloud Clone() {
-          return new PointInCloud(this);
-        }
-
-        /// <summary>Field number for the "point" field.</summary>
-        public const int PointFieldNumber = 1;
-        private global::ARFlow.DataFrameRequest.Types.Vector3 point_;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public global::ARFlow.DataFrameRequest.Types.Vector3 Point {
-          get { return point_; }
-          set {
-            point_ = value;
-          }
-        }
-
-        /// <summary>Field number for the "confidence" field.</summary>
-        public const int ConfidenceFieldNumber = 2;
-        private float confidence_;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public float Confidence {
-          get { return confidence_; }
-          set {
-            confidence_ = value;
-          }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public override bool Equals(object other) {
-          return Equals(other as PointInCloud);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public bool Equals(PointInCloud other) {
-          if (ReferenceEquals(other, null)) {
-            return false;
-          }
-          if (ReferenceEquals(other, this)) {
-            return true;
-          }
-          if (!object.Equals(Point, other.Point)) return false;
-          if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Confidence, other.Confidence)) return false;
-          return Equals(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public override int GetHashCode() {
-          int hash = 1;
-          if (point_ != null) hash ^= Point.GetHashCode();
-          if (Confidence != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Confidence);
-          if (_unknownFields != null) {
-            hash ^= _unknownFields.GetHashCode();
-          }
-          return hash;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public void WriteTo(pb::CodedOutputStream output) {
-        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-          output.WriteRawMessage(this);
-        #else
-          if (point_ != null) {
-            output.WriteRawTag(10);
-            output.WriteMessage(Point);
-          }
-          if (Confidence != 0F) {
-            output.WriteRawTag(21);
-            output.WriteFloat(Confidence);
-          }
-          if (_unknownFields != null) {
-            _unknownFields.WriteTo(output);
-          }
-        #endif
-        }
-
-        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-          if (point_ != null) {
-            output.WriteRawTag(10);
-            output.WriteMessage(Point);
-          }
-          if (Confidence != 0F) {
-            output.WriteRawTag(21);
-            output.WriteFloat(Confidence);
-          }
-          if (_unknownFields != null) {
-            _unknownFields.WriteTo(ref output);
-          }
-        }
-        #endif
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public int CalculateSize() {
-          int size = 0;
-          if (point_ != null) {
-            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Point);
-          }
-          if (Confidence != 0F) {
-            size += 1 + 4;
-          }
-          if (_unknownFields != null) {
-            size += _unknownFields.CalculateSize();
-          }
-          return size;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public void MergeFrom(PointInCloud other) {
-          if (other == null) {
-            return;
-          }
-          if (other.point_ != null) {
-            if (point_ == null) {
-              Point = new global::ARFlow.DataFrameRequest.Types.Vector3();
-            }
-            Point.MergeFrom(other.Point);
-          }
-          if (other.Confidence != 0F) {
-            Confidence = other.Confidence;
-          }
-          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public void MergeFrom(pb::CodedInputStream input) {
-        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-          input.ReadRawMessage(this);
-        #else
-          uint tag;
-          while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
-              default:
-                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-                break;
-              case 10: {
-                if (point_ == null) {
-                  Point = new global::ARFlow.DataFrameRequest.Types.Vector3();
-                }
-                input.ReadMessage(Point);
-                break;
-              }
-              case 21: {
-                Confidence = input.ReadFloat();
-                break;
-              }
-            }
-          }
-        #endif
-        }
-
-        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-          uint tag;
-          while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
-              default:
-                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-                break;
-              case 10: {
-                if (point_ == null) {
-                  Point = new global::ARFlow.DataFrameRequest.Types.Vector3();
-                }
-                input.ReadMessage(Point);
-                break;
-              }
-              case 21: {
-                Confidence = input.ReadFloat();
-                break;
-              }
-            }
-          }
-        }
-        #endif
-
-      }
-
-      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class Vector2 : pb::IMessage<Vector2>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -3622,7 +3294,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[2]; }
+          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[1]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3849,7 +3521,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[3]; }
+          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[2]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4140,7 +3812,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[4]; }
+          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[3]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4417,6 +4089,343 @@ namespace ARFlow {
               }
               case 37: {
                 W = input.ReadFloat();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      public sealed partial class gyroscope_data : pb::IMessage<gyroscope_data>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<gyroscope_data> _parser = new pb::MessageParser<gyroscope_data>(() => new gyroscope_data());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<gyroscope_data> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[4]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public gyroscope_data() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public gyroscope_data(gyroscope_data other) : this() {
+          attitude_ = other.attitude_ != null ? other.attitude_.Clone() : null;
+          rotationRate_ = other.rotationRate_ != null ? other.rotationRate_.Clone() : null;
+          gravity_ = other.gravity_ != null ? other.gravity_.Clone() : null;
+          acceleration_ = other.acceleration_ != null ? other.acceleration_.Clone() : null;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public gyroscope_data Clone() {
+          return new gyroscope_data(this);
+        }
+
+        /// <summary>Field number for the "attitude" field.</summary>
+        public const int AttitudeFieldNumber = 1;
+        private global::ARFlow.DataFrameRequest.Types.Quaternion attitude_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::ARFlow.DataFrameRequest.Types.Quaternion Attitude {
+          get { return attitude_; }
+          set {
+            attitude_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "rotation_rate" field.</summary>
+        public const int RotationRateFieldNumber = 2;
+        private global::ARFlow.DataFrameRequest.Types.Vector3 rotationRate_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::ARFlow.DataFrameRequest.Types.Vector3 RotationRate {
+          get { return rotationRate_; }
+          set {
+            rotationRate_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "gravity" field.</summary>
+        public const int GravityFieldNumber = 3;
+        private global::ARFlow.DataFrameRequest.Types.Vector3 gravity_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::ARFlow.DataFrameRequest.Types.Vector3 Gravity {
+          get { return gravity_; }
+          set {
+            gravity_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "acceleration" field.</summary>
+        public const int AccelerationFieldNumber = 4;
+        private global::ARFlow.DataFrameRequest.Types.Vector3 acceleration_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::ARFlow.DataFrameRequest.Types.Vector3 Acceleration {
+          get { return acceleration_; }
+          set {
+            acceleration_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as gyroscope_data);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(gyroscope_data other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (!object.Equals(Attitude, other.Attitude)) return false;
+          if (!object.Equals(RotationRate, other.RotationRate)) return false;
+          if (!object.Equals(Gravity, other.Gravity)) return false;
+          if (!object.Equals(Acceleration, other.Acceleration)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (attitude_ != null) hash ^= Attitude.GetHashCode();
+          if (rotationRate_ != null) hash ^= RotationRate.GetHashCode();
+          if (gravity_ != null) hash ^= Gravity.GetHashCode();
+          if (acceleration_ != null) hash ^= Acceleration.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (attitude_ != null) {
+            output.WriteRawTag(10);
+            output.WriteMessage(Attitude);
+          }
+          if (rotationRate_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(RotationRate);
+          }
+          if (gravity_ != null) {
+            output.WriteRawTag(26);
+            output.WriteMessage(Gravity);
+          }
+          if (acceleration_ != null) {
+            output.WriteRawTag(34);
+            output.WriteMessage(Acceleration);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (attitude_ != null) {
+            output.WriteRawTag(10);
+            output.WriteMessage(Attitude);
+          }
+          if (rotationRate_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(RotationRate);
+          }
+          if (gravity_ != null) {
+            output.WriteRawTag(26);
+            output.WriteMessage(Gravity);
+          }
+          if (acceleration_ != null) {
+            output.WriteRawTag(34);
+            output.WriteMessage(Acceleration);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (attitude_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Attitude);
+          }
+          if (rotationRate_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(RotationRate);
+          }
+          if (gravity_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Gravity);
+          }
+          if (acceleration_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Acceleration);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(gyroscope_data other) {
+          if (other == null) {
+            return;
+          }
+          if (other.attitude_ != null) {
+            if (attitude_ == null) {
+              Attitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+            }
+            Attitude.MergeFrom(other.Attitude);
+          }
+          if (other.rotationRate_ != null) {
+            if (rotationRate_ == null) {
+              RotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            RotationRate.MergeFrom(other.RotationRate);
+          }
+          if (other.gravity_ != null) {
+            if (gravity_ == null) {
+              Gravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            Gravity.MergeFrom(other.Gravity);
+          }
+          if (other.acceleration_ != null) {
+            if (acceleration_ == null) {
+              Acceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
+            }
+            Acceleration.MergeFrom(other.Acceleration);
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                if (attitude_ == null) {
+                  Attitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+                }
+                input.ReadMessage(Attitude);
+                break;
+              }
+              case 18: {
+                if (rotationRate_ == null) {
+                  RotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(RotationRate);
+                break;
+              }
+              case 26: {
+                if (gravity_ == null) {
+                  Gravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Gravity);
+                break;
+              }
+              case 34: {
+                if (acceleration_ == null) {
+                  Acceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Acceleration);
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                if (attitude_ == null) {
+                  Attitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+                }
+                input.ReadMessage(Attitude);
+                break;
+              }
+              case 18: {
+                if (rotationRate_ == null) {
+                  RotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(RotationRate);
+                break;
+              }
+              case 26: {
+                if (gravity_ == null) {
+                  Gravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Gravity);
+                break;
+              }
+              case 34: {
+                if (acceleration_ == null) {
+                  Acceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                }
+                input.ReadMessage(Acceleration);
                 break;
               }
             }

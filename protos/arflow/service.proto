@@ -83,12 +83,6 @@ message DataFrameRequest {
         float z = 3;
     }
 
-    message PointInCloud {
-        Vector3 point = 1;
-        float confidence = 2;
-    }
-    repeated PointInCloud point_cloud = 5;
-
     message Vector2 {
         float x = 1;
         float y = 2;
@@ -98,20 +92,24 @@ message DataFrameRequest {
         Vector3 normal = 2;
         Vector2 size = 3;
     }
-    repeated Planes plane_detection = 6;
+    repeated Planes plane_detection = 5;
     
-
     message Quaternion {
         float x = 1;
         float y = 2;
         float z = 3;
         float w = 4;
     }
+    message gyroscope_data {
+        Quaternion attitude = 1;
+        Vector3 rotation_rate = 2;
+        Vector3 gravity = 3;
+        Vector3 acceleration = 4;
+    }
+    gyroscope_data gyroscope = 6;
 
-    Quaternion gyroscope_attitude = 7;
-    Vector3 gyroscope_rotation_rate = 8;
-    Vector3 gyroscope_gravity = 9;
-    Vector3 gyroscope_acceleration = 10;
+    bytes audio = 8;
+    bytes meshing = 9;
 }
 
 message DataFrameResponse {
