@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "arflow"
 version = "0.2.0"
-description = ""
+description = "ARFlow is a data-sharing layer that enables developer-friendly data streaming, storage, and visualization for augmented reality (AR) device data."
 authors = ["Yiqin Zhao <yiqinzhao@outlook.com>"]
 readme = "README.md"
 packages = [{ include = "arflow" }]
@@ -34,7 +34,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 serve = "arflow.serve:serve"
-make-docs = "arflow.docs:make_docs"
 
 [tool.ruff]
 # gRPC generated files

@@ -1,18 +1,70 @@
 # ARFlow
 
-[ARFlow: A Framework for Simplifying AR Experimentation Workflow](https://doi.org/10.1145/3638550.3643617)
+ARFlow is a data-sharing layer that enables developer-friendly data streaming, storage, and visualization for augmented reality (AR) device data.
+This project aims to provide a tool to democratize and accelerate AR research and development.
 
-[Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#bibtex) | [Project Page](https://cake.wpi.edu/ARFlow/) | [Video](https://youtu.be/mml8YrCgfTk)
+[Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#how-to-cite-arflow) | [Project Page](https://cake.wpi.edu/ARFlow/) | [Video](https://youtu.be/mml8YrCgfTk)
+
+## Getting Started
+
+### Device Preparation
+
+First, you need an AR device.
+We currently support iOS and Android phones and tablets. Meta Quests 3 support is being developed.
+Make sure you have the developer mode enabled on your device.
+
+### Server Setup
+
+Next, create your own ARFlow server instance to start playing with the device collected AR data. Here we show the steps to build a simple server:
+
+```bash
+# Create a python environment using your favorite tool, then
+pip install arflow
+```
+
+Create a Python file `simple_arflow_server.py` and paste the following code:
+
+```python
+"""A simple example of extending the ARFlow server."""
+
+import arflow
+
+
+class CustomService(arflow.ARFlowService):
+    def on_frame_received(self, frame: arflow.DataFrameRequest):
+        """Called when a frame is received."""
+        print("Frame received!")
+
+
+def main():
+    arflow.create_server(CustomService, port=8500, path_to_save="./")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+Run it!
+
+```
+python simple_arflow_server.py
+```
+
+### Client Setup
+
+Next, follow the client application installation [guide](./unity/README.md) to build the ARFlow client app and install it on your device.
+Following the onscreen instruction to input the server address and port (8500 for the previous example) information, then tap **connect** and **start**. 
 
 Watch our demo video:
 
 [![Demo video](https://img.youtube.com/vi/mml8YrCgfTk/maxresdefault.jpg)](https://youtu.be/mml8YrCgfTk)
 
-## Get Started
 
-Please refer to the individual [server](./python/README.md) and [client](./unity/README.md) installation guides.
+## Contribution
 
-## Contributors 
+Please read the [CONTRIBUTING](./CONTRIBUTING.md) guideline first, and refer to the individual [server](./python/README.md) and [client](./unity/README.md) installation guides.
+
+### Contributors 
 
 <!-- readme: contributors -start -->
 <table>

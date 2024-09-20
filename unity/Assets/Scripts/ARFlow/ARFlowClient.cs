@@ -21,6 +21,7 @@ namespace ARFlow
         /// <param name="address">The address (AKA server URL) to connect to</param>
         public ARFlowClient(string address)
         {
+            Debug.Log("Initialize client for " + address);
             var handler = new YetAnotherHttpHandler() { Http2Only = true };
             _channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions()
             {
@@ -71,7 +72,7 @@ namespace ARFlow
                 // {
                 //     Debug.Log(response);
                 // });
-                var response = _client.data_frame(frameData); ;
+                var response = _client.data_frame(frameData);
                 res = response.Message;
             }
             catch (Exception e)

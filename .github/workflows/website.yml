@@ -80,7 +80,7 @@ jobs:
 
       - name: Build the documentation
         working-directory: ./python
-        run: poetry run make-docs
+        run: poetry run python tools/make_docs_cli.py
       
       - name: Move docs to website directory
         run: |

@@ -1,3 +1,5 @@
+"""A simple script to generate docs from Python doc strings."""
+
 from pathlib import Path
 
 import pdoc

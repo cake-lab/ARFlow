@@ -162,7 +162,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.TheCakeLab.ARFlow
-    iPhone: com.TheCakeLab.ARFLow
+    iPhone: com.TheCakeLab.ARFlow
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -873,14 +873,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: ARFLow Thin Client
+  metroPackageName: ARFlow Thin Client
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: ARFLow Thin Client
+  metroApplicationDescription: ARFlow Thin Client
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0

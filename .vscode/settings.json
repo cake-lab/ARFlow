@@ -20,12 +20,15 @@
     "editor.inlineSuggest.suppressSuggestions": false
   },
   "cSpell.words": [
+        "arange",
     "arflow",
     "astype",
     "Behaviour",
+        "dtype",
     "flipud",
     "frombuffer",
     "gmtime",
+        "meshgrid",
     "ndarray",
     "Protobuf",
     "thecakelab",
