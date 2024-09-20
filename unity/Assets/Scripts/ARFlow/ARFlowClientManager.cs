@@ -33,6 +33,9 @@ namespace ARFlow
             ["CameraPointCloud"] = true,
         };
 
+        public static readonly List<string> MODALITIES = new List<string>
+            { "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud"};
+
         /// <summary>
         /// Initialize the client
         /// </summary>
@@ -58,6 +61,7 @@ namespace ARFlow
         )
         {
             _client = new ARFlowClient(address);
+            _activatedDataModalities = activatedDataModalities;
             if (activatedDataModalities == null)
                 _activatedDataModalities = DEFAULT_MODALITIES;
 

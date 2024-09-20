@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using System.Collections.Generic;
+using System.Collections;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
@@ -29,6 +31,10 @@ public class ARFlowDeviceSample : MonoBehaviour
     public TMP_InputField ipField;
     public TMP_InputField portField;
 
+    public GameObject OptionsContainer;
+
+    private Dictionary<string, GameObject> _optionObjects = new Dictionary<string, GameObject>();
+
     private string _defaultConnection = "http://192.168.1.219:8500";
 
     // Start is called before the first frame update
@@ -38,11 +44,54 @@ public class ARFlowDeviceSample : MonoBehaviour
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
         _clientManager = new ARFlowClientManager(cameraManager, occlusionManager);
 
+        addModalityOptionsToConfig();
+
         // OnConnectButtonClick();
 
         // The following suppose to limit the fps to 30, but it doesn't work.
         // QualitySettings.vSyncCount = 0;
         // Application.targetFrameRate = 30;
+    }
+
+    void addModalityOptionsToConfig()
+    {
+        // Get first child, WITH THE ASSUMPTION that it's a checkbox
+        GameObject firstChild = OptionsContainer.transform.GetChild(0).gameObject;
+
+        foreach (string modality in ARFlowClientManager.MODALITIES)
+        {
+            GameObject newOption = Instantiate(
+                firstChild, 
+                parent: OptionsContainer.transform
+            );
+            newOption.GetComponent<Text>().text = splitByCapital(modality);
+
+            _optionObjects.Add( modality, newOption );
+        }
+    }
+
+    string splitByCapital(string s)
+    {
+        return Regex.Replace(s, "([a-z])([A-Z])", "$1 $2");
+    }
+
+    Dictionary<string, bool> modalityOptions()
+    {
+        Dictionary<string, bool> res = new Dictionary<string, bool>();
+        foreach (var option in  _optionObjects)
+        {
+            var optionName = option.Key;
+            var optionObject = option.Value;
+
+            var slider = optionObject.transform.Find("Slider");
+            if (slider != null)
+            {
+                var sliderVal = slider.GetComponent<Slider>().value;
+                res.Add(optionName, sliderVal != 0);
+            }
+        }
+
+        return res;
     }
 
     bool validIP (string ipField)
@@ -66,7 +115,22 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             serverURL = "http://" + ipField.text + ":" + portField.text;
         }
-        _clientManager.Connect(serverURL);
+        var modalities = modalityOptions();
+
+        prettyPrintDictionary(modalities);
+
+        _clientManager.Connect(serverURL, modalityOptions());
+    }
+
+    public static void prettyPrintDictionary(Dictionary<string, bool> dict)
+    {
+        string log = "";
+        foreach (var kvp in dict)
+        {
+            //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+            log += string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+        }
+        Debug.Log(log);
     }
 
     /// <summary>
