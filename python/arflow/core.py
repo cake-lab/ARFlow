@@ -33,6 +33,7 @@ from arflow.types import (
     DecodedDataFrame,
     DepthImg,
     EnrichedARFlowRequest,
+    HashableClientIdentifier,
     Intrinsic,
     PointCloudCLR,
     PointCloudPCD,
@@ -73,7 +74,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         if init_uid is None:
             init_uid = str(uuid.uuid4())
 
-        self._client_configurations[ClientIdentifier(uid=init_uid)] = request
+        self._client_configurations[HashableClientIdentifier(init_uid)] = request
 
         self.recorder.init(f"{request.device_name} - ARFlow", spawn=True)
         print("Registered a client with UUID: %s" % init_uid, request)
@@ -95,7 +96,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         # Start processing.
         try:
             client_config = self._client_configurations[
-                ClientIdentifier(uid=request.uid)
+                HashableClientIdentifier(request.uid)
             ]
         except KeyError:
             if context is not None:

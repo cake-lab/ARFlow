@@ -3,9 +3,11 @@ from typing import Any, Dict, List, NewType, TypedDict
 import numpy as np
 from numpy.typing import NDArray
 
-from arflow.service_pb2 import ClientConfiguration, ClientIdentifier, DataFrame
+from arflow.service_pb2 import ClientConfiguration, DataFrame
 
 Timestamp = NewType("Timestamp", float)
+HashableClientIdentifier = NewType("HashableClientIdentifier", str)
+"""This should match a hashable field in the `ClientConfiguration` message."""
 ARFlowRequest = DataFrame | ClientConfiguration
 
 
@@ -15,7 +17,7 @@ class EnrichedARFlowRequest(TypedDict):
 
 
 RequestsHistory = List[EnrichedARFlowRequest]
-ClientConfigurations = Dict[ClientIdentifier, ClientConfiguration]
+ClientConfigurations = Dict[HashableClientIdentifier, ClientConfiguration]
 
 ColorRGB = NDArray[np.uint8]
 DepthImg = NDArray[np.float32] | np.ndarray[Any, np.dtype[np.float32 | np.uint16]]
