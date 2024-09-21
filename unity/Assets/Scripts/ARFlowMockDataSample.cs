@@ -39,10 +39,10 @@ public class ARFlowMockDataSample : MonoBehaviour
 
         _sampleSize = new Vector2Int(256, 192);
 
-        _client.Connect(new RegisterRequest()
+        _client.Connect(new ClientConfiguration()
         {
             DeviceName = "MockDataTestbed",
-            CameraIntrinsics = new RegisterRequest.Types.CameraIntrinsics()
+            CameraIntrinsics = new ClientConfiguration.Types.CameraIntrinsics()
             {
                 FocalLengthX = 128,
                 FocalLengthY = 96,
@@ -51,18 +51,18 @@ public class ARFlowMockDataSample : MonoBehaviour
                 PrincipalPointX = 128,
                 PrincipalPointY = 96
             },
-            CameraColor = new RegisterRequest.Types.CameraColor()
+            CameraColor = new ClientConfiguration.Types.CameraColor()
             {
                 Enabled = true,
                 DataType = "YCbCr420",
                 ResizeFactorX = 1.0f,
                 ResizeFactorY = 1.0f,
             },
-            CameraDepth = new RegisterRequest.Types.CameraDepth()
+            CameraDepth = new ClientConfiguration.Types.CameraDepth()
             {
                 Enabled = false,
             },
-            CameraTransform = new RegisterRequest.Types.CameraTransform()
+            CameraTransform = new ClientConfiguration.Types.CameraTransform()
             {
                 Enabled = false
             }
@@ -80,7 +80,7 @@ public class ARFlowMockDataSample : MonoBehaviour
         var colorBytes = new byte[size];
         _rnd.NextBytes(colorBytes);
 
-        _client.SendFrame(new DataFrameRequest()
+        _client.SendFrame(new DataFrame()
         {
             Color = ByteString.CopyFrom(colorBytes)
         });

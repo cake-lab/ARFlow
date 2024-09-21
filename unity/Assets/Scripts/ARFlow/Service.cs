@@ -24,43 +24,45 @@ namespace ARFlow {
     static ServiceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8ivgYKD1JlZ2lzdGVyUmVx",
-            "dWVzdBITCgtkZXZpY2VfbmFtZRgBIAEoCRI8ChFjYW1lcmFfaW50cmluc2lj",
-            "cxgCIAEoCzIhLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFJbnRyaW5zaWNzEjIK",
-            "DGNhbWVyYV9jb2xvchgDIAEoCzIcLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFD",
-            "b2xvchIyCgxjYW1lcmFfZGVwdGgYBCABKAsyHC5SZWdpc3RlclJlcXVlc3Qu",
-            "Q2FtZXJhRGVwdGgSOgoQY2FtZXJhX3RyYW5zZm9ybRgFIAEoCzIgLlJlZ2lz",
-            "dGVyUmVxdWVzdC5DYW1lcmFUcmFuc2Zvcm0SPQoSY2FtZXJhX3BvaW50X2Ns",
-            "b3VkGAYgASgLMiEuUmVnaXN0ZXJSZXF1ZXN0LkNhbWVyYVBvaW50Q2xvdWQa",
-            "pAEKEENhbWVyYUludHJpbnNpY3MSFgoOZm9jYWxfbGVuZ3RoX3gYASABKAIS",
-            "FgoOZm9jYWxfbGVuZ3RoX3kYAiABKAISGQoRcHJpbmNpcGFsX3BvaW50X3gY",
-            "AyABKAISGQoRcHJpbmNpcGFsX3BvaW50X3kYBCABKAISFAoMcmVzb2x1dGlv",
-            "bl94GAUgASgFEhQKDHJlc29sdXRpb25feRgGIAEoBRpjCgtDYW1lcmFDb2xv",
-            "chIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgCIAEoCRIXCg9yZXNp",
-            "emVfZmFjdG9yX3gYAyABKAISFwoPcmVzaXplX2ZhY3Rvcl95GAQgASgCGoEB",
-            "CgtDYW1lcmFEZXB0aBIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgC",
-            "IAEoCRIiChpjb25maWRlbmNlX2ZpbHRlcmluZ19sZXZlbBgDIAEoBRIUCgxy",
-            "ZXNvbHV0aW9uX3gYBCABKAUSFAoMcmVzb2x1dGlvbl95GAUgASgFGiIKD0Nh",
-            "bWVyYVRyYW5zZm9ybRIPCgdlbmFibGVkGAEgASgIGkEKEENhbWVyYVBvaW50",
-            "Q2xvdWQSDwoHZW5hYmxlZBgBIAEoCBIcChRkZXB0aF91cHNjYWxlX2ZhY3Rv",
-            "chgCIAEoAiIfChBSZWdpc3RlclJlc3BvbnNlEgsKA3VpZBgBIAEoCSJQChBE",
-            "YXRhRnJhbWVSZXF1ZXN0EgsKA3VpZBgBIAEoCRINCgVjb2xvchgCIAEoDBIN",
-            "CgVkZXB0aBgDIAEoDBIRCgl0cmFuc2Zvcm0YBCABKAwiJAoRRGF0YUZyYW1l",
-            "UmVzcG9uc2USDwoHbWVzc2FnZRgBIAEoCTJ1Cg1BUkZsb3dTZXJ2aWNlEi8K",
-            "CHJlZ2lzdGVyEhAuUmVnaXN0ZXJSZXF1ZXN0GhEuUmVnaXN0ZXJSZXNwb25z",
-            "ZRIzCgpkYXRhX2ZyYW1lEhEuRGF0YUZyYW1lUmVxdWVzdBoSLkRhdGFGcmFt",
-            "ZVJlc3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
+            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8SBmFyZmxvdyL5BgoTQ2xp",
+            "ZW50Q29uZmlndXJhdGlvbhITCgtkZXZpY2VfbmFtZRgBIAEoCRJHChFjYW1l",
+            "cmFfaW50cmluc2ljcxgCIAEoCzIsLmFyZmxvdy5DbGllbnRDb25maWd1cmF0",
+            "aW9uLkNhbWVyYUludHJpbnNpY3MSPQoMY2FtZXJhX2NvbG9yGAMgASgLMicu",
+            "YXJmbG93LkNsaWVudENvbmZpZ3VyYXRpb24uQ2FtZXJhQ29sb3ISPQoMY2Ft",
+            "ZXJhX2RlcHRoGAQgASgLMicuYXJmbG93LkNsaWVudENvbmZpZ3VyYXRpb24u",
+            "Q2FtZXJhRGVwdGgSRQoQY2FtZXJhX3RyYW5zZm9ybRgFIAEoCzIrLmFyZmxv",
+            "dy5DbGllbnRDb25maWd1cmF0aW9uLkNhbWVyYVRyYW5zZm9ybRJIChJjYW1l",
+            "cmFfcG9pbnRfY2xvdWQYBiABKAsyLC5hcmZsb3cuQ2xpZW50Q29uZmlndXJh",
+            "dGlvbi5DYW1lcmFQb2ludENsb3VkGqQBChBDYW1lcmFJbnRyaW5zaWNzEhYK",
+            "DmZvY2FsX2xlbmd0aF94GAEgASgCEhYKDmZvY2FsX2xlbmd0aF95GAIgASgC",
+            "EhkKEXByaW5jaXBhbF9wb2ludF94GAMgASgCEhkKEXByaW5jaXBhbF9wb2lu",
+            "dF95GAQgASgCEhQKDHJlc29sdXRpb25feBgFIAEoBRIUCgxyZXNvbHV0aW9u",
+            "X3kYBiABKAUaYwoLQ2FtZXJhQ29sb3ISDwoHZW5hYmxlZBgBIAEoCBIRCglk",
+            "YXRhX3R5cGUYAiABKAkSFwoPcmVzaXplX2ZhY3Rvcl94GAMgASgCEhcKD3Jl",
+            "c2l6ZV9mYWN0b3JfeRgEIAEoAhqBAQoLQ2FtZXJhRGVwdGgSDwoHZW5hYmxl",
+            "ZBgBIAEoCBIRCglkYXRhX3R5cGUYAiABKAkSIgoaY29uZmlkZW5jZV9maWx0",
+            "ZXJpbmdfbGV2ZWwYAyABKAUSFAoMcmVzb2x1dGlvbl94GAQgASgFEhQKDHJl",
+            "c29sdXRpb25feRgFIAEoBRoiCg9DYW1lcmFUcmFuc2Zvcm0SDwoHZW5hYmxl",
+            "ZBgBIAEoCBpBChBDYW1lcmFQb2ludENsb3VkEg8KB2VuYWJsZWQYASABKAgS",
+            "HAoUZGVwdGhfdXBzY2FsZV9mYWN0b3IYAiABKAIiHwoQQ2xpZW50SWRlbnRp",
+            "ZmllchILCgN1aWQYASABKAkiSQoJRGF0YUZyYW1lEgsKA3VpZBgBIAEoCRIN",
+            "CgVjb2xvchgCIAEoDBINCgVkZXB0aBgDIAEoDBIRCgl0cmFuc2Zvcm0YBCAB",
+            "KAwiIgoPQWNrbm93bGVkZ2VtZW50Eg8KB21lc3NhZ2UYASABKAkyjQEKBkFS",
+            "RmxvdxJHCg5SZWdpc3RlckNsaWVudBIbLmFyZmxvdy5DbGllbnRDb25maWd1",
+            "cmF0aW9uGhguYXJmbG93LkNsaWVudElkZW50aWZpZXISOgoMUHJvY2Vzc0Zy",
+            "YW1lEhEuYXJmbG93LkRhdGFGcmFtZRoXLmFyZmxvdy5BY2tub3dsZWRnZW1l",
+            "bnRCCaoCBkFSRmxvd2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest), global::ARFlow.RegisterRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraIntrinsics), global::ARFlow.RegisterRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraColor), global::ARFlow.RegisterRequest.Types.CameraColor.Parser, new[]{ "Enabled", "DataType", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraDepth), global::ARFlow.RegisterRequest.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraTransform), global::ARFlow.RegisterRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPointCloud), global::ARFlow.RegisterRequest.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterResponse), global::ARFlow.RegisterResponse.Parser, new[]{ "Uid" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameResponse), global::ARFlow.DataFrameResponse.Parser, new[]{ "Message" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration), global::ARFlow.ClientConfiguration.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraIntrinsics), global::ARFlow.ClientConfiguration.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraColor), global::ARFlow.ClientConfiguration.Types.CameraColor.Parser, new[]{ "Enabled", "DataType", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraDepth), global::ARFlow.ClientConfiguration.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraTransform), global::ARFlow.ClientConfiguration.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraPointCloud), global::ARFlow.ClientConfiguration.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientIdentifier), global::ARFlow.ClientIdentifier.Parser, new[]{ "Uid" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame), global::ARFlow.DataFrame.Parser, new[]{ "Uid", "Color", "Depth", "Transform" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.Acknowledgement), global::ARFlow.Acknowledgement.Parser, new[]{ "Message" }, null, null, null, null)
           }));
     }
     #endregion
@@ -68,16 +70,16 @@ namespace ARFlow {
   }
   #region Messages
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class RegisterRequest : pb::IMessage<RegisterRequest>
+  public sealed partial class ClientConfiguration : pb::IMessage<ClientConfiguration>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<RegisterRequest> _parser = new pb::MessageParser<RegisterRequest>(() => new RegisterRequest());
+    private static readonly pb::MessageParser<ClientConfiguration> _parser = new pb::MessageParser<ClientConfiguration>(() => new ClientConfiguration());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<RegisterRequest> Parser { get { return _parser; } }
+    public static pb::MessageParser<ClientConfiguration> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -93,7 +95,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RegisterRequest() {
+    public ClientConfiguration() {
       OnConstruction();
     }
 
@@ -101,7 +103,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RegisterRequest(RegisterRequest other) : this() {
+    public ClientConfiguration(ClientConfiguration other) : this() {
       deviceName_ = other.deviceName_;
       cameraIntrinsics_ = other.cameraIntrinsics_ != null ? other.cameraIntrinsics_.Clone() : null;
       cameraColor_ = other.cameraColor_ != null ? other.cameraColor_.Clone() : null;
@@ -113,13 +115,16 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RegisterRequest Clone() {
-      return new RegisterRequest(this);
+    public ClientConfiguration Clone() {
+      return new ClientConfiguration(this);
     }
 
     /// <summary>Field number for the "device_name" field.</summary>
     public const int DeviceNameFieldNumber = 1;
     private string deviceName_ = "";
+    /// <summary>
+    /// TODO: Add documentation for each field, units of measurement, etc.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string DeviceName {
@@ -131,10 +136,10 @@ namespace ARFlow {
 
     /// <summary>Field number for the "camera_intrinsics" field.</summary>
     public const int CameraIntrinsicsFieldNumber = 2;
-    private global::ARFlow.RegisterRequest.Types.CameraIntrinsics cameraIntrinsics_;
+    private global::ARFlow.ClientConfiguration.Types.CameraIntrinsics cameraIntrinsics_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.RegisterRequest.Types.CameraIntrinsics CameraIntrinsics {
+    public global::ARFlow.ClientConfiguration.Types.CameraIntrinsics CameraIntrinsics {
       get { return cameraIntrinsics_; }
       set {
         cameraIntrinsics_ = value;
@@ -143,10 +148,10 @@ namespace ARFlow {
 
     /// <summary>Field number for the "camera_color" field.</summary>
     public const int CameraColorFieldNumber = 3;
-    private global::ARFlow.RegisterRequest.Types.CameraColor cameraColor_;
+    private global::ARFlow.ClientConfiguration.Types.CameraColor cameraColor_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.RegisterRequest.Types.CameraColor CameraColor {
+    public global::ARFlow.ClientConfiguration.Types.CameraColor CameraColor {
       get { return cameraColor_; }
       set {
         cameraColor_ = value;
@@ -155,10 +160,10 @@ namespace ARFlow {
 
     /// <summary>Field number for the "camera_depth" field.</summary>
     public const int CameraDepthFieldNumber = 4;
-    private global::ARFlow.RegisterRequest.Types.CameraDepth cameraDepth_;
+    private global::ARFlow.ClientConfiguration.Types.CameraDepth cameraDepth_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.RegisterRequest.Types.CameraDepth CameraDepth {
+    public global::ARFlow.ClientConfiguration.Types.CameraDepth CameraDepth {
       get { return cameraDepth_; }
       set {
         cameraDepth_ = value;
@@ -167,10 +172,10 @@ namespace ARFlow {
 
     /// <summary>Field number for the "camera_transform" field.</summary>
     public const int CameraTransformFieldNumber = 5;
-    private global::ARFlow.RegisterRequest.Types.CameraTransform cameraTransform_;
+    private global::ARFlow.ClientConfiguration.Types.CameraTransform cameraTransform_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.RegisterRequest.Types.CameraTransform CameraTransform {
+    public global::ARFlow.ClientConfiguration.Types.CameraTransform CameraTransform {
       get { return cameraTransform_; }
       set {
         cameraTransform_ = value;
@@ -179,10 +184,10 @@ namespace ARFlow {
 
     /// <summary>Field number for the "camera_point_cloud" field.</summary>
     public const int CameraPointCloudFieldNumber = 6;
-    private global::ARFlow.RegisterRequest.Types.CameraPointCloud cameraPointCloud_;
+    private global::ARFlow.ClientConfiguration.Types.CameraPointCloud cameraPointCloud_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.RegisterRequest.Types.CameraPointCloud CameraPointCloud {
+    public global::ARFlow.ClientConfiguration.Types.CameraPointCloud CameraPointCloud {
       get { return cameraPointCloud_; }
       set {
         cameraPointCloud_ = value;
@@ -192,12 +197,12 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as RegisterRequest);
+      return Equals(other as ClientConfiguration);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(RegisterRequest other) {
+    public bool Equals(ClientConfiguration other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -335,7 +340,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(RegisterRequest other) {
+    public void MergeFrom(ClientConfiguration other) {
       if (other == null) {
         return;
       }
@@ -344,31 +349,31 @@ namespace ARFlow {
       }
       if (other.cameraIntrinsics_ != null) {
         if (cameraIntrinsics_ == null) {
-          CameraIntrinsics = new global::ARFlow.RegisterRequest.Types.CameraIntrinsics();
+          CameraIntrinsics = new global::ARFlow.ClientConfiguration.Types.CameraIntrinsics();
         }
         CameraIntrinsics.MergeFrom(other.CameraIntrinsics);
       }
       if (other.cameraColor_ != null) {
         if (cameraColor_ == null) {
-          CameraColor = new global::ARFlow.RegisterRequest.Types.CameraColor();
+          CameraColor = new global::ARFlow.ClientConfiguration.Types.CameraColor();
         }
         CameraColor.MergeFrom(other.CameraColor);
       }
       if (other.cameraDepth_ != null) {
         if (cameraDepth_ == null) {
-          CameraDepth = new global::ARFlow.RegisterRequest.Types.CameraDepth();
+          CameraDepth = new global::ARFlow.ClientConfiguration.Types.CameraDepth();
         }
         CameraDepth.MergeFrom(other.CameraDepth);
       }
       if (other.cameraTransform_ != null) {
         if (cameraTransform_ == null) {
-          CameraTransform = new global::ARFlow.RegisterRequest.Types.CameraTransform();
+          CameraTransform = new global::ARFlow.ClientConfiguration.Types.CameraTransform();
         }
         CameraTransform.MergeFrom(other.CameraTransform);
       }
       if (other.cameraPointCloud_ != null) {
         if (cameraPointCloud_ == null) {
-          CameraPointCloud = new global::ARFlow.RegisterRequest.Types.CameraPointCloud();
+          CameraPointCloud = new global::ARFlow.ClientConfiguration.Types.CameraPointCloud();
         }
         CameraPointCloud.MergeFrom(other.CameraPointCloud);
       }
@@ -393,35 +398,35 @@ namespace ARFlow {
           }
           case 18: {
             if (cameraIntrinsics_ == null) {
-              CameraIntrinsics = new global::ARFlow.RegisterRequest.Types.CameraIntrinsics();
+              CameraIntrinsics = new global::ARFlow.ClientConfiguration.Types.CameraIntrinsics();
             }
             input.ReadMessage(CameraIntrinsics);
             break;
           }
           case 26: {
             if (cameraColor_ == null) {
-              CameraColor = new global::ARFlow.RegisterRequest.Types.CameraColor();
+              CameraColor = new global::ARFlow.ClientConfiguration.Types.CameraColor();
             }
             input.ReadMessage(CameraColor);
             break;
           }
           case 34: {
             if (cameraDepth_ == null) {
-              CameraDepth = new global::ARFlow.RegisterRequest.Types.CameraDepth();
+              CameraDepth = new global::ARFlow.ClientConfiguration.Types.CameraDepth();
             }
             input.ReadMessage(CameraDepth);
             break;
           }
           case 42: {
             if (cameraTransform_ == null) {
-              CameraTransform = new global::ARFlow.RegisterRequest.Types.CameraTransform();
+              CameraTransform = new global::ARFlow.ClientConfiguration.Types.CameraTransform();
             }
             input.ReadMessage(CameraTransform);
             break;
           }
           case 50: {
             if (cameraPointCloud_ == null) {
-              CameraPointCloud = new global::ARFlow.RegisterRequest.Types.CameraPointCloud();
+              CameraPointCloud = new global::ARFlow.ClientConfiguration.Types.CameraPointCloud();
             }
             input.ReadMessage(CameraPointCloud);
             break;
@@ -447,35 +452,35 @@ namespace ARFlow {
           }
           case 18: {
             if (cameraIntrinsics_ == null) {
-              CameraIntrinsics = new global::ARFlow.RegisterRequest.Types.CameraIntrinsics();
+              CameraIntrinsics = new global::ARFlow.ClientConfiguration.Types.CameraIntrinsics();
             }
             input.ReadMessage(CameraIntrinsics);
             break;
           }
           case 26: {
             if (cameraColor_ == null) {
-              CameraColor = new global::ARFlow.RegisterRequest.Types.CameraColor();
+              CameraColor = new global::ARFlow.ClientConfiguration.Types.CameraColor();
             }
             input.ReadMessage(CameraColor);
             break;
           }
           case 34: {
             if (cameraDepth_ == null) {
-              CameraDepth = new global::ARFlow.RegisterRequest.Types.CameraDepth();
+              CameraDepth = new global::ARFlow.ClientConfiguration.Types.CameraDepth();
             }
             input.ReadMessage(CameraDepth);
             break;
           }
           case 42: {
             if (cameraTransform_ == null) {
-              CameraTransform = new global::ARFlow.RegisterRequest.Types.CameraTransform();
+              CameraTransform = new global::ARFlow.ClientConfiguration.Types.CameraTransform();
             }
             input.ReadMessage(CameraTransform);
             break;
           }
           case 50: {
             if (cameraPointCloud_ == null) {
-              CameraPointCloud = new global::ARFlow.RegisterRequest.Types.CameraPointCloud();
+              CameraPointCloud = new global::ARFlow.ClientConfiguration.Types.CameraPointCloud();
             }
             input.ReadMessage(CameraPointCloud);
             break;
@@ -486,7 +491,7 @@ namespace ARFlow {
     #endif
 
     #region Nested types
-    /// <summary>Container for nested types declared in the RegisterRequest message type.</summary>
+    /// <summary>Container for nested types declared in the ClientConfiguration message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
@@ -505,7 +510,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[0]; }
+          get { return global::ARFlow.ClientConfiguration.Descriptor.NestedTypes[0]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -880,7 +885,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[1]; }
+          get { return global::ARFlow.ClientConfiguration.Descriptor.NestedTypes[1]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1181,7 +1186,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[2]; }
+          get { return global::ARFlow.ClientConfiguration.Descriptor.NestedTypes[2]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1519,7 +1524,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[3]; }
+          get { return global::ARFlow.ClientConfiguration.Descriptor.NestedTypes[3]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1709,7 +1714,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[4]; }
+          get { return global::ARFlow.ClientConfiguration.Descriptor.NestedTypes[4]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1927,16 +1932,16 @@ namespace ARFlow {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class RegisterResponse : pb::IMessage<RegisterResponse>
+  public sealed partial class ClientIdentifier : pb::IMessage<ClientIdentifier>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<RegisterResponse> _parser = new pb::MessageParser<RegisterResponse>(() => new RegisterResponse());
+    private static readonly pb::MessageParser<ClientIdentifier> _parser = new pb::MessageParser<ClientIdentifier>(() => new ClientIdentifier());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<RegisterResponse> Parser { get { return _parser; } }
+    public static pb::MessageParser<ClientIdentifier> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1952,7 +1957,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RegisterResponse() {
+    public ClientIdentifier() {
       OnConstruction();
     }
 
@@ -1960,15 +1965,15 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RegisterResponse(RegisterResponse other) : this() {
+    public ClientIdentifier(ClientIdentifier other) : this() {
       uid_ = other.uid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RegisterResponse Clone() {
-      return new RegisterResponse(this);
+    public ClientIdentifier Clone() {
+      return new ClientIdentifier(this);
     }
 
     /// <summary>Field number for the "uid" field.</summary>
@@ -1986,12 +1991,12 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as RegisterResponse);
+      return Equals(other as ClientIdentifier);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(RegisterResponse other) {
+    public bool Equals(ClientIdentifier other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -2064,7 +2069,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(RegisterResponse other) {
+    public void MergeFrom(ClientIdentifier other) {
       if (other == null) {
         return;
       }
@@ -2117,16 +2122,16 @@ namespace ARFlow {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class DataFrameRequest : pb::IMessage<DataFrameRequest>
+  public sealed partial class DataFrame : pb::IMessage<DataFrame>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<DataFrameRequest> _parser = new pb::MessageParser<DataFrameRequest>(() => new DataFrameRequest());
+    private static readonly pb::MessageParser<DataFrame> _parser = new pb::MessageParser<DataFrame>(() => new DataFrame());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<DataFrameRequest> Parser { get { return _parser; } }
+    public static pb::MessageParser<DataFrame> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2142,7 +2147,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public DataFrameRequest() {
+    public DataFrame() {
       OnConstruction();
     }
 
@@ -2150,7 +2155,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public DataFrameRequest(DataFrameRequest other) : this() {
+    public DataFrame(DataFrame other) : this() {
       uid_ = other.uid_;
       color_ = other.color_;
       depth_ = other.depth_;
@@ -2160,8 +2165,8 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public DataFrameRequest Clone() {
-      return new DataFrameRequest(this);
+    public DataFrame Clone() {
+      return new DataFrame(this);
     }
 
     /// <summary>Field number for the "uid" field.</summary>
@@ -2215,12 +2220,12 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as DataFrameRequest);
+      return Equals(other as DataFrame);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(DataFrameRequest other) {
+    public bool Equals(DataFrame other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -2332,7 +2337,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(DataFrameRequest other) {
+    public void MergeFrom(DataFrame other) {
       if (other == null) {
         return;
       }
@@ -2418,16 +2423,16 @@ namespace ARFlow {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class DataFrameResponse : pb::IMessage<DataFrameResponse>
+  public sealed partial class Acknowledgement : pb::IMessage<Acknowledgement>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<DataFrameResponse> _parser = new pb::MessageParser<DataFrameResponse>(() => new DataFrameResponse());
+    private static readonly pb::MessageParser<Acknowledgement> _parser = new pb::MessageParser<Acknowledgement>(() => new Acknowledgement());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<DataFrameResponse> Parser { get { return _parser; } }
+    public static pb::MessageParser<Acknowledgement> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2443,7 +2448,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public DataFrameResponse() {
+    public Acknowledgement() {
       OnConstruction();
     }
 
@@ -2451,15 +2456,15 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public DataFrameResponse(DataFrameResponse other) : this() {
+    public Acknowledgement(Acknowledgement other) : this() {
       message_ = other.message_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public DataFrameResponse Clone() {
-      return new DataFrameResponse(this);
+    public Acknowledgement Clone() {
+      return new Acknowledgement(this);
     }
 
     /// <summary>Field number for the "message" field.</summary>
@@ -2477,12 +2482,12 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as DataFrameResponse);
+      return Equals(other as Acknowledgement);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(DataFrameResponse other) {
+    public bool Equals(Acknowledgement other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -2555,7 +2560,7 @@ namespace ARFlow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(DataFrameResponse other) {
+    public void MergeFrom(Acknowledgement other) {
       if (other == null) {
         return;
       }

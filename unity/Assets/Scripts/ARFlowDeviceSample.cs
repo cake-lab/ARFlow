@@ -77,10 +77,10 @@ public class ARFlowDeviceSample : MonoBehaviour
 
             _sampleSize = depthImage.dimensions;
 
-            var requestData = new RegisterRequest()
+            var requestData = new ClientConfiguration()
             {
                 DeviceName = SystemInfo.deviceName,
-                CameraIntrinsics = new RegisterRequest.Types.CameraIntrinsics()
+                CameraIntrinsics = new ClientConfiguration.Types.CameraIntrinsics()
                 {
                     FocalLengthX = k.focalLength.x,
                     FocalLengthY = k.focalLength.y,
@@ -89,14 +89,14 @@ public class ARFlowDeviceSample : MonoBehaviour
                     PrincipalPointX = k.principalPoint.x,
                     PrincipalPointY = k.principalPoint.y,
                 },
-                CameraColor = new RegisterRequest.Types.CameraColor()
+                CameraColor = new ClientConfiguration.Types.CameraColor()
                 {
                     Enabled = true,
                     DataType = "YCbCr420",
                     ResizeFactorX = depthImage.dimensions.x / (float)colorImage.dimensions.x,
                     ResizeFactorY = depthImage.dimensions.y / (float)colorImage.dimensions.y,
                 },
-                CameraDepth = new RegisterRequest.Types.CameraDepth()
+                CameraDepth = new ClientConfiguration.Types.CameraDepth()
                 {
                     Enabled = true,
 #if UNITY_ANDROID
@@ -109,11 +109,11 @@ public class ARFlowDeviceSample : MonoBehaviour
                     ResolutionX = depthImage.dimensions.x,
                     ResolutionY = depthImage.dimensions.y
                 },
-                CameraTransform = new RegisterRequest.Types.CameraTransform()
+                CameraTransform = new ClientConfiguration.Types.CameraTransform()
                 {
                     Enabled = true
                 },
-                CameraPointCloud = new RegisterRequest.Types.CameraPointCloud()
+                CameraPointCloud = new ClientConfiguration.Types.CameraPointCloud()
                 {
                     Enabled = true,
                     DepthUpscaleFactor = 1.0f,
@@ -172,7 +172,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         }, 0, cameraTransformBytes, 0, transformLength);
 
 
-        _client.SendFrame(new DataFrameRequest()
+        _client.SendFrame(new DataFrame()
         {
             Color = ByteString.CopyFrom(colorImage.Encode()),
             Depth = ByteString.CopyFrom(depthImage.Encode()),
