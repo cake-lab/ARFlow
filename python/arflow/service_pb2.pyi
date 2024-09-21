@@ -4,7 +4,7 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-class RegisterRequest(_message.Message):
+class ClientConfiguration(_message.Message):
     __slots__ = ("device_name", "camera_intrinsics", "camera_color", "camera_depth", "camera_transform", "camera_point_cloud")
     class CameraIntrinsics(_message.Message):
         __slots__ = ("focal_length_x", "focal_length_y", "principal_point_x", "principal_point_y", "resolution_x", "resolution_y")
@@ -64,20 +64,20 @@ class RegisterRequest(_message.Message):
     CAMERA_TRANSFORM_FIELD_NUMBER: _ClassVar[int]
     CAMERA_POINT_CLOUD_FIELD_NUMBER: _ClassVar[int]
     device_name: str
-    camera_intrinsics: RegisterRequest.CameraIntrinsics
-    camera_color: RegisterRequest.CameraColor
-    camera_depth: RegisterRequest.CameraDepth
-    camera_transform: RegisterRequest.CameraTransform
-    camera_point_cloud: RegisterRequest.CameraPointCloud
-    def __init__(self, device_name: _Optional[str] = ..., camera_intrinsics: _Optional[_Union[RegisterRequest.CameraIntrinsics, _Mapping]] = ..., camera_color: _Optional[_Union[RegisterRequest.CameraColor, _Mapping]] = ..., camera_depth: _Optional[_Union[RegisterRequest.CameraDepth, _Mapping]] = ..., camera_transform: _Optional[_Union[RegisterRequest.CameraTransform, _Mapping]] = ..., camera_point_cloud: _Optional[_Union[RegisterRequest.CameraPointCloud, _Mapping]] = ...) -> None: ...
+    camera_intrinsics: ClientConfiguration.CameraIntrinsics
+    camera_color: ClientConfiguration.CameraColor
+    camera_depth: ClientConfiguration.CameraDepth
+    camera_transform: ClientConfiguration.CameraTransform
+    camera_point_cloud: ClientConfiguration.CameraPointCloud
+    def __init__(self, device_name: _Optional[str] = ..., camera_intrinsics: _Optional[_Union[ClientConfiguration.CameraIntrinsics, _Mapping]] = ..., camera_color: _Optional[_Union[ClientConfiguration.CameraColor, _Mapping]] = ..., camera_depth: _Optional[_Union[ClientConfiguration.CameraDepth, _Mapping]] = ..., camera_transform: _Optional[_Union[ClientConfiguration.CameraTransform, _Mapping]] = ..., camera_point_cloud: _Optional[_Union[ClientConfiguration.CameraPointCloud, _Mapping]] = ...) -> None: ...
 
-class RegisterResponse(_message.Message):
+class ClientIdentifier(_message.Message):
     __slots__ = ("uid",)
     UID_FIELD_NUMBER: _ClassVar[int]
     uid: str
     def __init__(self, uid: _Optional[str] = ...) -> None: ...
 
-class DataFrameRequest(_message.Message):
+class DataFrame(_message.Message):
     __slots__ = ("uid", "color", "depth", "transform")
     UID_FIELD_NUMBER: _ClassVar[int]
     COLOR_FIELD_NUMBER: _ClassVar[int]
@@ -89,7 +89,7 @@ class DataFrameRequest(_message.Message):
     transform: bytes
     def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ...) -> None: ...
 
-class DataFrameResponse(_message.Message):
+class Acknowledgement(_message.Message):
     __slots__ = ("message",)
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
     message: str

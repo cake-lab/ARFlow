@@ -15,7 +15,7 @@ from transformers import pipeline
 import arflow
 
 
-class DepthAnythingV2Service(arflow.ARFlowService):
+class DepthAnythingV2Service(arflow.ARFlowServicer):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__()
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -31,7 +31,9 @@ class DepthAnythingV2Service(arflow.ARFlowService):
     def on_frame_received(self, frame_data: Dict[str, Any]):
         color_rgb = frame_data["color_rgb"]
         if self.num_frame % 50 == 0:
-            thread = Thread(target=lambda: (self.run_depth_estimation(color_rgb.copy())) )
+            thread = Thread(
+                target=lambda: (self.run_depth_estimation(color_rgb.copy()))
+            )
             thread.start()
 
         self.num_frame = self.num_frame + 1

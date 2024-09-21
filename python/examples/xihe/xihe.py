@@ -14,20 +14,19 @@ from typing import Any, Dict
 import numpy as np
 import pandas as pd
 import torch
-import utils3d as u3d
-import xihenet_utils
 
 # This import is necessary to avoid an "operator not found" error when loading
 # DO NOT REMOVE (please)
 # To install this (workaround currently), enter "poetry shell" and run:
 # pip install wheel
 # pip install torch-cluster -f https://data.pyg.org/whl/torch-2.4.0+${CUDA}.html (this will take very long).
-import torch_cluster
+import utils3d as u3d
+import xihenet_utils
 
 import arflow
 
 
-class XiheService(arflow.ARFlowService):
+class XiheService(arflow.ARFlowServicer):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__()
 

@@ -10,7 +10,7 @@ import numpy as np
 import arflow
 
 
-class MinimalService(arflow.ARFlowService):
+class MinimalService(arflow.ARFlowServicer):
     def on_register(self, request: arflow.RegisterRequest):
         positions = np.vstack(
             [xyz.ravel() for xyz in np.mgrid[3 * [slice(-10, 10, 10j)]]]

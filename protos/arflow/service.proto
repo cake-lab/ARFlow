@@ -2,16 +2,22 @@ syntax = "proto3";
 
 option csharp_namespace = "ARFlow";
 
-// The ARFlowService service definition.
-service ARFlowService {
-    // Registers a device with the given specifications.
-    rpc register(RegisterRequest) returns (RegisterResponse);
+package arflow;
 
-    // Sends a data frame from a device.
-    rpc data_frame(DataFrameRequest) returns (DataFrameResponse);
+// The ARFlow service definition.
+service ARFlow {
+    // Registers a client with the given specifications.
+    //
+    // The client is registered with the server and is assigned a unique identifier.
+    // The client can then send data frames to the server using the assigned identifier.
+    rpc RegisterClient(ClientConfiguration) returns (ClientIdentifier);
+
+    // Accepts a data frame from a client, returning an acknowledgment.
+    rpc ProcessFrame(DataFrame) returns (Acknowledgement);
 }
 
-message RegisterRequest {
+message ClientConfiguration {
+    // TODO: Add documentation for each field, units of measurement, etc.
     string device_name = 1;
 
     message CameraIntrinsics {
@@ -58,17 +64,17 @@ message RegisterRequest {
     CameraPointCloud camera_point_cloud = 6;
 }
 
-message RegisterResponse {
+message ClientIdentifier {
     string uid = 1;
 }
 
-message DataFrameRequest {
+message DataFrame {
     string uid = 1;
     bytes color = 2;
     bytes depth = 3;
     bytes transform = 4;
 }
 
-message DataFrameResponse {
+message Acknowledgement {
     string message = 1;
 }

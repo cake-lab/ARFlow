@@ -3,45 +3,43 @@
 import pickle
 import threading
 import time
-from typing import List
+from pathlib import Path
 
-from arflow.core import ARFlowService
-from arflow.service_pb2 import DataFrameRequest, RegisterRequest
+from arflow.core import ARFlowServicer
+from arflow.service_pb2 import ClientConfiguration, DataFrame
+from arflow.types import EnrichedARFlowRequest, RequestsHistory, Timestamp
 
 
 class ARFlowPlayer(threading.Thread):
     """A class for replaying ARFlow data."""
 
-    service: ARFlowService
-    frame_data: List
-    n_frame: int
-
-    def __init__(self, service: ARFlowService, frame_data_path: str) -> None:
+    def __init__(self, frame_data_path: Path) -> None:
         super().__init__()
-        self.service = service()
+        self._service = ARFlowServicer()
+        self._requests_history: RequestsHistory = []
         with open(frame_data_path, "rb") as f:
-            raw_data = pickle.load(f)
+            raw_data: RequestsHistory = pickle.load(f)
 
-        self.frame_data = []
         start_delta = 0
         for i, data in enumerate(raw_data):
             if i == 0:
-                start_delta = data["time_stamp"] - 3
-                self.frame_data.append(
-                    {
-                        "time_stamp": data["time_stamp"] - start_delta,
-                        "data": RegisterRequest.FromString(data["data"]),
-                    }
+                start_delta = data["timestamp"] - 3
+                self._requests_history.append(
+                    EnrichedARFlowRequest(
+                        timestamp=Timestamp(data["timestamp"] - start_delta),
+                        data=data["data"],
+                    )
                 )
             else:
-                self.frame_data.append(
-                    {
-                        "time_stamp": data["time_stamp"] - start_delta,
-                        "data": DataFrameRequest.FromString(data["data"]),
-                    }
+                self._requests_history.append(
+                    EnrichedARFlowRequest(
+                        timestamp=Timestamp(data["timestamp"] - start_delta),
+                        data=data["data"],
+                    )
                 )
 
-        self.uid = self.frame_data[1]["data"].uid
+        # TODO: Fix this
+        self.uid = self.frame_data[1]["data"].uid  # type: ignore
 
         self.period = 0.001  # Simulate a 1ms loop.
         self.n_frame = 0
@@ -60,18 +58,20 @@ class ARFlowPlayer(threading.Thread):
         while True:
             current_time = time.time() - self.t0
 
-            t = self.frame_data[self.n_frame]["time_stamp"]
+            t = self._requests_history[self.n_frame]["timestamp"]
 
             if t - current_time < 0.001:
-                data = self.frame_data[self.n_frame]["data"]
-                if self.n_frame == 0:
-                    self.service.register(data, None, uid=self.uid)
+                data = self._requests_history[self.n_frame]["data"]
+                if self.n_frame == 0 and isinstance(data, ClientConfiguration):
+                    self._service.RegisterClient(data, None, init_uid=self.uid)
+                elif isinstance(data, DataFrame):
+                    self._service.ProcessFrame(data, None)
                 else:
-                    self.service.data_frame(data, None)
+                    raise ValueError("Unknown request data type.")
 
                 self.n_frame += 1
 
-            if self.n_frame > len(self.frame_data) - 1:
+            if self.n_frame > len(self._requests_history) - 1:
                 break
 
             self.sleep()

@@ -1,20 +1,20 @@
 """Simple server for ARFlow service."""
 
+import logging
 import sys
 from concurrent import futures
+from pathlib import Path
 
 import grpc
 
 from arflow import service_pb2_grpc
-from arflow.core import ARFlowService
+from arflow.core import ARFlowServicer
 
 
-def create_server(
-    service: ARFlowService, port: int = 8500, path_to_save: str | None = "./"
-):
+def create_server(port: int = 8500, path_to_save: Path | None = None):
     """Run gRPC server."""
     try:
-        service = service()
+        servicer = ARFlowServicer()
         server = grpc.server(
             futures.ThreadPoolExecutor(max_workers=10),
             options=[
@@ -22,25 +22,22 @@ def create_server(
                 ("grpc.max_receive_message_length", -1),
             ],
         )
-        service_pb2_grpc.add_ARFlowServiceServicer_to_server(service, server)
+        service_pb2_grpc.add_ARFlowServicer_to_server(servicer, server)
         server.add_insecure_port("[::]:%s" % port)
         server.start()
-
-        print(f"ARFlow server started on port {port}")
+        print(f"ARFlow server started, listening on {port}")
         server.wait_for_termination()
     except KeyboardInterrupt:
         if path_to_save is not None:
-            service.on_program_exit(path_to_save)
+            servicer.on_program_exit(path_to_save)
         sys.exit(0)
-
-    # except Exception as e:
-    #     print(e)
 
 
 def serve():
     """Run a simple ARFlow server."""
-    create_server(ARFlowService)
+    create_server()
 
 
 if __name__ == "__main__":
+    logging.basicConfig()  # TODO: Replace print with logging
     serve()

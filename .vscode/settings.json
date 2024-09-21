@@ -12,7 +12,7 @@
     },
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
-  "python.analysis.typeCheckingMode": "off", // TODO: Enable strict type checking
+  "python.analysis.typeCheckingMode": "basic",
   "python.analysis.autoImportCompletions": true,
   "[csharp]": {
     "editor.formatOnSave": true,
@@ -20,15 +20,12 @@
     "editor.inlineSuggest.suppressSuggestions": false
   },
   "cSpell.words": [
-        "arange",
     "arflow",
     "astype",
     "Behaviour",
-        "dtype",
     "flipud",
     "frombuffer",
     "gmtime",
-        "meshgrid",
     "ndarray",
     "Protobuf",
     "thecakelab",

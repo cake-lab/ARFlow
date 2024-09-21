@@ -21,7 +21,7 @@ grpcio-tools = "^1.60.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"
-pyright = "^1.1.379"
+pyright = "^1.1.381"
 pytest = "^8.3.2"
 pre-commit = "^3.8.0"
 
@@ -51,12 +51,21 @@ extend-select = ["I"]
 convention = "google"
 
 [tool.pyright]
-typeCheckingMode = "off" # TODO: Enable strict type checking
+typeCheckingMode = "basic" # TODO: Enable strict type checking
+include = ["arflow"]
+exclude = [
+    "examples",
+    "arflow/service_pb2.py",
+    "arflow/service_pb2_grpc.py",
+    "arflow/service_pb2.pyi",
+]
 ignore = [
     "arflow/service_pb2.py",
     "arflow/service_pb2_grpc.py",
     "arflow/service_pb2.pyi",
 ]
-# https://github.com/RobertCraigie/pyright-python#pre-commit
-venvPath = "."
-venv = ".venv"
+defineConstant = { DEBUG = true }
+stubPath = "arflow/stubs"
+
+reportMissingImports = "error"
+reportMissingTypeStubs = false
