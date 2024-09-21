@@ -29,7 +29,7 @@ def create_server(port: int = 8500, path_to_save: Path | None = None):
         server.wait_for_termination()
     except KeyboardInterrupt:
         if path_to_save is not None:
-            servicer.on_program_exit(path_to_save)
+            servicer._on_program_exit(path_to_save)
         sys.exit(0)
 
 

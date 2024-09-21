@@ -51,9 +51,10 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         self._requests_history: RequestsHistory = []
         self._client_configurations: ClientConfigurations = {}
         self.recorder = rr
+        """A recorder object for logging data."""
         super().__init__()
 
-    def save_request(self, request: ARFlowRequest):
+    def _save_request(self, request: ARFlowRequest):
         timestamp = (time.time_ns() - self._start_time) / 1e9
         enriched_request = EnrichedARFlowRequest(
             timestamp=Timestamp(timestamp),
@@ -67,9 +68,12 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         context: grpc.ServicerContext | None = None,
         init_uid: str | None = None,
     ) -> ClientIdentifier:
-        """Register a client."""
+        """
+        @private
+        Register a client.
+        """
 
-        self.save_request(request)
+        self._save_request(request)
 
         if init_uid is None:
             init_uid = str(uuid.uuid4())
@@ -89,9 +93,12 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         request: DataFrame,
         context: grpc.ServicerContext | None = None,
     ) -> Acknowledgement:
-        """Process an incoming frame."""
+        """
+        @private
+        Process an incoming frame.
+        """
 
-        self.save_request(request)
+        self._save_request(request)
 
         # Start processing.
         try:
@@ -196,7 +203,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         """Called when a frame is received. Override this method to process the data."""
         pass
 
-    def on_program_exit(self, path_to_save: Path):
+    def _on_program_exit(self, path_to_save: Path):
         """Save the data and exit."""
         print("Saving the data...")
         f_name = strftime("%Y_%m_%d_%H_%M_%S", gmtime())

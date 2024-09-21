@@ -14,6 +14,7 @@ class ARFlowPlayer(threading.Thread):
     """A class for replaying ARFlow data."""
 
     def __init__(self, frame_data_path: Path) -> None:
+        """Initialize the ARFlowPlayer."""
         super().__init__()
         self._service = ARFlowServicer()
         self._requests_history: RequestsHistory = []
@@ -39,42 +40,43 @@ class ARFlowPlayer(threading.Thread):
                 )
 
         # TODO: Fix this
-        self.uid = self.frame_data[1]["data"].uid  # type: ignore
+        self._uid = self.frame_data[1]["data"].uid  # type: ignore
 
-        self.period = 0.001  # Simulate a 1ms loop.
-        self.n_frame = 0
+        self._period = 0.001  # Simulate a 1ms loop.
+        self._n_frame = 0
 
-        self.i = 0
-        self.t0 = time.time()
+        self._i = 0
+        self._t0 = time.time()
         self.start()
 
-    def sleep(self):
-        self.i += 1
-        delta = self.t0 + self.period * self.i - time.time()
+    def _sleep(self):
+        self._i += 1
+        delta = self._t0 + self._period * self._i - time.time()
         if delta > 0:
             time.sleep(delta)
 
     def run(self):
+        """Run the replay."""
         while True:
-            current_time = time.time() - self.t0
+            current_time = time.time() - self._t0
 
-            t = self._requests_history[self.n_frame]["timestamp"]
+            t = self._requests_history[self._n_frame]["timestamp"]
 
             if t - current_time < 0.001:
-                data = self._requests_history[self.n_frame]["data"]
-                if self.n_frame == 0 and isinstance(data, ClientConfiguration):
-                    self._service.RegisterClient(data, None, init_uid=self.uid)
+                data = self._requests_history[self._n_frame]["data"]
+                if self._n_frame == 0 and isinstance(data, ClientConfiguration):
+                    self._service.RegisterClient(data, None, init_uid=self._uid)
                 elif isinstance(data, DataFrame):
                     self._service.ProcessFrame(data, None)
                 else:
                     raise ValueError("Unknown request data type.")
 
-                self.n_frame += 1
+                self._n_frame += 1
 
-            if self.n_frame > len(self._requests_history) - 1:
+            if self._n_frame > len(self._requests_history) - 1:
                 break
 
-            self.sleep()
+            self._sleep()
 
         print("Reply finished.")
         exit()
