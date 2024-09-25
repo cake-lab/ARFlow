@@ -11,7 +11,7 @@ import arflow
 
 
 class MinimalService(arflow.ARFlowServicer):
-    def on_register(self, request: arflow.RegisterRequest):
+    def on_register(self, request: arflow.ClientConfiguration):
         positions = np.vstack(
             [xyz.ravel() for xyz in np.mgrid[3 * [slice(-10, 10, 10j)]]]
         ).T
@@ -26,7 +26,7 @@ class MinimalService(arflow.ARFlowServicer):
         )
         pass
 
-    def on_frame_received(self, frame_data: arflow.DataFrameRequest):
+    def on_frame_received(self, decoded_data_frame: arflow.DecodedDataFrame):
         print("Received a frame")
 
 

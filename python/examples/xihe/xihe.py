@@ -9,9 +9,9 @@ and Services (MobiSys'21). 28-40.
 """
 
 from threading import Thread
-from typing import Any, Dict
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 import torch
 
@@ -38,25 +38,28 @@ class XiheService(arflow.ARFlowServicer):
 
         self.calculator = xihenet_utils.JointEntropyCalculator()
 
-    def on_register(self, request: arflow.RegisterRequest):
+    def on_register(self, request: arflow.ClientConfiguration):
         self.num_frame = 0
 
-    def on_frame_received(self, frame_data: Dict[str, Any]):
+    def on_frame_received(self, decoded_data_frame: arflow.DecodedDataFrame):
         # Run XiheNet inference.
-        pcd = frame_data["point_cloud_pcd"]
-        clr = frame_data["point_cloud_clr"]
         if self.num_frame % 100 == 0:
             thread = Thread(
-                target=self.run_xihenet_inference, args=(pcd.copy(), clr.copy())
+                target=self.run_xihenet_inference, args=(decoded_data_frame.point_cloud_pcd.copy(), decoded_data_frame.point_cloud_clr.copy())
             )
             thread.start()
 
         self.num_frame = self.num_frame + 1
 
-    def run_xihenet_inference(self, xyz: np.ndarray, rgb: np.ndarray):
+    def run_xihenet_inference(self, xyz: npt.NDArray[np.float32], rgb: npt.NDArray[np.uint8]):
         # Log input entropy.
         entropy = self.calculator.forward(torch.from_numpy(xyz).float())
-        self.recorder.log("Xihe/input_entropy", self.recorder.TimeSeriesScalar(entropy))
+
+        # TODO: FIX THIS https://rerun.io/docs/reference/migration/migration-0-13#timeseriesscalar-deprecated-in-favor-of-scalartypesarchetypesscalarmd--serieslinetypesarchetypesserieslinemdseriespointtypesarchetypesseriespointmd
+        # self.recorder.log("Xihe/input_entropy", self.recorder.TimeSeriesScalar(entropy))
+        self.recorder.log("Xihe/input_entropy", self.recorder.Scalar(entropy))
+        # self.recorder.log("Xihe/input_entropy", self.recorder.SeriesPoint(entropy))
+        # self.recorder.log("Xihe/input_entropy", self.recorder.SeriesLine(entropy))
 
         # Inference preprocessing code copied from previous
         # lighting estimation visualization code.
