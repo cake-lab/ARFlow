@@ -74,7 +74,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ./python/.venv
-          key: venv-$${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
 
       # - name: Install docs dependencies
       #   working-directory: ./python
