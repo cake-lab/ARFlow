@@ -28,14 +28,18 @@ poetry run ruff check # check for linting errors
 poetry run ruff check --fix # check for linting errors and fix them
 
 poetry run ruff format # format the code
-
-poetry run pyright # type check
 ```
 
 All of these quality checks are run automatically before every commit using [`pre-commit`](https://pre-commit.com). To install the pre-commit hooks, run:
 
 ```bash
 poetry run pre-commit install
+```
+
+To manually invoke the pre-commit checks, run:
+
+```bash
+poetry run pre-commit run --all-files
 ```
 
 ### Testing
@@ -46,7 +50,15 @@ ARFlow uses [`pytest`](https://pytest.org). Make sure you are in the `python` di
 poetry run pytest
 ```
 
-###
+### Continuous Integration
+
+ARFlow uses GitHub Actions for continuous integration. The CI pipeline runs the following checks:
+
+```bash
+poetry run ruff check # linting
+poetry run pyright arflow # type checking
+poetry run pytest # testing
+```
 
 ## Packages & Tools
 
@@ -83,7 +95,7 @@ ARFlow uses [`pdoc`](https://pdoc.dev). You can refer to their documentation for
 To preview the documentation locally, run:
 
 ```bash
-poetry run pdoc arflow # or replace with module_name that you want to preview
+poetry run pdoc arflow examples # or replace with module_name that you want to preview
 ```
 
 ## Common Issues

@@ -20,10 +20,10 @@ grpcio = "^1.60.1"
 grpcio-tools = "^1.60.1"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.6.4"
+ruff = "^0.6.4"          # Sync with `.github/ci.yml` if changed
 pytest = "^8.3.2"
 pre-commit = "^3.8.0"
-pyright = "^1.1.381"
+pyright = "^1.1.382"     # Sync with `.github/ci.yml` if changed
 grpc-stubs = "^1.53.0.5"
 
 [tool.poetry.group.docs.dependencies]

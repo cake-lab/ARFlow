@@ -3,12 +3,11 @@ repos:
     rev: v4.6.0
     hooks:
       - id: check-added-large-files
+      - id: check-json
       - id: check-toml
       - id: check-yaml
         args:
           - --unsafe
-      - id: end-of-file-fixer
-      - id: trailing-whitespace
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
     rev: v0.6.4
