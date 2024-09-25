@@ -27,17 +27,23 @@ Create a Python file `simple_arflow_server.py` and paste the following code:
 ```python
 """A simple example of extending the ARFlow server."""
 
+from pathlib import Path
+
 import arflow
 
 
-class CustomService(arflow.ARFlowService):
-    def on_frame_received(self, frame: arflow.DataFrameRequest):
+class CustomService(arflow.ARFlowServicer):
+    def on_register(self, request: arflow.ClientConfiguration):
+        """Called when a client registers."""
+        print("Client registered!")
+
+    def on_frame_received(self, decoded_data_frame: arflow.DecodedDataFrame):
         """Called when a frame is received."""
         print("Frame received!")
 
 
 def main():
-    arflow.create_server(CustomService, port=8500, path_to_save="./")
+    arflow.create_server(CustomService, port=8500, path_to_save=Path("./"))
 
 
 if __name__ == "__main__":
@@ -60,7 +66,6 @@ After lunching the ARFlow client app, follow the onscreen instruction to input t
 Watch our demo video:
 
 [![Demo video](https://img.youtube.com/vi/mml8YrCgfTk/maxresdefault.jpg)](https://youtu.be/mml8YrCgfTk)
-
 
 ## Contribution
 
