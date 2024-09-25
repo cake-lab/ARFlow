@@ -4,6 +4,7 @@ import pickle
 import threading
 import time
 from pathlib import Path
+from typing import Type
 
 from arflow.core import ARFlowServicer
 from arflow.service_pb2 import ClientConfiguration, DataFrame
@@ -13,10 +14,10 @@ from arflow.types import EnrichedARFlowRequest, RequestsHistory
 class ARFlowPlayer(threading.Thread):
     """A class for replaying ARFlow data."""
 
-    def __init__(self, frame_data_path: Path) -> None:
+    def __init__(self, service: Type[ARFlowServicer], frame_data_path: Path) -> None:
         """Initialize the ARFlowPlayer."""
         super().__init__()
-        self._service = ARFlowServicer()
+        self._service = service()
         self._requests_history: RequestsHistory = []
         with open(frame_data_path, "rb") as f:
             raw_data: RequestsHistory = pickle.load(f)

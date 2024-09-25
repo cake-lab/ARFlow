@@ -25,22 +25,27 @@ Next, you may integrate ARFlow with your own research prototype via the Python A
 ```python
 """A simple example of extending the ARFlow server."""
 
+from pathlib import Path
+
 import arflow
 
 
-class CustomService(arflow.ARFlowService):
-    def on_frame_received(self, frame: arflow.DataFrameRequest):
+class CustomService(arflow.ARFlowServicer):
+    def on_register(self, request: arflow.ClientConfiguration):
+        """Called when a client registers."""
+        print("Client registered!")
+
+    def on_frame_received(self, decoded_data_frame: arflow.DecodedDataFrame):
         """Called when a frame is received."""
         print("Frame received!")
 
 
 def main():
-    arflow.create_server(CustomService, port=8500, path_to_save="./")
+    arflow.create_server(CustomService, port=8500, path_to_save=Path("./"))
 
 
 if __name__ == "__main__":
     main()
-
 ```
 
 Save the above code to a file, e.g., `simple_server.py`, and run it:
@@ -56,25 +61,26 @@ You can visualize the data using the ARFlow Player:
 ```python
 """A simple example of replaying saved ARFlow data."""
 
+from pathlib import Path
+
 import arflow
+
 from .simple_server import CustomService
 
 
 def main():
     """Run the example."""
     player = arflow.ARFlowPlayer(
-        CustomService, frame_data_path="FRAME_DATA_PATH.pkl"
+        CustomService, frame_data_path=Path("FRAME_DATA_PATH.pkl")
     )
     player.run()
 
 
 if __name__ == "__main__":
     main()
-
 ```
 
 Save the above code to a file, e.g., `simple_replay.py`, replace `FRAME_DATA_PATH` with the path to your saved `pickle` file, and run it:
-
 
 ```bash
 python3 simple_replay.py

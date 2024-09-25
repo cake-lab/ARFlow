@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+# type: ignore
 """A demo integration with Xihe.
+
+Note: `# type: ignore` is added to the first line to suppress typecheck errors.
+In case you want to copy this code, please remove the first line if you are using typecheck.
 
 Reference:
 - Yiqin Zhao and Tian Guo. 2021. Xihe: A 3D Vision-Based Lighting
