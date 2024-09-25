@@ -12,7 +12,7 @@
     },
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
-  "python.analysis.typeCheckingMode": "standard", // must match the value in the pyproject.toml
+  "python.analysis.typeCheckingMode": "strict", // must match the value in the pyproject.toml
   "python.analysis.autoImportCompletions": true,
   "[csharp]": {
     "editor.formatOnSave": true,

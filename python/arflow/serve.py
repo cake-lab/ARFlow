@@ -1,7 +1,6 @@
 """Simple server for ARFlow service."""
 
 import logging
-import sys
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
@@ -16,14 +15,14 @@ from arflow.core import ARFlowServicer
 def create_server(port: int = 8500, path_to_save: Path | None = None):
     """Run gRPC server."""
     servicer = ARFlowServicer()
-    server = grpc.server(
+    server = grpc.server(  # type: ignore
         futures.ThreadPoolExecutor(max_workers=10),
         options=[
             ("grpc.max_send_message_length", -1),
             ("grpc.max_receive_message_length", -1),
         ],
     )
-    service_pb2_grpc.add_ARFlowServicer_to_server(servicer, server)
+    service_pb2_grpc.add_ARFlowServicer_to_server(servicer, server)  # type: ignore
     server.add_insecure_port("[::]:%s" % port)
     server.start()
     print(f"ARFlow server started, listening on {port}")
@@ -39,7 +38,7 @@ def create_server(port: int = 8500, path_to_save: Path | None = None):
 
         if path_to_save is not None:
             print("Saving data...")
-            servicer._on_program_exit(path_to_save)
+            servicer.on_program_exit(path_to_save)
 
         print("Shut down gracefully")
 

@@ -60,15 +60,10 @@ ignore = ["D417"]
 convention = "google"
 
 [tool.pyright]
-typeCheckingMode = "standard"
+typeCheckingMode = "strict"
 exclude = [
     "examples",
     "arflow/service_pb2.py",
     "arflow/service_pb2_grpc.py",
     "arflow/service_pb2.pyi",
 ]
-
-reportMissingImports = "error"
-reportMissingTypeStubs = true            # TODO: remove
-reportUnknownParameterType = "error"
-reportUntypedFunctionDecorator = "error"

@@ -10,7 +10,6 @@ from time import gmtime, strftime
 
 import grpc
 import numpy as np
-import numpy.typing as npt
 import rerun as rr
 
 from arflow import service_pb2_grpc
@@ -208,8 +207,11 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         """Called when a frame is received. Override this method to process the data."""
         pass
 
-    def _on_program_exit(self, path_to_save: Path):
-        """Save the data and exit."""
+    def on_program_exit(self, path_to_save: Path):
+        """Save the data and exit.
+
+        @private
+        """
         print("Saving the data...")
         f_name = strftime("%Y_%m_%d_%H_%M_%S", gmtime())
         # Ensure the directory exists.
