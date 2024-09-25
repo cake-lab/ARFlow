@@ -7,7 +7,7 @@ from pathlib import Path
 
 from arflow.core import ARFlowServicer
 from arflow.service_pb2 import ClientConfiguration, DataFrame
-from arflow.types import EnrichedARFlowRequest, RequestsHistory, Timestamp
+from arflow.types import EnrichedARFlowRequest, RequestsHistory
 
 
 class ARFlowPlayer(threading.Thread):
@@ -24,23 +24,26 @@ class ARFlowPlayer(threading.Thread):
         start_delta = 0
         for i, data in enumerate(raw_data):
             if i == 0:
-                start_delta = data["timestamp"] - 3
+                start_delta = data.timestamp - 3
                 self._requests_history.append(
                     EnrichedARFlowRequest(
-                        timestamp=Timestamp(data["timestamp"] - start_delta),
-                        data=data["data"],
+                        timestamp=data.timestamp - start_delta,
+                        data=data.data,
                     )
                 )
             else:
                 self._requests_history.append(
                     EnrichedARFlowRequest(
-                        timestamp=Timestamp(data["timestamp"] - start_delta),
-                        data=data["data"],
+                        timestamp=data.timestamp - start_delta,
+                        data=data.data,
                     )
                 )
 
-        # TODO: Fix this
-        self._uid = self.frame_data[1]["data"].uid  # type: ignore
+        sent_dataframe = self._requests_history[1].data
+        if not isinstance(sent_dataframe, DataFrame):
+            raise ValueError("The second request should be a DataFrame.")
+        else:
+            self._uid = sent_dataframe.uid
 
         self._period = 0.001  # Simulate a 1ms loop.
         self._n_frame = 0
@@ -60,10 +63,10 @@ class ARFlowPlayer(threading.Thread):
         while True:
             current_time = time.time() - self._t0
 
-            t = self._requests_history[self._n_frame]["timestamp"]
+            t = self._requests_history[self._n_frame].timestamp
 
             if t - current_time < 0.001:
-                data = self._requests_history[self._n_frame]["data"]
+                data = self._requests_history[self._n_frame].data
                 if self._n_frame == 0 and isinstance(data, ClientConfiguration):
                     self._service.RegisterClient(data, None, init_uid=self._uid)
                 elif isinstance(data, DataFrame):

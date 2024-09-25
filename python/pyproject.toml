@@ -15,15 +15,16 @@ repository = "https://github.com/cake-lab/ARFlow"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
-rerun-sdk = "^0.12.1"
+rerun-sdk = "^0.18.2"
 grpcio = "^1.60.1"
 grpcio-tools = "^1.60.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"
-pyright = "^1.1.381"
 pytest = "^8.3.2"
 pre-commit = "^3.8.0"
+pyright = "^1.1.381"
+grpc-stubs = "^1.53.0.5"
 
 [tool.poetry.group.docs.dependencies]
 pdoc = "^14.6.1"
@@ -38,6 +39,7 @@ serve = "arflow.serve:serve"
 [tool.ruff]
 # gRPC generated files
 extend-exclude = [
+    "examples",
     "arflow/service_pb2.py",
     "arflow/service_pb2_grpc.py",
     "arflow/service_pb2.pyi",
@@ -46,26 +48,27 @@ extend-exclude = [
 [tool.ruff.lint]
 # https://github.com/astral-sh/ruff-vscode/blob/main/README.md#configuring-vs-code
 extend-select = ["I"]
+# Enable all `pydocstyle` rules, limiting to those that adhere to the
+# Google convention via `convention = "google"`, below.
+select = ["D"]
+
+# On top of the Google convention, disable `D417`, which requires
+# documentation for every function parameter.
+ignore = ["D417"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.pyright]
-typeCheckingMode = "basic" # TODO: Enable strict type checking
-include = ["arflow"]
+typeCheckingMode = "standard"
 exclude = [
     "examples",
     "arflow/service_pb2.py",
     "arflow/service_pb2_grpc.py",
     "arflow/service_pb2.pyi",
 ]
-ignore = [
-    "arflow/service_pb2.py",
-    "arflow/service_pb2_grpc.py",
-    "arflow/service_pb2.pyi",
-]
-defineConstant = { DEBUG = true }
-stubPath = "arflow/stubs"
 
 reportMissingImports = "error"
-reportMissingTypeStubs = false
+reportMissingTypeStubs = true            # TODO: remove
+reportUnknownParameterType = "error"
+reportUntypedFunctionDecorator = "error"

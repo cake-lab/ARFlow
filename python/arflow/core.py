@@ -7,10 +7,10 @@ import uuid
 from abc import abstractmethod
 from pathlib import Path
 from time import gmtime, strftime
-from typing import Tuple
 
 import grpc
 import numpy as np
+import numpy.typing as npt
 import rerun as rr
 
 from arflow import service_pb2_grpc
@@ -38,7 +38,6 @@ from arflow.types import (
     PointCloudCLR,
     PointCloudPCD,
     RequestsHistory,
-    Timestamp,
     Transform,
 )
 
@@ -47,6 +46,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
     """Provides methods that implement the functionality of the ARFlow gRPC server."""
 
     def __init__(self) -> None:
+        """Initialize the ARFlowServicer."""
         self._start_time = time.time_ns()
         self._requests_history: RequestsHistory = []
         self._client_configurations: ClientConfigurations = {}
@@ -57,7 +57,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
     def _save_request(self, request: ARFlowRequest):
         timestamp = (time.time_ns() - self._start_time) / 1e9
         enriched_request = EnrichedARFlowRequest(
-            timestamp=Timestamp(timestamp),
+            timestamp=timestamp,
             data=request,
         )
         self._requests_history.append(enriched_request)
@@ -68,11 +68,10 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         context: grpc.ServicerContext | None = None,
         init_uid: str | None = None,
     ) -> ClientIdentifier:
-        """
-        @private
-        Register a client.
-        """
+        """Register a client.
 
+        @private
+        """
         self._save_request(request)
 
         if init_uid is None:
@@ -93,11 +92,10 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         request: DataFrame,
         context: grpc.ServicerContext | None = None,
     ) -> Acknowledgement:
-        """
-        @private
-        Process an incoming frame.
-        """
+        """Process an incoming frame.
 
+        @private
+        """
         self._save_request(request)
 
         # Start processing.
@@ -113,25 +111,29 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         color_rgb: ColorRGB | None = None
         depth_img: DepthImg | None = None
         transform: Transform | None = None
+        k: Intrinsic | None = None
         point_cloud_pcd: PointCloudPCD | None = None
         point_cloud_clr: PointCloudCLR | None = None
 
         if client_config.camera_color.enabled:
-            if client_config.camera_color.data_type not in ["RGB24", "YCbCr420"]:
-                if context is not None:
-                    set_grpc_error(
-                        context,
-                        GRPCError(
-                            details=f"Unknown color data type: {client_config.camera_color.data_type}",
-                            status_code=grpc.StatusCode.INVALID_ARGUMENT,
-                        ),
-                    )
-            color_rgb = np.flipud(decode_rgb_image(client_config, request.color))
+            if (
+                client_config.camera_color.data_type not in ["RGB24", "YCbCr420"]
+                and context is not None
+            ):
+                set_grpc_error(
+                    context,
+                    GRPCError(
+                        details=f"Unknown color data type: {client_config.camera_color.data_type}",
+                        status_code=grpc.StatusCode.INVALID_ARGUMENT,
+                    ),
+                )
+            color_rgb = np.flipud(_decode_rgb_image(client_config, request.color))
             self.recorder.log("rgb", rr.Image(color_rgb))
 
         if client_config.camera_depth.enabled:
-            depth_img = np.flipud(decode_depth_image(client_config, request.depth))
-            self.recorder.log("depth", rr.DepthImage(depth_img, meter=1.0))
+            depth_img = np.flipud(_decode_depth_image(client_config, request.depth))
+            # https://github.com/rerun-io/rerun/blob/79da203f08e719f3b56029893185c3631f2a8b54/rerun_py/rerun_sdk/rerun/archetypes/encoded_image_ext.py#L15
+            self.recorder.log("depth", rr.DepthImage(depth_img, meter=1.0))  # type: ignore
 
         if client_config.camera_transform.enabled:
             self.recorder.log("world/origin", rr.ViewCoordinates.RIGHT_HAND_Y_DOWN)
@@ -143,7 +145,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
             #     ),
             # )
 
-            transform = decode_transform(request.transform)
+            transform = _decode_transform(request.transform)
             self.recorder.log(
                 "world/camera",
                 self.recorder.Transform3D(
@@ -151,18 +153,19 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 ),
             )
 
-            k = decode_intrinsic(client_config)
+            k = _decode_intrinsic(client_config)
             self.recorder.log("world/camera", rr.Pinhole(image_from_camera=k))
             if color_rgb is not None:
                 self.recorder.log("world/camera", rr.Image(np.flipud(color_rgb)))
 
         if client_config.camera_point_cloud.enabled:
             if (
-                color_rgb is not None
+                k is not None
+                and color_rgb is not None
                 and depth_img is not None
                 and transform is not None
             ):
-                point_cloud_pcd, point_cloud_clr = decode_point_cloud(
+                point_cloud_pcd, point_cloud_clr = _decode_point_cloud(
                     client_config, k, color_rgb, depth_img, transform
                 )
                 self.recorder.log(
@@ -178,6 +181,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
             color_rgb is not None
             and depth_img is not None
             and transform is not None
+            and k is not None
             and point_cloud_pcd is not None
             and point_cloud_clr is not None
         ):
@@ -186,6 +190,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                     color_rgb=color_rgb,
                     depth_img=depth_img,
                     transform=transform,
+                    intrinsic=k,
                     point_cloud_pcd=point_cloud_pcd,
                     point_cloud_clr=point_cloud_clr,
                 )
@@ -216,7 +221,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         print(f"Data saved to {save_path}")
 
 
-def decode_rgb_image(client_config: ClientConfiguration, buffer: bytes) -> ColorRGB:
+def _decode_rgb_image(client_config: ClientConfiguration, buffer: bytes) -> ColorRGB:
     # Calculate the size of the image.
     color_img_w = int(
         client_config.camera_intrinsics.resolution_x
@@ -259,7 +264,7 @@ def decode_rgb_image(client_config: ClientConfiguration, buffer: bytes) -> Color
     return color_rgb
 
 
-def decode_depth_image(client_config: ClientConfiguration, buffer: bytes) -> DepthImg:
+def _decode_depth_image(client_config: ClientConfiguration, buffer: bytes) -> DepthImg:
     if client_config.camera_depth.data_type == "f32":
         dtype = np.float32
     elif client_config.camera_depth.data_type == "u16":
@@ -285,7 +290,7 @@ def decode_depth_image(client_config: ClientConfiguration, buffer: bytes) -> Dep
     return depth_img
 
 
-def decode_transform(buffer: bytes) -> Transform:
+def _decode_transform(buffer: bytes) -> Transform:
     y_down_to_y_up = np.array(
         [
             [1.0, -0.0, 0.0, 0],
@@ -305,7 +310,7 @@ def decode_transform(buffer: bytes) -> Transform:
     return transform
 
 
-def decode_intrinsic(client_config: ClientConfiguration) -> Intrinsic:
+def _decode_intrinsic(client_config: ClientConfiguration) -> Intrinsic:
     sx = client_config.camera_color.resize_factor_x
     sy = client_config.camera_color.resize_factor_y
 
@@ -323,13 +328,13 @@ def decode_intrinsic(client_config: ClientConfiguration) -> Intrinsic:
     return k
 
 
-def decode_point_cloud(
+def _decode_point_cloud(
     client_config: ClientConfiguration,
     k: Intrinsic,
     color_rgb: ColorRGB,
     depth_img: DepthImg,
     transform: Transform,
-) -> Tuple[PointCloudPCD, PointCloudCLR]:
+) -> tuple[PointCloudPCD, PointCloudCLR]:
     # Flip image is needed for point cloud generation.
     color_rgb = np.flipud(color_rgb)
     depth_img = np.flipud(depth_img)
@@ -342,9 +347,8 @@ def decode_point_cloud(
         client_config.camera_intrinsics.resolution_y
         * client_config.camera_color.resize_factor_y
     )
-    u, v = np.meshgrid(
-        np.arange(color_img_w, dtype=np.int32), np.arange(color_img_h, dtype=np.int32)
-    )
+
+    u, v = np.meshgrid(np.arange(color_img_w), np.arange(color_img_h))
 
     fx: np.float32 = k[0, 0]
     fy: np.float32 = k[1, 1]
@@ -354,8 +358,8 @@ def decode_point_cloud(
     z = depth_img.copy()
     x = ((u - cx) * z) / fx
     y = ((v - cy) * z) / fy
-    pcd = np.stack([x, y, z], axis=-1).reshape(-1, 3)
-    pcd = np.matmul(transform[:3, :3], pcd.T).T + transform[:3, 3]
+    pre_pcd = np.stack([x, y, z], axis=-1).reshape(-1, 3)
+    pcd: PointCloudPCD = np.matmul(transform[:3, :3], pre_pcd.T).T + transform[:3, 3]
     clr = color_rgb.reshape(-1, 3)
 
-    return pcd, clr  # type: ignore
+    return pcd, clr
