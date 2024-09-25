@@ -45,10 +45,10 @@ jobs:
           path: ./python/.venv
           key: venv-$${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
 
-      - name: Install dev & docs dependencies (used by later docs workflow)
+      - name: Install dependencies (used by later workflows)
         working-directory: ./python
         run: |
-          poetry install --with dev,docs
+          poetry install
           echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
           echo "VIRTUAL_ENV=$(poetry env info --path)/bin" >> $GITHUB_ENV
 

@@ -76,22 +76,22 @@ jobs:
           path: ./python/.venv
           key: venv-$${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
 
-      - name: Install docs dependencies
-        working-directory: ./python
-        run: |
-          poetry install --with docs
-          echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
-          echo "VIRTUAL_ENV=$(poetry env info --path)/bin" >> $GITHUB_ENV
+      # - name: Install docs dependencies
+      #   working-directory: ./python
+      #   run: |
+      #     poetry install --with docs
+      #     echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
+      #     echo "VIRTUAL_ENV=$(poetry env info --path)/bin" >> $GITHUB_ENV
 
-      - name: Saved cached virtualenv
-        uses: actions/cache/save@v4
-        with:
-          path: ./python/.venv
-          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+      # - name: Saved cached virtualenv
+      #   uses: actions/cache/save@v4
+      #   with:
+      #     path: ./python/.venv
+      #     key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
 
       - name: Build the documentation
         working-directory: ./python
-        run: poetry run python tools/make_docs_cli.py
+        run: python tools/make_docs_cli.py
 
       - name: Move docs to website directory
         run: |
