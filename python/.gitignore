@@ -1,37 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/macos,windows,visualstudiocode,python
-# Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,visualstudiocode,python
-
-### macOS ###
-# General
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-### macOS Patch ###
-# iCloud generated files
-*.icloud
+# Created by https://www.toptal.com/developers/gitignore/api/python
+# Edit at https://www.toptal.com/developers/gitignore?templates=python
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -128,18 +96,20 @@ ipython_config.py
 #   However, in case of collaboration, if having platform-specific dependencies or dependencies
 #   having no cross-platform support, pipenv may install dependencies that don't work, or not
 #   install all needed dependencies.
-Pipfile.lock
+#Pipfile.lock
 
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
 #   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-# poetry.lock
+# NOTICE FOR ARFLOW DEVELOPERS: poetry.lock should be kept in version control. See
+# https://python-poetry.org/docs/basic-usage/#as-a-library-developer
+#poetry.lock
 
 # pdm
 #   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-pdm.lock
+#pdm.lock
 #   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
 #   in version control.
 #   https://pdm.fming.dev/#use-with-ide
@@ -205,57 +175,4 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
-
-# Local History for Visual Studio Code
-.history/
-
-# Built Visual Studio Code Extensions
-*.vsix
-
-### VisualStudioCode Patch ###
-# Ignore all local history of files
-.history
-.ionide
-
-### Windows ###
-# Windows thumbnail cache files
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-
-# Dump file
-*.stackdump
-
-# Folder config file
-[Dd]esktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# End of https://www.toptal.com/developers/gitignore/api/macos,windows,visualstudiocode,python
-
-test_data/*
-docs/*
-
-# Ignore all gRPC-generated files
-# arflow/service_pb2_grpc.py
-# arflow/service_pb2.py
-# arflow/service_pb2.pyi
+# End of https://www.toptal.com/developers/gitignore/api/python
