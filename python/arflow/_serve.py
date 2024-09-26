@@ -2,7 +2,7 @@
 
 import logging
 
-from arflow.core import ARFlowServicer, create_server
+from arflow._core import ARFlowServicer, create_server
 
 
 def serve():

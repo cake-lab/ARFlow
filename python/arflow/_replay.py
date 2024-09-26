@@ -6,9 +6,9 @@ import time
 from pathlib import Path
 from typing import Type
 
-from arflow.core import ARFlowServicer
-from arflow.service_pb2 import ClientConfiguration, DataFrame
-from arflow.types import EnrichedARFlowRequest, RequestsHistory
+from arflow._core import ARFlowServicer
+from arflow._types import EnrichedARFlowRequest, RequestsHistory
+from arflow_grpc.service_pb2 import ClientConfiguration, DataFrame
 
 
 class ARFlowPlayer(threading.Thread):
@@ -59,7 +59,7 @@ class ARFlowPlayer(threading.Thread):
         if delta > 0:
             time.sleep(delta)
 
-    def run(self):
+    def run(self) -> None:
         """Run the replay."""
         while True:
             current_time = time.time() - self._t0

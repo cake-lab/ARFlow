@@ -74,3 +74,5 @@ jobs:
 
       # TODO: Add package building, publishing to PyPI, sending Slack notifications
       # See https://hackernoon.com/how-to-integrate-github-actions-and-cicd-with-your-next-python-project
+      # Also need to add `py.typed` in published distribution.
+      # See https://dagster.io/blog/adding-python-types#step-2-mark-published-package-with-pytyped

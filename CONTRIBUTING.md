@@ -42,6 +42,16 @@ To manually invoke the pre-commit checks, run:
 poetry run pre-commit run --all-files
 ```
 
+### Type Completeness
+
+Library authors are encouraged to prioritize bringing their public API to 100% type coverage. Although this is very hard in ARFlow's case due to our dependency on `gRPC`, we should still strive to achieve this goal. To check for type completeness, run:
+
+```bash
+poetry run pyright --ignoreexternal --verifytypes arflow
+```
+
+To read more about formalizing libraries' public APIs, please refer to this excellent [blog post](https://dagster.io/blog/adding-python-types#-step-3-formalize-public-api) by Dagster.
+
 ### Testing
 
 ARFlow uses [`pytest`](https://pytest.org). Make sure you are in the `python` directory and then run tests with:
@@ -72,7 +82,7 @@ ARFlow uses `poetry` to manage dependencies and run commands. Commands can be fo
 
 A language-neutral, platform-neutral, extensible mechanism for serializing structured data.
 
-ARFlow uses `protobuf` to define the communication protocol between the server and the client. The protocol is defined in [`service.proto`](../protos/arflow/service.proto) and can be compiled using [`compile.sh`](../protos/scripts/compile.sh).
+ARFlow uses `protobuf` to define the communication protocol between the server and the client. The protocol is defined in [`service.proto`](./protos/arflow/_grpc/service.proto) and can be compiled using [`compile.sh`](./protos/compile.sh).
 
 ### [`pickle`](https://docs.python.org/3/library/pickle.html)
 
@@ -90,7 +100,7 @@ ARFlow uses the Rerun Python SDK to visualize the data collected by the ARFlow s
 
 ## Documentation
 
-ARFlow uses [`pdoc`](https://pdoc.dev). You can refer to their documentation for more information on how to generate documentation. If you create a new submodule, make sure to add it to the `__all__` list defined in the `_init__.py` file of the `arflow` package.
+ARFlow uses [`pdoc`](https://pdoc.dev). You can refer to their documentation for more information on how to generate documentation.
 
 To preview the documentation locally, run:
 
@@ -107,3 +117,7 @@ VSCode may force changes the locale to `en_US.UTF-8` for git commit hooks. To fi
 ```bash
 sudo locale-gen en_US.UTF-8
 ```
+
+### Running Rerun on WSL2
+
+Please refer to their documentation [documentation](https://rerun.io/docs/getting-started/troubleshooting#wsl2).

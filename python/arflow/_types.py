@@ -8,7 +8,7 @@ from typing import Dict, List, NewType
 import numpy as np
 import numpy.typing as npt
 
-from arflow.service_pb2 import ClientConfiguration, DataFrame
+from arflow_grpc.service_pb2 import ClientConfiguration, DataFrame
 
 ARFlowRequest = DataFrame | ClientConfiguration
 

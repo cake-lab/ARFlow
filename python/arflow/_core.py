@@ -8,27 +8,19 @@ from abc import abstractmethod
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from time import gmtime, strftime
 from typing import Any, Type
 
 import grpc
 import numpy as np
 import rerun as rr
 
-from arflow import service_pb2_grpc
-from arflow.errors import (
+from arflow._errors import (
     GRPC_CLIENT_CONFIG_NOT_FOUND,
     CannotReachException,
     GRPCError,
     set_grpc_error,
 )
-from arflow.service_pb2 import (
-    Acknowledgement,
-    ClientConfiguration,
-    ClientIdentifier,
-    DataFrame,
-)
-from arflow.types import (
+from arflow._types import (
     ARFlowRequest,
     ClientConfigurations,
     ColorRGB,
@@ -41,6 +33,13 @@ from arflow.types import (
     PointCloudPCD,
     RequestsHistory,
     Transform,
+)
+from arflow_grpc import service_pb2_grpc
+from arflow_grpc.service_pb2 import (
+    Acknowledgement,
+    ClientConfiguration,
+    ClientIdentifier,
+    DataFrame,
 )
 
 
@@ -201,25 +200,27 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         return Acknowledgement(message="OK")
 
     @abstractmethod
-    def on_register(self, request: ClientConfiguration):
+    def on_register(self, request: ClientConfiguration) -> None:
         """Called when a new device is registered. Override this method to process the data."""
         pass
 
     @abstractmethod
-    def on_frame_received(self, decoded_data_frame: DecodedDataFrame):
+    def on_frame_received(self, decoded_data_frame: DecodedDataFrame) -> None:
         """Called when a frame is received. Override this method to process the data."""
         pass
 
-    def on_program_exit(self, path_to_save: Path):
+    def on_program_exit(self, path_to_save: Path) -> None:
         """Save the data and exit.
 
         @private
         """
         print("Saving the data...")
-        f_name = strftime("%Y_%m_%d_%H_%M_%S", gmtime())
         # Ensure the directory exists.
         path_to_save.parent.mkdir(parents=True, exist_ok=True)
-        save_path = os.path.join(path_to_save, f"frames_{f_name}.pkl")
+        save_path = os.path.join(
+            path_to_save,
+            f"frames_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.pkl",
+        )
         with open(save_path, "wb") as f:
             pickle.dump(self._requests_history, f)
 
@@ -394,12 +395,22 @@ def create_server(
     print(f"Server started, listening on {port}")
 
     def handle_shutdown(*_: Any) -> None:
-        """Shutdown gracefully."""
+        """Shutdown gracefully.
+
+        This function handles graceful shutdown of the server. It is triggered by termination signals,
+        which are typically sent by Kubernetes or other orchestration tools to stop the service.
+
+        - When running locally, pressing <Ctrl+C> will raise a `KeyboardInterrupt`, which can be caught to call this function.
+        - In a Kubernetes environment, a SIGTERM signal is sent to the service, followed by a SIGKILL if the service does not stop within 30 seconds.
+
+        Steps:
+        1. Catch the SIGTERM signal.
+        2. Call `server.stop(30)` to refuse new requests and wait up to 30 seconds for ongoing requests to complete.
+        3. Wait on the `threading.Event` object returned by `server.stop(30)` to ensure Python does not exit prematurely.
+        4. Optionally, perform cleanup procedures and save any necessary data before shutting down completely.
+        """
         print("Received shutdown signal")
-        # shutdows gracefully, refuse new requests, and wait for all RPCs to finish
-        # returns a `threading.Event` object on which to wait
         all_rpcs_done_event = server.stop(30)
-        # block/wait the object so Python doesn't exit prematurely
         all_rpcs_done_event.wait(30)
 
         if path_to_save is not None:
@@ -408,6 +419,6 @@ def create_server(
 
         print("Shut down gracefully")
 
-    signal(SIGTERM, handle_shutdown)  # request to terminate the process
-    signal(SIGINT, handle_shutdown)  # request to interrupt the process
+    signal(SIGTERM, handle_shutdown)
+    signal(SIGINT, handle_shutdown)
     server.wait_for_termination()

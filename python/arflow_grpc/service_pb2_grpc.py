@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from arflow import service_pb2 as arflow_dot_service__pb2
+from arflow_grpc import service_pb2 as arflow__grpc_dot_service__pb2
 
 GRPC_GENERATED_VERSION = '1.66.1'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in arflow/service_pb2_grpc.py depends on'
+        + f' but the generated code in arflow_grpc/service_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -37,13 +37,13 @@ class ARFlowStub(object):
         """
         self.RegisterClient = channel.unary_unary(
                 '/arflow.ARFlow/RegisterClient',
-                request_serializer=arflow_dot_service__pb2.ClientConfiguration.SerializeToString,
-                response_deserializer=arflow_dot_service__pb2.ClientIdentifier.FromString,
+                request_serializer=arflow__grpc_dot_service__pb2.ClientConfiguration.SerializeToString,
+                response_deserializer=arflow__grpc_dot_service__pb2.ClientIdentifier.FromString,
                 _registered_method=True)
         self.ProcessFrame = channel.unary_unary(
                 '/arflow.ARFlow/ProcessFrame',
-                request_serializer=arflow_dot_service__pb2.DataFrame.SerializeToString,
-                response_deserializer=arflow_dot_service__pb2.Acknowledgement.FromString,
+                request_serializer=arflow__grpc_dot_service__pb2.DataFrame.SerializeToString,
+                response_deserializer=arflow__grpc_dot_service__pb2.Acknowledgement.FromString,
                 _registered_method=True)
 
 
@@ -73,13 +73,13 @@ def add_ARFlowServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'RegisterClient': grpc.unary_unary_rpc_method_handler(
                     servicer.RegisterClient,
-                    request_deserializer=arflow_dot_service__pb2.ClientConfiguration.FromString,
-                    response_serializer=arflow_dot_service__pb2.ClientIdentifier.SerializeToString,
+                    request_deserializer=arflow__grpc_dot_service__pb2.ClientConfiguration.FromString,
+                    response_serializer=arflow__grpc_dot_service__pb2.ClientIdentifier.SerializeToString,
             ),
             'ProcessFrame': grpc.unary_unary_rpc_method_handler(
                     servicer.ProcessFrame,
-                    request_deserializer=arflow_dot_service__pb2.DataFrame.FromString,
-                    response_serializer=arflow_dot_service__pb2.Acknowledgement.SerializeToString,
+                    request_deserializer=arflow__grpc_dot_service__pb2.DataFrame.FromString,
+                    response_serializer=arflow__grpc_dot_service__pb2.Acknowledgement.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -108,8 +108,8 @@ class ARFlow(object):
             request,
             target,
             '/arflow.ARFlow/RegisterClient',
-            arflow_dot_service__pb2.ClientConfiguration.SerializeToString,
-            arflow_dot_service__pb2.ClientIdentifier.FromString,
+            arflow__grpc_dot_service__pb2.ClientConfiguration.SerializeToString,
+            arflow__grpc_dot_service__pb2.ClientIdentifier.FromString,
             options,
             channel_credentials,
             insecure,
@@ -135,8 +135,8 @@ class ARFlow(object):
             request,
             target,
             '/arflow.ARFlow/ProcessFrame',
-            arflow_dot_service__pb2.DataFrame.SerializeToString,
-            arflow_dot_service__pb2.Acknowledgement.FromString,
+            arflow__grpc_dot_service__pb2.DataFrame.SerializeToString,
+            arflow__grpc_dot_service__pb2.Acknowledgement.FromString,
             options,
             channel_credentials,
             insecure,
