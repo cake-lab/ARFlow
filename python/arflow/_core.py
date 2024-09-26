@@ -174,24 +174,16 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 )
 
         # Call the for user extension code.
-        if (
-            color_rgb is not None
-            and depth_img is not None
-            and transform is not None
-            and k is not None
-            and point_cloud_pcd is not None
-            and point_cloud_clr is not None
-        ):
-            self.on_frame_received(
-                DecodedDataFrame(
-                    color_rgb=color_rgb,
-                    depth_img=depth_img,
-                    transform=transform,
-                    intrinsic=k,
-                    point_cloud_pcd=point_cloud_pcd,
-                    point_cloud_clr=point_cloud_clr,
-                )
+        self.on_frame_received(
+            DecodedDataFrame(
+                color_rgb=color_rgb,
+                depth_img=depth_img,
+                transform=transform,
+                intrinsic=k,
+                point_cloud_pcd=point_cloud_pcd,
+                point_cloud_clr=point_cloud_clr,
             )
+        )
 
         return Acknowledgement(message="OK")
 

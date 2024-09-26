@@ -35,17 +35,17 @@ PointCloudCLR = npt.NDArray[np.uint8]
 class DecodedDataFrame:
     """A decoded data frame."""
 
-    color_rgb: ColorRGB
+    color_rgb: ColorRGB | None = None
     """The color image in RGB format."""
-    depth_img: DepthImg
+    depth_img: DepthImg | None = None
     """The depth image. f32 for iOS, u16 for Android."""
-    transform: Transform
+    transform: Transform | None = None
     """The transformation matrix of the camera."""
-    intrinsic: Intrinsic
+    intrinsic: Intrinsic | None = None
     """The intrinsic matrix of the camera."""
-    point_cloud_pcd: PointCloudPCD
+    point_cloud_pcd: PointCloudPCD | None = None
     """The point cloud in PCD format."""
-    point_cloud_clr: PointCloudCLR
+    point_cloud_clr: PointCloudCLR | None = None
     """The point cloud colors in RGB format."""
 
 
