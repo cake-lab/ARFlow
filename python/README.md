@@ -6,7 +6,7 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Checked with pyright](https://microsoft.github.io/pyright/img/pyright_badge.svg)](https://microsoft.github.io/pyright/)
 [![CI status](https://github.com/cake-lab/ARFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/cake-lab/ARFlow/actions)
-[![Website status](https://github.com/cake-lab/ARFlow/actions/workflows/website.yml/badge.svg)](https://github.com/cake-lab/ARFlow/actions)
+[![Release status](https://github.com/cake-lab/ARFlow/actions/workflows/release.yml/badge.svg)](https://github.com/cake-lab/ARFlow/actions)
 
 The ARFlow Python server collects streaming data from your ARFlow clients. The server is designed to be easily extensible and can be integrated with your own research prototype. Data is streamed to the `rerun` logger and saved to a `pickle` file at the end of a session, which can be visualized later using the ARFlow Player.
 

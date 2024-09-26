@@ -4,7 +4,6 @@ import os
 import pickle
 import time
 import uuid
-from abc import abstractmethod
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
@@ -175,9 +174,6 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 )
 
         # Call the for user extension code.
-        # TODO: I really, really cannot figure out why TypedDict with total=False is not working properly
-        # so the type guard should not be necessary. The point is to provide type hints for UX but also
-        # allow for missing keys.
         if (
             color_rgb is not None
             and depth_img is not None
@@ -199,12 +195,10 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
 
         return Acknowledgement(message="OK")
 
-    @abstractmethod
     def on_register(self, request: ClientConfiguration) -> None:
         """Called when a new device is registered. Override this method to process the data."""
         pass
 
-    @abstractmethod
     def on_frame_received(self, decoded_data_frame: DecodedDataFrame) -> None:
         """Called when a frame is received. Override this method to process the data."""
         pass

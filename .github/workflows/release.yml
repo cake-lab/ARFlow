@@ -1,24 +1,19 @@
-name: CI
+name: Release
 
 on:
   push:
-    branches:
-      - main
-
-  pull_request:
-    branches:
-      - main
+    tags:
+      - "*"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# security: restrict permissions for CI jobs.
 permissions:
   contents: read
 
 jobs:
-  server-ci:
-    name: Server CI
+  release:
+    name: Release package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -46,7 +41,7 @@ jobs:
           path: ./python/.venv
           key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
 
-      - name: Install dependencies (used by later workflows)
+      - name: Install dependencies (skipped if cache hit, fallback to install)
         working-directory: ./python
         run: |
           poetry install
@@ -59,16 +54,14 @@ jobs:
           path: ./python/.venv
           key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
 
-      - name: Lint with ruff
+      - name: Use PyPI API token
         working-directory: ./python
-        run: ruff check --output-format=github
+        run: poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
 
-      - name: Typecheck with pyright
+      - name: Build and publish the package
         working-directory: ./python
-        run: pyright arflow
+        run: poetry publish --build
 
-      - name: Test with pytest
-        working-directory: ./python
-        # TODO: Add coverage tracking once we have a stable test suite
-        run: |
-          pytest
+  publish-docs:
+    name: Publish documentation
+    uses: ./.github/workflows/publish-docs.yml

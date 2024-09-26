@@ -1,31 +1,16 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Build docs site
+name: Publish docs
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches:
-      - main
-
-  workflow_run:
-    workflows: ["CI"]
-    branches: ["main"]
-    types:
-      - completed
-
-    # Alternative: only build for tags.
-    # tags:
-    #   - '*'
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  workflow_call:
 
-# security: restrict permissions for CI jobs.
 permissions:
   contents: read
 
 jobs:
   build-client-docs-as-artifact:
+    name: Build client docs
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,6 +33,7 @@ jobs:
           path: ./unity/Documentation/clientHTMLOutput
 
   build-server-docs:
+    name: Build server docs
     needs: build-client-docs-as-artifact
     runs-on: ubuntu-latest
     steps:
@@ -118,7 +104,8 @@ jobs:
           path: ./website
 
   # Single deploy job since we're just deploying
-  deploy:
+  deploy-website:
+    name: Deploy website
     needs: build-server-docs
     runs-on: ubuntu-latest
     permissions:
