@@ -62,7 +62,7 @@ class DepthAnythingV2Service(arflow.ARFlowServicer):
 def main() -> None:
     # sanity-check since all other example scripts take arguments:
     assert len(sys.argv) == 1, f"{sys.argv[0]} does not take any arguments"
-    arflow.create_server(DepthAnythingV2Service, port=8500, path_to_save=None)
+    arflow.run_server(DepthAnythingV2Service, port=8500, path_to_save=None)
 
 
 if __name__ == "__main__":

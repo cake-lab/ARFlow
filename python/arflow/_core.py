@@ -365,9 +365,9 @@ def _decode_point_cloud(
     return pcd, clr
 
 
-def create_server(
+def run_server(
     service: Type[ARFlowServicer], port: int = 8500, path_to_save: Path | None = None
-):
+) -> None:
     """Run gRPC server.
 
     Args:

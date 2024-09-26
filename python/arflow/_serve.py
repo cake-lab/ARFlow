@@ -2,12 +2,12 @@
 
 import logging
 
-from arflow._core import ARFlowServicer, create_server
+from arflow._core import ARFlowServicer, run_server
 
 
 def serve():
     """Run a simple ARFlow server."""
-    create_server(ARFlowServicer)
+    run_server(ARFlowServicer)
 
 
 if __name__ == "__main__":

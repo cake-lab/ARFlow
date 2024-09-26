@@ -45,7 +45,7 @@ class CustomService(arflow.ARFlowServicer):
 
 
 def main():
-    arflow.create_server(CustomService, port=8500, path_to_save=Path("./"))
+    arflow.run_server(CustomService, port=8500, path_to_save=Path("./"))
 
 
 if __name__ == "__main__":
