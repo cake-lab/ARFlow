@@ -1,9 +1,9 @@
-name: Release
+name: Pre-release
 
 on:
-  release:
-    types:
-      - published
+  push:
+    tags:
+      - "*"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -54,13 +54,15 @@ jobs:
           path: ./python/.venv
           key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
 
-      - name: Use PyPI API token
+      - name: Configure Test PyPI with Poetry
         working-directory: ./python
-        run: poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          poetry config repositories.testpypi https://test.pypi.org/legacy/
+          poetry config pypi-token.testpypi ${{ secrets.TEST_PYPI_API_TOKEN }}
 
       - name: Build and publish the package
         working-directory: ./python
-        run: poetry publish --build
+        run: poetry publish --build -r testpypi
 
   publish-docs:
     name: Publish documentation
