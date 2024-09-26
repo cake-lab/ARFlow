@@ -22,8 +22,9 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
     _start_time = time.time_ns()
     _frame_data: List[Dict[str, float | bytes]] = []
 
-    def __init__(self) -> None:
+    def __init__(self, use_visualizer: bool = True) -> None:
         self.recorder = rr
+        self.use_visualizer = use_visualizer
         super().__init__()
 
     def _save_frame_data(
@@ -48,7 +49,11 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
 
         sessions[uid] = request
 
-        self.recorder.init(f"{request.device_name} - ARFlow", spawn=True)
+        self.recorder.init(
+            f"{request.device_name} - ARFlow",
+            spawn=self.use_visualizer,
+            default_enabled=self.use_visualizer,
+        )
         print("Registered a client with UUID: %s" % uid, request)
 
         # Call the for user extension code.
