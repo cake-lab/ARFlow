@@ -21,6 +21,11 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     public AROcclusionManager occlusionManager;
 
+    /// <summary>
+    /// Plane detection
+    /// </summary>
+    public ARPlaneManager planeManager;
+
     public Button connectButton;
     public Button startPauseButton;
 

@@ -16,26 +16,13 @@ import rerun.datatypes as rrdt
 class MinimalService(arflow.ARFlowService):
     def __init__(self):
         super().__init__()
-        attitude = rrdt.Quaternion(xyzw=[1, 0, 0, 0])
-        rr.log("attitude", rr.Arrows3D(attitude=attitude))
-
-
-                    # rr.log(
-            #     "world/gyroscope/acceleration",
-            #                 #     rr.Arrows3D(
-            # #         vectors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-            # #         colors=[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
-            # #     ),
-            #     rr.Arrows3D([gravity, acceleration], 
-            #                 colors=[[0, 0, 255], [255, 255, 0]]),
-            # )
-                        # self.logger.log(
-            #     "world/xyz",
-            #     rr.Arrows3D(
-            #         vectors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-            #         colors=[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
-            #     ),
-            # )
+        self.recorder.log(
+                "world/xyz",
+                rr.Arrows3D(
+                    vectors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+                    colors=[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
+                ),
+            )
 
 
     def on_register(self, request: arflow.RegisterRequest):

@@ -119,7 +119,6 @@ public class ARFlowMockDataSample : MonoBehaviour
 
     DataFrameRequest.Types.Quaternion unityQuaternionToProto(Quaternion a)
     {
-        Debug.Log("hai");
         return new DataFrameRequest.Types.Quaternion()
         {
             X = a.x,

@@ -72,13 +72,13 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
 
         if session_configs.camera_color.enabled:
             color_rgb = ARFlowService.decode_rgb_image(session_configs, request.color)
-            decoded_data["color_rgb"] = color_rgb
+            decoded_data["image/color_rgb"] = color_rgb
             color_rgb = np.flipud(color_rgb)
             self.recorder.log("rgb", rr.Image(color_rgb))
 
         if session_configs.camera_depth.enabled:
             depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
-            decoded_data["depth_img"] = depth_img
+            decoded_data["image/depth_img"] = depth_img
             depth_img = np.flipud(depth_img)
             self.recorder.log("depth", rr.DepthImage(depth_img, meter=1.0))
 
