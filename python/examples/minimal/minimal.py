@@ -9,24 +9,12 @@ import numpy as np
 
 import arflow
 
-import rerun as rr
-import rerun.datatypes as rrdt
-
 
 class MinimalService(arflow.ARFlowService):
     def __init__(self):
         super().__init__()
-        self.recorder.log(
-                "world/xyz",
-                rr.Arrows3D(
-                    vectors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-                    colors=[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
-                ),
-            )
-
 
     def on_register(self, request: arflow.RegisterRequest):
-        
         positions = np.vstack(
             [xyz.ravel() for xyz in np.mgrid[3 * [slice(-10, 10, 10j)]]]
         ).T

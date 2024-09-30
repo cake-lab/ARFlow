@@ -129,7 +129,7 @@ namespace ARFlow
 #if UNITY_ANDROID
                         DataType = "u16", // f32 for iOS, u16 for Android
 #endif
-#if UNITY_IPHONE
+#if UNITY_IOS
                         DataType = "f32",
 #endif
                         ConfidenceFilteringLevel = 0,
