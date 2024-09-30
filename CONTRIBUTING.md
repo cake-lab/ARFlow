@@ -108,6 +108,42 @@ To preview the documentation locally, run:
 poetry run pdoc arflow examples # or replace with module_name that you want to preview
 ```
 
+## gRPC Best Practices
+
+The ARFlow server and client communicates through gRPC. Here are some best practices to keep in mind when working with gRPC:
+
+### Input validation
+
+All fields in `proto3` are optional, so you’ll need to validate that they’re all set. If you leave one unset, then it’ll default to zero for numeric types or to an empty string for strings.
+
+### Error handling
+
+gRPC is built on top of HTTP/2, the status code is like the standard HTTP status code. This allows clients to take different actions based on the code they receive. Proper error handling also allows middleware, like monitoring systems, to log how many requests have errors.
+
+ARFlow uses the `grpc_interceptor` library to handle exceptions. This library provides a way to raise exceptions in your service handlers, and have them automatically converted to gRPC status codes. Check out an example usage [here](https://github.com/d5h-foss/grpc-interceptor/tree/master?tab=readme-ov-file#server-interceptor).
+
+`grpc_interceptor` also provides a testing framework to run a gRPC service with interceptors. You can check out the example usage [here](./python/tests/test_interceptor.py).
+
+### Protobuf versioning
+
+To achieve **backward compatibility**, you should never remove a field from a message. Instead, mark it as deprecated and add a new field with the new name. This way, clients that use the old field will still work.
+
+### Protobuf linting
+
+We use `buf` to lint our protobuf files. You can install it by following the instructions [here](https://buf.build/docs/installation).
+
+### Type checking Protobuf-generated code
+
+We use `pyright` and `grpc-stubs` to type check our Protobuf-generated code.
+
+### Graceful shutdown
+
+When the server is shutting down, it should wait for all in-flight requests to complete before shutting down. This is to prevent data loss or corruption. We have done this in the ARFlow server.
+
+### Securing channels
+
+gRPC supports TLS encryption out of the box. We have not implemented this in the ARFlow server yet. If you are interested in working on this, please let us know.
+
 ## Common Issues
 
 ### VSCode Force Changes Locale

@@ -12,13 +12,10 @@ from typing import Any, Type
 import grpc
 import numpy as np
 import rerun as rr
+from grpc_interceptor import ExceptionToStatusInterceptor
+from grpc_interceptor.exceptions import InvalidArgument, NotFound
 
-from arflow._errors import (
-    GRPC_CLIENT_CONFIG_NOT_FOUND,
-    CannotReachException,
-    GRPCError,
-    set_grpc_error,
-)
+from arflow._error_logger import ErrorLogger
 from arflow._types import (
     ARFlowRequest,
     ClientConfigurations,
@@ -104,9 +101,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 HashableClientIdentifier(request.uid)
             ]
         except KeyError:
-            if context is not None:
-                set_grpc_error(context, GRPC_CLIENT_CONFIG_NOT_FOUND)
-            return Acknowledgement()
+            raise NotFound("Client configuration not found")
 
         color_rgb: ColorRGB | None = None
         depth_img: DepthImg | None = None
@@ -116,16 +111,9 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         point_cloud_clr: PointCloudCLR | None = None
 
         if client_config.camera_color.enabled:
-            if (
-                client_config.camera_color.data_type not in ["RGB24", "YCbCr420"]
-                and context is not None
-            ):
-                set_grpc_error(
-                    context,
-                    GRPCError(
-                        details=f"Unknown color data type: {client_config.camera_color.data_type}",
-                        status_code=grpc.StatusCode.INVALID_ARGUMENT,
-                    ),
+            if client_config.camera_color.data_type not in ["RGB24", "YCbCr420"]:
+                raise InvalidArgument(
+                    f"Unknown color data type: {client_config.camera_color.data_type}"
                 )
             color_rgb = np.flipud(_decode_rgb_image(client_config, request.color))
             self.recorder.log("rgb", rr.Image(color_rgb))
@@ -249,7 +237,7 @@ def _decode_rgb_image(client_config: ClientConfiguration, buffer: bytes) -> Colo
         color_rgb = color_rgb.astype(np.uint8)
 
     else:
-        raise CannotReachException(
+        raise RuntimeError(
             f"Unknown color data type: {client_config.camera_color.data_type}"
         )
 
@@ -368,8 +356,10 @@ def run_server(
         path_to_save: The path to save data to.
     """
     servicer = service()
+    interceptors = [ExceptionToStatusInterceptor(), ErrorLogger()]  # type: ignore
     server = grpc.server(  # type: ignore
         futures.ThreadPoolExecutor(max_workers=10),
+        interceptors=interceptors,  # type: ignore
         options=[
             ("grpc.max_send_message_length", -1),
             ("grpc.max_receive_message_length", -1),
@@ -402,6 +392,8 @@ def run_server(
         if path_to_save is not None:
             print("Saving data...")
             servicer.on_program_exit(path_to_save)
+
+        # TODO: Discuss hook for user-defined cleanup procedures.
 
         print("Shut down gracefully")
 
