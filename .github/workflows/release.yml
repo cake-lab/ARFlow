@@ -62,6 +62,12 @@ jobs:
         working-directory: ./python
         run: poetry publish --build
 
+      - name: Upload Python package to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./python/dist/
+          if-no-files-found: error
+
   publish-docs:
     name: Publish documentation
     permissions:
