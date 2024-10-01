@@ -24,72 +24,75 @@ namespace ARFlow {
     static ServiceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chtwcm90b3MvYXJmbG93L3NlcnZpY2UucHJvdG8igwkKD1JlZ2lzdGVyUmVx",
-            "dWVzdBITCgtkZXZpY2VfbmFtZRgBIAEoCRI8ChFjYW1lcmFfaW50cmluc2lj",
-            "cxgCIAEoCzIhLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFJbnRyaW5zaWNzEjIK",
-            "DGNhbWVyYV9jb2xvchgDIAEoCzIcLlJlZ2lzdGVyUmVxdWVzdC5DYW1lcmFD",
-            "b2xvchIyCgxjYW1lcmFfZGVwdGgYBCABKAsyHC5SZWdpc3RlclJlcXVlc3Qu",
-            "Q2FtZXJhRGVwdGgSOgoQY2FtZXJhX3RyYW5zZm9ybRgFIAEoCzIgLlJlZ2lz",
-            "dGVyUmVxdWVzdC5DYW1lcmFUcmFuc2Zvcm0SPQoSY2FtZXJhX3BvaW50X2Ns",
-            "b3VkGAYgASgLMiEuUmVnaXN0ZXJSZXF1ZXN0LkNhbWVyYVBvaW50Q2xvdWQS",
-            "RQoWY2FtZXJhX3BsYW5lX2RldGVjdGlvbhgHIAEoCzIlLlJlZ2lzdGVyUmVx",
-            "dWVzdC5DYW1lcmFQbGFuZURldGVjdGlvbhItCglneXJvc2NvcGUYCCABKAsy",
-            "Gi5SZWdpc3RlclJlcXVlc3QuR3lyb3Njb3BlEiUKBWF1ZGlvGAkgASgLMhYu",
-            "UmVnaXN0ZXJSZXF1ZXN0LkF1ZGlvEikKB21lc2hpbmcYCiABKAsyGC5SZWdp",
-            "c3RlclJlcXVlc3QuTWVzaGluZxqkAQoQQ2FtZXJhSW50cmluc2ljcxIWCg5m",
-            "b2NhbF9sZW5ndGhfeBgBIAEoAhIWCg5mb2NhbF9sZW5ndGhfeRgCIAEoAhIZ",
-            "ChFwcmluY2lwYWxfcG9pbnRfeBgDIAEoAhIZChFwcmluY2lwYWxfcG9pbnRf",
-            "eRgEIAEoAhIUCgxyZXNvbHV0aW9uX3gYBSABKAUSFAoMcmVzb2x1dGlvbl95",
-            "GAYgASgFGmMKC0NhbWVyYUNvbG9yEg8KB2VuYWJsZWQYASABKAgSEQoJZGF0",
-            "YV90eXBlGAIgASgJEhcKD3Jlc2l6ZV9mYWN0b3JfeBgDIAEoAhIXCg9yZXNp",
-            "emVfZmFjdG9yX3kYBCABKAIagQEKC0NhbWVyYURlcHRoEg8KB2VuYWJsZWQY",
-            "ASABKAgSEQoJZGF0YV90eXBlGAIgASgJEiIKGmNvbmZpZGVuY2VfZmlsdGVy",
-            "aW5nX2xldmVsGAMgASgFEhQKDHJlc29sdXRpb25feBgEIAEoBRIUCgxyZXNv",
-            "bHV0aW9uX3kYBSABKAUaIgoPQ2FtZXJhVHJhbnNmb3JtEg8KB2VuYWJsZWQY",
-            "ASABKAgaQQoQQ2FtZXJhUG9pbnRDbG91ZBIPCgdlbmFibGVkGAEgASgIEhwK",
-            "FGRlcHRoX3Vwc2NhbGVfZmFjdG9yGAIgASgCGicKFENhbWVyYVBsYW5lRGV0",
-            "ZWN0aW9uEg8KB2VuYWJsZWQYASABKAgaHAoJR3lyb3Njb3BlEg8KB2VuYWJs",
-            "ZWQYASABKAgaGAoFQXVkaW8SDwoHZW5hYmxlZBgBIAEoCBoaCgdNZXNoaW5n",
-            "Eg8KB2VuYWJsZWQYASABKAgiHwoQUmVnaXN0ZXJSZXNwb25zZRILCgN1aWQY",
-            "ASABKAkiuwUKEERhdGFGcmFtZVJlcXVlc3QSCwoDdWlkGAEgASgJEg0KBWNv",
-            "bG9yGAIgASgMEg0KBWRlcHRoGAMgASgMEhEKCXRyYW5zZm9ybRgEIAEoDBIx",
-            "Cg9wbGFuZV9kZXRlY3Rpb24YBSADKAsyGC5EYXRhRnJhbWVSZXF1ZXN0LlBs",
-            "YW5lcxIzCglneXJvc2NvcGUYBiABKAsyIC5EYXRhRnJhbWVSZXF1ZXN0Lmd5",
-            "cm9zY29wZV9kYXRhEg0KBWF1ZGlvGAggASgMEg8KB21lc2hpbmcYCSABKAwa",
-            "KgoHVmVjdG9yMxIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAhof",
-            "CgdWZWN0b3IyEgkKAXgYASABKAISCQoBeRgCIAEoAhqHAQoGUGxhbmVzEikK",
-            "BmNlbnRlchgBIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxIpCgZu",
-            "b3JtYWwYAiABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMSJwoEc2l6",
-            "ZRgDIAEoCzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMho4CgpRdWF0ZXJu",
-            "aW9uEgkKAXgYASABKAISCQoBeRgCIAEoAhIJCgF6GAMgASgCEgkKAXcYBCAB",
-            "KAIazwEKDmd5cm9zY29wZV9kYXRhEi4KCGF0dGl0dWRlGAEgASgLMhwuRGF0",
-            "YUZyYW1lUmVxdWVzdC5RdWF0ZXJuaW9uEjAKDXJvdGF0aW9uX3JhdGUYAiAB",
-            "KAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMSKgoHZ3Jhdml0eRgDIAEo",
-            "CzIZLkRhdGFGcmFtZVJlcXVlc3QuVmVjdG9yMxIvCgxhY2NlbGVyYXRpb24Y",
-            "BCABKAsyGS5EYXRhRnJhbWVSZXF1ZXN0LlZlY3RvcjMiJAoRRGF0YUZyYW1l",
-            "UmVzcG9uc2USDwoHbWVzc2FnZRgBIAEoCTJ1Cg1BUkZsb3dTZXJ2aWNlEi8K",
-            "CHJlZ2lzdGVyEhAuUmVnaXN0ZXJSZXF1ZXN0GhEuUmVnaXN0ZXJSZXNwb25z",
-            "ZRIzCgpkYXRhX2ZyYW1lEhEuRGF0YUZyYW1lUmVxdWVzdBoSLkRhdGFGcmFt",
-            "ZVJlc3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
+            "CiBwcm90b3MvYXJmbG93X2dycGMvc2VydmljZS5wcm90bxIGYXJmbG93IuoJ",
+            "ChNDbGllbnRDb25maWd1cmF0aW9uEhMKC2RldmljZV9uYW1lGAEgASgJEkcK",
+            "EWNhbWVyYV9pbnRyaW5zaWNzGAIgASgLMiwuYXJmbG93LkNsaWVudENvbmZp",
+            "Z3VyYXRpb24uQ2FtZXJhSW50cmluc2ljcxI9CgxjYW1lcmFfY29sb3IYAyAB",
+            "KAsyJy5hcmZsb3cuQ2xpZW50Q29uZmlndXJhdGlvbi5DYW1lcmFDb2xvchI9",
+            "CgxjYW1lcmFfZGVwdGgYBCABKAsyJy5hcmZsb3cuQ2xpZW50Q29uZmlndXJh",
+            "dGlvbi5DYW1lcmFEZXB0aBJFChBjYW1lcmFfdHJhbnNmb3JtGAUgASgLMisu",
+            "YXJmbG93LkNsaWVudENvbmZpZ3VyYXRpb24uQ2FtZXJhVHJhbnNmb3JtEkgK",
+            "EmNhbWVyYV9wb2ludF9jbG91ZBgGIAEoCzIsLmFyZmxvdy5DbGllbnRDb25m",
+            "aWd1cmF0aW9uLkNhbWVyYVBvaW50Q2xvdWQSUAoWY2FtZXJhX3BsYW5lX2Rl",
+            "dGVjdGlvbhgHIAEoCzIwLmFyZmxvdy5DbGllbnRDb25maWd1cmF0aW9uLkNh",
+            "bWVyYVBsYW5lRGV0ZWN0aW9uEjgKCWd5cm9zY29wZRgIIAEoCzIlLmFyZmxv",
+            "dy5DbGllbnRDb25maWd1cmF0aW9uLkd5cm9zY29wZRIwCgVhdWRpbxgJIAEo",
+            "CzIhLmFyZmxvdy5DbGllbnRDb25maWd1cmF0aW9uLkF1ZGlvEjQKB21lc2hp",
+            "bmcYCiABKAsyIy5hcmZsb3cuQ2xpZW50Q29uZmlndXJhdGlvbi5NZXNoaW5n",
+            "GqQBChBDYW1lcmFJbnRyaW5zaWNzEhYKDmZvY2FsX2xlbmd0aF94GAEgASgC",
+            "EhYKDmZvY2FsX2xlbmd0aF95GAIgASgCEhkKEXByaW5jaXBhbF9wb2ludF94",
+            "GAMgASgCEhkKEXByaW5jaXBhbF9wb2ludF95GAQgASgCEhQKDHJlc29sdXRp",
+            "b25feBgFIAEoBRIUCgxyZXNvbHV0aW9uX3kYBiABKAUaYwoLQ2FtZXJhQ29s",
+            "b3ISDwoHZW5hYmxlZBgBIAEoCBIRCglkYXRhX3R5cGUYAiABKAkSFwoPcmVz",
+            "aXplX2ZhY3Rvcl94GAMgASgCEhcKD3Jlc2l6ZV9mYWN0b3JfeRgEIAEoAhqB",
+            "AQoLQ2FtZXJhRGVwdGgSDwoHZW5hYmxlZBgBIAEoCBIRCglkYXRhX3R5cGUY",
+            "AiABKAkSIgoaY29uZmlkZW5jZV9maWx0ZXJpbmdfbGV2ZWwYAyABKAUSFAoM",
+            "cmVzb2x1dGlvbl94GAQgASgFEhQKDHJlc29sdXRpb25feRgFIAEoBRoiCg9D",
+            "YW1lcmFUcmFuc2Zvcm0SDwoHZW5hYmxlZBgBIAEoCBpBChBDYW1lcmFQb2lu",
+            "dENsb3VkEg8KB2VuYWJsZWQYASABKAgSHAoUZGVwdGhfdXBzY2FsZV9mYWN0",
+            "b3IYAiABKAIaJwoUQ2FtZXJhUGxhbmVEZXRlY3Rpb24SDwoHZW5hYmxlZBgB",
+            "IAEoCBocCglHeXJvc2NvcGUSDwoHZW5hYmxlZBgBIAEoCBoYCgVBdWRpbxIP",
+            "CgdlbmFibGVkGAEgASgIGhoKB01lc2hpbmcSDwoHZW5hYmxlZBgBIAEoCCIf",
+            "ChBDbGllbnRJZGVudGlmaWVyEgsKA3VpZBgBIAEoCSK0BQoJRGF0YUZyYW1l",
+            "EgsKA3VpZBgBIAEoCRINCgVjb2xvchgCIAEoDBINCgVkZXB0aBgDIAEoDBIR",
+            "Cgl0cmFuc2Zvcm0YBCABKAwSMQoPcGxhbmVfZGV0ZWN0aW9uGAUgAygLMhgu",
+            "YXJmbG93LkRhdGFGcmFtZS5QbGFuZXMSMwoJZ3lyb3Njb3BlGAYgASgLMiAu",
+            "YXJmbG93LkRhdGFGcmFtZS5neXJvc2NvcGVfZGF0YRINCgVhdWRpbxgIIAEo",
+            "DBIPCgdtZXNoaW5nGAkgASgMGioKB1ZlY3RvcjMSCQoBeBgBIAEoAhIJCgF5",
+            "GAIgASgCEgkKAXoYAyABKAIaHwoHVmVjdG9yMhIJCgF4GAEgASgCEgkKAXkY",
+            "AiABKAIahwEKBlBsYW5lcxIpCgZjZW50ZXIYASABKAsyGS5hcmZsb3cuRGF0",
+            "YUZyYW1lLlZlY3RvcjMSKQoGbm9ybWFsGAIgASgLMhkuYXJmbG93LkRhdGFG",
+            "cmFtZS5WZWN0b3IzEicKBHNpemUYAyABKAsyGS5hcmZsb3cuRGF0YUZyYW1l",
+            "LlZlY3RvcjIaOAoKUXVhdGVybmlvbhIJCgF4GAEgASgCEgkKAXkYAiABKAIS",
+            "CQoBehgDIAEoAhIJCgF3GAQgASgCGs8BCg5neXJvc2NvcGVfZGF0YRIuCghh",
+            "dHRpdHVkZRgBIAEoCzIcLmFyZmxvdy5EYXRhRnJhbWUuUXVhdGVybmlvbhIw",
+            "Cg1yb3RhdGlvbl9yYXRlGAIgASgLMhkuYXJmbG93LkRhdGFGcmFtZS5WZWN0",
+            "b3IzEioKB2dyYXZpdHkYAyABKAsyGS5hcmZsb3cuRGF0YUZyYW1lLlZlY3Rv",
+            "cjMSLwoMYWNjZWxlcmF0aW9uGAQgASgLMhkuYXJmbG93LkRhdGFGcmFtZS5W",
+            "ZWN0b3IzIiIKD0Fja25vd2xlZGdlbWVudBIPCgdtZXNzYWdlGAEgASgJMo0B",
+            "CgZBUkZsb3cSRwoOUmVnaXN0ZXJDbGllbnQSGy5hcmZsb3cuQ2xpZW50Q29u",
+            "ZmlndXJhdGlvbhoYLmFyZmxvdy5DbGllbnRJZGVudGlmaWVyEjoKDFByb2Nl",
+            "c3NGcmFtZRIRLmFyZmxvdy5EYXRhRnJhbWUaFy5hcmZsb3cuQWNrbm93bGVk",
+            "Z2VtZW50QgmqAgZBUkZsb3diBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest), global::ARFlow.RegisterRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud", "CameraPlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraIntrinsics), global::ARFlow.RegisterRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraColor), global::ARFlow.RegisterRequest.Types.CameraColor.Parser, new[]{ "Enabled", "DataType", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraDepth), global::ARFlow.RegisterRequest.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraTransform), global::ARFlow.RegisterRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPointCloud), global::ARFlow.RegisterRequest.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.CameraPlaneDetection), global::ARFlow.RegisterRequest.Types.CameraPlaneDetection.Parser, new[]{ "Enabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.Gyroscope), global::ARFlow.RegisterRequest.Types.Gyroscope.Parser, new[]{ "Enabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.Audio), global::ARFlow.RegisterRequest.Types.Audio.Parser, new[]{ "Enabled" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterRequest.Types.Meshing), global::ARFlow.RegisterRequest.Types.Meshing.Parser, new[]{ "Enabled" }, null, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterResponse), global::ARFlow.RegisterResponse.Parser, new[]{ "Uid" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest), global::ARFlow.DataFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Vector3), global::ARFlow.DataFrameRequest.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Vector2), global::ARFlow.DataFrameRequest.Types.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Planes), global::ARFlow.DataFrameRequest.Types.Planes.Parser, new[]{ "Center", "Normal", "Size" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.Quaternion), global::ARFlow.DataFrameRequest.Types.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameRequest.Types.gyroscope_data), global::ARFlow.DataFrameRequest.Types.gyroscope_data.Parser, new[]{ "Attitude", "RotationRate", "Gravity", "Acceleration" }, null, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrameResponse), global::ARFlow.DataFrameResponse.Parser, new[]{ "Message" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration), global::ARFlow.ClientConfiguration.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud", "CameraPlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraIntrinsics), global::ARFlow.ClientConfiguration.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraColor), global::ARFlow.ClientConfiguration.Types.CameraColor.Parser, new[]{ "Enabled", "DataType", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraDepth), global::ARFlow.ClientConfiguration.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraTransform), global::ARFlow.ClientConfiguration.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraPointCloud), global::ARFlow.ClientConfiguration.Types.CameraPointCloud.Parser, new[]{ "Enabled", "DepthUpscaleFactor" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.CameraPlaneDetection), global::ARFlow.ClientConfiguration.Types.CameraPlaneDetection.Parser, new[]{ "Enabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.Gyroscope), global::ARFlow.ClientConfiguration.Types.Gyroscope.Parser, new[]{ "Enabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.Audio), global::ARFlow.ClientConfiguration.Types.Audio.Parser, new[]{ "Enabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.Meshing), global::ARFlow.ClientConfiguration.Types.Meshing.Parser, new[]{ "Enabled" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientIdentifier), global::ARFlow.ClientIdentifier.Parser, new[]{ "Uid" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame), global::ARFlow.DataFrame.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Vector3), global::ARFlow.DataFrame.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Vector2), global::ARFlow.DataFrame.Types.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Planes), global::ARFlow.DataFrame.Types.Planes.Parser, new[]{ "Center", "Normal", "Size" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Quaternion), global::ARFlow.DataFrame.Types.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.gyroscope_data), global::ARFlow.DataFrame.Types.gyroscope_data.Parser, new[]{ "Attitude", "RotationRate", "Gravity", "Acceleration" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.Acknowledgement), global::ARFlow.Acknowledgement.Parser, new[]{ "Message" }, null, null, null, null)
           }));
     }
     #endregion
@@ -227,10 +230,10 @@ namespace ARFlow {
 
     /// <summary>Field number for the "camera_plane_detection" field.</summary>
     public const int CameraPlaneDetectionFieldNumber = 7;
-    private global::ARFlow.RegisterRequest.Types.CameraPlaneDetection cameraPlaneDetection_;
+    private global::ARFlow.ClientConfiguration.Types.CameraPlaneDetection cameraPlaneDetection_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.RegisterRequest.Types.CameraPlaneDetection CameraPlaneDetection {
+    public global::ARFlow.ClientConfiguration.Types.CameraPlaneDetection CameraPlaneDetection {
       get { return cameraPlaneDetection_; }
       set {
         cameraPlaneDetection_ = value;
@@ -239,10 +242,10 @@ namespace ARFlow {
 
     /// <summary>Field number for the "gyroscope" field.</summary>
     public const int GyroscopeFieldNumber = 8;
-    private global::ARFlow.RegisterRequest.Types.Gyroscope gyroscope_;
+    private global::ARFlow.ClientConfiguration.Types.Gyroscope gyroscope_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.RegisterRequest.Types.Gyroscope Gyroscope {
+    public global::ARFlow.ClientConfiguration.Types.Gyroscope Gyroscope {
       get { return gyroscope_; }
       set {
         gyroscope_ = value;
@@ -251,10 +254,10 @@ namespace ARFlow {
 
     /// <summary>Field number for the "audio" field.</summary>
     public const int AudioFieldNumber = 9;
-    private global::ARFlow.RegisterRequest.Types.Audio audio_;
+    private global::ARFlow.ClientConfiguration.Types.Audio audio_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.RegisterRequest.Types.Audio Audio {
+    public global::ARFlow.ClientConfiguration.Types.Audio Audio {
       get { return audio_; }
       set {
         audio_ = value;
@@ -263,10 +266,10 @@ namespace ARFlow {
 
     /// <summary>Field number for the "meshing" field.</summary>
     public const int MeshingFieldNumber = 10;
-    private global::ARFlow.RegisterRequest.Types.Meshing meshing_;
+    private global::ARFlow.ClientConfiguration.Types.Meshing meshing_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.RegisterRequest.Types.Meshing Meshing {
+    public global::ARFlow.ClientConfiguration.Types.Meshing Meshing {
       get { return meshing_; }
       set {
         meshing_ = value;
@@ -510,25 +513,25 @@ namespace ARFlow {
       }
       if (other.cameraPlaneDetection_ != null) {
         if (cameraPlaneDetection_ == null) {
-          CameraPlaneDetection = new global::ARFlow.RegisterRequest.Types.CameraPlaneDetection();
+          CameraPlaneDetection = new global::ARFlow.ClientConfiguration.Types.CameraPlaneDetection();
         }
         CameraPlaneDetection.MergeFrom(other.CameraPlaneDetection);
       }
       if (other.gyroscope_ != null) {
         if (gyroscope_ == null) {
-          Gyroscope = new global::ARFlow.RegisterRequest.Types.Gyroscope();
+          Gyroscope = new global::ARFlow.ClientConfiguration.Types.Gyroscope();
         }
         Gyroscope.MergeFrom(other.Gyroscope);
       }
       if (other.audio_ != null) {
         if (audio_ == null) {
-          Audio = new global::ARFlow.RegisterRequest.Types.Audio();
+          Audio = new global::ARFlow.ClientConfiguration.Types.Audio();
         }
         Audio.MergeFrom(other.Audio);
       }
       if (other.meshing_ != null) {
         if (meshing_ == null) {
-          Meshing = new global::ARFlow.RegisterRequest.Types.Meshing();
+          Meshing = new global::ARFlow.ClientConfiguration.Types.Meshing();
         }
         Meshing.MergeFrom(other.Meshing);
       }
@@ -543,7 +546,11 @@ namespace ARFlow {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -588,28 +595,28 @@ namespace ARFlow {
           }
           case 58: {
             if (cameraPlaneDetection_ == null) {
-              CameraPlaneDetection = new global::ARFlow.RegisterRequest.Types.CameraPlaneDetection();
+              CameraPlaneDetection = new global::ARFlow.ClientConfiguration.Types.CameraPlaneDetection();
             }
             input.ReadMessage(CameraPlaneDetection);
             break;
           }
           case 66: {
             if (gyroscope_ == null) {
-              Gyroscope = new global::ARFlow.RegisterRequest.Types.Gyroscope();
+              Gyroscope = new global::ARFlow.ClientConfiguration.Types.Gyroscope();
             }
             input.ReadMessage(Gyroscope);
             break;
           }
           case 74: {
             if (audio_ == null) {
-              Audio = new global::ARFlow.RegisterRequest.Types.Audio();
+              Audio = new global::ARFlow.ClientConfiguration.Types.Audio();
             }
             input.ReadMessage(Audio);
             break;
           }
           case 82: {
             if (meshing_ == null) {
-              Meshing = new global::ARFlow.RegisterRequest.Types.Meshing();
+              Meshing = new global::ARFlow.ClientConfiguration.Types.Meshing();
             }
             input.ReadMessage(Meshing);
             break;
@@ -625,7 +632,11 @@ namespace ARFlow {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -670,28 +681,28 @@ namespace ARFlow {
           }
           case 58: {
             if (cameraPlaneDetection_ == null) {
-              CameraPlaneDetection = new global::ARFlow.RegisterRequest.Types.CameraPlaneDetection();
+              CameraPlaneDetection = new global::ARFlow.ClientConfiguration.Types.CameraPlaneDetection();
             }
             input.ReadMessage(CameraPlaneDetection);
             break;
           }
           case 66: {
             if (gyroscope_ == null) {
-              Gyroscope = new global::ARFlow.RegisterRequest.Types.Gyroscope();
+              Gyroscope = new global::ARFlow.ClientConfiguration.Types.Gyroscope();
             }
             input.ReadMessage(Gyroscope);
             break;
           }
           case 74: {
             if (audio_ == null) {
-              Audio = new global::ARFlow.RegisterRequest.Types.Audio();
+              Audio = new global::ARFlow.ClientConfiguration.Types.Audio();
             }
             input.ReadMessage(Audio);
             break;
           }
           case 82: {
             if (meshing_ == null) {
-              Meshing = new global::ARFlow.RegisterRequest.Types.Meshing();
+              Meshing = new global::ARFlow.ClientConfiguration.Types.Meshing();
             }
             input.ReadMessage(Meshing);
             break;
@@ -1007,7 +1018,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1046,7 +1061,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -1324,7 +1343,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1355,7 +1378,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -1654,7 +1681,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1689,7 +1720,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -1876,7 +1911,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1895,7 +1934,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2095,7 +2138,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2118,7 +2165,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2152,7 +2203,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[5]; }
+          get { return global::ARFlow.ClientConfiguration.Descriptor.NestedTypes[5]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2293,7 +2344,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2312,7 +2367,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2342,7 +2401,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[6]; }
+          get { return global::ARFlow.ClientConfiguration.Descriptor.NestedTypes[6]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2483,7 +2542,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2502,7 +2565,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2532,7 +2599,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[7]; }
+          get { return global::ARFlow.ClientConfiguration.Descriptor.NestedTypes[7]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2673,7 +2740,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2692,7 +2763,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2722,7 +2797,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.RegisterRequest.Descriptor.NestedTypes[8]; }
+          get { return global::ARFlow.ClientConfiguration.Descriptor.NestedTypes[8]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2863,7 +2938,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2882,7 +2961,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -3058,7 +3141,11 @@ namespace ARFlow {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3077,7 +3164,11 @@ namespace ARFlow {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3194,21 +3285,21 @@ namespace ARFlow {
 
     /// <summary>Field number for the "plane_detection" field.</summary>
     public const int PlaneDetectionFieldNumber = 5;
-    private static readonly pb::FieldCodec<global::ARFlow.DataFrameRequest.Types.Planes> _repeated_planeDetection_codec
-        = pb::FieldCodec.ForMessage(42, global::ARFlow.DataFrameRequest.Types.Planes.Parser);
-    private readonly pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.Planes> planeDetection_ = new pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.Planes>();
+    private static readonly pb::FieldCodec<global::ARFlow.DataFrame.Types.Planes> _repeated_planeDetection_codec
+        = pb::FieldCodec.ForMessage(42, global::ARFlow.DataFrame.Types.Planes.Parser);
+    private readonly pbc::RepeatedField<global::ARFlow.DataFrame.Types.Planes> planeDetection_ = new pbc::RepeatedField<global::ARFlow.DataFrame.Types.Planes>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::ARFlow.DataFrameRequest.Types.Planes> PlaneDetection {
+    public pbc::RepeatedField<global::ARFlow.DataFrame.Types.Planes> PlaneDetection {
       get { return planeDetection_; }
     }
 
     /// <summary>Field number for the "gyroscope" field.</summary>
     public const int GyroscopeFieldNumber = 6;
-    private global::ARFlow.DataFrameRequest.Types.gyroscope_data gyroscope_;
+    private global::ARFlow.DataFrame.Types.gyroscope_data gyroscope_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ARFlow.DataFrameRequest.Types.gyroscope_data Gyroscope {
+    public global::ARFlow.DataFrame.Types.gyroscope_data Gyroscope {
       get { return gyroscope_; }
       set {
         gyroscope_ = value;
@@ -3422,7 +3513,7 @@ namespace ARFlow {
       planeDetection_.Add(other.planeDetection_);
       if (other.gyroscope_ != null) {
         if (gyroscope_ == null) {
-          Gyroscope = new global::ARFlow.DataFrameRequest.Types.gyroscope_data();
+          Gyroscope = new global::ARFlow.DataFrame.Types.gyroscope_data();
         }
         Gyroscope.MergeFrom(other.Gyroscope);
       }
@@ -3443,7 +3534,11 @@ namespace ARFlow {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3469,7 +3564,7 @@ namespace ARFlow {
           }
           case 50: {
             if (gyroscope_ == null) {
-              Gyroscope = new global::ARFlow.DataFrameRequest.Types.gyroscope_data();
+              Gyroscope = new global::ARFlow.DataFrame.Types.gyroscope_data();
             }
             input.ReadMessage(Gyroscope);
             break;
@@ -3493,7 +3588,11 @@ namespace ARFlow {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3519,7 +3618,7 @@ namespace ARFlow {
           }
           case 50: {
             if (gyroscope_ == null) {
-              Gyroscope = new global::ARFlow.DataFrameRequest.Types.gyroscope_data();
+              Gyroscope = new global::ARFlow.DataFrame.Types.gyroscope_data();
             }
             input.ReadMessage(Gyroscope);
             break;
@@ -3538,7 +3637,7 @@ namespace ARFlow {
     #endif
 
     #region Nested types
-    /// <summary>Container for nested types declared in the DataFrameRequest message type.</summary>
+    /// <summary>Container for nested types declared in the DataFrame message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
@@ -3557,7 +3656,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[0]; }
+          get { return global::ARFlow.DataFrame.Descriptor.NestedTypes[0]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3756,7 +3855,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -3783,7 +3886,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -3821,7 +3928,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[1]; }
+          get { return global::ARFlow.DataFrame.Descriptor.NestedTypes[1]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3991,7 +4098,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -4014,7 +4125,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -4048,7 +4163,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[2]; }
+          get { return global::ARFlow.DataFrame.Descriptor.NestedTypes[2]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4082,10 +4197,10 @@ namespace ARFlow {
 
         /// <summary>Field number for the "center" field.</summary>
         public const int CenterFieldNumber = 1;
-        private global::ARFlow.DataFrameRequest.Types.Vector3 center_;
+        private global::ARFlow.DataFrame.Types.Vector3 center_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public global::ARFlow.DataFrameRequest.Types.Vector3 Center {
+        public global::ARFlow.DataFrame.Types.Vector3 Center {
           get { return center_; }
           set {
             center_ = value;
@@ -4094,10 +4209,10 @@ namespace ARFlow {
 
         /// <summary>Field number for the "normal" field.</summary>
         public const int NormalFieldNumber = 2;
-        private global::ARFlow.DataFrameRequest.Types.Vector3 normal_;
+        private global::ARFlow.DataFrame.Types.Vector3 normal_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public global::ARFlow.DataFrameRequest.Types.Vector3 Normal {
+        public global::ARFlow.DataFrame.Types.Vector3 Normal {
           get { return normal_; }
           set {
             normal_ = value;
@@ -4106,10 +4221,10 @@ namespace ARFlow {
 
         /// <summary>Field number for the "size" field.</summary>
         public const int SizeFieldNumber = 3;
-        private global::ARFlow.DataFrameRequest.Types.Vector2 size_;
+        private global::ARFlow.DataFrame.Types.Vector2 size_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public global::ARFlow.DataFrameRequest.Types.Vector2 Size {
+        public global::ARFlow.DataFrame.Types.Vector2 Size {
           get { return size_; }
           set {
             size_ = value;
@@ -4229,19 +4344,19 @@ namespace ARFlow {
           }
           if (other.center_ != null) {
             if (center_ == null) {
-              Center = new global::ARFlow.DataFrameRequest.Types.Vector3();
+              Center = new global::ARFlow.DataFrame.Types.Vector3();
             }
             Center.MergeFrom(other.Center);
           }
           if (other.normal_ != null) {
             if (normal_ == null) {
-              Normal = new global::ARFlow.DataFrameRequest.Types.Vector3();
+              Normal = new global::ARFlow.DataFrame.Types.Vector3();
             }
             Normal.MergeFrom(other.Normal);
           }
           if (other.size_ != null) {
             if (size_ == null) {
-              Size = new global::ARFlow.DataFrameRequest.Types.Vector2();
+              Size = new global::ARFlow.DataFrame.Types.Vector2();
             }
             Size.MergeFrom(other.Size);
           }
@@ -4256,27 +4371,31 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
               case 10: {
                 if (center_ == null) {
-                  Center = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  Center = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(Center);
                 break;
               }
               case 18: {
                 if (normal_ == null) {
-                  Normal = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  Normal = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(Normal);
                 break;
               }
               case 26: {
                 if (size_ == null) {
-                  Size = new global::ARFlow.DataFrameRequest.Types.Vector2();
+                  Size = new global::ARFlow.DataFrame.Types.Vector2();
                 }
                 input.ReadMessage(Size);
                 break;
@@ -4292,27 +4411,31 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
               case 10: {
                 if (center_ == null) {
-                  Center = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  Center = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(Center);
                 break;
               }
               case 18: {
                 if (normal_ == null) {
-                  Normal = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  Normal = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(Normal);
                 break;
               }
               case 26: {
                 if (size_ == null) {
-                  Size = new global::ARFlow.DataFrameRequest.Types.Vector2();
+                  Size = new global::ARFlow.DataFrame.Types.Vector2();
                 }
                 input.ReadMessage(Size);
                 break;
@@ -4339,7 +4462,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[3]; }
+          get { return global::ARFlow.DataFrame.Descriptor.NestedTypes[3]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4567,7 +4690,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -4598,7 +4725,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -4640,7 +4771,7 @@ namespace ARFlow {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::ARFlow.DataFrameRequest.Descriptor.NestedTypes[4]; }
+          get { return global::ARFlow.DataFrame.Descriptor.NestedTypes[4]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4675,10 +4806,10 @@ namespace ARFlow {
 
         /// <summary>Field number for the "attitude" field.</summary>
         public const int AttitudeFieldNumber = 1;
-        private global::ARFlow.DataFrameRequest.Types.Quaternion attitude_;
+        private global::ARFlow.DataFrame.Types.Quaternion attitude_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public global::ARFlow.DataFrameRequest.Types.Quaternion Attitude {
+        public global::ARFlow.DataFrame.Types.Quaternion Attitude {
           get { return attitude_; }
           set {
             attitude_ = value;
@@ -4687,10 +4818,10 @@ namespace ARFlow {
 
         /// <summary>Field number for the "rotation_rate" field.</summary>
         public const int RotationRateFieldNumber = 2;
-        private global::ARFlow.DataFrameRequest.Types.Vector3 rotationRate_;
+        private global::ARFlow.DataFrame.Types.Vector3 rotationRate_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public global::ARFlow.DataFrameRequest.Types.Vector3 RotationRate {
+        public global::ARFlow.DataFrame.Types.Vector3 RotationRate {
           get { return rotationRate_; }
           set {
             rotationRate_ = value;
@@ -4699,10 +4830,10 @@ namespace ARFlow {
 
         /// <summary>Field number for the "gravity" field.</summary>
         public const int GravityFieldNumber = 3;
-        private global::ARFlow.DataFrameRequest.Types.Vector3 gravity_;
+        private global::ARFlow.DataFrame.Types.Vector3 gravity_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public global::ARFlow.DataFrameRequest.Types.Vector3 Gravity {
+        public global::ARFlow.DataFrame.Types.Vector3 Gravity {
           get { return gravity_; }
           set {
             gravity_ = value;
@@ -4711,10 +4842,10 @@ namespace ARFlow {
 
         /// <summary>Field number for the "acceleration" field.</summary>
         public const int AccelerationFieldNumber = 4;
-        private global::ARFlow.DataFrameRequest.Types.Vector3 acceleration_;
+        private global::ARFlow.DataFrame.Types.Vector3 acceleration_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public global::ARFlow.DataFrameRequest.Types.Vector3 Acceleration {
+        public global::ARFlow.DataFrame.Types.Vector3 Acceleration {
           get { return acceleration_; }
           set {
             acceleration_ = value;
@@ -4847,25 +4978,25 @@ namespace ARFlow {
           }
           if (other.attitude_ != null) {
             if (attitude_ == null) {
-              Attitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+              Attitude = new global::ARFlow.DataFrame.Types.Quaternion();
             }
             Attitude.MergeFrom(other.Attitude);
           }
           if (other.rotationRate_ != null) {
             if (rotationRate_ == null) {
-              RotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
+              RotationRate = new global::ARFlow.DataFrame.Types.Vector3();
             }
             RotationRate.MergeFrom(other.RotationRate);
           }
           if (other.gravity_ != null) {
             if (gravity_ == null) {
-              Gravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
+              Gravity = new global::ARFlow.DataFrame.Types.Vector3();
             }
             Gravity.MergeFrom(other.Gravity);
           }
           if (other.acceleration_ != null) {
             if (acceleration_ == null) {
-              Acceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
+              Acceleration = new global::ARFlow.DataFrame.Types.Vector3();
             }
             Acceleration.MergeFrom(other.Acceleration);
           }
@@ -4880,34 +5011,38 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
               case 10: {
                 if (attitude_ == null) {
-                  Attitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+                  Attitude = new global::ARFlow.DataFrame.Types.Quaternion();
                 }
                 input.ReadMessage(Attitude);
                 break;
               }
               case 18: {
                 if (rotationRate_ == null) {
-                  RotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  RotationRate = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(RotationRate);
                 break;
               }
               case 26: {
                 if (gravity_ == null) {
-                  Gravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  Gravity = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(Gravity);
                 break;
               }
               case 34: {
                 if (acceleration_ == null) {
-                  Acceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  Acceleration = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(Acceleration);
                 break;
@@ -4923,34 +5058,38 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
               case 10: {
                 if (attitude_ == null) {
-                  Attitude = new global::ARFlow.DataFrameRequest.Types.Quaternion();
+                  Attitude = new global::ARFlow.DataFrame.Types.Quaternion();
                 }
                 input.ReadMessage(Attitude);
                 break;
               }
               case 18: {
                 if (rotationRate_ == null) {
-                  RotationRate = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  RotationRate = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(RotationRate);
                 break;
               }
               case 26: {
                 if (gravity_ == null) {
-                  Gravity = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  Gravity = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(Gravity);
                 break;
               }
               case 34: {
                 if (acceleration_ == null) {
-                  Acceleration = new global::ARFlow.DataFrameRequest.Types.Vector3();
+                  Acceleration = new global::ARFlow.DataFrame.Types.Vector3();
                 }
                 input.ReadMessage(Acceleration);
                 break;
@@ -4968,16 +5107,16 @@ namespace ARFlow {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class DataFrameResponse : pb::IMessage<DataFrameResponse>
+  public sealed partial class Acknowledgement : pb::IMessage<Acknowledgement>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<DataFrameResponse> _parser = new pb::MessageParser<DataFrameResponse>(() => new DataFrameResponse());
+    private static readonly pb::MessageParser<Acknowledgement> _parser = new pb::MessageParser<Acknowledgement>(() => new Acknowledgement());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<DataFrameResponse> Parser { get { return _parser; } }
+    public static pb::MessageParser<Acknowledgement> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5123,7 +5262,11 @@ namespace ARFlow {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -5142,7 +5285,11 @@ namespace ARFlow {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;

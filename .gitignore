@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,visualstudiocode
 
 #additional files
-.grpc_tools
+.grpc_tools/**
 
 ### macOS ###
 # General

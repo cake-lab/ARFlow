@@ -5,7 +5,7 @@ import warnings
 
 from arflow_grpc import service_pb2 as arflow__grpc_dot_service__pb2
 
-GRPC_GENERATED_VERSION = '1.66.2'
+GRPC_GENERATED_VERSION = '1.66.1'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 

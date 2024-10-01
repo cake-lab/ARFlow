@@ -5,7 +5,7 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-class RegisterRequest(_message.Message):
+class ClientConfiguration(_message.Message):
     __slots__ = ("device_name", "camera_intrinsics", "camera_color", "camera_depth", "camera_transform", "camera_point_cloud", "camera_plane_detection", "gyroscope", "audio", "meshing")
     class CameraIntrinsics(_message.Message):
         __slots__ = ("focal_length_x", "focal_length_y", "principal_point_x", "principal_point_y", "resolution_x", "resolution_y")
@@ -89,16 +89,16 @@ class RegisterRequest(_message.Message):
     AUDIO_FIELD_NUMBER: _ClassVar[int]
     MESHING_FIELD_NUMBER: _ClassVar[int]
     device_name: str
-    camera_intrinsics: RegisterRequest.CameraIntrinsics
-    camera_color: RegisterRequest.CameraColor
-    camera_depth: RegisterRequest.CameraDepth
-    camera_transform: RegisterRequest.CameraTransform
-    camera_point_cloud: RegisterRequest.CameraPointCloud
-    camera_plane_detection: RegisterRequest.CameraPlaneDetection
-    gyroscope: RegisterRequest.Gyroscope
-    audio: RegisterRequest.Audio
-    meshing: RegisterRequest.Meshing
-    def __init__(self, device_name: _Optional[str] = ..., camera_intrinsics: _Optional[_Union[RegisterRequest.CameraIntrinsics, _Mapping]] = ..., camera_color: _Optional[_Union[RegisterRequest.CameraColor, _Mapping]] = ..., camera_depth: _Optional[_Union[RegisterRequest.CameraDepth, _Mapping]] = ..., camera_transform: _Optional[_Union[RegisterRequest.CameraTransform, _Mapping]] = ..., camera_point_cloud: _Optional[_Union[RegisterRequest.CameraPointCloud, _Mapping]] = ..., camera_plane_detection: _Optional[_Union[RegisterRequest.CameraPlaneDetection, _Mapping]] = ..., gyroscope: _Optional[_Union[RegisterRequest.Gyroscope, _Mapping]] = ..., audio: _Optional[_Union[RegisterRequest.Audio, _Mapping]] = ..., meshing: _Optional[_Union[RegisterRequest.Meshing, _Mapping]] = ...) -> None: ...
+    camera_intrinsics: ClientConfiguration.CameraIntrinsics
+    camera_color: ClientConfiguration.CameraColor
+    camera_depth: ClientConfiguration.CameraDepth
+    camera_transform: ClientConfiguration.CameraTransform
+    camera_point_cloud: ClientConfiguration.CameraPointCloud
+    camera_plane_detection: ClientConfiguration.CameraPlaneDetection
+    gyroscope: ClientConfiguration.Gyroscope
+    audio: ClientConfiguration.Audio
+    meshing: ClientConfiguration.Meshing
+    def __init__(self, device_name: _Optional[str] = ..., camera_intrinsics: _Optional[_Union[ClientConfiguration.CameraIntrinsics, _Mapping]] = ..., camera_color: _Optional[_Union[ClientConfiguration.CameraColor, _Mapping]] = ..., camera_depth: _Optional[_Union[ClientConfiguration.CameraDepth, _Mapping]] = ..., camera_transform: _Optional[_Union[ClientConfiguration.CameraTransform, _Mapping]] = ..., camera_point_cloud: _Optional[_Union[ClientConfiguration.CameraPointCloud, _Mapping]] = ..., camera_plane_detection: _Optional[_Union[ClientConfiguration.CameraPlaneDetection, _Mapping]] = ..., gyroscope: _Optional[_Union[ClientConfiguration.Gyroscope, _Mapping]] = ..., audio: _Optional[_Union[ClientConfiguration.Audio, _Mapping]] = ..., meshing: _Optional[_Union[ClientConfiguration.Meshing, _Mapping]] = ...) -> None: ...
 
 class ClientIdentifier(_message.Message):
     __slots__ = ("uid",)
@@ -106,7 +106,7 @@ class ClientIdentifier(_message.Message):
     uid: str
     def __init__(self, uid: _Optional[str] = ...) -> None: ...
 
-class DataFrameRequest(_message.Message):
+class DataFrame(_message.Message):
     __slots__ = ("uid", "color", "depth", "transform", "plane_detection", "gyroscope", "audio", "meshing")
     class Vector3(_message.Message):
         __slots__ = ("x", "y", "z")
@@ -129,10 +129,10 @@ class DataFrameRequest(_message.Message):
         CENTER_FIELD_NUMBER: _ClassVar[int]
         NORMAL_FIELD_NUMBER: _ClassVar[int]
         SIZE_FIELD_NUMBER: _ClassVar[int]
-        center: DataFrameRequest.Vector3
-        normal: DataFrameRequest.Vector3
-        size: DataFrameRequest.Vector2
-        def __init__(self, center: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ..., normal: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ..., size: _Optional[_Union[DataFrameRequest.Vector2, _Mapping]] = ...) -> None: ...
+        center: DataFrame.Vector3
+        normal: DataFrame.Vector3
+        size: DataFrame.Vector2
+        def __init__(self, center: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., normal: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., size: _Optional[_Union[DataFrame.Vector2, _Mapping]] = ...) -> None: ...
     class Quaternion(_message.Message):
         __slots__ = ("x", "y", "z", "w")
         X_FIELD_NUMBER: _ClassVar[int]
@@ -150,11 +150,11 @@ class DataFrameRequest(_message.Message):
         ROTATION_RATE_FIELD_NUMBER: _ClassVar[int]
         GRAVITY_FIELD_NUMBER: _ClassVar[int]
         ACCELERATION_FIELD_NUMBER: _ClassVar[int]
-        attitude: DataFrameRequest.Quaternion
-        rotation_rate: DataFrameRequest.Vector3
-        gravity: DataFrameRequest.Vector3
-        acceleration: DataFrameRequest.Vector3
-        def __init__(self, attitude: _Optional[_Union[DataFrameRequest.Quaternion, _Mapping]] = ..., rotation_rate: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ..., gravity: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ..., acceleration: _Optional[_Union[DataFrameRequest.Vector3, _Mapping]] = ...) -> None: ...
+        attitude: DataFrame.Quaternion
+        rotation_rate: DataFrame.Vector3
+        gravity: DataFrame.Vector3
+        acceleration: DataFrame.Vector3
+        def __init__(self, attitude: _Optional[_Union[DataFrame.Quaternion, _Mapping]] = ..., rotation_rate: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., gravity: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., acceleration: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ...) -> None: ...
     UID_FIELD_NUMBER: _ClassVar[int]
     COLOR_FIELD_NUMBER: _ClassVar[int]
     DEPTH_FIELD_NUMBER: _ClassVar[int]
@@ -167,13 +167,13 @@ class DataFrameRequest(_message.Message):
     color: bytes
     depth: bytes
     transform: bytes
-    plane_detection: _containers.RepeatedCompositeFieldContainer[DataFrameRequest.Planes]
-    gyroscope: DataFrameRequest.gyroscope_data
+    plane_detection: _containers.RepeatedCompositeFieldContainer[DataFrame.Planes]
+    gyroscope: DataFrame.gyroscope_data
     audio: bytes
     meshing: bytes
-    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrameRequest.Planes, _Mapping]]] = ..., gyroscope: _Optional[_Union[DataFrameRequest.gyroscope_data, _Mapping]] = ..., audio: _Optional[bytes] = ..., meshing: _Optional[bytes] = ...) -> None: ...
+    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrame.Planes, _Mapping]]] = ..., gyroscope: _Optional[_Union[DataFrame.gyroscope_data, _Mapping]] = ..., audio: _Optional[bytes] = ..., meshing: _Optional[bytes] = ...) -> None: ...
 
-class DataFrameResponse(_message.Message):
+class Acknowledgement(_message.Message):
     __slots__ = ("message",)
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
     message: str
