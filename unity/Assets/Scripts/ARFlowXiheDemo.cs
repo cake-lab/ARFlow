@@ -16,10 +16,10 @@ public class ARFlowXiheDemo : MonoBehaviour
     public Button startPauseButton;
     public ARCameraManager cameraManager;
     public AROcclusionManager occlusionManager;
-    private ARFlowClient _client;
-    private Vector2Int _sampleSize;
     private bool _initialized = false;
     private bool _enabled = false;
+
+    private ARFlowClientManager _clientManager;
 
     public GameObject objectToPlace;
     public GameObject placementIndicator;
@@ -33,6 +33,7 @@ public class ARFlowXiheDemo : MonoBehaviour
     {
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
+        _clientManager = new ARFlowClientManager(cameraManager, occlusionManager);
     }
 
     // Update is called once per frame
@@ -99,69 +100,7 @@ public class ARFlowXiheDemo : MonoBehaviour
             PlaceObject();
         }
 
-        try
-        {
-            _client = new ARFlowClient(addressInput.text);
-
-            cameraManager.TryGetIntrinsics(out var k);
-            cameraManager.TryAcquireLatestCpuImage(out var colorImage);
-            occlusionManager.TryAcquireEnvironmentDepthCpuImage(out var depthImage);
-
-            _sampleSize = depthImage.dimensions;
-
-            var requestData = new ClientConfiguration()
-            {
-                DeviceName = SystemInfo.deviceName,
-                CameraIntrinsics = new ClientConfiguration.Types.CameraIntrinsics()
-                {
-                    FocalLengthX = k.focalLength.x,
-                    FocalLengthY = k.focalLength.y,
-                    ResolutionX = k.resolution.x,
-                    ResolutionY = k.resolution.y,
-                    PrincipalPointX = k.principalPoint.x,
-                    PrincipalPointY = k.principalPoint.y,
-                },
-                CameraColor = new ClientConfiguration.Types.CameraColor()
-                {
-                    Enabled = true,
-                    DataType = "YCbCr420",
-                    ResizeFactorX = depthImage.dimensions.x / (float)colorImage.dimensions.x,
-                    ResizeFactorY = depthImage.dimensions.y / (float)colorImage.dimensions.y,
-                },
-                CameraDepth = new ClientConfiguration.Types.CameraDepth()
-                {
-                    Enabled = true,
-#if UNITY_ANDROID
-                    DataType = "u16", // f32 for iOS, u16 for Android
-#endif
-#if (UNITY_IOS || UNITY_VISIONOS)
-                    DataType = "f32",
-#endif
-                    ConfidenceFilteringLevel = 0,
-                    ResolutionX = depthImage.dimensions.x,
-                    ResolutionY = depthImage.dimensions.y
-                },
-                CameraTransform = new ClientConfiguration.Types.CameraTransform()
-                {
-                    Enabled = true
-                },
-                CameraPointCloud = new ClientConfiguration.Types.CameraPointCloud()
-                {
-                    Enabled = true,
-                    DepthUpscaleFactor = 1.0f,
-                },
-            };
-            colorImage.Dispose();
-            depthImage.Dispose();
-
-            _client.Connect(requestData);
-
-            // OnStartPauseButtonClick();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e);
-        }
+        _clientManager.Connect(addressInput.text);
     }
 
     private void OnStartPauseButtonClick()
@@ -174,30 +113,8 @@ public class ARFlowXiheDemo : MonoBehaviour
 
     private void UploadFrame()
     {
-        var colorImage = new XRYCbCrColorImage(cameraManager, _sampleSize);
-        var depthImage = new XRConfidenceFilteredDepthImage(occlusionManager, 0);
 
-        const int transformLength = 3 * 4 * sizeof(float);
-        var m = Camera.main!.transform.localToWorldMatrix;
-        var cameraTransformBytes = new byte[transformLength];
-
-        Buffer.BlockCopy(new[]
-        {
-            m.m00, m.m01, m.m02, m.m03,
-            m.m10, m.m11, m.m12, m.m13,
-            m.m20, m.m21, m.m22, m.m23
-        }, 0, cameraTransformBytes, 0, transformLength);
-
-
-        var responseSHC = _client.SendFrame(new DataFrame()
-        {
-            Color = ByteString.CopyFrom(colorImage.Encode()),
-            Depth = ByteString.CopyFrom(depthImage.Encode()),
-            Transform = ByteString.CopyFrom(cameraTransformBytes)
-        });
-
-        colorImage.Dispose();
-        depthImage.Dispose();
+        var responseSHC = _clientManager.GetAndSendFrame();
 
         if (responseSHC.Length > 0)
         {

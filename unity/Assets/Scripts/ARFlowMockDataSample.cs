@@ -65,6 +65,10 @@ public class ARFlowMockDataSample : MonoBehaviour
             CameraTransform = new ClientConfiguration.Types.CameraTransform()
             {
                 Enabled = false
+            },
+            Gyroscope = new RegisterRequest.Types.Gyroscope()
+            {
+                Enabled = true,
             }
         });
     }
@@ -80,10 +84,48 @@ public class ARFlowMockDataSample : MonoBehaviour
         var colorBytes = new byte[size];
         _rnd.NextBytes(colorBytes);
 
-        _client.SendFrame(new DataFrame()
+        var dataFrameRequest = new DataFrameRequest()
         {
             Color = ByteString.CopyFrom(colorBytes)
+        };
+
+        dataFrameRequest.Gyroscope = new DataFrameRequest.Types.gyroscope_data();
+        Quaternion attitude = Input.gyro.attitude;
+        Vector3 rotation_rate = Input.gyro.rotationRateUnbiased;
+        Vector3 gravity = Input.gyro.gravity;
+        Vector3 acceleration = Input.gyro.userAcceleration;
+
+        dataFrameRequest.Gyroscope.Attitude = unityQuaternionToProto(attitude);
+        dataFrameRequest.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);
+        dataFrameRequest.Gyroscope.Gravity = unityVector3ToProto(gravity);
+        dataFrameRequest.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
+
+        _client.SendFrame(new DataFrameRequest()
+        {
+            Color = ByteString.CopyFrom(colorBytes)
+
         });
+    }
+
+    DataFrameRequest.Types.Vector3 unityVector3ToProto(Vector3 a)
+    {
+        return new DataFrameRequest.Types.Vector3()
+        {
+            X = a.x,
+            Y = a.y,
+            Z = a.z
+        };
+    }
+
+    DataFrameRequest.Types.Quaternion unityQuaternionToProto(Quaternion a)
+    {
+        return new DataFrameRequest.Types.Quaternion()
+        {
+            X = a.x,
+            Y = a.y,
+            Z = a.z,
+            W = a.w
+        };
     }
 
     // Update is called once per frame

@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using System.Collections.Generic;
+using System.Collections;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
@@ -19,15 +21,24 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     public AROcclusionManager occlusionManager;
 
+    /// <summary>
+    /// Plane detection
+    /// </summary>
+    public ARPlaneManager planeManager;
+
     public Button connectButton;
     public Button startPauseButton;
 
-    private ARFlowClient _client;
-    private Vector2Int _sampleSize;
     private bool _enabled = false;
+
+    private ARFlowClientManager _clientManager;
 
     public TMP_InputField ipField;
     public TMP_InputField portField;
+
+    public GameObject OptionsContainer;
+
+    private Dictionary<string, GameObject> _optionObjects = new Dictionary<string, GameObject>();
 
     private string _defaultConnection = "http://192.168.1.219:8500";
 
@@ -36,6 +47,9 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
+        _clientManager = new ARFlowClientManager(cameraManager, occlusionManager);
+
+        addModalityOptionsToConfig();
 
         // OnConnectButtonClick();
 
@@ -44,7 +58,48 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Application.targetFrameRate = 30;
     }
 
-    bool validIP(string ipField)
+    void addModalityOptionsToConfig()
+    {
+        // Get first child, WITH THE ASSUMPTION that it's a checkbox
+        GameObject firstChild = OptionsContainer.transform.GetChild(0).gameObject;
+
+        foreach (string modality in ARFlowClientManager.MODALITIES)
+        {
+            GameObject newOption = Instantiate(
+                firstChild, 
+                parent: OptionsContainer.transform
+            );
+            newOption.GetComponent<Text>().text = splitByCapital(modality);
+
+            _optionObjects.Add( modality, newOption );
+        }
+    }
+
+    string splitByCapital(string s)
+    {
+        return Regex.Replace(s, "([a-z])([A-Z])", "$1 $2");
+    }
+
+    Dictionary<string, bool> modalityOptions()
+    {
+        Dictionary<string, bool> res = new Dictionary<string, bool>();
+        foreach (var option in  _optionObjects)
+        {
+            var optionName = option.Key;
+            var optionObject = option.Value;
+
+            var slider = optionObject.transform.Find("Slider");
+            if (slider != null)
+            {
+                var sliderVal = slider.GetComponent<Slider>().value;
+                res.Add(optionName, sliderVal != 0);
+            }
+        }
+
+        return res;
+    }
+
+    bool validIP (string ipField)
     {
         return Regex.IsMatch(ipField, @"(\d){1,3}\.(\d){1,3}\.(\d){1,3}\.(\d){1,3}");
     }
@@ -65,71 +120,22 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             serverURL = "http://" + ipField.text + ":" + portField.text;
         }
-        serverURL = Regex.Replace(serverURL, @"\s+", "");
-        // destructor dispose old client when we reconnect
-        _client = new ARFlowClient(serverURL);
+        var modalities = modalityOptions();
 
-        try
+        prettyPrintDictionary(modalities);
+
+        _clientManager.Connect(serverURL, modalityOptions());
+    }
+
+    public static void prettyPrintDictionary(Dictionary<string, bool> dict)
+    {
+        string log = "";
+        foreach (var kvp in dict)
         {
-            cameraManager.TryGetIntrinsics(out var k);
-            cameraManager.TryAcquireLatestCpuImage(out var colorImage);
-            occlusionManager.TryAcquireEnvironmentDepthCpuImage(out var depthImage);
-
-            _sampleSize = depthImage.dimensions;
-
-            var requestData = new ClientConfiguration()
-            {
-                DeviceName = SystemInfo.deviceName,
-                CameraIntrinsics = new ClientConfiguration.Types.CameraIntrinsics()
-                {
-                    FocalLengthX = k.focalLength.x,
-                    FocalLengthY = k.focalLength.y,
-                    ResolutionX = k.resolution.x,
-                    ResolutionY = k.resolution.y,
-                    PrincipalPointX = k.principalPoint.x,
-                    PrincipalPointY = k.principalPoint.y,
-                },
-                CameraColor = new ClientConfiguration.Types.CameraColor()
-                {
-                    Enabled = true,
-                    DataType = "YCbCr420",
-                    ResizeFactorX = depthImage.dimensions.x / (float)colorImage.dimensions.x,
-                    ResizeFactorY = depthImage.dimensions.y / (float)colorImage.dimensions.y,
-                },
-                CameraDepth = new ClientConfiguration.Types.CameraDepth()
-                {
-                    Enabled = true,
-#if UNITY_ANDROID
-                    DataType = "u16", // f32 for iOS, u16 for Android
-#endif
-#if (UNITY_IOS || UNITY_VISIONOS)
-                    DataType = "f32",
-#endif
-                    ConfidenceFilteringLevel = 0,
-                    ResolutionX = depthImage.dimensions.x,
-                    ResolutionY = depthImage.dimensions.y
-                },
-                CameraTransform = new ClientConfiguration.Types.CameraTransform()
-                {
-                    Enabled = true
-                },
-                CameraPointCloud = new ClientConfiguration.Types.CameraPointCloud()
-                {
-                    Enabled = true,
-                    DepthUpscaleFactor = 1.0f,
-                },
-            };
-            colorImage.Dispose();
-            depthImage.Dispose();
-
-            _client.Connect(requestData);
-
-            // OnStartPauseButtonClick();
+            //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+            log += string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
         }
-        catch (Exception e)
-        {
-            Debug.LogError(e);
-        }
+        Debug.Log(log);
     }
 
     /// <summary>
@@ -157,29 +163,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void UploadFrame()
     {
-        var colorImage = new XRYCbCrColorImage(cameraManager, _sampleSize);
-        var depthImage = new XRConfidenceFilteredDepthImage(occlusionManager, 0);
-
-        const int transformLength = 3 * 4 * sizeof(float);
-        var m = Camera.main!.transform.localToWorldMatrix;
-        var cameraTransformBytes = new byte[transformLength];
-
-        Buffer.BlockCopy(new[]
-        {
-            m.m00, m.m01, m.m02, m.m03,
-            m.m10, m.m11, m.m12, m.m13,
-            m.m20, m.m21, m.m22, m.m23
-        }, 0, cameraTransformBytes, 0, transformLength);
-
-
-        _client.SendFrame(new DataFrame()
-        {
-            Color = ByteString.CopyFrom(colorImage.Encode()),
-            Depth = ByteString.CopyFrom(depthImage.Encode()),
-            Transform = ByteString.CopyFrom(cameraTransformBytes)
-        });
-
-        colorImage.Dispose();
-        depthImage.Dispose();
+        _clientManager.GetAndSendFrame();
     }
+
 }
