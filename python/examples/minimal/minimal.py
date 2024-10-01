@@ -11,6 +11,9 @@ import arflow
 
 
 class MinimalService(arflow.ARFlowService):
+    def __init__(self):
+        super().__init__()
+
     def on_register(self, request: arflow.RegisterRequest):
         positions = np.vstack(
             [xyz.ravel() for xyz in np.mgrid[3 * [slice(-10, 10, 10j)]]]

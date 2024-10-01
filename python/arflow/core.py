@@ -76,13 +76,13 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
 
         if session_configs.camera_color.enabled:
             color_rgb = ARFlowService.decode_rgb_image(session_configs, request.color)
-            decoded_data["color_rgb"] = color_rgb
+            decoded_data["image/color_rgb"] = color_rgb
             color_rgb = np.flipud(color_rgb)
             self.recorder.log("rgb", rr.Image(color_rgb))
 
         if session_configs.camera_depth.enabled:
             depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
-            decoded_data["depth_img"] = depth_img
+            decoded_data["image/depth_img"] = depth_img
             depth_img = np.flipud(depth_img)
             self.recorder.log("depth", rr.DepthImage(depth_img, meter=1.0))
 
@@ -116,6 +116,56 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
             decoded_data["point_cloud_pcd"] = pcd
             decoded_data["point_cloud_clr"] = clr
             self.recorder.log("world/point_cloud", rr.Points3D(pcd, colors=clr))
+
+        if session_configs.camera_plane_detection.enabled:
+            pass
+
+        if session_configs.gyroscope.enabled:
+            gyro_data = request.gyroscope
+
+            attitude = rr.Quaternion(
+                xyzw=[
+                    gyro_data.attitude.x,
+                    gyro_data.attitude.y,
+                    gyro_data.attitude.z,
+                    gyro_data.attitude.w,
+                ]
+            )
+            rotation_rate = rr.datatypes.Vec3D(
+                [
+                    gyro_data.rotation_rate.x,
+                    gyro_data.rotation_rate.y,
+                    gyro_data.rotation_rate.z,
+                ]
+            )
+            gravity = rr.datatypes.Vec3D(
+                [gyro_data.gravity.x, gyro_data.gravity.y, gyro_data.gravity.z]
+            )
+            acceleration = rr.datatypes.Vec3D(
+                [
+                    gyro_data.acceleration.x,
+                    gyro_data.acceleration.y,
+                    gyro_data.acceleration.z,
+                ]
+            )
+
+            # Attitute is displayed as a box, and the other acceleration variables are displayed as arrows.
+            rr.log(
+                "rotations/gyroscope/attitude",
+                rr.Boxes3D(half_sizes=[0.5, 0.5, 0.5], quaternions=[attitude]),
+            )
+            rr.log(
+                "rotations/gyroscope/rotation_rate",
+                rr.Arrows3D(vectors=[rotation_rate], colors=[[0, 255, 0]]),
+            )
+            rr.log(
+                "rotations/gyroscope/gravity",
+                rr.Arrows3D(vectors=[gravity], colors=[[0, 0, 255]]),
+            )
+            rr.log(
+                "rotations/gyroscope/acceleration",
+                rr.Arrows3D(vectors=[acceleration], colors=[[255, 255, 0]]),
+            )
 
         # Call the for user extension code.
         self.on_frame_received(decoded_data)

@@ -15,9 +15,9 @@ repository = "https://github.com/cake-lab/ARFlow"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
-rerun-sdk = "^0.12.1"
 grpcio = "^1.60.1"
 grpcio-tools = "^1.60.1"
+rerun-sdk = "^0.18.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"
