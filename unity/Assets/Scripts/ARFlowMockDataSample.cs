@@ -66,7 +66,7 @@ public class ARFlowMockDataSample : MonoBehaviour
             {
                 Enabled = false
             },
-            Gyroscope = new RegisterRequest.Types.Gyroscope()
+            Gyroscope = new ClientConfiguration.Types.Gyroscope()
             {
                 Enabled = true,
             }
@@ -84,32 +84,32 @@ public class ARFlowMockDataSample : MonoBehaviour
         var colorBytes = new byte[size];
         _rnd.NextBytes(colorBytes);
 
-        var dataFrameRequest = new DataFrameRequest()
+        var dataFrame = new DataFrame()
         {
             Color = ByteString.CopyFrom(colorBytes)
         };
 
-        dataFrameRequest.Gyroscope = new DataFrameRequest.Types.gyroscope_data();
+        dataFrame.Gyroscope = new DataFrame.Types.gyroscope_data();
         Quaternion attitude = Input.gyro.attitude;
         Vector3 rotation_rate = Input.gyro.rotationRateUnbiased;
         Vector3 gravity = Input.gyro.gravity;
         Vector3 acceleration = Input.gyro.userAcceleration;
 
-        dataFrameRequest.Gyroscope.Attitude = unityQuaternionToProto(attitude);
-        dataFrameRequest.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);
-        dataFrameRequest.Gyroscope.Gravity = unityVector3ToProto(gravity);
-        dataFrameRequest.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
+        dataFrame.Gyroscope.Attitude = unityQuaternionToProto(attitude);
+        dataFrame.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);
+        dataFrame.Gyroscope.Gravity = unityVector3ToProto(gravity);
+        dataFrame.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
 
-        _client.SendFrame(new DataFrameRequest()
+        _client.SendFrame(new DataFrame()
         {
             Color = ByteString.CopyFrom(colorBytes)
 
         });
     }
 
-    DataFrameRequest.Types.Vector3 unityVector3ToProto(Vector3 a)
+    DataFrame.Types.Vector3 unityVector3ToProto(Vector3 a)
     {
-        return new DataFrameRequest.Types.Vector3()
+        return new DataFrame.Types.Vector3()
         {
             X = a.x,
             Y = a.y,
@@ -117,9 +117,9 @@ public class ARFlowMockDataSample : MonoBehaviour
         };
     }
 
-    DataFrameRequest.Types.Quaternion unityQuaternionToProto(Quaternion a)
+    DataFrame.Types.Quaternion unityQuaternionToProto(Quaternion a)
     {
-        return new DataFrameRequest.Types.Quaternion()
+        return new DataFrame.Types.Quaternion()
         {
             X = a.x,
             Y = a.y,
