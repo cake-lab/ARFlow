@@ -29,6 +29,7 @@ Transform = npt.NDArray[np.float32]
 Intrinsic = npt.NDArray[np.float32]
 PointCloudPCD = npt.NDArray[np.float32]
 PointCloudCLR = npt.NDArray[np.uint8]
+Audio = npt.NDArray[np.float32]
 
 
 @dataclass

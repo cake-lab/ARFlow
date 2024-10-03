@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 97db58b9403c0964c91782c4e42f3595
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - unityVoiceProcessorMixer: {fileID: 24300002, guid: 80f14401e61be2348b045082a2eec30d,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

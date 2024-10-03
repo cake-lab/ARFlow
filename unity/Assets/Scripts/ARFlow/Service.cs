@@ -53,27 +53,27 @@ namespace ARFlow {
             "b3IYAiABKAIaJwoUQ2FtZXJhUGxhbmVEZXRlY3Rpb24SDwoHZW5hYmxlZBgB",
             "IAEoCBocCglHeXJvc2NvcGUSDwoHZW5hYmxlZBgBIAEoCBoYCgVBdWRpbxIP",
             "CgdlbmFibGVkGAEgASgIGhoKB01lc2hpbmcSDwoHZW5hYmxlZBgBIAEoCCIf",
-            "ChBDbGllbnRJZGVudGlmaWVyEgsKA3VpZBgBIAEoCSK0BQoJRGF0YUZyYW1l",
+            "ChBDbGllbnRJZGVudGlmaWVyEgsKA3VpZBgBIAEoCSK5BQoJRGF0YUZyYW1l",
             "EgsKA3VpZBgBIAEoCRINCgVjb2xvchgCIAEoDBINCgVkZXB0aBgDIAEoDBIR",
             "Cgl0cmFuc2Zvcm0YBCABKAwSMQoPcGxhbmVfZGV0ZWN0aW9uGAUgAygLMhgu",
             "YXJmbG93LkRhdGFGcmFtZS5QbGFuZXMSMwoJZ3lyb3Njb3BlGAYgASgLMiAu",
-            "YXJmbG93LkRhdGFGcmFtZS5neXJvc2NvcGVfZGF0YRINCgVhdWRpbxgIIAEo",
-            "DBIPCgdtZXNoaW5nGAkgASgMGioKB1ZlY3RvcjMSCQoBeBgBIAEoAhIJCgF5",
-            "GAIgASgCEgkKAXoYAyABKAIaHwoHVmVjdG9yMhIJCgF4GAEgASgCEgkKAXkY",
-            "AiABKAIahwEKBlBsYW5lcxIpCgZjZW50ZXIYASABKAsyGS5hcmZsb3cuRGF0",
-            "YUZyYW1lLlZlY3RvcjMSKQoGbm9ybWFsGAIgASgLMhkuYXJmbG93LkRhdGFG",
-            "cmFtZS5WZWN0b3IzEicKBHNpemUYAyABKAsyGS5hcmZsb3cuRGF0YUZyYW1l",
-            "LlZlY3RvcjIaOAoKUXVhdGVybmlvbhIJCgF4GAEgASgCEgkKAXkYAiABKAIS",
-            "CQoBehgDIAEoAhIJCgF3GAQgASgCGs8BCg5neXJvc2NvcGVfZGF0YRIuCghh",
-            "dHRpdHVkZRgBIAEoCzIcLmFyZmxvdy5EYXRhRnJhbWUuUXVhdGVybmlvbhIw",
-            "Cg1yb3RhdGlvbl9yYXRlGAIgASgLMhkuYXJmbG93LkRhdGFGcmFtZS5WZWN0",
-            "b3IzEioKB2dyYXZpdHkYAyABKAsyGS5hcmZsb3cuRGF0YUZyYW1lLlZlY3Rv",
-            "cjMSLwoMYWNjZWxlcmF0aW9uGAQgASgLMhkuYXJmbG93LkRhdGFGcmFtZS5W",
-            "ZWN0b3IzIiIKD0Fja25vd2xlZGdlbWVudBIPCgdtZXNzYWdlGAEgASgJMo0B",
-            "CgZBUkZsb3cSRwoOUmVnaXN0ZXJDbGllbnQSGy5hcmZsb3cuQ2xpZW50Q29u",
-            "ZmlndXJhdGlvbhoYLmFyZmxvdy5DbGllbnRJZGVudGlmaWVyEjoKDFByb2Nl",
-            "c3NGcmFtZRIRLmFyZmxvdy5EYXRhRnJhbWUaFy5hcmZsb3cuQWNrbm93bGVk",
-            "Z2VtZW50QgmqAgZBUkZsb3diBnByb3RvMw=="));
+            "YXJmbG93LkRhdGFGcmFtZS5neXJvc2NvcGVfZGF0YRISCgphdWRpb19kYXRh",
+            "GAggAygCEg8KB21lc2hpbmcYCSABKAwaKgoHVmVjdG9yMxIJCgF4GAEgASgC",
+            "EgkKAXkYAiABKAISCQoBehgDIAEoAhofCgdWZWN0b3IyEgkKAXgYASABKAIS",
+            "CQoBeRgCIAEoAhqHAQoGUGxhbmVzEikKBmNlbnRlchgBIAEoCzIZLmFyZmxv",
+            "dy5EYXRhRnJhbWUuVmVjdG9yMxIpCgZub3JtYWwYAiABKAsyGS5hcmZsb3cu",
+            "RGF0YUZyYW1lLlZlY3RvcjMSJwoEc2l6ZRgDIAEoCzIZLmFyZmxvdy5EYXRh",
+            "RnJhbWUuVmVjdG9yMho4CgpRdWF0ZXJuaW9uEgkKAXgYASABKAISCQoBeRgC",
+            "IAEoAhIJCgF6GAMgASgCEgkKAXcYBCABKAIazwEKDmd5cm9zY29wZV9kYXRh",
+            "Ei4KCGF0dGl0dWRlGAEgASgLMhwuYXJmbG93LkRhdGFGcmFtZS5RdWF0ZXJu",
+            "aW9uEjAKDXJvdGF0aW9uX3JhdGUYAiABKAsyGS5hcmZsb3cuRGF0YUZyYW1l",
+            "LlZlY3RvcjMSKgoHZ3Jhdml0eRgDIAEoCzIZLmFyZmxvdy5EYXRhRnJhbWUu",
+            "VmVjdG9yMxIvCgxhY2NlbGVyYXRpb24YBCABKAsyGS5hcmZsb3cuRGF0YUZy",
+            "YW1lLlZlY3RvcjMiIgoPQWNrbm93bGVkZ2VtZW50Eg8KB21lc3NhZ2UYASAB",
+            "KAkyjQEKBkFSRmxvdxJHCg5SZWdpc3RlckNsaWVudBIbLmFyZmxvdy5DbGll",
+            "bnRDb25maWd1cmF0aW9uGhguYXJmbG93LkNsaWVudElkZW50aWZpZXISOgoM",
+            "UHJvY2Vzc0ZyYW1lEhEuYXJmbG93LkRhdGFGcmFtZRoXLmFyZmxvdy5BY2tu",
+            "b3dsZWRnZW1lbnRCCaoCBkFSRmxvd2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -87,7 +87,7 @@ namespace ARFlow {
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.Audio), global::ARFlow.ClientConfiguration.Types.Audio.Parser, new[]{ "Enabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientConfiguration.Types.Meshing), global::ARFlow.ClientConfiguration.Types.Meshing.Parser, new[]{ "Enabled" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientIdentifier), global::ARFlow.ClientIdentifier.Parser, new[]{ "Uid" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame), global::ARFlow.DataFrame.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Vector3), global::ARFlow.DataFrame.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame), global::ARFlow.DataFrame.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PlaneDetection", "Gyroscope", "AudioData", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Vector3), global::ARFlow.DataFrame.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Vector2), global::ARFlow.DataFrame.Types.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Planes), global::ARFlow.DataFrame.Types.Planes.Parser, new[]{ "Center", "Normal", "Size" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Quaternion), global::ARFlow.DataFrame.Types.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null),
@@ -3224,7 +3224,7 @@ namespace ARFlow {
       transform_ = other.transform_;
       planeDetection_ = other.planeDetection_.Clone();
       gyroscope_ = other.gyroscope_ != null ? other.gyroscope_.Clone() : null;
-      audio_ = other.audio_;
+      audioData_ = other.audioData_.Clone();
       meshing_ = other.meshing_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -3306,16 +3306,15 @@ namespace ARFlow {
       }
     }
 
-    /// <summary>Field number for the "audio" field.</summary>
-    public const int AudioFieldNumber = 8;
-    private pb::ByteString audio_ = pb::ByteString.Empty;
+    /// <summary>Field number for the "audio_data" field.</summary>
+    public const int AudioDataFieldNumber = 8;
+    private static readonly pb::FieldCodec<float> _repeated_audioData_codec
+        = pb::FieldCodec.ForFloat(66);
+    private readonly pbc::RepeatedField<float> audioData_ = new pbc::RepeatedField<float>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pb::ByteString Audio {
-      get { return audio_; }
-      set {
-        audio_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
+    public pbc::RepeatedField<float> AudioData {
+      get { return audioData_; }
     }
 
     /// <summary>Field number for the "meshing" field.</summary>
@@ -3351,7 +3350,7 @@ namespace ARFlow {
       if (Transform != other.Transform) return false;
       if(!planeDetection_.Equals(other.planeDetection_)) return false;
       if (!object.Equals(Gyroscope, other.Gyroscope)) return false;
-      if (Audio != other.Audio) return false;
+      if(!audioData_.Equals(other.audioData_)) return false;
       if (Meshing != other.Meshing) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -3366,7 +3365,7 @@ namespace ARFlow {
       if (Transform.Length != 0) hash ^= Transform.GetHashCode();
       hash ^= planeDetection_.GetHashCode();
       if (gyroscope_ != null) hash ^= Gyroscope.GetHashCode();
-      if (Audio.Length != 0) hash ^= Audio.GetHashCode();
+      hash ^= audioData_.GetHashCode();
       if (Meshing.Length != 0) hash ^= Meshing.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -3407,10 +3406,7 @@ namespace ARFlow {
         output.WriteRawTag(50);
         output.WriteMessage(Gyroscope);
       }
-      if (Audio.Length != 0) {
-        output.WriteRawTag(66);
-        output.WriteBytes(Audio);
-      }
+      audioData_.WriteTo(output, _repeated_audioData_codec);
       if (Meshing.Length != 0) {
         output.WriteRawTag(74);
         output.WriteBytes(Meshing);
@@ -3446,10 +3442,7 @@ namespace ARFlow {
         output.WriteRawTag(50);
         output.WriteMessage(Gyroscope);
       }
-      if (Audio.Length != 0) {
-        output.WriteRawTag(66);
-        output.WriteBytes(Audio);
-      }
+      audioData_.WriteTo(ref output, _repeated_audioData_codec);
       if (Meshing.Length != 0) {
         output.WriteRawTag(74);
         output.WriteBytes(Meshing);
@@ -3480,9 +3473,7 @@ namespace ARFlow {
       if (gyroscope_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Gyroscope);
       }
-      if (Audio.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Audio);
-      }
+      size += audioData_.CalculateSize(_repeated_audioData_codec);
       if (Meshing.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(Meshing);
       }
@@ -3517,9 +3508,7 @@ namespace ARFlow {
         }
         Gyroscope.MergeFrom(other.Gyroscope);
       }
-      if (other.Audio.Length != 0) {
-        Audio = other.Audio;
-      }
+      audioData_.Add(other.audioData_);
       if (other.Meshing.Length != 0) {
         Meshing = other.Meshing;
       }
@@ -3569,8 +3558,9 @@ namespace ARFlow {
             input.ReadMessage(Gyroscope);
             break;
           }
-          case 66: {
-            Audio = input.ReadBytes();
+          case 66:
+          case 69: {
+            audioData_.AddEntriesFrom(input, _repeated_audioData_codec);
             break;
           }
           case 74: {
@@ -3623,8 +3613,9 @@ namespace ARFlow {
             input.ReadMessage(Gyroscope);
             break;
           }
-          case 66: {
-            Audio = input.ReadBytes();
+          case 66:
+          case 69: {
+            audioData_.AddEntriesFrom(ref input, _repeated_audioData_codec);
             break;
           }
           case 74: {

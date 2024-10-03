@@ -125,7 +125,7 @@ message DataFrame {
     }
     gyroscope_data gyroscope = 6;
 
-    bytes audio = 8;
+    repeated float audio_data = 8;
     bytes meshing = 9;
 }
 

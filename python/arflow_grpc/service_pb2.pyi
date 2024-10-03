@@ -107,7 +107,7 @@ class ClientIdentifier(_message.Message):
     def __init__(self, uid: _Optional[str] = ...) -> None: ...
 
 class DataFrame(_message.Message):
-    __slots__ = ("uid", "color", "depth", "transform", "plane_detection", "gyroscope", "audio", "meshing")
+    __slots__ = ("uid", "color", "depth", "transform", "plane_detection", "gyroscope", "audio_data", "meshing")
     class Vector3(_message.Message):
         __slots__ = ("x", "y", "z")
         X_FIELD_NUMBER: _ClassVar[int]
@@ -161,7 +161,7 @@ class DataFrame(_message.Message):
     TRANSFORM_FIELD_NUMBER: _ClassVar[int]
     PLANE_DETECTION_FIELD_NUMBER: _ClassVar[int]
     GYROSCOPE_FIELD_NUMBER: _ClassVar[int]
-    AUDIO_FIELD_NUMBER: _ClassVar[int]
+    AUDIO_DATA_FIELD_NUMBER: _ClassVar[int]
     MESHING_FIELD_NUMBER: _ClassVar[int]
     uid: str
     color: bytes
@@ -169,9 +169,9 @@ class DataFrame(_message.Message):
     transform: bytes
     plane_detection: _containers.RepeatedCompositeFieldContainer[DataFrame.Planes]
     gyroscope: DataFrame.gyroscope_data
-    audio: bytes
+    audio_data: _containers.RepeatedScalarFieldContainer[float]
     meshing: bytes
-    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrame.Planes, _Mapping]]] = ..., gyroscope: _Optional[_Union[DataFrame.gyroscope_data, _Mapping]] = ..., audio: _Optional[bytes] = ..., meshing: _Optional[bytes] = ...) -> None: ...
+    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrame.Planes, _Mapping]]] = ..., gyroscope: _Optional[_Union[DataFrame.gyroscope_data, _Mapping]] = ..., audio_data: _Optional[_Iterable[float]] = ..., meshing: _Optional[bytes] = ...) -> None: ...
 
 class Acknowledgement(_message.Message):
     __slots__ = ("message",)

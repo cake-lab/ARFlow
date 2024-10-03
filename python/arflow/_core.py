@@ -18,6 +18,7 @@ from grpc_interceptor.exceptions import InvalidArgument, NotFound
 from arflow._error_logger import ErrorLogger
 from arflow._types import (
     ARFlowRequest,
+    Audio,
     ClientConfigurations,
     ColorRGB,
     DecodedDataFrame,
@@ -109,6 +110,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         k: Intrinsic | None = None
         point_cloud_pcd: PointCloudPCD | None = None
         point_cloud_clr: PointCloudCLR | None = None
+        audio_data: Audio | None = None
 
         if client_config.camera_color.enabled:
             if client_config.camera_color.data_type not in ["RGB24", "YCbCr420"]:
@@ -160,6 +162,12 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                     "world/point_cloud",
                     rr.Points3D(point_cloud_pcd, colors=point_cloud_clr),
                 )
+
+        if client_config.audio.enabled:
+            audio_data = np.array(request.audio_data)
+            print(audio_data)
+            for i in audio_data:
+                self.recorder.log("audio", rr.Scalar(i))
 
         # Call the for user extension code.
         self.on_frame_received(

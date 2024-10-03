@@ -120,9 +120,8 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             serverURL = "http://" + ipField.text + ":" + portField.text;
         }
-        var modalities = modalityOptions();
-
-        prettyPrintDictionary(modalities);
+        //var modalities = modalityOptions();
+        //prettyPrintDictionary(modalities);
 
         _clientManager.Connect(serverURL, modalityOptions());
     }
@@ -145,6 +144,15 @@ public class ARFlowDeviceSample : MonoBehaviour
     private void OnStartPauseButtonClick()
     {
         Debug.Log($"Current framerate: {Application.targetFrameRate}");
+
+        if (enabled)
+        {
+            _clientManager.startDataStreaming();
+        }
+        else
+        {
+            _clientManager.stopDataStreaming();
+        }
 
         _enabled = !_enabled;
         startPauseButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";
