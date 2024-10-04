@@ -13,6 +13,7 @@ using UnityEngine.InputSystem;
 using Google.Protobuf.WellKnownTypes;
 using Unity.Collections;
 using System.Linq;
+using UnityEngine.Android;
 
 namespace ARFlow
 {
@@ -92,6 +93,18 @@ namespace ARFlow
             _audioStreaming = new AudioStreaming();
             _planeManager = planeManager;
             _meshManager = meshManager;
+#if UNITY_ANDROID
+            if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
+            {
+                Permission.RequestUserPermission(Permission.Microphone);
+            }
+#endif
+#if UNITY_IOS
+            if (Application.HasUserAuthorization(UserAuthorization.Microphone))
+            {
+                Application.RequestUserAuthorization(UserAuthorization.Microphone);
+            }
+#endif
         }
 
 
@@ -362,6 +375,7 @@ namespace ARFlow
             {
                 Debug.Log("audio");
                 dataFrame.AudioData.Add(_audioStreaming.UnsentFrames);
+                _audioStreaming.clearFrameList();
                 //Buffer.BlockCopy
             }
 
@@ -385,7 +399,9 @@ namespace ARFlow
 
             }
 
+            Debug.Log("sending dataframe");
             string serverMessage = _client.SendFrame(dataFrame);
+            Debug.Log("dataframe sent");
             return serverMessage;
         }
     }

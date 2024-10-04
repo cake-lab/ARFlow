@@ -6941,7 +6941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1760703bbd54c04488a8d10600262ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlanePrefab: {fileID: 0}
+  m_PlanePrefab: {fileID: 6975488193990435630, guid: 5fd90b9f89d89b24f8637ccf70adcec6, type: 3}
   m_DetectionMode: -1
 --- !u!1 &1405679186
 GameObject:
@@ -7333,8 +7333,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 518653703}
   m_HandleRect: {fileID: 518653702}
   m_Direction: 2
-  m_Value: -0.0005764425
-  m_Size: 0.9380414
+  m_Value: 0
+  m_Size: 0.93953675
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13347,7 +13347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000076293945, y: -177.33739}
+  m_AnchoredPosition: {x: -0.000076293945, y: -177.35089}
   m_SizeDelta: {x: -4.7499847, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6234637625898487408

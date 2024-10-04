@@ -172,7 +172,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 )
 
         if client_config.camera_plane_detection.enabled:
-            strips: List[npt.NDArray[np.float32]] = []
+            index = 0
             for plane in request.plane_detection:
                 boundary_points_2d: List[List[float]] = list(
                     map(lambda pt: [pt.x, pt.y], plane.boundary_points)
@@ -188,15 +188,15 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 boundary_3d = convert_2d_to_3d(
                     plane.boundary_points, plane.normal, plane.center
                 )
-                strips.append(boundary_3d)
-            self.recorder.log(
-                "world/plane",
-                rr.LineStrips3D(
-                    strips=strips,
-                    colors=[[255, 0, 0]],
-                    radii=rr.Radius.ui_points(5.0),
-                ),
-            )
+                self.recorder.log(
+                    f"world/plane/plane-{index}",
+                    rr.LineStrips3D(
+                        strips=boundary_3d,
+                        colors=[[255, 0, 0]],
+                        radii=rr.Radius.ui_points(5.0),
+                    ),
+                )
+                index += 1
 
         if client_config.gyroscope.enabled:
             gyro_data_proto = request.gyroscope
