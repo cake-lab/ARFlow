@@ -1,5 +1,6 @@
 """A library for replaying ARFlow data."""
 
+import logging
 import pickle
 import threading
 import time
@@ -9,6 +10,8 @@ from typing import Type
 from arflow._core import ARFlowServicer
 from arflow._types import EnrichedARFlowRequest, RequestsHistory
 from arflow_grpc.service_pb2 import ClientConfiguration, DataFrame
+
+logger = logging.getLogger(__name__)
 
 
 class ARFlowPlayer(threading.Thread):
@@ -90,5 +93,5 @@ class ARFlowPlayer(threading.Thread):
 
             self._sleep()
 
-        print("Reply finished.")
+        logger.debug("Reply finished.")
         exit()

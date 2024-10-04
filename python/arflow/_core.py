@@ -1,5 +1,6 @@
 """Data exchanging service."""
 
+import logging
 import os
 import pickle
 import time
@@ -37,6 +38,8 @@ from arflow_grpc.service_pb2 import (
     ClientIdentifier,
     DataFrame,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
@@ -77,7 +80,9 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         self._client_configurations[HashableClientIdentifier(init_uid)] = request
 
         self.recorder.init(f"{request.device_name} - ARFlow", spawn=True)
-        print("Registered a client with UUID: %s" % init_uid, request)
+        logger.debug(
+            "Registered a client with UUID: %s, Request: %s", init_uid, request
+        )
 
         # Call the for user extension code.
         self.on_register(request)
@@ -230,7 +235,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
 
         @private
         """
-        print("Saving the data...")
+        logger.debug("Saving the data...")
         # Ensure the directory exists.
         os.makedirs(path_to_save, exist_ok=True)
         save_path = (
@@ -240,7 +245,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         with open(save_path, "wb") as f:
             pickle.dump(self._requests_history, f)
 
-        print(f"Data saved to {save_path}")
+        logger.info("Data saved to %s", save_path)
 
 
 def _decode_rgb_image(
@@ -427,7 +432,7 @@ def run_server(
     service_pb2_grpc.add_ARFlowServicer_to_server(servicer, server)  # pyright: ignore [reportUnknownMemberType]
     server.add_insecure_port("[::]:%s" % port)
     server.start()
-    print(f"Server started, listening on {port}")
+    logger.info("Server started, listening on %s", port)
 
     def handle_shutdown(*_: Any) -> None:
         """Shutdown gracefully.
@@ -444,7 +449,7 @@ def run_server(
         3. Wait on the `threading.Event` object returned by `server.stop(30)` to ensure Python does not exit prematurely.
         4. Optionally, perform cleanup procedures and save any necessary data before shutting down completely.
         """
-        print("Received shutdown signal")
+        logger.debug("Shutting down gracefully")
         all_rpcs_done_event = server.stop(30)
         all_rpcs_done_event.wait(30)
 
@@ -453,7 +458,7 @@ def run_server(
 
         # TODO: Discuss hook for user-defined cleanup procedures.
 
-        print("Shut down gracefully")
+        logger.debug("Server shut down gracefully")
 
     signal(SIGTERM, handle_shutdown)
     signal(SIGINT, handle_shutdown)

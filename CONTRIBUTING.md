@@ -60,6 +60,27 @@ ARFlow uses [`pytest`](https://pytest.org). Make sure you are in the `python` di
 poetry run pytest
 ```
 
+### Logging
+
+- Log key events for debugging and tracking.
+- Avoid logging sensitive information (e.g., user data).
+- Initialize a logger in each module using `logger = logging.getLogger(__name__)`. This enables granular logging and gives users control over logs from specific parts of the library.
+- Use appropriate log levels:
+
+| Level       | Usage                        |
+| ----------- | ---------------------------- |
+| `debug()`   | Detailed internal state info |
+| `info()`    | General operational events   |
+| `warning()` | Unexpected events, non-fatal |
+| `error()`   | Errors, exceptions           |
+
+Example:
+
+```python
+logger = logging.getLogger(__name__)
+logger.debug("Processing request: %s", request_id)
+```
+
 ### Continuous Integration
 
 ARFlow uses GitHub Actions for continuous integration. The CI pipeline runs the following checks:

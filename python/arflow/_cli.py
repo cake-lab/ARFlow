@@ -9,6 +9,8 @@ from typing import Any, Sequence
 from arflow._core import ARFlowServicer, run_server
 from arflow._replay import ARFlowPlayer
 
+logger = logging.getLogger(__name__)
+
 
 def _validate_dir_path(path_as_str: str | None) -> str | None:
     """Check if the path is a valid directory."""
@@ -84,7 +86,7 @@ def parse_args(
     parsed_args = parser.parse_args(argv)
 
     if parsed_args.debug:
-        logging.getLogger().setLevel(logging.DEBUG)
+        logger.setLevel(logging.DEBUG)
 
     return parser, parsed_args
 
@@ -98,5 +100,4 @@ def main(argv: Sequence[str] | None = None):  # pragma: no cover
 
 
 if __name__ == "__main__":  # pragma: no cover
-    logging.basicConfig()  # TODO: Replace print with logging
     main()
