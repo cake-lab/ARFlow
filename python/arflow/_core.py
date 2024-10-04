@@ -172,7 +172,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 )
 
         if client_config.camera_plane_detection.enabled:
-            rr.log(f"world/plane", rr.Clear(recursive=True))
+            strips: List[npt.NDArray[np.float32]] = []
             for plane in request.plane_detection:
                 boundary_points_2d: List[List[float]] = list(
                     map(lambda pt: [pt.x, pt.y], plane.boundary_points)
@@ -188,14 +188,15 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 boundary_3d = convert_2d_to_3d(
                     plane.boundary_points, plane.normal, plane.center
                 )
-                self.recorder.log(
-                    "world/plane",
-                    rr.LineStrips3D(
-                        strips=[boundary_3d],
-                        colors=[[255, 0, 0]],
-                        radii=rr.Radius.ui_points(5.0),
-                    ),
-                )
+                strips.append(boundary_3d)
+            self.recorder.log(
+                "world/plane",
+                rr.LineStrips3D(
+                    strips=strips,
+                    colors=[[255, 0, 0]],
+                    radii=rr.Radius.ui_points(5.0),
+                ),
+            )
 
         if client_config.gyroscope.enabled:
             gyro_data_proto = request.gyroscope
@@ -260,8 +261,10 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 self.recorder.log("world/audio", rr.Scalar(i))
 
         if client_config.meshing.enabled:
+            print("Number of meshes: ", len(request.meshes))
             # Binary arrays can be empty if no mesh is sent. This could be due to non-supporting devices. We can log this in the future.
             binary_arrays = request.meshes
+            index = 0
             for mesh_data in binary_arrays:
                 # We are ignoring type because DracoPy is written with Cython, and Pyright cannot infer types from a native module.
                 dracoMesh = DracoPy.decode(mesh_data.data)  # pyright: ignore [reportUnknownMemberType, reportUnknownVariableType]
@@ -275,7 +278,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 )
 
                 rr.log(
-                    "world/mesh",
+                    f"world/mesh/mesh-{index}",
                     rr.Mesh3D(
                         vertex_positions=mesh.points,
                         triangle_indices=mesh.faces,
@@ -284,6 +287,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                         vertex_texcoords=mesh.tex_coord,
                     ),
                 )
+                index += 1
 
         # Call the for user extension code.
         self.on_frame_received(
@@ -323,6 +327,36 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
             pickle.dump(self._requests_history, f)
 
         print(f"Data saved to {save_path}")
+
+
+def convert_2d_to_3d(
+    boundary_points_2d: PlaneBoundaryPoints, normal: PlaneNormal, center: PlaneCenter
+) -> npt.NDArray[np.float32]:
+    # Ensure the normal is normalized
+    normal = normal / np.linalg.norm(normal)
+
+    # Generate two orthogonal vectors (u and v) that lie on the plane
+    # Find a vector that is not parallel to the normal
+    arbitrary_vector = (
+        np.array([1, 0, 0])
+        if not np.allclose(normal, [1, 0, 0])
+        else np.array([0, 1, 0])
+    )
+
+    # Create u vector, which is perpendicular to the normal
+    u = np.cross(normal, arbitrary_vector)
+    u = u / np.linalg.norm(u)
+
+    # Create v vector, which is perpendicular to both the normal and u
+    v = np.cross(normal, u)
+
+    # Convert the 2D points into 3D
+    # Each 2D point can be written as a linear combination of u and v, plus the center
+    boundary_points_3d = np.array(
+        [center + point_2d[0] * u + point_2d[1] * v for point_2d in boundary_points_2d]
+    )
+
+    return np.array(boundary_points_3d)
 
 
 def _decode_rgb_image(client_config: ClientConfiguration, buffer: bytes) -> ColorRGB:
@@ -467,36 +501,6 @@ def _decode_point_cloud(
     clr = color_rgb.reshape(-1, 3)
 
     return pcd, clr
-
-
-def convert_2d_to_3d(
-    boundary_points_2d: PlaneBoundaryPoints, normal: PlaneNormal, center: PlaneCenter
-) -> npt.NDArray[np.float32]:
-    # Ensure the normal is normalized
-    normal = normal / np.linalg.norm(normal)
-
-    # Generate two orthogonal vectors (u and v) that lie on the plane
-    # Find a vector that is not parallel to the normal
-    arbitrary_vector = (
-        np.array([1, 0, 0])
-        if not np.allclose(normal, [1, 0, 0])
-        else np.array([0, 1, 0])
-    )
-
-    # Create u vector, which is perpendicular to the normal
-    u = np.cross(normal, arbitrary_vector)
-    u = u / np.linalg.norm(u)
-
-    # Create v vector, which is perpendicular to both the normal and u
-    v = np.cross(normal, u)
-
-    # Convert the 2D points into 3D
-    # Each 2D point can be written as a linear combination of u and v, plus the center
-    boundary_points_3d = np.array(
-        [center + point_2d[0] * u + point_2d[1] * v for point_2d in boundary_points_2d]
-    )
-
-    return np.array(boundary_points_3d)
 
 
 def run_server(

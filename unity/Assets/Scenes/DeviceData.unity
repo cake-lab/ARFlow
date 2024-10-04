@@ -7244,12 +7244,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968053edfd89749c48f4ea5d444abf64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MeshPrefab: {fileID: 0}
+  m_MeshPrefab: {fileID: 6988629162430333432, guid: 07e0d316a36aa344eb8201a100604a46, type: 3}
   m_Density: 0.5
   m_Normals: 1
-  m_Tangents: 0
-  m_TextureCoordinates: 0
-  m_Colors: 0
+  m_Tangents: 1
+  m_TextureCoordinates: 1
+  m_Colors: 1
   m_ConcurrentQueueSize: 4
 --- !u!1 &1574944571
 GameObject:
@@ -7333,8 +7333,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 518653703}
   m_HandleRect: {fileID: 518653702}
   m_Direction: 2
-  m_Value: -0.000014345874
-  m_Size: 0.9416722
+  m_Value: -0.0005764425
+  m_Size: 0.9380414
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13347,7 +13347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000076293945, y: -177.35057}
+  m_AnchoredPosition: {x: -0.000076293945, y: -177.33739}
   m_SizeDelta: {x: -4.7499847, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6234637625898487408
