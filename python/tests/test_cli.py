@@ -4,6 +4,7 @@
 # pyright: reportPrivateUsage=false
 
 import argparse
+import logging
 import shlex
 import tempfile
 from pathlib import Path
@@ -89,18 +90,29 @@ def test_replay():
 
 
 @pytest.mark.parametrize(
-    "command, subcommand, debug, port, save_path, file_path",
+    "command, subcommand, debug, verbose, port, save_path, file_path",
     [
-        ("", None, False, None, None, None),
-        ("-d", None, True, None, None, None),
-        ("serve", "serve", False, 8500, None, None),
-        ("-d serve", "serve", True, 8500, None, None),
-        ("-d serve -p 1234", "serve", True, 1234, None, None),
-        ("-d serve -s /tmp/save_path", "serve", True, 8500, "/tmp/save_path", None),
+        ("", None, False, False, None, None, None),
+        ("-d", None, True, False, None, None, None),
+        ("-v", None, False, True, None, None, None),
+        ("-d -v", None, True, True, None, None, None),
+        ("serve", "serve", False, False, 8500, None, None),
+        ("-d serve", "serve", True, False, 8500, None, None),
+        ("-d serve -p 1234", "serve", True, False, 1234, None, None),
+        (
+            "-d serve -s /tmp/save_path",
+            "serve",
+            True,
+            False,
+            8500,
+            "/tmp/save_path",
+            None,
+        ),
         (
             "-d serve -p 1234 -s /tmp/save_path",
             "serve",
             True,
+            False,
             1234,
             "/tmp/save_path",
             None,
@@ -108,6 +120,7 @@ def test_replay():
         (
             "replay /path/to/data.file",
             "replay",
+            False,
             False,
             None,
             None,
@@ -117,6 +130,7 @@ def test_replay():
             "-d replay /path/to/data.file",
             "replay",
             True,
+            False,
             None,
             None,
             "/path/to/data.file",
@@ -127,6 +141,7 @@ def test_parse_args(
     command: str,
     subcommand: Literal["serve", "replay"] | None,
     debug: bool,
+    verbose: bool,
     port: int | None,
     save_path: str | None,
     file_path: str | None,
@@ -136,7 +151,15 @@ def test_parse_args(
     ), patch("arflow._cli._validate_dir_path", return_value="/tmp/save_path"):
         _, args = parse_args(shlex.split(command))
 
-        assert args.debug == debug
+        if not debug and not verbose:
+            assert args.loglevel == logging.WARNING
+        elif debug and verbose:
+            assert args.loglevel == logging.INFO
+        elif debug:
+            assert args.loglevel == logging.DEBUG
+        elif verbose:
+            assert args.loglevel == logging.INFO
+
         if subcommand == "serve":
             assert args.func == serve
             assert args.port == port
