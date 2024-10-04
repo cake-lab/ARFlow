@@ -53,28 +53,29 @@ namespace ARFlow {
             "b3IYAiABKAIaJwoUQ2FtZXJhUGxhbmVEZXRlY3Rpb24SDwoHZW5hYmxlZBgB",
             "IAEoCBocCglHeXJvc2NvcGUSDwoHZW5hYmxlZBgBIAEoCBoYCgVBdWRpbxIP",
             "CgdlbmFibGVkGAEgASgIGhoKB01lc2hpbmcSDwoHZW5hYmxlZBgBIAEoCCIf",
-            "ChBDbGllbnRJZGVudGlmaWVyEgsKA3VpZBgBIAEoCSLmBQoJRGF0YUZyYW1l",
+            "ChBDbGllbnRJZGVudGlmaWVyEgsKA3VpZBgBIAEoCSKYBgoJRGF0YUZyYW1l",
             "EgsKA3VpZBgBIAEoCRINCgVjb2xvchgCIAEoDBINCgVkZXB0aBgDIAEoDBIR",
-            "Cgl0cmFuc2Zvcm0YBCABKAwSMQoPcGxhbmVfZGV0ZWN0aW9uGAUgAygLMhgu",
-            "YXJmbG93LkRhdGFGcmFtZS5QbGFuZXMSMwoJZ3lyb3Njb3BlGAYgASgLMiAu",
-            "YXJmbG93LkRhdGFGcmFtZS5neXJvc2NvcGVfZGF0YRISCgphdWRpb19kYXRh",
-            "GAggAygCEiYKBm1lc2hlcxgJIAMoCzIWLmFyZmxvdy5EYXRhRnJhbWUuTWVz",
-            "aBoqCgdWZWN0b3IzEgkKAXgYASABKAISCQoBeRgCIAEoAhIJCgF6GAMgASgC",
-            "Gh8KB1ZlY3RvcjISCQoBeBgBIAEoAhIJCgF5GAIgASgCGocBCgZQbGFuZXMS",
-            "KQoGY2VudGVyGAEgASgLMhkuYXJmbG93LkRhdGFGcmFtZS5WZWN0b3IzEikK",
-            "Bm5vcm1hbBgCIAEoCzIZLmFyZmxvdy5EYXRhRnJhbWUuVmVjdG9yMxInCgRz",
-            "aXplGAMgASgLMhkuYXJmbG93LkRhdGFGcmFtZS5WZWN0b3IyGjgKClF1YXRl",
-            "cm5pb24SCQoBeBgBIAEoAhIJCgF5GAIgASgCEgkKAXoYAyABKAISCQoBdxgE",
-            "IAEoAhrPAQoOZ3lyb3Njb3BlX2RhdGESLgoIYXR0aXR1ZGUYASABKAsyHC5h",
-            "cmZsb3cuRGF0YUZyYW1lLlF1YXRlcm5pb24SMAoNcm90YXRpb25fcmF0ZRgC",
-            "IAEoCzIZLmFyZmxvdy5EYXRhRnJhbWUuVmVjdG9yMxIqCgdncmF2aXR5GAMg",
-            "ASgLMhkuYXJmbG93LkRhdGFGcmFtZS5WZWN0b3IzEi8KDGFjY2VsZXJhdGlv",
-            "bhgEIAEoCzIZLmFyZmxvdy5EYXRhRnJhbWUuVmVjdG9yMxoUCgRNZXNoEgwK",
-            "BGRhdGEYASABKAwiIgoPQWNrbm93bGVkZ2VtZW50Eg8KB21lc3NhZ2UYASAB",
-            "KAkyjQEKBkFSRmxvdxJHCg5SZWdpc3RlckNsaWVudBIbLmFyZmxvdy5DbGll",
-            "bnRDb25maWd1cmF0aW9uGhguYXJmbG93LkNsaWVudElkZW50aWZpZXISOgoM",
-            "UHJvY2Vzc0ZyYW1lEhEuYXJmbG93LkRhdGFGcmFtZRoXLmFyZmxvdy5BY2tu",
-            "b3dsZWRnZW1lbnRCCaoCBkFSRmxvd2IGcHJvdG8z"));
+            "Cgl0cmFuc2Zvcm0YBCABKAwSMAoPcGxhbmVfZGV0ZWN0aW9uGAUgAygLMhcu",
+            "YXJmbG93LkRhdGFGcmFtZS5QbGFuZRIzCglneXJvc2NvcGUYBiABKAsyIC5h",
+            "cmZsb3cuRGF0YUZyYW1lLmd5cm9zY29wZV9kYXRhEhIKCmF1ZGlvX2RhdGEY",
+            "CCADKAISJgoGbWVzaGVzGAkgAygLMhYuYXJmbG93LkRhdGFGcmFtZS5NZXNo",
+            "GioKB1ZlY3RvcjMSCQoBeBgBIAEoAhIJCgF5GAIgASgCEgkKAXoYAyABKAIa",
+            "HwoHVmVjdG9yMhIJCgF4GAEgASgCEgkKAXkYAiABKAIaugEKBVBsYW5lEikK",
+            "BmNlbnRlchgBIAEoCzIZLmFyZmxvdy5EYXRhRnJhbWUuVmVjdG9yMxIpCgZu",
+            "b3JtYWwYAiABKAsyGS5hcmZsb3cuRGF0YUZyYW1lLlZlY3RvcjMSJwoEc2l6",
+            "ZRgDIAEoCzIZLmFyZmxvdy5EYXRhRnJhbWUuVmVjdG9yMhIyCg9ib3VuZGFy",
+            "eV9wb2ludHMYBCADKAsyGS5hcmZsb3cuRGF0YUZyYW1lLlZlY3RvcjIaOAoK",
+            "UXVhdGVybmlvbhIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAhIJ",
+            "CgF3GAQgASgCGs8BCg5neXJvc2NvcGVfZGF0YRIuCghhdHRpdHVkZRgBIAEo",
+            "CzIcLmFyZmxvdy5EYXRhRnJhbWUuUXVhdGVybmlvbhIwCg1yb3RhdGlvbl9y",
+            "YXRlGAIgASgLMhkuYXJmbG93LkRhdGFGcmFtZS5WZWN0b3IzEioKB2dyYXZp",
+            "dHkYAyABKAsyGS5hcmZsb3cuRGF0YUZyYW1lLlZlY3RvcjMSLwoMYWNjZWxl",
+            "cmF0aW9uGAQgASgLMhkuYXJmbG93LkRhdGFGcmFtZS5WZWN0b3IzGhQKBE1l",
+            "c2gSDAoEZGF0YRgBIAEoDCIiCg9BY2tub3dsZWRnZW1lbnQSDwoHbWVzc2Fn",
+            "ZRgBIAEoCTKNAQoGQVJGbG93EkcKDlJlZ2lzdGVyQ2xpZW50EhsuYXJmbG93",
+            "LkNsaWVudENvbmZpZ3VyYXRpb24aGC5hcmZsb3cuQ2xpZW50SWRlbnRpZmll",
+            "chI6CgxQcm9jZXNzRnJhbWUSES5hcmZsb3cuRGF0YUZyYW1lGhcuYXJmbG93",
+            "LkFja25vd2xlZGdlbWVudEIJqgIGQVJGbG93YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -90,7 +91,7 @@ namespace ARFlow {
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ClientIdentifier), global::ARFlow.ClientIdentifier.Parser, new[]{ "Uid" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame), global::ARFlow.DataFrame.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PlaneDetection", "Gyroscope", "AudioData", "Meshes" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Vector3), global::ARFlow.DataFrame.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Vector2), global::ARFlow.DataFrame.Types.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Planes), global::ARFlow.DataFrame.Types.Planes.Parser, new[]{ "Center", "Normal", "Size" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Plane), global::ARFlow.DataFrame.Types.Plane.Parser, new[]{ "Center", "Normal", "Size", "BoundaryPoints" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Quaternion), global::ARFlow.DataFrame.Types.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.gyroscope_data), global::ARFlow.DataFrame.Types.gyroscope_data.Parser, new[]{ "Attitude", "RotationRate", "Gravity", "Acceleration" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.DataFrame.Types.Mesh), global::ARFlow.DataFrame.Types.Mesh.Parser, new[]{ "Data" }, null, null, null, null)}),
@@ -3287,12 +3288,12 @@ namespace ARFlow {
 
     /// <summary>Field number for the "plane_detection" field.</summary>
     public const int PlaneDetectionFieldNumber = 5;
-    private static readonly pb::FieldCodec<global::ARFlow.DataFrame.Types.Planes> _repeated_planeDetection_codec
-        = pb::FieldCodec.ForMessage(42, global::ARFlow.DataFrame.Types.Planes.Parser);
-    private readonly pbc::RepeatedField<global::ARFlow.DataFrame.Types.Planes> planeDetection_ = new pbc::RepeatedField<global::ARFlow.DataFrame.Types.Planes>();
+    private static readonly pb::FieldCodec<global::ARFlow.DataFrame.Types.Plane> _repeated_planeDetection_codec
+        = pb::FieldCodec.ForMessage(42, global::ARFlow.DataFrame.Types.Plane.Parser);
+    private readonly pbc::RepeatedField<global::ARFlow.DataFrame.Types.Plane> planeDetection_ = new pbc::RepeatedField<global::ARFlow.DataFrame.Types.Plane>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::ARFlow.DataFrame.Types.Planes> PlaneDetection {
+    public pbc::RepeatedField<global::ARFlow.DataFrame.Types.Plane> PlaneDetection {
       get { return planeDetection_; }
     }
 
@@ -3324,6 +3325,9 @@ namespace ARFlow {
     private static readonly pb::FieldCodec<global::ARFlow.DataFrame.Types.Mesh> _repeated_meshes_codec
         = pb::FieldCodec.ForMessage(74, global::ARFlow.DataFrame.Types.Mesh.Parser);
     private readonly pbc::RepeatedField<global::ARFlow.DataFrame.Types.Mesh> meshes_ = new pbc::RepeatedField<global::ARFlow.DataFrame.Types.Mesh>();
+    /// <summary>
+    /// Multiple meshes can be sent in a single frame
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pbc::RepeatedField<global::ARFlow.DataFrame.Types.Mesh> Meshes {
@@ -4131,16 +4135,16 @@ namespace ARFlow {
       }
 
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-      public sealed partial class Planes : pb::IMessage<Planes>
+      public sealed partial class Plane : pb::IMessage<Plane>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
       #endif
       {
-        private static readonly pb::MessageParser<Planes> _parser = new pb::MessageParser<Planes>(() => new Planes());
+        private static readonly pb::MessageParser<Plane> _parser = new pb::MessageParser<Plane>(() => new Plane());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public static pb::MessageParser<Planes> Parser { get { return _parser; } }
+        public static pb::MessageParser<Plane> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -4156,7 +4160,7 @@ namespace ARFlow {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public Planes() {
+        public Plane() {
           OnConstruction();
         }
 
@@ -4164,17 +4168,18 @@ namespace ARFlow {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public Planes(Planes other) : this() {
+        public Plane(Plane other) : this() {
           center_ = other.center_ != null ? other.center_.Clone() : null;
           normal_ = other.normal_ != null ? other.normal_.Clone() : null;
           size_ = other.size_ != null ? other.size_.Clone() : null;
+          boundaryPoints_ = other.boundaryPoints_.Clone();
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public Planes Clone() {
-          return new Planes(this);
+        public Plane Clone() {
+          return new Plane(this);
         }
 
         /// <summary>Field number for the "center" field.</summary>
@@ -4213,15 +4218,26 @@ namespace ARFlow {
           }
         }
 
+        /// <summary>Field number for the "boundary_points" field.</summary>
+        public const int BoundaryPointsFieldNumber = 4;
+        private static readonly pb::FieldCodec<global::ARFlow.DataFrame.Types.Vector2> _repeated_boundaryPoints_codec
+            = pb::FieldCodec.ForMessage(34, global::ARFlow.DataFrame.Types.Vector2.Parser);
+        private readonly pbc::RepeatedField<global::ARFlow.DataFrame.Types.Vector2> boundaryPoints_ = new pbc::RepeatedField<global::ARFlow.DataFrame.Types.Vector2>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public override bool Equals(object other) {
-          return Equals(other as Planes);
+        public pbc::RepeatedField<global::ARFlow.DataFrame.Types.Vector2> BoundaryPoints {
+          get { return boundaryPoints_; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public bool Equals(Planes other) {
+        public override bool Equals(object other) {
+          return Equals(other as Plane);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(Plane other) {
           if (ReferenceEquals(other, null)) {
             return false;
           }
@@ -4231,6 +4247,7 @@ namespace ARFlow {
           if (!object.Equals(Center, other.Center)) return false;
           if (!object.Equals(Normal, other.Normal)) return false;
           if (!object.Equals(Size, other.Size)) return false;
+          if(!boundaryPoints_.Equals(other.boundaryPoints_)) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -4241,6 +4258,7 @@ namespace ARFlow {
           if (center_ != null) hash ^= Center.GetHashCode();
           if (normal_ != null) hash ^= Normal.GetHashCode();
           if (size_ != null) hash ^= Size.GetHashCode();
+          hash ^= boundaryPoints_.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -4271,6 +4289,7 @@ namespace ARFlow {
             output.WriteRawTag(26);
             output.WriteMessage(Size);
           }
+          boundaryPoints_.WriteTo(output, _repeated_boundaryPoints_codec);
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -4293,6 +4312,7 @@ namespace ARFlow {
             output.WriteRawTag(26);
             output.WriteMessage(Size);
           }
+          boundaryPoints_.WriteTo(ref output, _repeated_boundaryPoints_codec);
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
           }
@@ -4312,6 +4332,7 @@ namespace ARFlow {
           if (size_ != null) {
             size += 1 + pb::CodedOutputStream.ComputeMessageSize(Size);
           }
+          size += boundaryPoints_.CalculateSize(_repeated_boundaryPoints_codec);
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
           }
@@ -4320,7 +4341,7 @@ namespace ARFlow {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public void MergeFrom(Planes other) {
+        public void MergeFrom(Plane other) {
           if (other == null) {
             return;
           }
@@ -4342,6 +4363,7 @@ namespace ARFlow {
             }
             Size.MergeFrom(other.Size);
           }
+          boundaryPoints_.Add(other.boundaryPoints_);
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 
@@ -4382,6 +4404,10 @@ namespace ARFlow {
                 input.ReadMessage(Size);
                 break;
               }
+              case 34: {
+                boundaryPoints_.AddEntriesFrom(input, _repeated_boundaryPoints_codec);
+                break;
+              }
             }
           }
         #endif
@@ -4420,6 +4446,10 @@ namespace ARFlow {
                   Size = new global::ARFlow.DataFrame.Types.Vector2();
                 }
                 input.ReadMessage(Size);
+                break;
+              }
+              case 34: {
+                boundaryPoints_.AddEntriesFrom(ref input, _repeated_boundaryPoints_codec);
                 break;
               }
             }
@@ -5083,6 +5113,9 @@ namespace ARFlow {
 
       }
 
+      /// <summary>
+      /// Represent a mesh
+      /// </summary>
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class Mesh : pb::IMessage<Mesh>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2b12afd4d27418a9cfb2823fe2b9ff3, type: 3}
   m_Name: XRSimulationRuntimeSettings
   m_EditorClassIdentifier: 
-  m_EnvironmentLayer: 30
+  m_EnvironmentLayer: 1
   m_EnvironmentScanParams:
     m_MinimumRescanTime: 0.1
     m_DeltaCameraDistanceToRescan: 0.025

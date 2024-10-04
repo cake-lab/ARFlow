@@ -124,15 +124,17 @@ class DataFrame(_message.Message):
         x: float
         y: float
         def __init__(self, x: _Optional[float] = ..., y: _Optional[float] = ...) -> None: ...
-    class Planes(_message.Message):
-        __slots__ = ("center", "normal", "size")
+    class Plane(_message.Message):
+        __slots__ = ("center", "normal", "size", "boundary_points")
         CENTER_FIELD_NUMBER: _ClassVar[int]
         NORMAL_FIELD_NUMBER: _ClassVar[int]
         SIZE_FIELD_NUMBER: _ClassVar[int]
+        BOUNDARY_POINTS_FIELD_NUMBER: _ClassVar[int]
         center: DataFrame.Vector3
         normal: DataFrame.Vector3
         size: DataFrame.Vector2
-        def __init__(self, center: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., normal: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., size: _Optional[_Union[DataFrame.Vector2, _Mapping]] = ...) -> None: ...
+        boundary_points: _containers.RepeatedCompositeFieldContainer[DataFrame.Vector2]
+        def __init__(self, center: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., normal: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., size: _Optional[_Union[DataFrame.Vector2, _Mapping]] = ..., boundary_points: _Optional[_Iterable[_Union[DataFrame.Vector2, _Mapping]]] = ...) -> None: ...
     class Quaternion(_message.Message):
         __slots__ = ("x", "y", "z", "w")
         X_FIELD_NUMBER: _ClassVar[int]
@@ -172,11 +174,11 @@ class DataFrame(_message.Message):
     color: bytes
     depth: bytes
     transform: bytes
-    plane_detection: _containers.RepeatedCompositeFieldContainer[DataFrame.Planes]
+    plane_detection: _containers.RepeatedCompositeFieldContainer[DataFrame.Plane]
     gyroscope: DataFrame.gyroscope_data
     audio_data: _containers.RepeatedScalarFieldContainer[float]
     meshes: _containers.RepeatedCompositeFieldContainer[DataFrame.Mesh]
-    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrame.Planes, _Mapping]]] = ..., gyroscope: _Optional[_Union[DataFrame.gyroscope_data, _Mapping]] = ..., audio_data: _Optional[_Iterable[float]] = ..., meshes: _Optional[_Iterable[_Union[DataFrame.Mesh, _Mapping]]] = ...) -> None: ...
+    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrame.Plane, _Mapping]]] = ..., gyroscope: _Optional[_Union[DataFrame.gyroscope_data, _Mapping]] = ..., audio_data: _Optional[_Iterable[float]] = ..., meshes: _Optional[_Iterable[_Union[DataFrame.Mesh, _Mapping]]] = ...) -> None: ...
 
 class Acknowledgement(_message.Message):
     __slots__ = ("message",)

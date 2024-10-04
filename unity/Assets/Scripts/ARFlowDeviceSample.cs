@@ -26,6 +26,11 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     public ARPlaneManager planeManager;
 
+    /// <summary>
+    /// Plane detection
+    /// </summary>
+    public ARMeshManager meshManager;
+
     public Button connectButton;
     public Button startPauseButton;
 
@@ -47,7 +52,11 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
-        _clientManager = new ARFlowClientManager(cameraManager, occlusionManager);
+        _clientManager = new ARFlowClientManager(
+            cameraManager: cameraManager,
+            occlusionManager: occlusionManager,
+            planeManager: planeManager,
+            meshManager: meshManager);
 
         addModalityOptionsToConfig();
 
@@ -159,7 +168,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (!_enabled) return;
         UploadFrame();

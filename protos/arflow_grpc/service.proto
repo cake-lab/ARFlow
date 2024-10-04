@@ -104,12 +104,13 @@ message DataFrame {
         float x = 1;
         float y = 2;
     }
-    message Planes {
+    message Plane {
         Vector3 center = 1;
         Vector3 normal = 2;
         Vector2 size = 3;
+        repeated Vector2 boundary_points = 4;
     }
-    repeated Planes plane_detection = 5;
+    repeated Plane plane_detection = 5;
     
     message Quaternion {
         float x = 1;

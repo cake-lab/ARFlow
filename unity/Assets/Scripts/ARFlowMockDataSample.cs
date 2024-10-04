@@ -78,6 +78,10 @@ public class ARFlowMockDataSample : MonoBehaviour
             Meshing = new ClientConfiguration.Types.Meshing()
             {
                 Enabled = true,
+            },
+            CameraPlaneDetection = new ClientConfiguration.Types.CameraPlaneDetection()
+            {
+                Enabled = true,
             }
         });
     }
@@ -123,7 +127,19 @@ public class ARFlowMockDataSample : MonoBehaviour
             }
         }
 
-
+        // Test plane
+        var plane = new DataFrame.Types.Plane();
+        plane.Center = unityVector3ToProto(new Vector3(1, 2, 3));
+        plane.Normal = unityVector3ToProto(new Vector3(0, 2, 5));
+        plane.Size = unityVector2ToProto(new Vector2(5, 5));
+        plane.BoundaryPoints.Add(new []
+            { unityVector2ToProto(new Vector2(0, 2)),
+            unityVector2ToProto(new Vector2(1, 3)),
+            unityVector2ToProto(new Vector2(2, 4)), 
+            unityVector2ToProto(new Vector2(1, 5)),
+            unityVector2ToProto(new Vector2(2, 1)) }
+        );
+        dataFrame.PlaneDetection.Add(plane);
 
         _client.SendFrame(dataFrame);
     }
@@ -146,6 +162,15 @@ public class ARFlowMockDataSample : MonoBehaviour
             Y = a.y,
             Z = a.z,
             W = a.w
+        };
+    }
+
+    DataFrame.Types.Vector2 unityVector2ToProto(Vector2 a)
+    {
+        return new DataFrame.Types.Vector2()
+        {
+            X = a.x,
+            Y = a.y,
         };
     }
 

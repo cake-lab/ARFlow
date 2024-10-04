@@ -6936,7 +6936,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1385474977}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1760703bbd54c04488a8d10600262ab, type: 3}
   m_Name: 
@@ -7194,6 +7194,7 @@ MonoBehaviour:
   cameraManager: {fileID: 853469696}
   occlusionManager: {fileID: 853469699}
   planeManager: {fileID: 1385474980}
+  meshManager: {fileID: 1572649768}
   connectButton: {fileID: 729170778}
   startPauseButton: {fileID: 390914750}
   ipField: {fileID: 1994881639}
@@ -7332,8 +7333,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 518653703}
   m_HandleRect: {fileID: 518653702}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.9417185
+  m_Value: -0.000014345874
+  m_Size: 0.9416722
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13346,7 +13347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000076293945, y: -177.3509}
+  m_AnchoredPosition: {x: -0.000076293945, y: -177.35057}
   m_SizeDelta: {x: -4.7499847, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6234637625898487408

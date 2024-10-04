@@ -29,6 +29,12 @@ Transform = npt.NDArray[np.float32]
 Intrinsic = npt.NDArray[np.float32]
 PointCloudPCD = npt.NDArray[np.float32]
 PointCloudCLR = npt.NDArray[np.uint8]
+
+Attitude = npt.NDArray[np.float32]
+RotationRate = npt.NDArray[np.float32]
+Gravity = npt.NDArray[np.float32]
+Acceleration = npt.NDArray[np.float32]
+
 Audio = npt.NDArray[np.float32]
 
 MeshFaces = npt.NDArray[np.uint32]
@@ -36,6 +42,39 @@ MeshPoints = npt.NDArray[np.float32]
 MeshNormals = npt.NDArray[np.float32]
 MeshTexCoord = npt.NDArray[np.float32]
 MeshColors = npt.NDArray[np.float32]
+
+PlaneCenter = npt.NDArray[np.float32]
+PlaneNormal = npt.NDArray[np.float32]
+PlaneSize = npt.NDArray[np.float32]
+PlaneBoundaryPoints = npt.NDArray[np.float32]
+
+
+@dataclass
+class PlaneInfo:
+    """Information about a plane."""
+
+    center: PlaneCenter
+    """The center of the plane. In world space (3D)."""
+    normal: PlaneNormal
+    """The normal of the plane. In world space (3D)."""
+    size: PlaneSize
+    """Width and Height of the plane. In meters (2D)"""
+    boundary_points: PlaneBoundaryPoints
+    """The boundary points of the plane. In plane space (2D)."""
+
+
+@dataclass
+class GyroscopeInfo:
+    """Information about a gyroscope."""
+
+    attitude: Attitude
+    """The attitude of the gyroscope."""
+    rotation_rate: RotationRate
+    """The rotation rate of the gyroscope."""
+    gravity: Gravity
+    """The gravity of the gyroscope."""
+    acceleration: Acceleration
+    """The acceleration of the gyroscope."""
 
 
 @dataclass

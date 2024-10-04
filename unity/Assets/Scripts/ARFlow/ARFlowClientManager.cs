@@ -10,9 +10,9 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
-using TMPro.EditorUtilities;
 using Google.Protobuf.WellKnownTypes;
 using Unity.Collections;
+using System.Linq;
 
 namespace ARFlow
 {
@@ -26,10 +26,11 @@ namespace ARFlow
         private ARFlowClient _client;
         private ARCameraManager _cameraManager;
         private AROcclusionManager _occlusionManager;
-        private ARMeshManager _meshManager;
         private Vector2Int _sampleSize;
         private Dictionary<string, bool> _activatedDataModalities;
         private AudioStreaming _audioStreaming;
+        private ARMeshManager _meshManager;
+        private ARPlaneManager _planeManager;
 
         //TODO
         //private Dictionary<string, Dictionary<string, Any>> _modalityConfig
@@ -64,7 +65,7 @@ namespace ARFlow
         public ARFlowClientManager(
             ARCameraManager cameraManager = null,
             AROcclusionManager occlusionManager = null,
-            ARPlaneManager planeManader = null,
+            ARPlaneManager planeManager = null,
             ARMeshManager meshManager = null
 
         )
@@ -89,6 +90,7 @@ namespace ARFlow
             _occlusionManager = occlusionManager;
 
             _audioStreaming = new AudioStreaming();
+            _planeManager = planeManager;
             _meshManager = meshManager;
         }
 
@@ -242,9 +244,17 @@ namespace ARFlow
             };
         }
 
+        DataFrame.Types.Vector2 unityVector2ToProto(Vector2 a)
+        {
+            return new DataFrame.Types.Vector2()
+            {
+                X = a.x,
+                Y = a.y,
+            };
+        }
+
         DataFrame.Types.Quaternion unityQuaternionToProto(Quaternion a)
         {
-            Debug.Log("hai");
             return new DataFrame.Types.Quaternion ()
             {
                 X = a.x,
@@ -255,11 +265,8 @@ namespace ARFlow
         }
 
 
-        private const int DEFAULT_SAMPLE_RATE = 44100;
-        public const int DEFAULT_FRAME_LENGTH = 1000;
-
-
-
+        private const int DEFAULT_SAMPLE_RATE = 10000;
+        public const int DEFAULT_FRAME_LENGTH = 2000;
         /// <summary>
         /// For streaming data: start streaming allow data to be sent periodically until stop streaming.
         /// </summary>
@@ -299,6 +306,8 @@ namespace ARFlow
 
                 colorImage.Dispose();
             }
+            Debug.Log("cp1");
+
             if (_activatedDataModalities["CameraDepth"])
             {
                 var depthImage = new XRConfidenceFilteredDepthImage(_occlusionManager, 0);
@@ -306,6 +315,7 @@ namespace ARFlow
 
                 depthImage.Dispose();
             }
+            Debug.Log("cp2");
 
             if (_activatedDataModalities["CameraTransform"])
             {
@@ -322,15 +332,23 @@ namespace ARFlow
 
                 dataFrame.Transform = ByteString.CopyFrom(cameraTransformBytes);
             }
+            Debug.Log("cp3");
 
-            //if (_activatedDataModalities["CameraPlaneDetection"])
-            //{
-            //    var CameraPlaneDetection = new ClientConfiguration.Types.CameraPlaneDetection()
-            //    {
-            //        Enabled = true
-            //    };
-            //    requestData.CameraPlaneDetection = CameraPlaneDetection;
-            //}
+            if (_activatedDataModalities["PlaneDetection"])
+            {
+                Debug.Log("plane detection");
+                foreach (ARPlane plane in _planeManager.trackables)
+                {
+                    var protoPlane = new DataFrame.Types.Plane();
+                    protoPlane.Center = unityVector3ToProto(plane.center);
+                    protoPlane.Normal = unityVector3ToProto(plane.normal);
+                    protoPlane.Size = unityVector2ToProto(plane.size);
+                    protoPlane.BoundaryPoints.Add(plane.boundary.Select(point => unityVector2ToProto(point)));
+                
+                    dataFrame.PlaneDetection.Add(protoPlane);
+                }
+            }
+            Debug.Log("cp4");
 
             if (_activatedDataModalities["Gyroscope"])
             {
@@ -345,14 +363,15 @@ namespace ARFlow
                 dataFrame.Gyroscope.Gravity = unityVector3ToProto(gravity);
                 dataFrame.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
             }
+            Debug.Log("cp5");
 
             if (_activatedDataModalities["Audio"])
             {
-                Debug.Log("oh look its the thing");
-                //float[] audioData = _audioStreaming.UnsentFrames.ToArray();
+                Debug.Log("audio");
                 dataFrame.AudioData.Add(_audioStreaming.UnsentFrames);
                 //Buffer.BlockCopy
             }
+            Debug.Log("cp6");
 
             if (_activatedDataModalities["Meshing"])
             {
@@ -375,7 +394,7 @@ namespace ARFlow
             }
 
 
-
+            Debug.Log("sending dataframe");
             string serverMessage = _client.SendFrame(dataFrame);
             return serverMessage;
         }
