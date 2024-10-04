@@ -7,7 +7,7 @@ import uuid
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from typing import Any, Type
+from typing import Any, Literal, Type, cast
 
 import grpc
 import numpy as np
@@ -92,6 +92,11 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         """Process an incoming frame.
 
         @private
+
+        Raises:
+            ValueError: If the request's data cannot be decoded (e.g., corrupted or invalid data).
+            grpc_interceptor.exceptions.NotFound: If the client configuration is not found.
+            grpc_interceptor.exceptions.InvalidArgument: If the color data type is not recognized or the depth data type is not recognized.
         """
         self._save_request(request)
 
@@ -115,13 +120,36 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 raise InvalidArgument(
                     f"Unknown color data type: {client_config.camera_color.data_type}"
                 )
-            color_rgb = np.flipud(_decode_rgb_image(client_config, request.color))
+            color_rgb = np.flipud(
+                _decode_rgb_image(
+                    client_config.camera_intrinsics.resolution_y,
+                    client_config.camera_intrinsics.resolution_x,
+                    client_config.camera_color.resize_factor_y,
+                    client_config.camera_color.resize_factor_x,
+                    cast(
+                        Literal["RGB24", "YCbCr420"],
+                        client_config.camera_color.data_type,
+                    ),
+                    request.color,
+                )
+            )
             self.recorder.log("rgb", rr.Image(color_rgb))
 
         if client_config.camera_depth.enabled:
-            depth_img = np.flipud(_decode_depth_image(client_config, request.depth))
+            if client_config.camera_depth.data_type not in ["f32", "u16"]:
+                raise InvalidArgument(
+                    f"Unknown depth data type: {client_config.camera_depth.data_type}"
+                )
+            depth_img = np.flipud(
+                _decode_depth_image(
+                    client_config.camera_depth.resolution_y,
+                    client_config.camera_depth.resolution_x,
+                    cast(Literal["f32", "u16"], client_config.camera_depth.data_type),
+                    request.depth,
+                )
+            )
             # https://github.com/rerun-io/rerun/blob/79da203f08e719f3b56029893185c3631f2a8b54/rerun_py/rerun_sdk/rerun/archetypes/encoded_image_ext.py#L15
-            self.recorder.log("depth", rr.DepthImage(depth_img, meter=1.0))  # type: ignore
+            self.recorder.log("depth", rr.DepthImage(depth_img, meter=1.0))
 
         if client_config.camera_transform.enabled:
             self.recorder.log("world/origin", rr.ViewCoordinates.RIGHT_HAND_Y_DOWN)
@@ -141,7 +169,14 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 ),
             )
 
-            k = _decode_intrinsic(client_config)
+            k = _decode_intrinsic(
+                client_config.camera_color.resize_factor_y,
+                client_config.camera_color.resize_factor_x,
+                client_config.camera_intrinsics.focal_length_y,
+                client_config.camera_intrinsics.focal_length_x,
+                client_config.camera_intrinsics.principal_point_y,
+                client_config.camera_intrinsics.principal_point_x,
+            )
             self.recorder.log("world/camera", rr.Pinhole(image_from_camera=k))
             if color_rgb is not None:
                 self.recorder.log("world/camera", rr.Image(np.flipud(color_rgb)))
@@ -154,7 +189,14 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 and transform is not None
             ):
                 point_cloud_pcd, point_cloud_clr = _decode_point_cloud(
-                    client_config, k, color_rgb, depth_img, transform
+                    client_config.camera_intrinsics.resolution_y,
+                    client_config.camera_intrinsics.resolution_x,
+                    client_config.camera_color.resize_factor_y,
+                    client_config.camera_color.resize_factor_x,
+                    k,
+                    color_rgb,
+                    depth_img,
+                    transform,
                 )
                 self.recorder.log(
                     "world/point_cloud",
@@ -181,7 +223,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
 
     def on_frame_received(self, decoded_data_frame: DecodedDataFrame) -> None:
         """Called when a frame is received. Override this method to process the data."""
-        pass
+        pass  # pragma: no cover
 
     def on_program_exit(self, path_to_save: Path) -> None:
         """Save the data and exit.
@@ -190,10 +232,10 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         """
         print("Saving the data...")
         # Ensure the directory exists.
-        path_to_save.parent.mkdir(parents=True, exist_ok=True)
-        save_path = os.path.join(
-            path_to_save,
-            f"frames_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.pkl",
+        os.makedirs(path_to_save, exist_ok=True)
+        save_path = (
+            path_to_save
+            / f"frames_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.pkl"
         )
         with open(save_path, "wb") as f:
             pickle.dump(self._requests_history, f)
@@ -201,26 +243,31 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         print(f"Data saved to {save_path}")
 
 
-def _decode_rgb_image(client_config: ClientConfiguration, buffer: bytes) -> ColorRGB:
+def _decode_rgb_image(
+    resolution_y: int,
+    resolution_x: int,
+    resize_factor_y: float,
+    resize_factor_x: float,
+    data_type: Literal["RGB24", "YCbCr420"],
+    buffer: bytes,
+) -> ColorRGB:
+    """Decode the color image from the buffer.
+
+    Raises:
+        ValueError: If the data type is not recognized
+    """
     # Calculate the size of the image.
-    color_img_w = int(
-        client_config.camera_intrinsics.resolution_x
-        * client_config.camera_color.resize_factor_x
-    )
-    color_img_h = int(
-        client_config.camera_intrinsics.resolution_y
-        * client_config.camera_color.resize_factor_y
-    )
+    color_img_w = int(resolution_x * resize_factor_x)
+    color_img_h = int(resolution_y * resize_factor_y)
     p = color_img_w * color_img_h
     color_img = np.frombuffer(buffer, dtype=np.uint8)
 
     # Decode RGB bytes into RGB.
-    if client_config.camera_color.data_type == "RGB24":
+    if data_type == "RGB24":
         color_rgb = color_img.reshape((color_img_h, color_img_w, 3))
-        color_rgb = color_rgb.astype(np.uint8)
 
     # Decode YCbCr bytes into RGB.
-    elif client_config.camera_color.data_type == "YCbCr420":
+    elif data_type == "YCbCr420":
         y = color_img[:p].reshape((color_img_h, color_img_w))
         cbcr = color_img[p:].reshape((color_img_h // 2, color_img_w // 2, 2))
         cb, cr = cbcr[:, :, 0], cbcr[:, :, 1]
@@ -234,32 +281,40 @@ def _decode_rgb_image(client_config: ClientConfiguration, buffer: bytes) -> Colo
         b = np.clip(y + 1.772 * cb, 0, 255)
 
         color_rgb = np.stack([r, g, b], axis=-1)
-        color_rgb = color_rgb.astype(np.uint8)
 
     else:
-        raise RuntimeError(
-            f"Unknown color data type: {client_config.camera_color.data_type}"
-        )
+        raise ValueError(f"Unknown data type: {data_type}")
 
-    return color_rgb
+    return color_rgb.astype(np.uint8)
 
 
-def _decode_depth_image(client_config: ClientConfiguration, buffer: bytes) -> DepthImg:
-    if client_config.camera_depth.data_type == "f32":
-        dtype = np.float32
-    elif client_config.camera_depth.data_type == "u16":
-        dtype = np.uint16
-    else:
-        raise ValueError(
-            f"Unknown depth data type: {client_config.camera_depth.data_type}"
-        )
+def _decode_depth_image(
+    resolution_y: int,
+    resolution_x: int,
+    data_type: Literal["f32", "u16"],
+    buffer: bytes,
+) -> DepthImg:
+    """Decode the depth image from the buffer.
 
+    Args:
+        data_type: `f32` for iOS, `u16` for Android.
+
+    Raises:
+        ValueError: If the data type is not recognized.
+    """
     # The `Any` means that the array can have any shape. We cannot
     # determine the shape of the array from the buffer.
+    if data_type == "f32":
+        dtype = np.float32
+    elif data_type == "u16":
+        dtype = np.uint16
+    else:
+        raise ValueError(f"Unknown data type: {data_type}")
+
     depth_img = np.frombuffer(buffer, dtype=dtype).reshape(
         (
-            client_config.camera_depth.resolution_y,
-            client_config.camera_depth.resolution_x,
+            resolution_y,
+            resolution_x,
         )
     )
 
@@ -267,7 +322,7 @@ def _decode_depth_image(client_config: ClientConfiguration, buffer: bytes) -> De
     if dtype == np.uint16:
         depth_img = (depth_img.astype(np.float32) / 1000.0).astype(np.float32)
 
-    return depth_img
+    return depth_img.astype(np.float32)
 
 
 def _decode_transform(buffer: bytes) -> Transform:
@@ -285,22 +340,29 @@ def _decode_transform(buffer: bytes) -> Transform:
     transform = np.eye(4, dtype=np.float32)
     transform[:3, :] = t.reshape((3, 4))
     transform[:3, 3] = 0
-    transform = (y_down_to_y_up @ transform).astype(np.float32)
+    transform = y_down_to_y_up @ transform
 
-    return transform
+    return transform.astype(np.float32)
 
 
-def _decode_intrinsic(client_config: ClientConfiguration) -> Intrinsic:
-    sx = client_config.camera_color.resize_factor_x
-    sy = client_config.camera_color.resize_factor_y
+def _decode_intrinsic(
+    resize_factor_y: float,
+    resize_factor_x: float,
+    focal_length_y: float,
+    focal_length_x: float,
+    principal_point_y: float,
+    principal_point_x: float,
+) -> Intrinsic:
+    sx = resize_factor_x
+    sy = resize_factor_y
 
     fx, fy = (
-        client_config.camera_intrinsics.focal_length_x * sx,
-        client_config.camera_intrinsics.focal_length_y * sy,
+        focal_length_x * sx,
+        focal_length_y * sy,
     )
     cx, cy = (
-        client_config.camera_intrinsics.principal_point_x * sx,
-        client_config.camera_intrinsics.principal_point_y * sy,
+        principal_point_x * sx,
+        principal_point_y * sy,
     )
 
     k = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]], dtype=np.float32)
@@ -309,7 +371,10 @@ def _decode_intrinsic(client_config: ClientConfiguration) -> Intrinsic:
 
 
 def _decode_point_cloud(
-    client_config: ClientConfiguration,
+    resolution_y: int,
+    resolution_x: int,
+    resize_factor_y: float,
+    resize_factor_x: float,
     k: Intrinsic,
     color_rgb: ColorRGB,
     depth_img: DepthImg,
@@ -319,14 +384,8 @@ def _decode_point_cloud(
     color_rgb = np.flipud(color_rgb)
     depth_img = np.flipud(depth_img)
 
-    color_img_w = int(
-        client_config.camera_intrinsics.resolution_x
-        * client_config.camera_color.resize_factor_x
-    )
-    color_img_h = int(
-        client_config.camera_intrinsics.resolution_y
-        * client_config.camera_color.resize_factor_y
-    )
+    color_img_w = int(resolution_x * resize_factor_x)
+    color_img_h = int(resolution_y * resize_factor_y)
 
     u, v = np.meshgrid(np.arange(color_img_w), np.arange(color_img_h))
 
@@ -339,10 +398,10 @@ def _decode_point_cloud(
     x = ((u - cx) * z) / fx
     y = ((v - cy) * z) / fy
     pre_pcd = np.stack([x, y, z], axis=-1).reshape(-1, 3)
-    pcd: PointCloudPCD = np.matmul(transform[:3, :3], pre_pcd.T).T + transform[:3, 3]
+    pcd = np.matmul(transform[:3, :3], pre_pcd.T).T + transform[:3, 3]
     clr = color_rgb.reshape(-1, 3)
 
-    return pcd, clr
+    return pcd.astype(np.float32), clr
 
 
 def run_server(
@@ -356,16 +415,16 @@ def run_server(
         path_to_save: The path to save data to.
     """
     servicer = service()
-    interceptors = [ExceptionToStatusInterceptor(), ErrorLogger()]  # type: ignore
-    server = grpc.server(  # type: ignore
+    interceptors = [ExceptionToStatusInterceptor(), ErrorLogger()]  # pyright: ignore [reportUnknownVariableType]
+    server = grpc.server(  # pyright: ignore [reportUnknownMemberType]
         futures.ThreadPoolExecutor(max_workers=10),
-        interceptors=interceptors,  # type: ignore
+        interceptors=interceptors,  # pyright: ignore [reportArgumentType]
         options=[
             ("grpc.max_send_message_length", -1),
             ("grpc.max_receive_message_length", -1),
         ],
     )
-    service_pb2_grpc.add_ARFlowServicer_to_server(servicer, server)  # type: ignore
+    service_pb2_grpc.add_ARFlowServicer_to_server(servicer, server)  # pyright: ignore [reportUnknownMemberType]
     server.add_insecure_port("[::]:%s" % port)
     server.start()
     print(f"Server started, listening on {port}")
@@ -390,7 +449,6 @@ def run_server(
         all_rpcs_done_event.wait(30)
 
         if path_to_save is not None:
-            print("Saving data...")
             servicer.on_program_exit(path_to_save)
 
         # TODO: Discuss hook for user-defined cleanup procedures.
