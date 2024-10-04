@@ -19,6 +19,7 @@ rerun-sdk = "^0.18.2"
 grpcio = "^1.60.1"
 grpcio-tools = "^1.60.1"
 grpc-interceptor = "^0.15.4"
+dracopy = "^1.4.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"                     # Sync with `.github/ci.yml` if changed

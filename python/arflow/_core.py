@@ -9,6 +9,7 @@ from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
 from typing import Any, Type
 
+import DracoPy
 import grpc
 import numpy as np
 import rerun as rr
@@ -26,6 +27,7 @@ from arflow._types import (
     EnrichedARFlowRequest,
     HashableClientIdentifier,
     Intrinsic,
+    Mesh,
     PointCloudCLR,
     PointCloudPCD,
     RequestsHistory,
@@ -165,9 +167,34 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
 
         if client_config.audio.enabled:
             audio_data = np.array(request.audio_data)
-            print(audio_data)
             for i in audio_data:
-                self.recorder.log("audio", rr.Scalar(i))
+                self.recorder.log("world/audio", rr.Scalar(i))
+
+        if client_config.meshing.enabled:
+            # Binary arrays can be empty if no mesh is sent. This could be due to non-supporting devices. We can log this in the future.
+            binary_arrays = request.meshes
+            for mesh_data in binary_arrays:
+                # DracoPy is written with Cython, and Pyright cannot infer types from a native module.
+                dracoMesh = DracoPy.decode(mesh_data.data)  # type: ignore
+
+                mesh = Mesh(
+                    dracoMesh.faces,  # type: ignore
+                    dracoMesh.points,  # type: ignore
+                    dracoMesh.normals,  # type: ignore
+                    dracoMesh.tex_coord,  # type: ignore
+                    dracoMesh.colors,  # type: ignore
+                )
+
+                rr.log(
+                    "world/mesh",
+                    rr.Mesh3D(
+                        vertex_positions=mesh.points,
+                        triangle_indices=mesh.faces,
+                        vertex_normals=mesh.normals,
+                        vertex_colors=mesh.colors,
+                        vertex_texcoords=mesh.tex_coord,
+                    ),
+                )
 
         # Call the for user extension code.
         self.on_frame_received(

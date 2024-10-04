@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using TMPro.EditorUtilities;
 using Google.Protobuf.WellKnownTypes;
+using Unity.Collections;
 
 namespace ARFlow
 {
@@ -25,6 +26,7 @@ namespace ARFlow
         private ARFlowClient _client;
         private ARCameraManager _cameraManager;
         private AROcclusionManager _occlusionManager;
+        private ARMeshManager _meshManager;
         private Vector2Int _sampleSize;
         private Dictionary<string, bool> _activatedDataModalities;
         private AudioStreaming _audioStreaming;
@@ -62,7 +64,9 @@ namespace ARFlow
         public ARFlowClientManager(
             ARCameraManager cameraManager = null,
             AROcclusionManager occlusionManager = null,
-            ARPlaneManager planeManader = null
+            ARPlaneManager planeManader = null,
+            ARMeshManager meshManager = null
+
         )
         {
             if (UnityEngine.InputSystem.Gyroscope.current != null)
@@ -85,6 +89,7 @@ namespace ARFlow
             _occlusionManager = occlusionManager;
 
             _audioStreaming = new AudioStreaming();
+            _meshManager = meshManager;
         }
 
 
@@ -285,19 +290,19 @@ namespace ARFlow
         public string GetAndSendFrame()
         {
             Debug.Log("uhmm hello");
-            var DataFrame = new DataFrame();
+            var dataFrame = new DataFrame();
 
             if (_activatedDataModalities["CameraColor"])
             {
                 var colorImage = new XRYCbCrColorImage(_cameraManager, _sampleSize);
-                DataFrame.Color = ByteString.CopyFrom(colorImage.Encode());
+                dataFrame.Color = ByteString.CopyFrom(colorImage.Encode());
 
                 colorImage.Dispose();
             }
             if (_activatedDataModalities["CameraDepth"])
             {
                 var depthImage = new XRConfidenceFilteredDepthImage(_occlusionManager, 0);
-                DataFrame.Depth = ByteString.CopyFrom(depthImage.Encode());
+                dataFrame.Depth = ByteString.CopyFrom(depthImage.Encode());
 
                 depthImage.Dispose();
             }
@@ -315,7 +320,7 @@ namespace ARFlow
                     m.m20, m.m21, m.m22, m.m23
                 }, 0, cameraTransformBytes, 0, transformLength);
 
-                DataFrame.Transform = ByteString.CopyFrom(cameraTransformBytes);
+                dataFrame.Transform = ByteString.CopyFrom(cameraTransformBytes);
             }
 
             //if (_activatedDataModalities["CameraPlaneDetection"])
@@ -329,38 +334,49 @@ namespace ARFlow
 
             if (_activatedDataModalities["Gyroscope"])
             {
-                DataFrame.Gyroscope = new DataFrame.Types.gyroscope_data();
+                dataFrame.Gyroscope = new DataFrame.Types.gyroscope_data();
                 Quaternion attitude = AttitudeSensor.current.attitude.ReadValue();
                 Vector3 rotation_rate = UnityEngine.InputSystem.Gyroscope.current.angularVelocity.ReadValue();
                 Vector3 gravity = GravitySensor.current.gravity.ReadValue();
                 Vector3 acceleration = Accelerometer.current.acceleration.ReadValue();
 
-                DataFrame.Gyroscope.Attitude = unityQuaternionToProto(attitude);
-                DataFrame.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);
-                DataFrame.Gyroscope.Gravity = unityVector3ToProto(gravity);
-                DataFrame.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
+                dataFrame.Gyroscope.Attitude = unityQuaternionToProto(attitude);
+                dataFrame.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);
+                dataFrame.Gyroscope.Gravity = unityVector3ToProto(gravity);
+                dataFrame.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
             }
 
             if (_activatedDataModalities["Audio"])
             {
                 Debug.Log("oh look its the thing");
                 //float[] audioData = _audioStreaming.UnsentFrames.ToArray();
-                DataFrame.AudioData.Add(_audioStreaming.UnsentFrames);
+                dataFrame.AudioData.Add(_audioStreaming.UnsentFrames);
                 //Buffer.BlockCopy
             }
 
-            //if (_activatedDataModalities["Meshing"])
-            //{
-            //    var Meshing = new ClientConfiguration.Types.Meshing()
-            //    {
-            //        Enabled = true
-            //    };
-            //    requestData.Meshing = Meshing;
-            //}
+            if (_activatedDataModalities["Meshing"])
+            {
+                IList<MeshFilter> meshFilters = _meshManager.meshes;
+
+                foreach (MeshFilter meshFilter in meshFilters)
+                {
+                    Mesh mesh = meshFilter.sharedMesh;
+                    List<NativeArray<byte>> encodedMesh = MeshingEncoder.encodeMesh(mesh);
+
+                    foreach(var meshElement in encodedMesh)
+                    {
+                        var meshProto = new DataFrame.Types.Mesh();
+                        meshProto.Data = ByteString.CopyFrom(meshElement);
+
+                        dataFrame.Meshes.Add(meshProto);
+                    }
+                }
+
+            }
 
 
 
-            string serverMessage = _client.SendFrame(DataFrame);
+            string serverMessage = _client.SendFrame(dataFrame);
             return serverMessage;
         }
     }

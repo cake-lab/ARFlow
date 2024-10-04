@@ -10,6 +10,8 @@ __pycache__/
 # C extensions
 *.so
 
+.test-draco
+
 # Distribution / packaging
 .Python
 build/

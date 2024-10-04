@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.atteneder.draco": {
+      "version": "4.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.burst": "1.4.11"
+      },
+      "url": "https://package.openupm.com"
+    },
     "com.cysharp.yetanotherhttphandler": {
       "version": "https://github.com/Cysharp/YetAnotherHttpHandler.git?path=src/YetAnotherHttpHandler#v1.0.0",
       "depth": 0,
@@ -13,6 +22,16 @@
       "source": "git",
       "dependencies": {},
       "hash": "75f68222d0a4bd2b468dbf3e6a17a191d28041ab"
+    },
+    "com.unity.burst": {
+      "version": "1.8.17",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.1",
+        "com.unity.modules.jsonserialize": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
       "version": "2.4.4",

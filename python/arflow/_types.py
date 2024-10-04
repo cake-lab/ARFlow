@@ -31,6 +31,28 @@ PointCloudPCD = npt.NDArray[np.float32]
 PointCloudCLR = npt.NDArray[np.uint8]
 Audio = npt.NDArray[np.float32]
 
+MeshFaces = npt.NDArray[np.uint32]
+MeshPoints = npt.NDArray[np.float32]
+MeshNormals = npt.NDArray[np.float32]
+MeshTexCoord = npt.NDArray[np.float32]
+MeshColors = npt.NDArray[np.float32]
+
+
+@dataclass
+class Mesh:
+    """A mesh object. Draco's meshes have additional methods and properties, but with limited documentation and usage on them, I will not include them here."""
+
+    faces: MeshFaces
+    """The mesh faces. Each face is an array of [3] indices."""
+    points: MeshPoints
+    """The mesh points. Each point is an array of [3] coordinates."""
+    normals: MeshNormals | None = None
+    """The mesh normals. Each normal is an array of [3] coordinates. If the mesh does not have normals, this field is `None`."""
+    tex_coord: MeshTexCoord | None = None
+    """The mesh texture coordinates. Each texture coordinate is an array of [2] coordinates. If the mesh does not have texture coordinates, this field is `None`."""
+    colors: MeshColors | None = None
+    """The mesh colors. If the mesh does not have colors, this field is `None`."""
+
 
 @dataclass
 class DecodedDataFrame:

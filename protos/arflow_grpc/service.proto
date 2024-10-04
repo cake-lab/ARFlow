@@ -126,7 +126,13 @@ message DataFrame {
     gyroscope_data gyroscope = 6;
 
     repeated float audio_data = 8;
-    bytes meshing = 9;
+    
+    // Represent a mesh
+    message Mesh {
+        bytes data = 1;
+    }
+    // Multiple meshes can be sent in a single frame
+    repeated Mesh meshes = 9;
 }
 
 message Acknowledgement {
