@@ -149,12 +149,15 @@ def test_parse_args(
     with patch(
         "arflow._cli._validate_file_path", return_value="/path/to/data.file"
     ), patch("arflow._cli._validate_dir_path", return_value="/tmp/save_path"):
+        if debug and verbose:
+            with pytest.raises(SystemExit):
+                parse_args(shlex.split(command))
+            return
+
         _, args = parse_args(shlex.split(command))
 
         if not debug and not verbose:
             assert args.loglevel == logging.WARNING
-        elif debug and verbose:
-            assert args.loglevel == logging.INFO
         elif debug:
             assert args.loglevel == logging.DEBUG
         elif verbose:

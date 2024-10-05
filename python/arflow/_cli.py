@@ -47,19 +47,20 @@ def parse_args(
     parser = argparse.ArgumentParser(description="ARFlow CLI")
     subparsers = parser.add_subparsers()
 
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
         "-d",
         "--debug",
-        help="Print lots of debugging statements.",
+        help="Print debug information.",
         action="store_const",
         dest="loglevel",
         const=logging.DEBUG,
         default=logging.WARNING,
     )
-    parser.add_argument(
+    group.add_argument(
         "-v",
         "--verbose",
-        help="Be verbose.",
+        help="Print verbose information.",
         action="store_const",
         dest="loglevel",
         const=logging.INFO,
