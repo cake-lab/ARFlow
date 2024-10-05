@@ -10,7 +10,7 @@ ARFlow uses [`poetry`](https://python-poetry.org) for dependency management. Ins
 
 Clone the forked repository:
 
-```bash
+```shell
 git clone https://github.com/{your-account}/ARFlow.git
 cd ARFlow/python
 poetry install
@@ -22,7 +22,7 @@ ARFlow uses [`ruff`](https://docs.astral.sh/ruff/) for linting and formatting. W
 
 These tools should run automatically in your editor. If you want to run them manually, you can also use the following commands:
 
-```bash
+```shell
 poetry run ruff check # check for linting errors
 
 poetry run ruff check --fix # check for linting errors and fix them
@@ -32,13 +32,13 @@ poetry run ruff format # format the code
 
 All of these quality checks are run automatically before every commit using [`pre-commit`](https://pre-commit.com). To install the pre-commit hooks, run:
 
-```bash
+```shell
 poetry run pre-commit install
 ```
 
 To manually invoke the pre-commit checks, run:
 
-```bash
+```shell
 poetry run pre-commit run --all-files
 ```
 
@@ -46,7 +46,7 @@ poetry run pre-commit run --all-files
 
 Library authors are encouraged to prioritize bringing their public API to 100% type coverage. Although this is very hard in ARFlow's case due to our dependency on `gRPC`, we should still strive to achieve this goal. To check for type completeness, run:
 
-```bash
+```shell
 poetry run pyright --ignoreexternal --verifytypes arflow
 ```
 
@@ -56,7 +56,7 @@ To read more about formalizing libraries' public APIs, please refer to this exce
 
 ARFlow uses [`pytest`](https://pytest.org). Make sure you are in the `python` directory and then run tests with:
 
-```bash
+```shell
 poetry run pytest
 ```
 
@@ -85,7 +85,7 @@ logger.debug("Processing request: %s", request_id)
 
 ARFlow uses GitHub Actions for continuous integration. The CI pipeline runs the following checks:
 
-```bash
+```shell
 poetry run ruff check # linting
 poetry run pyright arflow # type checking
 poetry run pytest # testing
@@ -125,7 +125,7 @@ ARFlow uses [`pdoc`](https://pdoc.dev). You can refer to their documentation for
 
 To preview the documentation locally, run:
 
-```bash
+```shell
 poetry run pdoc arflow examples # or replace with module_name that you want to preview
 ```
 
@@ -171,7 +171,7 @@ gRPC supports TLS encryption out of the box. We have not implemented this in the
 
 VSCode may force changes the locale to `en_US.UTF-8` for git commit hooks. To fix this, run:
 
-```bash
+```shell
 sudo locale-gen en_US.UTF-8
 ```
 

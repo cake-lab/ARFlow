@@ -16,81 +16,28 @@ The ARFlow Python server collects streaming data from your ARFlow clients. The s
 
 The ARFlow server can be simply installed via `pip`:
 
-```bash
+```shell
+# Create a python environment using your favorite tool, then
 pip install arflow
+```
+
+## Server CLI
+
+Here are some example usages of the ARFlow server CLI:
+
+```shell
+arflow serve # ARFlow port 8500, no save file
+
+arflow serve -p 1234 -s ./ # ARFlow port 1234, save to current working directory
+
+arflow replay ./FRAME_DATA_PATH.pkl # replay ARFlow data file
+
+arflow -h # show help
 ```
 
 ## Examples
 
-Next, you may integrate ARFlow with your own research prototype via the Python API:
-
-<!-- TODO: Figure out how to sync this with example scripts -->
-
-```python
-"""A simple example of extending the ARFlow server."""
-
-from pathlib import Path
-
-import arflow
-
-
-class CustomService(arflow.ARFlowServicer):
-    def on_register(self, request: arflow.ClientConfiguration):
-        """Called when a client registers."""
-        print("Client registered!")
-
-    def on_frame_received(self, decoded_data_frame: arflow.DecodedDataFrame):
-        """Called when a frame is received."""
-        print("Frame received!")
-
-
-def main():
-    arflow.run_server(CustomService, port=8500, path_to_save=Path("./"))
-
-
-if __name__ == "__main__":
-    main()
-```
-
-Save the above code to a file, e.g., `simple_server.py`, and run it:
-
-```bash
-python3 simple_server.py
-```
-
-Once you have your server running, you can start your ARFlow clients and connect them to the server. The server will start collecting data from the clients and save it to a `pickle` file at the end of the session.
-
-You can visualize the data using the ARFlow Player:
-
-```python
-"""A simple example of replaying saved ARFlow data."""
-
-from pathlib import Path
-
-import arflow
-
-from .simple_server import CustomService
-
-
-def main():
-    """Run the example."""
-    player = arflow.ARFlowPlayer(
-        CustomService, frame_data_path=Path("FRAME_DATA_PATH.pkl")
-    )
-    player.run()
-
-
-if __name__ == "__main__":
-    main()
-```
-
-Save the above code to a file, e.g., `simple_replay.py`, replace `FRAME_DATA_PATH` with the path to your saved `pickle` file, and run it:
-
-```bash
-python3 simple_replay.py
-```
-
-For more examples, check out the [examples](https://github.com/cake-lab/ARFlow/tree/main/python/examples) directory.
+Check out the [examples](https://github.com/cake-lab/ARFlow/tree/main/python/examples). We recommend starting with the [`simple`](examples/simple/README.md) example.
 
 ## Contributing
 
