@@ -5,7 +5,7 @@ This project aims to provide a tool to democratize and accelerate AR research an
 
 [Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#how-to-cite-arflow) | [Project Page](https://cake.wpi.edu/ARFlow/) | [Video](https://youtu.be/mml8YrCgfTk)
 
-## Getting Started
+## Quick Start
 
 ### Device Preparation
 
@@ -15,45 +15,10 @@ Make sure you have the developer mode enabled on your device.
 
 ### Server Setup
 
-Next, create your own ARFlow server instance to start playing with the device collected AR data. Here we show the steps to build a simple server:
+Next, start up your own ARFlow server instance:
 
-```bash
-# Create a python environment using your favorite tool, then
-pip install arflow
-```
-
-Create a Python file `simple_arflow_server.py` and paste the following code:
-
-```python
-"""A simple example of extending the ARFlow server."""
-
-from pathlib import Path
-
-import arflow
-
-
-class CustomService(arflow.ARFlowServicer):
-    def on_register(self, request: arflow.ClientConfiguration):
-        """Called when a client registers."""
-        print("Client registered!")
-
-    def on_frame_received(self, decoded_data_frame: arflow.DecodedDataFrame):
-        """Called when a frame is received."""
-        print("Frame received!")
-
-
-def main():
-    arflow.run_server(CustomService, port=8500, path_to_save=Path("./"))
-
-
-if __name__ == "__main__":
-    main()
-```
-
-Run it!
-
-```
-python simple_arflow_server.py
+```shell
+arflow serve # This will start the server on port 8500
 ```
 
 ### Client Setup
@@ -61,7 +26,7 @@ python simple_arflow_server.py
 Next, go to the [releases](https://github.com/cake-lab/ARFlow/releases) page and find the prebuilt items for Android and iOS.
 For Android, directly install the prebuilt apk on your device. For iOS, compile the generated Xcode project to deploy the ARFlow client app to your iOS device. Note that you will need to configure the developer credentials in the Xcode project.
 
-After lunching the ARFlow client app, follow the onscreen instruction to input the server address and port (8500 for the previous example) information, then tap **connect** and **start**.
+After launching the ARFlow client app, follow the onscreen instruction to input the server address and port (8500 for the previous example) information, then tap **connect** and **start**.
 
 Watch our demo video:
 

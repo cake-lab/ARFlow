@@ -86,3 +86,18 @@ $RECYCLE.BIN/
 ### ARFlow ###
 # Docs are generated in CI and combined with existing static files
 website/docs/**
+
+# Unit test / coverage reports sometimes get "leaked" out of the `python` directory
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/

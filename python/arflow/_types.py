@@ -24,7 +24,7 @@ class EnrichedARFlowRequest:
 
 
 ColorRGB = npt.NDArray[np.uint8]
-DepthImg = npt.NDArray[np.float32 | np.uint16]
+DepthImg = npt.NDArray[np.float32]
 Transform = npt.NDArray[np.float32]
 Intrinsic = npt.NDArray[np.float32]
 PointCloudPCD = npt.NDArray[np.float32]
@@ -100,7 +100,7 @@ class DecodedDataFrame:
     color_rgb: ColorRGB | None = None
     """The color image in RGB format."""
     depth_img: DepthImg | None = None
-    """The depth image. f32 for iOS, u16 for Android."""
+    """The depth image."""
     transform: Transform | None = None
     """The transformation matrix of the camera."""
     intrinsic: Intrinsic | None = None

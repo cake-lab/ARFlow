@@ -1,5 +1,6 @@
 """A library for replaying ARFlow data."""
 
+import logging
 import pickle
 import threading
 import time
@@ -10,6 +11,8 @@ from arflow._core import ARFlowServicer
 from arflow._types import EnrichedARFlowRequest, RequestsHistory
 from arflow_grpc.service_pb2 import ClientConfiguration, DataFrame
 
+logger = logging.getLogger(__name__)
+
 
 class ARFlowPlayer(threading.Thread):
     """A class for replaying ARFlow data."""
@@ -19,8 +22,16 @@ class ARFlowPlayer(threading.Thread):
         super().__init__()
         self._service = service()
         self._requests_history: RequestsHistory = []
+
         with open(frame_data_path, "rb") as f:
             raw_data: RequestsHistory = pickle.load(f)
+
+        if not raw_data:
+            raise ValueError("No data to replay.")
+        if not isinstance(raw_data[0].data, ClientConfiguration):
+            raise ValueError("The first request should be a ClientConfiguration.")
+        if not isinstance(raw_data[1].data, DataFrame):
+            raise ValueError("The second request should be a DataFrame.")
 
         start_delta = 0
         for i, data in enumerate(raw_data):
@@ -82,5 +93,5 @@ class ARFlowPlayer(threading.Thread):
 
             self._sleep()
 
-        print("Reply finished.")
+        logger.debug("Reply finished.")
         exit()

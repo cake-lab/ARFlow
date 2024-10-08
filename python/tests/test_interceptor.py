@@ -1,10 +1,16 @@
-"""Tests for the server-side interceptors."""
+"""Server-side interceptors tests."""
 
-# ruff:noqa: D102,D107
+# ruff:noqa: D102,D103,D107
+
+from typing import Any
 
 import grpc
 import pytest
-from grpc_interceptor.testing import DummyRequest, dummy_client, raises  # type: ignore
+from grpc_interceptor.testing import (
+    DummyRequest,
+    dummy_client,  # pyright: ignore [reportUnknownVariableType]
+    raises,  # pyright: ignore [reportUnknownVariableType]
+)
 
 from arflow._error_logger import ErrorLogger
 
@@ -33,14 +39,33 @@ def test_log_error():
     """
     mock = MockErrorLogger()
     ex = Exception()
-    special_cases = {"error": raises(ex)}  # type: ignore
+    special_cases: dict[str, Any] = {"error": raises(ex)}
 
     with dummy_client(special_cases=special_cases, interceptors=[mock]) as client:
         # Test no exception
-        assert client.Execute(DummyRequest(input="foo")).output == "foo"  # type: ignore
+        assert client.Execute(DummyRequest(input="foo")).output == "foo"  # pyright: ignore [reportUnknownMemberType]
         assert mock.logged_exception is None
 
         # Test exception
         with pytest.raises(grpc.RpcError):
-            client.Execute(DummyRequest(input="error"))  # type: ignore
+            client.Execute(DummyRequest(input="error"))  # pyright: ignore [reportUnknownMemberType]
         assert mock.logged_exception is ex
+
+
+def test_log_error_multiple_cases():
+    mock = MockErrorLogger()
+    ex1 = Exception("Error 1")
+    ex2 = Exception("Error 2")
+    special_cases: dict[str, Any] = {
+        "error1": raises(ex1),
+        "error2": raises(ex2),
+    }
+
+    with dummy_client(special_cases=special_cases, interceptors=[mock]) as client:
+        with pytest.raises(grpc.RpcError):
+            client.Execute(DummyRequest(input="error1"))  # pyright: ignore [reportUnknownMemberType]
+        assert mock.logged_exception is ex1
+
+        with pytest.raises(grpc.RpcError):
+            client.Execute(DummyRequest(input="error2"))  # pyright: ignore [reportUnknownMemberType]
+        assert mock.logged_exception is ex2
