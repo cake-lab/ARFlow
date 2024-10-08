@@ -8,7 +8,7 @@ import uuid
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from typing import Any, Literal, Type, cast
+from typing import Any, List, Literal, Type, cast
 
 import DracoPy
 import grpc
