@@ -9,11 +9,17 @@ import numpy as np
 import pytest
 
 from arflow._core import (
+    _convert_2d_to_3d,
     _decode_depth_image,
     _decode_intrinsic,
     _decode_point_cloud,
     _decode_rgb_image,
     _decode_transform,
+)
+from arflow._types import (
+    PlaneBoundaryPoints,
+    PlaneCenter,
+    PlaneNormal,
 )
 
 
@@ -208,3 +214,49 @@ def test_decode_point_cloud(
                 depth_img,
                 transform,
             )
+
+
+@pytest.mark.parametrize(
+    "boundary_points_2d,normal,center,should_pass",
+    [
+        (
+            np.array([[1, 2], [2, 3], [1, 3]]),
+            np.array([4, 5, 6]),
+            np.array([2, 3, 4]),
+            True,
+        ),  # Valid 2D points, normal, and center
+        (
+            np.array([[1, 2], [2, 3]]),
+            np.array([4, 5, 6]),
+            np.array([2, 3, 4]),
+            False,
+        ),  # Invalid 2D points
+        (
+            np.array([[1, 2], [2, 3], [1, 3]]),
+            np.array([[2, 3], [4, 5]]),
+            np.array([2, 3, 4]),
+            False,
+        ),  # Invalid normal
+        (
+            np.array([[1, 2], [2, 3], [1, 3]]),
+            np.array([4, 5, 6]),
+            np.array([[2, 3], [3, 4]]),
+            False,
+        ),  # Invalid center
+    ],
+)
+def test_convert_2d_points_to_3d(
+    boundary_points_2d: PlaneBoundaryPoints,
+    normal: PlaneNormal,
+    center: PlaneCenter,
+    should_pass: bool,
+):
+    if should_pass:
+        result = _convert_2d_to_3d(boundary_points_2d, normal, center)
+        assert result.shape[0] == (boundary_points_2d.shape[0])
+        assert result.shape[1] == 3
+        assert result.dtype == np.float64
+
+    else:
+        with pytest.raises(ValueError):
+            result = _convert_2d_to_3d(boundary_points_2d, normal, center)

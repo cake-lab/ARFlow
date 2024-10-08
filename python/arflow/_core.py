@@ -232,7 +232,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                     boundary_points=np.array(boundary_points_2d),
                 )
 
-                boundary_3d = convert_2d_to_3d(
+                boundary_3d = _convert_2d_to_3d(
                     plane.boundary_points, plane.normal, plane.center
                 )
 
@@ -379,11 +379,29 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         logger.info("Data saved to %s", save_path)
 
 
-def convert_2d_to_3d(
+def _convert_2d_to_3d(
     boundary_points_2d: PlaneBoundaryPoints, normal: PlaneNormal, center: PlaneCenter
 ) -> npt.NDArray[np.float32]:
     # Ensure the normal is normalized
     normal = normal / np.linalg.norm(normal)
+
+    # Check boundary points validity
+    if boundary_points_2d.shape[1] != 2:
+        raise ValueError("Boundary points should be in 2D")
+    if boundary_points_2d.shape[0] < 3:
+        raise ValueError("At least 3 boundary points are required")
+
+    # Check that the normal is in 3d
+    if normal.shape[0] != 3:
+        raise ValueError("Normal should be in 3D")
+    if len(normal.shape) != 1:
+        raise ValueError("There should only be 1 normal")
+
+    # Check that the center is in 3d
+    if center.shape[0] != 3:
+        raise ValueError("Center should be in 3D")
+    if len(normal.shape) != 1:
+        raise ValueError("There should only be 1 center")
 
     # Generate two orthogonal vectors (u and v) that lie on the plane
     # Find a vector that is not parallel to the normal
