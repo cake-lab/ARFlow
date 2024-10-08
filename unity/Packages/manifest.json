@@ -1,17 +1,21 @@
 {
   "dependencies": {
+    "com.atteneder.draco": "4.1.0",
     "com.cysharp.yetanotherhttphandler": "https://github.com/Cysharp/YetAnotherHttpHandler.git?path=src/YetAnotherHttpHandler#v1.0.0",
     "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
     "com.unity.collab-proxy": "2.4.4",
     "com.unity.feature.development": "1.0.1",
+    "com.unity.mobile.android-logcat": "1.4.3",
     "com.unity.textmeshpro": "3.0.8",
     "com.unity.timeline": "1.7.6",
     "com.unity.toolchain.linux-x86_64": "2.0.6",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.4",
+    "com.unity.xr-content.xr-sim-environments": "file:../ContentPackages\\com.unity.xr-content.xr-sim-environments-1.0.0.tgz",
     "com.unity.xr.arcore": "5.1.5",
     "com.unity.xr.arfoundation": "5.1.5",
     "com.unity.xr.arkit": "5.1.5",
+    "com.unity.xr.mock-hmd": "1.4.0-preview.2",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -43,5 +47,14 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.atteneder"
+      ]
+    }
+  ]
 }

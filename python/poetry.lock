@@ -140,6 +140,51 @@ files = [
 ]
 
 [[package]]
+name = "dracopy"
+version = "1.4.0"
+description = "Python wrapper for Google's Draco Mesh Compression Library"
+optional = false
+python-versions = "*"
+files = [
+    {file = "DracoPy-1.4.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:4bffde5eda803f8a2c76ee4fab0e0d40ee7f5939df5f8eed22bdc4e5c6d9f405"},
+    {file = "DracoPy-1.4.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:9d3a00c20f829ea2f2a7355b35bd02f62bbafebb39f742929aa498c66c4ae4ef"},
+    {file = "DracoPy-1.4.0-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:cf2e0f15145a23a94794272fce2a373ab953fdc75967c0e46ed7ac2687bdcba4"},
+    {file = "DracoPy-1.4.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6f204151f4ca8a10a0945eb9cd86d99746e2fbd6e8cb21511028e9054d9ee6a1"},
+    {file = "DracoPy-1.4.0-cp310-cp310-win32.whl", hash = "sha256:004aeb2e24324f7a0e77424ba1116f03c16120a610ebeb8fea5f88077b8330a1"},
+    {file = "DracoPy-1.4.0-cp310-cp310-win_amd64.whl", hash = "sha256:b3142f77670530ae219a591f97db7589a9a47b0bac836da0ce88221555187a1b"},
+    {file = "DracoPy-1.4.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:934e7927e26a80cef5d7f57de42aa19deefddfe08e3b64e88225d7b4546e8398"},
+    {file = "DracoPy-1.4.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:bef6e752b80a5dec169185784ac47dfa4e6418b547410c1be9af5ccbe614e7cf"},
+    {file = "DracoPy-1.4.0-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:8ec3586416a716f03bd78fecb64d77a2be0fd7c08d5e1bf30c3d9633915e7cc9"},
+    {file = "DracoPy-1.4.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f9e0581f6e5bd064ce642e1e1a7850a91a640790e9b9d27834c0d897992192ab"},
+    {file = "DracoPy-1.4.0-cp311-cp311-win32.whl", hash = "sha256:f85a7686f31e076d20a36e10d1ad9035bed3ac523bce2274257eb93f17276a5c"},
+    {file = "DracoPy-1.4.0-cp311-cp311-win_amd64.whl", hash = "sha256:7f95d66b69332ad643a6b86fc40f38ff23fa5db9c366842c00eaeb6ca76ed0ec"},
+    {file = "DracoPy-1.4.0-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:c1b1025a012763ab97291b0863e2d7ba5f3c7301102c06ab1ec3c513ca0a9984"},
+    {file = "DracoPy-1.4.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:f7d132f7469c782337d84034c3808d8bcb7ab4c28a4fef1b12f717620e18a2ab"},
+    {file = "DracoPy-1.4.0-cp312-cp312-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:45efeb617d68beac1712f6ff1aa1a9a86bd110192f1d688ad9cda46f7c8830c7"},
+    {file = "DracoPy-1.4.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fc15e5ff9d070d07632dd897fedd8136cd429cb40a838606cc594b9cbdcb8c43"},
+    {file = "DracoPy-1.4.0-cp312-cp312-win32.whl", hash = "sha256:7d5bbae855f8ba16148d6de07ca9367ea8960d65cc6911f4069e407193411eb7"},
+    {file = "DracoPy-1.4.0-cp312-cp312-win_amd64.whl", hash = "sha256:ef6e894922c0596374f160d082fdae6d3639466ca4f528a08a145f445b180ee7"},
+    {file = "DracoPy-1.4.0-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:ae51f031af22f5b0a5626b30c7e68576166057b901da3b822c8f75420aa96b25"},
+    {file = "DracoPy-1.4.0-cp37-cp37m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:b217267bf05a4ba8e90d5fd85577b958d8dbd133cde1ad1c0c1dba9b712be16f"},
+    {file = "DracoPy-1.4.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e6776c773074bfe492d976cd17c25e46ca622e501153d616fec9455ac03f9651"},
+    {file = "DracoPy-1.4.0-cp37-cp37m-win32.whl", hash = "sha256:c0b6f8f2c5539c850c6132b2879afe865b3c9754de93e8060b6868b284d556aa"},
+    {file = "DracoPy-1.4.0-cp37-cp37m-win_amd64.whl", hash = "sha256:571f783c32f39fb68a7d02fa599330bcfc4bcc2bcac86128ae10539b6fdcb29a"},
+    {file = "DracoPy-1.4.0-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:fabd1e79e24488e9e7aa187594ca043854b516dc5a3c2736c4d13f31057f51bf"},
+    {file = "DracoPy-1.4.0-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:3f3cbba5a534dc3d8427351130f974d7a4782f21b5289097f72bfb37009bb52c"},
+    {file = "DracoPy-1.4.0-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:2f27505392dddd01cdd66b5cfd96646104dc9afe49f2e7338235cb39b8204963"},
+    {file = "DracoPy-1.4.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c4c64f09c886ce9f2e5dba214602d5249a26ae4f478a4cc0ff61b203df407848"},
+    {file = "DracoPy-1.4.0-cp38-cp38-win32.whl", hash = "sha256:8ffbb3ccf09920eb103b6d9bbec96105d7b161b06a448c8549952f0b2188fab6"},
+    {file = "DracoPy-1.4.0-cp38-cp38-win_amd64.whl", hash = "sha256:5694c18a500d26798bc37baa38a748308a8f497d1e1538e6a48424ee198d25f2"},
+    {file = "DracoPy-1.4.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:a89b07dca2b1c17a68cadf418a5718ad1b4a4c5ffa6d00f5d3c332e0933bef49"},
+    {file = "DracoPy-1.4.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:6071ec96ce833a52fbf7d6e491a2aa6bd6d27a11ccdf2c54250dfeaea1c0311c"},
+    {file = "DracoPy-1.4.0-cp39-cp39-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:eaeff76a0b7e7b7c5015970eaaf021b8cfe2df2b15aed9a63be925bad60a67fe"},
+    {file = "DracoPy-1.4.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a63c9f4a86d320393e698e0aaaa90477fa40b96de799672f15f7b4d784f9a5b4"},
+    {file = "DracoPy-1.4.0-cp39-cp39-win32.whl", hash = "sha256:3bc04aeb05dd3925841d5370c620a5537a27f22fce9506e6d9146a86ac4be246"},
+    {file = "DracoPy-1.4.0-cp39-cp39-win_amd64.whl", hash = "sha256:2b1e6527b163ff6d87b619bf430089b888ac2fd61b9833992feb850cb334bb26"},
+    {file = "DracoPy-1.4.0.tar.gz", hash = "sha256:a889015283e2f74d62912e4b5c9be29947a0be9fb30f9c8ba635c5124966d5a2"},
+]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 description = "Backport of PEP 654 (exception groups)"
@@ -1060,4 +1105,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "3658723ce2d85d4d04ec15ed70c5b413e2f6038cae6d9ad20920cfab616dd8b2"
+content-hash = "6e12dc20875296cfeff66e245bdabef8dd7569537cfadb4a5c1b5e5634e22e21"

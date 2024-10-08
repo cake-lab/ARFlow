@@ -8,10 +8,12 @@ import uuid
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from typing import Any, Literal, Type, cast
+from typing import Any, List, Literal, Type, cast
 
+import DracoPy
 import grpc
 import numpy as np
+import numpy.typing as npt
 import rerun as rr
 from grpc_interceptor import ExceptionToStatusInterceptor
 from grpc_interceptor.exceptions import InvalidArgument, NotFound
@@ -19,13 +21,20 @@ from grpc_interceptor.exceptions import InvalidArgument, NotFound
 from arflow._error_logger import ErrorLogger
 from arflow._types import (
     ARFlowRequest,
+    Audio,
     ClientConfigurations,
     ColorRGB,
     DecodedDataFrame,
     DepthImg,
     EnrichedARFlowRequest,
+    GyroscopeInfo,
     HashableClientIdentifier,
     Intrinsic,
+    Mesh,
+    PlaneBoundaryPoints,
+    PlaneCenter,
+    PlaneInfo,
+    PlaneNormal,
     PointCloudCLR,
     PointCloudPCD,
     RequestsHistory,
@@ -119,6 +128,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         k: Intrinsic | None = None
         point_cloud_pcd: PointCloudPCD | None = None
         point_cloud_clr: PointCloudCLR | None = None
+        audio_data: Audio | None = None
 
         if client_config.camera_color.enabled:
             if client_config.camera_color.data_type not in ["RGB24", "YCbCr420"]:
@@ -208,6 +218,127 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                     rr.Points3D(point_cloud_pcd, colors=point_cloud_clr),
                 )
 
+        if client_config.camera_plane_detection.enabled:
+            strips: List[npt.NDArray[np.float32]] = []
+            for plane in request.plane_detection:
+                boundary_points_2d: List[List[float]] = list(
+                    map(lambda pt: [pt.x, pt.y], plane.boundary_points)
+                )
+
+                plane = PlaneInfo(
+                    center=np.array([plane.center.x, plane.center.y, plane.center.z]),
+                    normal=np.array([plane.normal.x, plane.normal.y, plane.normal.z]),
+                    size=np.array([plane.size.x, plane.size.y]),
+                    boundary_points=np.array(boundary_points_2d),
+                )
+
+                boundary_3d = convert_2d_to_3d(
+                    plane.boundary_points, plane.normal, plane.center
+                )
+
+                # Close the boundary by adding the first point to the end.
+                boundary_3d = np.vstack([boundary_3d, boundary_3d[0]])
+                strips.append(boundary_3d)
+            self.recorder.log(
+                f"world/detected-planes",
+                rr.LineStrips3D(
+                    strips=strips,
+                    colors=[[255, 0, 0]],
+                    radii=rr.Radius.ui_points(5.0),
+                ),
+            )
+
+        if client_config.gyroscope.enabled:
+            gyro_data_proto = request.gyroscope
+            gyro_data = GyroscopeInfo(
+                attitude=np.array(
+                    [
+                        gyro_data_proto.attitude.x,
+                        gyro_data_proto.attitude.y,
+                        gyro_data_proto.attitude.z,
+                        gyro_data_proto.attitude.w,
+                    ]
+                ),
+                rotation_rate=np.array(
+                    [
+                        gyro_data_proto.rotation_rate.x,
+                        gyro_data_proto.rotation_rate.y,
+                        gyro_data_proto.rotation_rate.z,
+                    ]
+                ),
+                gravity=np.array(
+                    [
+                        gyro_data_proto.gravity.x,
+                        gyro_data_proto.gravity.y,
+                        gyro_data_proto.gravity.z,
+                    ]
+                ),
+                acceleration=np.array(
+                    [
+                        gyro_data_proto.acceleration.x,
+                        gyro_data_proto.acceleration.y,
+                        gyro_data_proto.acceleration.z,
+                    ]
+                ),
+            )
+            attitude = rr.Quaternion(
+                xyzw=[gyro_data.attitude],
+            )
+            rotation_rate = rr.datatypes.Vec3D(gyro_data.rotation_rate)
+            gravity = rr.datatypes.Vec3D(gyro_data.gravity)
+            acceleration = rr.datatypes.Vec3D(gyro_data.acceleration)
+            # Attitute is displayed as a box, and the other acceleration variables are displayed as arrows.
+            rr.log(
+                "rotations/gyroscope/attitude",
+                rr.Boxes3D(half_sizes=[0.5, 0.5, 0.5], quaternions=[attitude]),
+            )
+            rr.log(
+                "rotations/gyroscope/rotation_rate",
+                rr.Arrows3D(vectors=[rotation_rate], colors=[[0, 255, 0]]),
+            )
+            rr.log(
+                "rotations/gyroscope/gravity",
+                rr.Arrows3D(vectors=[gravity], colors=[[0, 0, 255]]),
+            )
+            rr.log(
+                "rotations/gyroscope/acceleration",
+                rr.Arrows3D(vectors=[acceleration], colors=[[255, 255, 0]]),
+            )
+
+        if client_config.audio.enabled:
+            audio_data = np.array(request.audio_data)
+            for i in audio_data:
+                self.recorder.log("world/audio", rr.Scalar(i))
+
+        if client_config.meshing.enabled:
+            print("Number of meshes: ", len(request.meshes))
+            # Binary arrays can be empty if no mesh is sent. This could be due to non-supporting devices. We can log this in the future.
+            binary_arrays = request.meshes
+            index = 0
+            for mesh_data in binary_arrays:
+                # We are ignoring type because DracoPy is written with Cython, and Pyright cannot infer types from a native module.
+                dracoMesh = DracoPy.decode(mesh_data.data)  # pyright: ignore [reportUnknownMemberType, reportUnknownVariableType]
+
+                mesh = Mesh(
+                    dracoMesh.faces,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                    dracoMesh.points,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                    dracoMesh.normals,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                    dracoMesh.tex_coord,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                    dracoMesh.colors,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                )
+
+                rr.log(
+                    f"world/mesh/mesh-{index}",
+                    rr.Mesh3D(
+                        vertex_positions=mesh.points,
+                        triangle_indices=mesh.faces,
+                        vertex_normals=mesh.normals,
+                        vertex_colors=mesh.colors,
+                        vertex_texcoords=mesh.tex_coord,
+                    ),
+                )
+                index += 1
+
         # Call the for user extension code.
         self.on_frame_received(
             DecodedDataFrame(
@@ -246,6 +377,36 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
             pickle.dump(self._requests_history, f)
 
         logger.info("Data saved to %s", save_path)
+
+
+def convert_2d_to_3d(
+    boundary_points_2d: PlaneBoundaryPoints, normal: PlaneNormal, center: PlaneCenter
+) -> npt.NDArray[np.float32]:
+    # Ensure the normal is normalized
+    normal = normal / np.linalg.norm(normal)
+
+    # Generate two orthogonal vectors (u and v) that lie on the plane
+    # Find a vector that is not parallel to the normal
+    arbitrary_vector = (
+        np.array([1, 0, 0])
+        if not np.allclose(normal, [1, 0, 0])
+        else np.array([0, 1, 0])
+    )
+
+    # Create u vector, which is perpendicular to the normal
+    u = np.cross(normal, arbitrary_vector)
+    u = u / np.linalg.norm(u)
+
+    # Create v vector, which is perpendicular to both the normal and u
+    v = np.cross(normal, u)
+
+    # Convert the 2D points into 3D
+    # Each 2D point can be written as a linear combination of u and v, plus the center
+    boundary_points_3d = np.array(
+        [center + point_2d[0] * u + point_2d[1] * v for point_2d in boundary_points_2d]
+    )
+
+    return np.array(boundary_points_3d)
 
 
 def _decode_rgb_image(

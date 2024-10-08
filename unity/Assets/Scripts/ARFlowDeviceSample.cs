@@ -26,6 +26,11 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     public ARPlaneManager planeManager;
 
+    /// <summary>
+    /// Plane detection
+    /// </summary>
+    public ARMeshManager meshManager;
+
     public Button connectButton;
     public Button startPauseButton;
 
@@ -47,7 +52,11 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
-        _clientManager = new ARFlowClientManager(cameraManager, occlusionManager);
+        _clientManager = new ARFlowClientManager(
+            cameraManager: cameraManager,
+            occlusionManager: occlusionManager,
+            planeManager: planeManager,
+            meshManager: meshManager);
 
         addModalityOptionsToConfig();
 
@@ -120,9 +129,8 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             serverURL = "http://" + ipField.text + ":" + portField.text;
         }
-        var modalities = modalityOptions();
-
-        prettyPrintDictionary(modalities);
+        //var modalities = modalityOptions();
+        //prettyPrintDictionary(modalities);
 
         _clientManager.Connect(serverURL, modalityOptions());
     }
@@ -146,12 +154,21 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         Debug.Log($"Current framerate: {Application.targetFrameRate}");
 
+        if (enabled)
+        {
+            _clientManager.startDataStreaming();
+        }
+        else
+        {
+            _clientManager.stopDataStreaming();
+        }
+
         _enabled = !_enabled;
         startPauseButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (!_enabled) return;
         UploadFrame();

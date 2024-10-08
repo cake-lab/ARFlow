@@ -3,6 +3,9 @@ using ARFlow;
 using Google.Protobuf;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using Unity.Collections;
+using static ARFlow.DataFrame.Types.Mesh;
 
 /// <summary>
 /// Class for sending mock data to the server.
@@ -13,6 +16,8 @@ public class ARFlowMockDataSample : MonoBehaviour
     public TMP_InputField addressInput;
     public Button connectButton;
     public Button sendButton;
+
+    public GameObject testBunny;
 
     private ARFlowClient _client;
     /// <summary>
@@ -69,6 +74,14 @@ public class ARFlowMockDataSample : MonoBehaviour
             Gyroscope = new ClientConfiguration.Types.Gyroscope()
             {
                 Enabled = true,
+            },
+            Meshing = new ClientConfiguration.Types.Meshing()
+            {
+                Enabled = true,
+            },
+            CameraPlaneDetection = new ClientConfiguration.Types.CameraPlaneDetection()
+            {
+                Enabled = true,
             }
         });
     }
@@ -100,11 +113,35 @@ public class ARFlowMockDataSample : MonoBehaviour
         dataFrame.Gyroscope.Gravity = unityVector3ToProto(gravity);
         dataFrame.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
 
-        _client.SendFrame(new DataFrame()
+        // Test meshing data encode + test server handling
+        Mesh meshdata = testBunny.GetComponent<MeshFilter>().sharedMesh;
+        List<NativeArray<byte>> encodedMesh = MeshingEncoder.encodeMesh(meshdata);
+        for (int i = 0; i < 20; i++)
         {
-            Color = ByteString.CopyFrom(colorBytes)
+            foreach (var meshElement in encodedMesh)
+            {
+                var meshProto = new DataFrame.Types.Mesh();
+                meshProto.Data = ByteString.CopyFrom(meshElement);
 
-        });
+                dataFrame.Meshes.Add(meshProto);
+            }
+        }
+
+        // Test plane
+        var plane = new DataFrame.Types.Plane();
+        plane.Center = unityVector3ToProto(new Vector3(1, 2, 3));
+        plane.Normal = unityVector3ToProto(new Vector3(0, 2, 5));
+        plane.Size = unityVector2ToProto(new Vector2(5, 5));
+        plane.BoundaryPoints.Add(new []
+            { unityVector2ToProto(new Vector2(0, 2)),
+            unityVector2ToProto(new Vector2(1, 3)),
+            unityVector2ToProto(new Vector2(2, 4)), 
+            unityVector2ToProto(new Vector2(1, 5)),
+            unityVector2ToProto(new Vector2(2, 1)) }
+        );
+        dataFrame.PlaneDetection.Add(plane);
+
+        _client.SendFrame(dataFrame);
     }
 
     DataFrame.Types.Vector3 unityVector3ToProto(Vector3 a)
@@ -125,6 +162,15 @@ public class ARFlowMockDataSample : MonoBehaviour
             Y = a.y,
             Z = a.z,
             W = a.w
+        };
+    }
+
+    DataFrame.Types.Vector2 unityVector2ToProto(Vector2 a)
+    {
+        return new DataFrame.Types.Vector2()
+        {
+            X = a.x,
+            Y = a.y,
         };
     }
 

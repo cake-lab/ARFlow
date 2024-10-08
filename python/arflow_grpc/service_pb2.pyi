@@ -107,7 +107,7 @@ class ClientIdentifier(_message.Message):
     def __init__(self, uid: _Optional[str] = ...) -> None: ...
 
 class DataFrame(_message.Message):
-    __slots__ = ("uid", "color", "depth", "transform", "plane_detection", "gyroscope", "audio", "meshing")
+    __slots__ = ("uid", "color", "depth", "transform", "plane_detection", "gyroscope", "audio_data", "meshes")
     class Vector3(_message.Message):
         __slots__ = ("x", "y", "z")
         X_FIELD_NUMBER: _ClassVar[int]
@@ -124,15 +124,17 @@ class DataFrame(_message.Message):
         x: float
         y: float
         def __init__(self, x: _Optional[float] = ..., y: _Optional[float] = ...) -> None: ...
-    class Planes(_message.Message):
-        __slots__ = ("center", "normal", "size")
+    class Plane(_message.Message):
+        __slots__ = ("center", "normal", "size", "boundary_points")
         CENTER_FIELD_NUMBER: _ClassVar[int]
         NORMAL_FIELD_NUMBER: _ClassVar[int]
         SIZE_FIELD_NUMBER: _ClassVar[int]
+        BOUNDARY_POINTS_FIELD_NUMBER: _ClassVar[int]
         center: DataFrame.Vector3
         normal: DataFrame.Vector3
         size: DataFrame.Vector2
-        def __init__(self, center: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., normal: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., size: _Optional[_Union[DataFrame.Vector2, _Mapping]] = ...) -> None: ...
+        boundary_points: _containers.RepeatedCompositeFieldContainer[DataFrame.Vector2]
+        def __init__(self, center: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., normal: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., size: _Optional[_Union[DataFrame.Vector2, _Mapping]] = ..., boundary_points: _Optional[_Iterable[_Union[DataFrame.Vector2, _Mapping]]] = ...) -> None: ...
     class Quaternion(_message.Message):
         __slots__ = ("x", "y", "z", "w")
         X_FIELD_NUMBER: _ClassVar[int]
@@ -155,23 +157,28 @@ class DataFrame(_message.Message):
         gravity: DataFrame.Vector3
         acceleration: DataFrame.Vector3
         def __init__(self, attitude: _Optional[_Union[DataFrame.Quaternion, _Mapping]] = ..., rotation_rate: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., gravity: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ..., acceleration: _Optional[_Union[DataFrame.Vector3, _Mapping]] = ...) -> None: ...
+    class Mesh(_message.Message):
+        __slots__ = ("data",)
+        DATA_FIELD_NUMBER: _ClassVar[int]
+        data: bytes
+        def __init__(self, data: _Optional[bytes] = ...) -> None: ...
     UID_FIELD_NUMBER: _ClassVar[int]
     COLOR_FIELD_NUMBER: _ClassVar[int]
     DEPTH_FIELD_NUMBER: _ClassVar[int]
     TRANSFORM_FIELD_NUMBER: _ClassVar[int]
     PLANE_DETECTION_FIELD_NUMBER: _ClassVar[int]
     GYROSCOPE_FIELD_NUMBER: _ClassVar[int]
-    AUDIO_FIELD_NUMBER: _ClassVar[int]
-    MESHING_FIELD_NUMBER: _ClassVar[int]
+    AUDIO_DATA_FIELD_NUMBER: _ClassVar[int]
+    MESHES_FIELD_NUMBER: _ClassVar[int]
     uid: str
     color: bytes
     depth: bytes
     transform: bytes
-    plane_detection: _containers.RepeatedCompositeFieldContainer[DataFrame.Planes]
+    plane_detection: _containers.RepeatedCompositeFieldContainer[DataFrame.Plane]
     gyroscope: DataFrame.gyroscope_data
-    audio: bytes
-    meshing: bytes
-    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrame.Planes, _Mapping]]] = ..., gyroscope: _Optional[_Union[DataFrame.gyroscope_data, _Mapping]] = ..., audio: _Optional[bytes] = ..., meshing: _Optional[bytes] = ...) -> None: ...
+    audio_data: _containers.RepeatedScalarFieldContainer[float]
+    meshes: _containers.RepeatedCompositeFieldContainer[DataFrame.Mesh]
+    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[DataFrame.Plane, _Mapping]]] = ..., gyroscope: _Optional[_Union[DataFrame.gyroscope_data, _Mapping]] = ..., audio_data: _Optional[_Iterable[float]] = ..., meshes: _Optional[_Iterable[_Union[DataFrame.Mesh, _Mapping]]] = ...) -> None: ...
 
 class Acknowledgement(_message.Message):
     __slots__ = ("message",)

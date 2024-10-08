@@ -30,6 +30,68 @@ Intrinsic = npt.NDArray[np.float32]
 PointCloudPCD = npt.NDArray[np.float32]
 PointCloudCLR = npt.NDArray[np.uint8]
 
+Attitude = npt.NDArray[np.float32]
+RotationRate = npt.NDArray[np.float32]
+Gravity = npt.NDArray[np.float32]
+Acceleration = npt.NDArray[np.float32]
+
+Audio = npt.NDArray[np.float32]
+
+MeshFaces = npt.NDArray[np.uint32]
+MeshPoints = npt.NDArray[np.float32]
+MeshNormals = npt.NDArray[np.float32]
+MeshTexCoord = npt.NDArray[np.float32]
+MeshColors = npt.NDArray[np.float32]
+
+PlaneCenter = npt.NDArray[np.float32]
+PlaneNormal = npt.NDArray[np.float32]
+PlaneSize = npt.NDArray[np.float32]
+PlaneBoundaryPoints = npt.NDArray[np.float32]
+
+
+@dataclass
+class PlaneInfo:
+    """Information about a plane."""
+
+    center: PlaneCenter
+    """The center of the plane. In world space (3D)."""
+    normal: PlaneNormal
+    """The normal of the plane. In world space (3D)."""
+    size: PlaneSize
+    """Width and Height of the plane. In meters (2D)"""
+    boundary_points: PlaneBoundaryPoints
+    """The boundary points of the plane. In plane space (2D)."""
+
+
+@dataclass
+class GyroscopeInfo:
+    """Information about a gyroscope."""
+
+    attitude: Attitude
+    """The attitude of the gyroscope."""
+    rotation_rate: RotationRate
+    """The rotation rate of the gyroscope."""
+    gravity: Gravity
+    """The gravity of the gyroscope."""
+    acceleration: Acceleration
+    """The acceleration of the gyroscope."""
+
+
+@dataclass
+class Mesh:
+    """A mesh object. Draco's meshes have additional methods and properties, but with limited documentation and usage on them, I will not include them here."""
+
+    faces: MeshFaces
+    """The mesh faces. Each face is an array of [3] indices."""
+    points: MeshPoints
+    """The mesh points. Each point is an array of [3] coordinates."""
+    normals: MeshNormals | None = None
+    """The mesh normals. Each normal is an array of [3] coordinates. If the mesh does not have normals, this field is `None`."""
+    tex_coord: MeshTexCoord | None = None
+    """The mesh texture coordinates. Each texture coordinate is an array of [2] coordinates. If the mesh does not have texture coordinates, this field is `None`."""
+    colors: MeshColors | None = None
+    """The mesh colors. If the mesh does not have colors, this field is `None`."""
+
 
 @dataclass
 class DecodedDataFrame:
