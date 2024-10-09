@@ -6,6 +6,10 @@ from arflow._types import (
     ColorRGB,
     DepthImg,
     Intrinsic,
+    PlaneBoundaryPoints2D,
+    PlaneBoundaryPoints3D,
+    PlaneCenter,
+    PlaneNormal,
     PointCloudCLR,
     PointCloudPCD,
     Transform,
@@ -171,3 +175,33 @@ def decode_point_cloud(
     clr = color_rgb.reshape(-1, 3)
 
     return pcd.astype(np.float32), clr
+
+
+def to_3d_boundary_points(
+    boundary_points_2d: PlaneBoundaryPoints2D, normal: PlaneNormal, center: PlaneCenter
+) -> PlaneBoundaryPoints3D:
+    # Ensure the normal is normalized
+    normal = normal / np.linalg.norm(normal)
+
+    # Generate two orthogonal vectors (u and v) that lie on the plane
+    # Find a vector that is not parallel to the normal
+    arbitrary_vector = (
+        np.array([1, 0, 0])
+        if not np.allclose(normal, [1, 0, 0])
+        else np.array([0, 1, 0])
+    )
+
+    # Create u vector, which is perpendicular to the normal
+    u = np.cross(normal, arbitrary_vector)
+    u = u / np.linalg.norm(u)
+
+    # Create v vector, which is perpendicular to both the normal and u
+    v = np.cross(normal, u)
+
+    # Convert the 2D points into 3D
+    # Each 2D point can be written as a linear combination of u and v, plus the center
+    boundary_points_3d = np.array(
+        [center + point_2d[0] * u + point_2d[1] * v for point_2d in boundary_points_2d]
+    )
+
+    return np.array(boundary_points_3d)
