@@ -13,7 +13,6 @@ from typing import Any, List, Type
 import DracoPy
 import grpc
 import numpy as np
-import numpy.typing as npt
 import rerun as rr
 from grpc_interceptor.exceptions import InvalidArgument, NotFound
 
@@ -38,6 +37,7 @@ from arflow._types import (
     HashableClientIdentifier,
     Intrinsic,
     Mesh,
+    PlaneBoundaryPoints3D,
     PlaneInfo,
     PointCloudCLR,
     PointCloudPCD,
@@ -232,7 +232,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 )
 
         if client_config.camera_plane_detection.enabled:
-            strips: List[npt.NDArray[np.float32]] = []
+            strips: List[PlaneBoundaryPoints3D] = []
             for plane in request.plane_detection:
                 boundary_points_2d: List[List[float]] = list(
                     map(lambda pt: [pt.x, pt.y], plane.boundary_points)
