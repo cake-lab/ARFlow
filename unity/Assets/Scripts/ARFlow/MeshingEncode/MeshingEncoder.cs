@@ -9,10 +9,10 @@ namespace ARFlow
 {
     public class MeshingEncoder
     {
-        public static List<NativeArray<byte>> encodeMesh(Mesh mesh)
+        public static List<NativeArray<byte>> EncodeMesh(Mesh mesh)
         {
             EncodeResult[] result = DracoEncoder.EncodeMesh(mesh);
-            List<NativeArray<byte>> ret = new List<NativeArray<byte>>(); 
+            List<NativeArray<byte>> ret = new(); 
             foreach (EncodeResult item in result)
             {
                 ret.Add(item.data);

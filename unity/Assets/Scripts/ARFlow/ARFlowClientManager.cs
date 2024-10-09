@@ -33,10 +33,14 @@ namespace ARFlow
         private ARMeshManager _meshManager;
         private ARPlaneManager _planeManager;
 
+        private Task oldTask = null;
+
+        private bool _isStreaming = false;
+
         //TODO
         //private Dictionary<string, Dictionary<string, Any>> _modalityConfig
 
-        private readonly Dictionary<string, bool> DEFAULT_MODALITIES = new Dictionary<string, bool>
+        private readonly Dictionary<string, bool> DEFAULT_MODALITIES = new()
         {
             ["CameraColor"] = false,
             ["CameraDepth"] = false,
@@ -48,7 +52,7 @@ namespace ARFlow
             ["Meshing"] = false
         };
 
-        public static readonly List<string> MODALITIES = new List<string>
+        public static readonly List<string> MODALITIES = new()
         { 
             "CameraColor", 
             "CameraDepth", 
@@ -107,7 +111,171 @@ namespace ARFlow
 #endif
         }
 
+        /// <summary>
+        /// A Task wrapper for the connect method, to avoid blocking the main thread.
+        /// <para /> Only the connect method is sent to another thread. 
+        /// The methods to collect client configurations is required to be in the main thread.
+        /// 
+        /// <para /> The method will spawn a new task, so the usage of this is only calling "ConnectTask(args)"
+        /// </summary>
+        /// <param name="address">Server address</param>
+        /// <param name="activatedDataModalities">Dictionary of all data modalities, either activated or not</param>
+        public Task ConnectTask(
+            string address,
+            Dictionary<string, bool> activatedDataModalities = null,
+            Action<Task> taskFinishedHook = null
+        )
+        {
+            ResetState();
+            _client = new ARFlowClient(address);
 
+            _activatedDataModalities = activatedDataModalities;
+            if (activatedDataModalities == null)
+                _activatedDataModalities = DEFAULT_MODALITIES;
+
+            try
+            {
+                // To avoid old method calls to log message 
+                oldTask?.ContinueWith(t => { });
+
+                var requestData = GetClientConfiguration();
+                var task = Task.Run(() => _client.Connect(requestData));
+                if (taskFinishedHook is not null)
+                    task.ContinueWith(taskFinishedHook);
+
+                oldTask = task;
+
+                return task;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+
+            return null;
+        }
+
+
+        private void ResetState()
+        {
+            if ( _isStreaming)
+            {
+                StopDataStreaming();
+            }
+        }
+
+        private ClientConfiguration GetClientConfiguration()
+        {
+            _cameraManager.TryGetIntrinsics(out var k);
+            _cameraManager.TryAcquireLatestCpuImage(out var colorImage);
+            _occlusionManager.TryAcquireEnvironmentDepthCpuImage(out var depthImage);
+
+            _sampleSize = depthImage.dimensions;
+
+            var requestData = new ClientConfiguration()
+            {
+                DeviceName = SystemInfo.deviceName,
+                CameraIntrinsics = new ClientConfiguration.Types.CameraIntrinsics()
+                {
+                    FocalLengthX = k.focalLength.x,
+                    FocalLengthY = k.focalLength.y,
+                    ResolutionX = k.resolution.x,
+                    ResolutionY = k.resolution.y,
+                    PrincipalPointX = k.principalPoint.x,
+                    PrincipalPointY = k.principalPoint.y,
+                }
+
+            };
+            if (_activatedDataModalities["CameraColor"])
+            {
+                var CameraColor = new ClientConfiguration.Types.CameraColor()
+                {
+                    Enabled = true,
+                    DataType = "YCbCr420",
+                    ResizeFactorX = depthImage.dimensions.x / (float)colorImage.dimensions.x,
+                    ResizeFactorY = depthImage.dimensions.y / (float)colorImage.dimensions.y,
+                };
+                requestData.CameraColor = CameraColor;
+            }
+            if (_activatedDataModalities["CameraDepth"])
+            {
+                var CameraDepth = new ClientConfiguration.Types.CameraDepth()
+                {
+                    Enabled = true,
+    #if UNITY_ANDROID
+                    DataType = "u16", // f32 for iOS, u16 for Android
+    #endif
+    #if UNITY_IOS
+                    DataType = "f32",
+    #endif
+                    ConfidenceFilteringLevel = 0,
+                    ResolutionX = depthImage.dimensions.x,
+                    ResolutionY = depthImage.dimensions.y
+                };
+                requestData.CameraDepth = CameraDepth;
+            }
+
+            if (_activatedDataModalities["CameraTransform"])
+            {
+                var CameraTransform = new ClientConfiguration.Types.CameraTransform()
+                {
+                    Enabled = true
+                };
+                requestData.CameraTransform = CameraTransform;
+            }
+
+            if (_activatedDataModalities["CameraPointCloud"])
+            {
+                var CameraPointCloud = new ClientConfiguration.Types.CameraPointCloud()
+                {
+                    Enabled = true,
+                    DepthUpscaleFactor = 1.0f,
+                };
+                requestData.CameraPointCloud = CameraPointCloud;
+            };
+
+            if (_activatedDataModalities["PlaneDetection"])
+            {
+                var CameraPlaneDetection = new ClientConfiguration.Types.CameraPlaneDetection()
+                {
+                    Enabled = true
+                };
+                requestData.CameraPlaneDetection = CameraPlaneDetection;
+            }
+
+            if (_activatedDataModalities["Gyroscope"])
+            {
+                var Gyroscope = new ClientConfiguration.Types.Gyroscope()
+                {
+                    Enabled = true
+                };
+                requestData.Gyroscope = Gyroscope;
+            }
+
+            if (_activatedDataModalities["Audio"])
+            {
+                var Audio = new ClientConfiguration.Types.Audio()
+                {
+                    Enabled = true
+                };
+                requestData.Audio = Audio;
+            }
+
+            if (_activatedDataModalities["Meshing"])
+            {
+                var Meshing = new ClientConfiguration.Types.Meshing()
+                {
+                    Enabled = true
+                };
+                requestData.Meshing = Meshing;
+            }
+
+            colorImage.Dispose();
+            depthImage.Dispose();
+
+            return requestData;
+
+        }
 
         /// <summary>
         /// Connect to the server at an address, and with data modalities activated or not.
@@ -119,122 +287,17 @@ namespace ARFlow
             Dictionary<string, bool> activatedDataModalities = null
         )
         {
+            ResetState();
             _client = new ARFlowClient(address);
+
             _activatedDataModalities = activatedDataModalities;
             if (activatedDataModalities == null)
                 _activatedDataModalities = DEFAULT_MODALITIES;
 
             try
             {
-                _cameraManager.TryGetIntrinsics(out var k);
-                _cameraManager.TryAcquireLatestCpuImage(out var colorImage);
-                _occlusionManager.TryAcquireEnvironmentDepthCpuImage(out var depthImage);
-
-                _sampleSize = depthImage.dimensions;
-
-                var requestData = new ClientConfiguration()
-                {
-                    DeviceName = SystemInfo.deviceName,
-                    CameraIntrinsics = new ClientConfiguration.Types.CameraIntrinsics()
-                    {
-                        FocalLengthX = k.focalLength.x,
-                        FocalLengthY = k.focalLength.y,
-                        ResolutionX = k.resolution.x,
-                        ResolutionY = k.resolution.y,
-                        PrincipalPointX = k.principalPoint.x,
-                        PrincipalPointY = k.principalPoint.y,
-                    }
-
-                };
-                if (_activatedDataModalities["CameraColor"])
-                {
-                    var CameraColor = new ClientConfiguration.Types.CameraColor()
-                    {
-                        Enabled = true,
-                        DataType = "YCbCr420",
-                        ResizeFactorX = depthImage.dimensions.x / (float)colorImage.dimensions.x,
-                        ResizeFactorY = depthImage.dimensions.y / (float)colorImage.dimensions.y,
-                    };
-                    requestData.CameraColor = CameraColor;
-                }
-                if (_activatedDataModalities["CameraDepth"])
-                {
-                    var CameraDepth = new ClientConfiguration.Types.CameraDepth()
-                    {
-                        Enabled = true,
-#if UNITY_ANDROID
-                        DataType = "u16", // f32 for iOS, u16 for Android
-#endif
-#if UNITY_IOS
-                        DataType = "f32",
-#endif
-                        ConfidenceFilteringLevel = 0,
-                        ResolutionX = depthImage.dimensions.x,
-                        ResolutionY = depthImage.dimensions.y
-                    };
-                    requestData.CameraDepth = CameraDepth;
-                }
-
-                if (_activatedDataModalities["CameraTransform"])
-                {
-                    var CameraTransform = new ClientConfiguration.Types.CameraTransform()
-                    {
-                        Enabled = true
-                    };
-                    requestData.CameraTransform = CameraTransform;
-                }
-
-                if (_activatedDataModalities["CameraPointCloud"])
-                {
-                    var CameraPointCloud = new ClientConfiguration.Types.CameraPointCloud()
-                    {
-                        Enabled = true,
-                        DepthUpscaleFactor = 1.0f,
-                    };
-                    requestData.CameraPointCloud = CameraPointCloud;
-                };
-
-                if (_activatedDataModalities["PlaneDetection"])
-                {
-                    var CameraPlaneDetection = new ClientConfiguration.Types.CameraPlaneDetection()
-                    {
-                        Enabled = true
-                    };
-                    requestData.CameraPlaneDetection = CameraPlaneDetection;
-                }
-
-                if (_activatedDataModalities["Gyroscope"])
-                {
-                    var Gyroscope = new ClientConfiguration.Types.Gyroscope()
-                    {
-                        Enabled = true
-                    };
-                    requestData.Gyroscope = Gyroscope;
-                }
-
-                if (_activatedDataModalities["Audio"])
-                {
-                    var Audio = new ClientConfiguration.Types.Audio()
-                    {
-                        Enabled = true
-                    };
-                    requestData.Audio = Audio;
-                }
-
-                if (_activatedDataModalities["Meshing"])
-                {
-                    var Meshing = new ClientConfiguration.Types.Meshing()
-                    {
-                        Enabled = true
-                    };
-                    requestData.Meshing = Meshing;
-                }
-
-                colorImage.Dispose();
-                depthImage.Dispose();
-
+                var requestData = GetClientConfiguration();
                 _client.Connect(requestData);
-
             }
             catch (Exception e)
             {
@@ -247,7 +310,7 @@ namespace ARFlow
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        DataFrame.Types.Vector3 unityVector3ToProto(Vector3 a)
+        DataFrame.Types.Vector3 UnityVector3ToProto(Vector3 a)
         {
             return new DataFrame.Types.Vector3 ()
             {
@@ -257,7 +320,7 @@ namespace ARFlow
             };
         }
 
-        DataFrame.Types.Vector2 unityVector2ToProto(Vector2 a)
+        DataFrame.Types.Vector2 UnityVector2ToProto(Vector2 a)
         {
             return new DataFrame.Types.Vector2()
             {
@@ -266,7 +329,7 @@ namespace ARFlow
             };
         }
 
-        DataFrame.Types.Quaternion unityQuaternionToProto(Quaternion a)
+        DataFrame.Types.Quaternion UnityQuaternionToProto(Quaternion a)
         {
             return new DataFrame.Types.Quaternion ()
             {
@@ -283,8 +346,9 @@ namespace ARFlow
         /// <summary>
         /// For streaming data: start streaming allow data to be sent periodically until stop streaming.
         /// </summary>
-        public void startDataStreaming()
+        public void StartDataStreaming()
         {
+            _isStreaming = true;
             if (_activatedDataModalities["Audio"]) 
             {
                 _audioStreaming.initializeAudioRecording(DEFAULT_SAMPLE_RATE, DEFAULT_FRAME_LENGTH);
@@ -295,8 +359,9 @@ namespace ARFlow
         /// For streaming data: stop streaming data so that we don't consume more 
         /// resource after this point.
         /// </summary>
-        public void stopDataStreaming()
+        public void StopDataStreaming()
         {
+            _isStreaming = false;
             if (_activatedDataModalities["Audio"])
             {
                 _audioStreaming.disposeAudioRecording();
@@ -304,10 +369,10 @@ namespace ARFlow
         }
 
         /// <summary>
-        /// Send a data of a frame to the server.
+        /// Collect data frame's data for sending to server
         /// </summary>
-        /// <param name="frameData">Data of the frame. The typing of this is generated by Protobuf.</param>
-        public string GetAndSendFrame()
+        /// <returns></returns>
+        public DataFrame CollectDataFrame()
         {
             var dataFrame = new DataFrame();
 
@@ -348,11 +413,11 @@ namespace ARFlow
                 foreach (ARPlane plane in _planeManager.trackables)
                 {
                     var protoPlane = new DataFrame.Types.Plane();
-                    protoPlane.Center = unityVector3ToProto(plane.center);
-                    protoPlane.Normal = unityVector3ToProto(plane.normal);
-                    protoPlane.Size = unityVector2ToProto(plane.size);
-                    protoPlane.BoundaryPoints.Add(plane.boundary.Select(point => unityVector2ToProto(point)));
-                
+                    protoPlane.Center = UnityVector3ToProto(plane.center);
+                    protoPlane.Normal = UnityVector3ToProto(plane.normal);
+                    protoPlane.Size = UnityVector2ToProto(plane.size);
+                    protoPlane.BoundaryPoints.Add(plane.boundary.Select(point => UnityVector2ToProto(point)));
+
                     dataFrame.PlaneDetection.Add(protoPlane);
                 }
             }
@@ -365,10 +430,10 @@ namespace ARFlow
                 Vector3 gravity = GravitySensor.current.gravity.ReadValue();
                 Vector3 acceleration = Accelerometer.current.acceleration.ReadValue();
 
-                dataFrame.Gyroscope.Attitude = unityQuaternionToProto(attitude);
-                dataFrame.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);
-                dataFrame.Gyroscope.Gravity = unityVector3ToProto(gravity);
-                dataFrame.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
+                dataFrame.Gyroscope.Attitude = UnityQuaternionToProto(attitude);
+                dataFrame.Gyroscope.RotationRate = UnityVector3ToProto(rotation_rate);
+                dataFrame.Gyroscope.Gravity = UnityVector3ToProto(gravity);
+                dataFrame.Gyroscope.Acceleration = UnityVector3ToProto(acceleration);
             }
 
             if (_activatedDataModalities["Audio"])
@@ -386,9 +451,9 @@ namespace ARFlow
                 foreach (MeshFilter meshFilter in meshFilters)
                 {
                     Mesh mesh = meshFilter.sharedMesh;
-                    List<NativeArray<byte>> encodedMesh = MeshingEncoder.encodeMesh(mesh);
+                    List<NativeArray<byte>> encodedMesh = MeshingEncoder.EncodeMesh(mesh);
 
-                    foreach(var meshElement in encodedMesh)
+                    foreach (var meshElement in encodedMesh)
                     {
                         var meshProto = new DataFrame.Types.Mesh();
                         meshProto.Data = ByteString.CopyFrom(meshElement);
@@ -399,9 +464,31 @@ namespace ARFlow
 
             }
 
-            Debug.Log("sending dataframe");
+            return dataFrame;
+        }
+
+        /// <summary>
+        /// This is a Task wrapper for GetAndSendFrame, to avoid blocking in the main thread.
+        /// <para /> The method will spawn a new task, so the usage of this is only calling "GetAndSendFrameTask()"
+        /// </summary>
+        /// <returns></returns>
+        public Task<string> GetAndSendFrameTask()
+        {
+            var dataFrame = CollectDataFrame();
+
+            return Task.Run(() => _client.SendFrame(dataFrame));
+        }
+
+        /// <summary>
+        /// Send a data of a frame to the server.
+        /// </summary>
+        /// <param name="frameData">Data of the frame. The typing of this is generated by Protobuf.</param>
+        /// <returns>A message from the server.</returns>
+        public string GetAndSendFrame()
+        {
+            var dataFrame = CollectDataFrame();
+
             string serverMessage = _client.SendFrame(dataFrame);
-            Debug.Log("dataframe sent");
             return serverMessage;
         }
     }

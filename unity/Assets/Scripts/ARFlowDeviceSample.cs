@@ -10,6 +10,12 @@ using UnityEngine.XR.ARFoundation;
 using System.Collections.Generic;
 using System.Collections;
 
+using EasyUI.Toast;
+using System.Threading.Tasks;
+using System.Net;
+using UnityEditor.PackageManager;
+using System.Security.Cryptography;
+
 public class ARFlowDeviceSample : MonoBehaviour
 {
     /// <summary>
@@ -43,10 +49,12 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public GameObject OptionsContainer;
 
-    private Dictionary<string, GameObject> _optionObjects = new Dictionary<string, GameObject>();
+    private readonly Dictionary<string, GameObject> _optionObjects = new();
 
-    private string _defaultConnection = "http://192.168.1.219:8500";
+    private readonly string _defaultConnection = "http://192.168.1.219:8500";
 
+    private bool _isConnected = false;
+    private Task connectTask = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,7 +66,7 @@ public class ARFlowDeviceSample : MonoBehaviour
             planeManager: planeManager,
             meshManager: meshManager);
 
-        addModalityOptionsToConfig();
+        AddModalityOptionsToConfig();
 
         // OnConnectButtonClick();
 
@@ -67,7 +75,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Application.targetFrameRate = 30;
     }
 
-    void addModalityOptionsToConfig()
+    void AddModalityOptionsToConfig()
     {
         // Get first child, WITH THE ASSUMPTION that it's a checkbox
         GameObject firstChild = OptionsContainer.transform.GetChild(0).gameObject;
@@ -78,20 +86,20 @@ public class ARFlowDeviceSample : MonoBehaviour
                 firstChild, 
                 parent: OptionsContainer.transform
             );
-            newOption.GetComponent<Text>().text = splitByCapital(modality);
+            newOption.GetComponent<Text>().text = SplitByCapital(modality);
 
             _optionObjects.Add( modality, newOption );
         }
     }
 
-    string splitByCapital(string s)
+    string SplitByCapital(string s)
     {
         return Regex.Replace(s, "([a-z])([A-Z])", "$1 $2");
     }
 
-    Dictionary<string, bool> modalityOptions()
+    Dictionary<string, bool> GetModalityOptions()
     {
-        Dictionary<string, bool> res = new Dictionary<string, bool>();
+        Dictionary<string, bool> res = new();
         foreach (var option in  _optionObjects)
         {
             var optionName = option.Key;
@@ -108,12 +116,12 @@ public class ARFlowDeviceSample : MonoBehaviour
         return res;
     }
 
-    bool validIP (string ipField)
+    bool IsIpValid (string ipField)
     {
         return Regex.IsMatch(ipField, @"(\d){1,3}\.(\d){1,3}\.(\d){1,3}\.(\d){1,3}");
     }
 
-    bool validPort(string portField)
+    bool IsPortValid(string portField)
     {
         return Regex.IsMatch(portField, @"(\d){1,5}");
     }
@@ -124,18 +132,52 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void OnConnectButtonClick()
     {
+
         var serverURL = _defaultConnection;
-        if (validIP(ipField.text) && validPort(portField.text))
+        if (IsIpValid(ipField.text) && IsPortValid(portField.text))
         {
             serverURL = "http://" + ipField.text + ":" + portField.text;
         }
-        //var modalities = modalityOptions();
-        //prettyPrintDictionary(modalities);
 
-        _clientManager.Connect(serverURL, modalityOptions());
+        // To update status of task to user
+        Toast.Show($"Connecting to {serverURL}", 3f, ToastColor.Yellow);
+
+        // Since toast can only be called from main thread (we cannot use the hook to display toast)
+        // these flags are updated and signals connection result to display to user.
+        connectTask = _clientManager.ConnectTask(
+            serverURL, 
+            GetModalityOptions(), 
+            t =>
+        {
+            if (t.IsFaulted)
+            {
+                Debug.Log("Connection failed.");
+            }
+            if (t.IsCompletedSuccessfully)
+            {
+                Debug.Log("Connected successfully.");
+            }
+        });
+        _isConnected = false;
     }
 
-    public static void prettyPrintDictionary(Dictionary<string, bool> dict)
+    private void UpdateConnectionStatus()
+    {
+        if (connectTask is not null && connectTask.IsCompleted)
+        {
+            _isConnected = true;
+            if (connectTask.IsFaulted)
+            {
+                Toast.Show("Connection failed.", ToastColor.Red);
+            }
+            if (connectTask.IsCompletedSuccessfully)
+            {
+                Toast.Show("Connected successfully.", ToastColor.Green);
+            }
+        }
+    }
+
+    public static void PrettyPrintDictionary(Dictionary<string, bool> dict)
     {
         string log = "";
         foreach (var kvp in dict)
@@ -153,14 +195,20 @@ public class ARFlowDeviceSample : MonoBehaviour
     private void OnStartPauseButtonClick()
     {
         Debug.Log($"Current framerate: {Application.targetFrameRate}");
-
         if (enabled)
         {
-            _clientManager.startDataStreaming();
+            if (!_isConnected)
+            {
+                Toast.Show("Connnection not established. Cannot send dataframe.");
+                _enabled = false;
+                return;
+            }
+
+            _clientManager.StartDataStreaming();
         }
         else
         {
-            _clientManager.stopDataStreaming();
+            _clientManager.StopDataStreaming();
         }
 
         _enabled = !_enabled;
@@ -170,17 +218,12 @@ public class ARFlowDeviceSample : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!_isConnected)
+        {
+            UpdateConnectionStatus();
+        }
         if (!_enabled) return;
-        UploadFrame();
-    }
-
-    /// <summary>
-    /// Get color image and depth information, and copy camera's transform from float to bytes. 
-    /// This data is sent over the server.
-    /// </summary>
-    private void UploadFrame()
-    {
-        _clientManager.GetAndSendFrame();
+        _clientManager.GetAndSendFrameTask();
     }
 
 }

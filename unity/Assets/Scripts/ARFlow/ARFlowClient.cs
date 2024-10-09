@@ -53,7 +53,7 @@ namespace ARFlow
             {
                 // Try to catch any exceptions.
                 // Network, device image, camera intrinsics
-                Debug.LogError(e);
+                Debug.Log(e);
             }
         }
 

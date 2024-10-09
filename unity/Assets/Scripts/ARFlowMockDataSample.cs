@@ -115,7 +115,7 @@ public class ARFlowMockDataSample : MonoBehaviour
 
         // Test meshing data encode + test server handling
         Mesh meshdata = testBunny.GetComponent<MeshFilter>().sharedMesh;
-        List<NativeArray<byte>> encodedMesh = MeshingEncoder.encodeMesh(meshdata);
+        List<NativeArray<byte>> encodedMesh = MeshingEncoder.EncodeMesh(meshdata);
         for (int i = 0; i < 20; i++)
         {
             foreach (var meshElement in encodedMesh)

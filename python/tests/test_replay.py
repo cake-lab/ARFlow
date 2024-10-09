@@ -1,4 +1,4 @@
-"""Replay unit tests."""
+"""Replay tests."""
 
 # ruff:noqa: D103
 

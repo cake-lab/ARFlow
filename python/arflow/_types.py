@@ -46,7 +46,8 @@ MeshColors = npt.NDArray[np.float32]
 PlaneCenter = npt.NDArray[np.float32]
 PlaneNormal = npt.NDArray[np.float32]
 PlaneSize = npt.NDArray[np.float32]
-PlaneBoundaryPoints = npt.NDArray[np.float32]
+PlaneBoundaryPoints2D = npt.NDArray[np.float32]
+PlaneBoundaryPoints3D = npt.NDArray[np.float32]
 
 
 @dataclass
@@ -59,7 +60,7 @@ class PlaneInfo:
     """The normal of the plane. In world space (3D)."""
     size: PlaneSize
     """Width and Height of the plane. In meters (2D)"""
-    boundary_points: PlaneBoundaryPoints
+    boundary_points: PlaneBoundaryPoints2D
     """The boundary points of the plane. In plane space (2D)."""
 
 
