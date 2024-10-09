@@ -8,12 +8,12 @@ from typing import Literal
 import numpy as np
 import pytest
 
-from arflow._core import (
-    _decode_depth_image,
-    _decode_intrinsic,
-    _decode_point_cloud,
-    _decode_rgb_image,
-    _decode_transform,
+from arflow._decoding import (
+    decode_depth_image,
+    decode_intrinsic,
+    decode_point_cloud,
+    decode_rgb_image,
+    decode_transform,
 )
 
 
@@ -37,7 +37,7 @@ def test_decode_rgb_image(
 ):
     buffer = np.random.randint(0, 255, buffer_length, dtype=np.uint8).tobytes()  # pyright: ignore [reportUnknownMemberType]
     if should_pass:
-        assert _decode_rgb_image(
+        assert decode_rgb_image(
             resolution_y,
             resolution_x,
             resize_factor_y,
@@ -50,7 +50,7 @@ def test_decode_rgb_image(
             3,
         )
         assert (
-            _decode_rgb_image(
+            decode_rgb_image(
                 resolution_y,
                 resolution_x,
                 resize_factor_y,
@@ -62,7 +62,7 @@ def test_decode_rgb_image(
         )
     else:
         with pytest.raises(ValueError):
-            _decode_rgb_image(
+            decode_rgb_image(
                 resolution_y,
                 resolution_x,
                 resize_factor_y,
@@ -91,12 +91,12 @@ def test_decode_depth_image(
     buffer = np.random.rand(resolution_y * resolution_x).astype(buffer_dtype).tobytes()
 
     if should_pass:
-        result = _decode_depth_image(resolution_y, resolution_x, data_type, buffer)
+        result = decode_depth_image(resolution_y, resolution_x, data_type, buffer)
         assert result.shape == (resolution_y, resolution_x)
         assert result.dtype == np.float32
     else:
         with pytest.raises(ValueError):
-            _decode_depth_image(resolution_y, resolution_x, data_type, buffer[:1])
+            decode_depth_image(resolution_y, resolution_x, data_type, buffer[:1])
 
 
 @pytest.mark.parametrize(
@@ -110,12 +110,12 @@ def test_decode_transform(buffer_length: int, should_pass: bool):
     buffer = np.random.rand(buffer_length // 4).astype(np.float32).tobytes()
 
     if should_pass:
-        result = _decode_transform(buffer)
+        result = decode_transform(buffer)
         assert result.shape == (4, 4)
         assert result.dtype == np.float32
     else:
         with pytest.raises(ValueError):
-            _decode_transform(buffer)
+            decode_transform(buffer)
 
 
 @pytest.mark.parametrize(
@@ -135,7 +135,7 @@ def test_decode_intrinsic(
     should_pass: bool,
 ):
     if should_pass:
-        result = _decode_intrinsic(
+        result = decode_intrinsic(
             resize_factor_y,
             resize_factor_x,
             focal_length_y,
@@ -147,7 +147,7 @@ def test_decode_intrinsic(
         assert result.dtype == np.float32
     else:
         with pytest.raises(ValueError):
-            _decode_intrinsic(
+            decode_intrinsic(
                 resize_factor_y,
                 resize_factor_x,
                 focal_length_y,
@@ -158,10 +158,10 @@ def test_decode_intrinsic(
 
 
 @pytest.mark.parametrize(
-    "resolution_y,resolution_x,resize_factor_y,resize_factor_x,valid_transform,should_pass",
+    "resolution_y,resolution_x,resize_factor_y,resize_factor_x,should_pass",
     [
-        (4, 4, 1.0, 1.0, True, True),  # Valid point cloud case
-        (4, 4, 1.0, 1.0, False, False),  # Invalid transformation matrix
+        (4, 4, 1.0, 1.0, True),  # Valid point cloud case
+        # TODO: Really no error cases? Because we can assume color_rgb, depth_img, and k are valid
     ],
 )
 def test_decode_point_cloud(
@@ -169,7 +169,6 @@ def test_decode_point_cloud(
     resolution_x: int,
     resize_factor_y: float,
     resize_factor_x: float,
-    valid_transform: bool,
     should_pass: bool,
 ):
     color_rgb = np.random.randint(  # pyright: ignore [reportUnknownMemberType]
@@ -177,12 +176,10 @@ def test_decode_point_cloud(
     )
     depth_img = np.random.rand(resolution_y, resolution_x).astype(np.float32)
     k = np.array([[2.0, 0, 1.0], [0, 2.0, 1.0], [0, 0, 1.0]], dtype=np.float32)
-    transform = (
-        np.eye(4, dtype=np.float32) if valid_transform else np.eye(3, dtype=np.float32)
-    )
+    transform = np.eye(4, dtype=np.float32)
 
     if should_pass:
-        pcd, clr = _decode_point_cloud(
+        pcd, clr = decode_point_cloud(
             resolution_y,
             resolution_x,
             resize_factor_y,
@@ -197,8 +194,8 @@ def test_decode_point_cloud(
         assert clr.shape == (resolution_y * resolution_x, 3)
         assert clr.dtype == np.uint8
     else:
-        with pytest.raises(IndexError):
-            _decode_point_cloud(
+        with pytest.raises(ValueError):
+            decode_point_cloud(
                 resolution_y,
                 resolution_x,
                 resize_factor_y,

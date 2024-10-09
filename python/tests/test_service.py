@@ -184,25 +184,81 @@ def test_process_frame_with_invalid_data_types(
     assert excinfo.value.status_code == grpc.StatusCode.INVALID_ARGUMENT
 
 
-def test_process_frame_with_corrupted_data(default_service: ARFlowServicer):
-    client_config = ClientConfiguration(
-        camera_color=ClientConfiguration.CameraColor(enabled=True, data_type="RGB24"),
-        camera_depth=ClientConfiguration.CameraDepth(enabled=True, data_type="f32"),
-    )
-    response = default_service.RegisterClient(
+@pytest.mark.parametrize(
+    "client_config, corrupted_frame",
+    [
+        (
+            ClientConfiguration(
+                camera_color=ClientConfiguration.CameraColor(
+                    enabled=True,
+                    data_type="RGB24",
+                    resize_factor_x=1.0,
+                    resize_factor_y=1.0,
+                ),
+                camera_intrinsics=ClientConfiguration.CameraIntrinsics(
+                    resolution_x=4,
+                    resolution_y=4,
+                ),
+            ),
+            DataFrame(
+                uid="1234",
+                color=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
+                    0, 255, (4, 4, 2), dtype=np.uint8
+                ).tobytes(),  # Incorrect size
+            ),
+        ),
+        (
+            ClientConfiguration(
+                camera_color=ClientConfiguration.CameraColor(
+                    enabled=False,
+                ),
+                camera_depth=ClientConfiguration.CameraDepth(
+                    enabled=True, resolution_x=4, resolution_y=4, data_type="f32"
+                ),
+            ),
+            DataFrame(
+                uid="1234",
+                depth=np.random.rand(4 * 4)
+                .astype(np.float32)
+                .tobytes()[:1],  # Incorrect size
+            ),
+        ),
+        (
+            ClientConfiguration(
+                camera_color=ClientConfiguration.CameraColor(
+                    enabled=False,
+                    resize_factor_x=1.0,
+                    resize_factor_y=1.0,
+                ),
+                camera_transform=ClientConfiguration.CameraTransform(enabled=True),
+                camera_intrinsics=ClientConfiguration.CameraIntrinsics(
+                    focal_length_x=1.0,
+                    focal_length_y=1.0,
+                    principal_point_x=1.0,
+                    principal_point_y=1.0,
+                ),
+            ),
+            DataFrame(
+                uid="1234",
+                transform=np.random.rand(8 // 4)
+                .astype(np.float32)
+                .tobytes(),  # Incorrect size
+            ),
+        ),
+    ],
+)
+def test_process_frame_with_corrupted_data(
+    client_config: ClientConfiguration,
+    corrupted_frame: DataFrame,
+    default_service: ARFlowServicer,
+):
+    default_service.RegisterClient(
         client_config,
-    )
-    client_id = response.uid
-
-    # Simulate corrupted color data (e.g., wrong buffer size)
-    mock_frame = DataFrame(
-        uid=client_id,
-        color=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
-            0, 255, (480, 640, 2), dtype=np.uint8
-        ).tobytes(),  # Incorrect size
+        init_uid="1234",
     )
 
-    with pytest.raises(ValueError):
+    with pytest.raises(grpc_interceptor.exceptions.InvalidArgument) as excinfo:
         default_service.ProcessFrame(
-            mock_frame,
+            corrupted_frame,
         )
+    assert excinfo.value.status_code == grpc.StatusCode.INVALID_ARGUMENT

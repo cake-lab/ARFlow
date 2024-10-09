@@ -12,10 +12,10 @@ from grpc_interceptor.testing import (
     raises,  # pyright: ignore [reportUnknownVariableType]
 )
 
-from arflow._error_logger import ErrorLogger
+from arflow._error_interceptor import ErrorInterceptor
 
 
-class MockErrorLogger(ErrorLogger):
+class MockErrorLogger(ErrorInterceptor):
     """Mock error logger that stores the last exception.
 
     You don’t actually want the logging side effect to happen. You just want to make sure it’s called.
