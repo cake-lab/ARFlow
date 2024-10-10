@@ -13,7 +13,6 @@ using System.Collections;
 using EasyUI.Toast;
 using System.Threading.Tasks;
 using System.Net;
-using UnityEditor.PackageManager;
 using System.Security.Cryptography;
 
 public class ARFlowDeviceSample : MonoBehaviour
@@ -165,13 +164,14 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         if (connectTask is not null && connectTask.IsCompleted)
         {
-            _isConnected = true;
             if (connectTask.IsFaulted)
             {
+                connectTask = null;
                 Toast.Show("Connection failed.", ToastColor.Red);
             }
-            if (connectTask.IsCompletedSuccessfully)
+            else if (connectTask.IsCompletedSuccessfully)
             {
+                _isConnected = true;
                 Toast.Show("Connected successfully.", ToastColor.Green);
             }
         }
