@@ -8,9 +8,9 @@ from typing import Dict, List, NewType
 import numpy as np
 import numpy.typing as npt
 
-from arflow_grpc.service_pb2 import ClientConfiguration, DataFrame
+from arflow_grpc.service_pb2 import ProcessFrameRequest, RegisterClientRequest
 
-ARFlowRequest = DataFrame | ClientConfiguration
+ARFlowRequest = ProcessFrameRequest | RegisterClientRequest
 
 
 @dataclass
@@ -114,5 +114,5 @@ class DecodedDataFrame:
 
 RequestsHistory = List[EnrichedARFlowRequest]
 HashableClientIdentifier = NewType("HashableClientIdentifier", str)
-"""This should match a hashable field in the `ClientConfiguration` message."""
-ClientConfigurations = Dict[HashableClientIdentifier, ClientConfiguration]
+"""This should match a hashable field in the `RegisterClientRequest` message."""
+ClientConfigurations = Dict[HashableClientIdentifier, RegisterClientRequest]

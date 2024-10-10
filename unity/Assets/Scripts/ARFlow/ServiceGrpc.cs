@@ -11,9 +11,9 @@ namespace ARFlow {
   /// <summary>
   /// The ARFlow service definition.
   /// </summary>
-  public static partial class ARFlow
+  public static partial class ARFlowService
   {
-    static readonly string __ServiceName = "arflow.ARFlow";
+    static readonly string __ServiceName = "arflow.v1.ARFlowService";
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
@@ -49,29 +49,29 @@ namespace ARFlow {
     }
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::ARFlow.ClientConfiguration> __Marshaller_arflow_ClientConfiguration = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.ClientConfiguration.Parser));
+    static readonly grpc::Marshaller<global::ARFlow.RegisterClientRequest> __Marshaller_arflow_v1_RegisterClientRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.RegisterClientRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::ARFlow.ClientIdentifier> __Marshaller_arflow_ClientIdentifier = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.ClientIdentifier.Parser));
+    static readonly grpc::Marshaller<global::ARFlow.RegisterClientResponse> __Marshaller_arflow_v1_RegisterClientResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.RegisterClientResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::ARFlow.DataFrame> __Marshaller_arflow_DataFrame = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.DataFrame.Parser));
+    static readonly grpc::Marshaller<global::ARFlow.ProcessFrameRequest> __Marshaller_arflow_v1_ProcessFrameRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.ProcessFrameRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::ARFlow.Acknowledgement> __Marshaller_arflow_Acknowledgement = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.Acknowledgement.Parser));
+    static readonly grpc::Marshaller<global::ARFlow.ProcessFrameResponse> __Marshaller_arflow_v1_ProcessFrameResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.ProcessFrameResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::ARFlow.ClientConfiguration, global::ARFlow.ClientIdentifier> __Method_RegisterClient = new grpc::Method<global::ARFlow.ClientConfiguration, global::ARFlow.ClientIdentifier>(
+    static readonly grpc::Method<global::ARFlow.RegisterClientRequest, global::ARFlow.RegisterClientResponse> __Method_RegisterClient = new grpc::Method<global::ARFlow.RegisterClientRequest, global::ARFlow.RegisterClientResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
         "RegisterClient",
-        __Marshaller_arflow_ClientConfiguration,
-        __Marshaller_arflow_ClientIdentifier);
+        __Marshaller_arflow_v1_RegisterClientRequest,
+        __Marshaller_arflow_v1_RegisterClientResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::ARFlow.DataFrame, global::ARFlow.Acknowledgement> __Method_ProcessFrame = new grpc::Method<global::ARFlow.DataFrame, global::ARFlow.Acknowledgement>(
+    static readonly grpc::Method<global::ARFlow.ProcessFrameRequest, global::ARFlow.ProcessFrameResponse> __Method_ProcessFrame = new grpc::Method<global::ARFlow.ProcessFrameRequest, global::ARFlow.ProcessFrameResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
         "ProcessFrame",
-        __Marshaller_arflow_DataFrame,
-        __Marshaller_arflow_Acknowledgement);
+        __Marshaller_arflow_v1_ProcessFrameRequest,
+        __Marshaller_arflow_v1_ProcessFrameResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -79,9 +79,9 @@ namespace ARFlow {
       get { return global::ARFlow.ServiceReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Base class for server-side implementations of ARFlow</summary>
-    [grpc::BindServiceMethod(typeof(ARFlow), "BindService")]
-    public abstract partial class ARFlowBase
+    /// <summary>Base class for server-side implementations of ARFlowService</summary>
+    [grpc::BindServiceMethod(typeof(ARFlowService), "BindService")]
+    public abstract partial class ARFlowServiceBase
     {
       /// <summary>
       /// Registers a client with the given specifications.
@@ -93,49 +93,54 @@ namespace ARFlow {
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::ARFlow.ClientIdentifier> RegisterClient(global::ARFlow.ClientConfiguration request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::ARFlow.RegisterClientResponse> RegisterClient(global::ARFlow.RegisterClientRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
       /// <summary>
       /// Accepts a data frame from a client, returning an acknowledgment.
+      ///
+      /// Errors:
+      /// - NOT_FOUND: If the client configuration is not found.
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::ARFlow.Acknowledgement> ProcessFrame(global::ARFlow.DataFrame request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::ARFlow.ProcessFrameResponse> ProcessFrame(global::ARFlow.ProcessFrameRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
     }
 
-    /// <summary>Client for ARFlow</summary>
-    public partial class ARFlowClient : grpc::ClientBase<ARFlowClient>
+    /// <summary>Client for ARFlowService</summary>
+    public partial class ARFlowServiceClient : grpc::ClientBase<ARFlowServiceClient>
     {
-      /// <summary>Creates a new client for ARFlow</summary>
+      /// <summary>Creates a new client for ARFlowService</summary>
       /// <param name="channel">The channel to use to make remote calls.</param>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public ARFlowClient(grpc::ChannelBase channel) : base(channel)
+      public ARFlowServiceClient(grpc::ChannelBase channel) : base(channel)
       {
       }
-      /// <summary>Creates a new client for ARFlow that uses a custom <c>CallInvoker</c>.</summary>
+      /// <summary>Creates a new client for ARFlowService that uses a custom <c>CallInvoker</c>.</summary>
       /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public ARFlowClient(grpc::CallInvoker callInvoker) : base(callInvoker)
+      public ARFlowServiceClient(grpc::CallInvoker callInvoker) : base(callInvoker)
       {
       }
       /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      protected ARFlowClient() : base()
+      protected ARFlowServiceClient() : base()
       {
       }
       /// <summary>Protected constructor to allow creation of configured clients.</summary>
       /// <param name="configuration">The client configuration.</param>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      protected ARFlowClient(ClientBaseConfiguration configuration) : base(configuration)
+      protected ARFlowServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
 
@@ -151,7 +156,7 @@ namespace ARFlow {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::ARFlow.ClientIdentifier RegisterClient(global::ARFlow.ClientConfiguration request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual global::ARFlow.RegisterClientResponse RegisterClient(global::ARFlow.RegisterClientRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return RegisterClient(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -165,7 +170,7 @@ namespace ARFlow {
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::ARFlow.ClientIdentifier RegisterClient(global::ARFlow.ClientConfiguration request, grpc::CallOptions options)
+      public virtual global::ARFlow.RegisterClientResponse RegisterClient(global::ARFlow.RegisterClientRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_RegisterClient, null, options, request);
       }
@@ -181,7 +186,7 @@ namespace ARFlow {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::ARFlow.ClientIdentifier> RegisterClientAsync(global::ARFlow.ClientConfiguration request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::ARFlow.RegisterClientResponse> RegisterClientAsync(global::ARFlow.RegisterClientRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return RegisterClientAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -195,12 +200,17 @@ namespace ARFlow {
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::ARFlow.ClientIdentifier> RegisterClientAsync(global::ARFlow.ClientConfiguration request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::ARFlow.RegisterClientResponse> RegisterClientAsync(global::ARFlow.RegisterClientRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_RegisterClient, null, options, request);
       }
       /// <summary>
       /// Accepts a data frame from a client, returning an acknowledgment.
+      ///
+      /// Errors:
+      /// - NOT_FOUND: If the client configuration is not found.
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -208,23 +218,33 @@ namespace ARFlow {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::ARFlow.Acknowledgement ProcessFrame(global::ARFlow.DataFrame request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual global::ARFlow.ProcessFrameResponse ProcessFrame(global::ARFlow.ProcessFrameRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return ProcessFrame(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
       /// Accepts a data frame from a client, returning an acknowledgment.
+      ///
+      /// Errors:
+      /// - NOT_FOUND: If the client configuration is not found.
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::ARFlow.Acknowledgement ProcessFrame(global::ARFlow.DataFrame request, grpc::CallOptions options)
+      public virtual global::ARFlow.ProcessFrameResponse ProcessFrame(global::ARFlow.ProcessFrameRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_ProcessFrame, null, options, request);
       }
       /// <summary>
       /// Accepts a data frame from a client, returning an acknowledgment.
+      ///
+      /// Errors:
+      /// - NOT_FOUND: If the client configuration is not found.
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -232,33 +252,38 @@ namespace ARFlow {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::ARFlow.Acknowledgement> ProcessFrameAsync(global::ARFlow.DataFrame request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::ARFlow.ProcessFrameResponse> ProcessFrameAsync(global::ARFlow.ProcessFrameRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return ProcessFrameAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
       /// Accepts a data frame from a client, returning an acknowledgment.
+      ///
+      /// Errors:
+      /// - NOT_FOUND: If the client configuration is not found.
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::ARFlow.Acknowledgement> ProcessFrameAsync(global::ARFlow.DataFrame request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::ARFlow.ProcessFrameResponse> ProcessFrameAsync(global::ARFlow.ProcessFrameRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_ProcessFrame, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      protected override ARFlowClient NewInstance(ClientBaseConfiguration configuration)
+      protected override ARFlowServiceClient NewInstance(ClientBaseConfiguration configuration)
       {
-        return new ARFlowClient(configuration);
+        return new ARFlowServiceClient(configuration);
       }
     }
 
     /// <summary>Creates service definition that can be registered with a server</summary>
     /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    public static grpc::ServerServiceDefinition BindService(ARFlowBase serviceImpl)
+    public static grpc::ServerServiceDefinition BindService(ARFlowServiceBase serviceImpl)
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_RegisterClient, serviceImpl.RegisterClient)
@@ -270,10 +295,10 @@ namespace ARFlow {
     /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
     /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    public static void BindService(grpc::ServiceBinderBase serviceBinder, ARFlowBase serviceImpl)
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, ARFlowServiceBase serviceImpl)
     {
-      serviceBinder.AddMethod(__Method_RegisterClient, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::ARFlow.ClientConfiguration, global::ARFlow.ClientIdentifier>(serviceImpl.RegisterClient));
-      serviceBinder.AddMethod(__Method_ProcessFrame, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::ARFlow.DataFrame, global::ARFlow.Acknowledgement>(serviceImpl.ProcessFrame));
+      serviceBinder.AddMethod(__Method_RegisterClient, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::ARFlow.RegisterClientRequest, global::ARFlow.RegisterClientResponse>(serviceImpl.RegisterClient));
+      serviceBinder.AddMethod(__Method_ProcessFrame, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::ARFlow.ProcessFrameRequest, global::ARFlow.ProcessFrameResponse>(serviceImpl.ProcessFrame));
     }
 
   }

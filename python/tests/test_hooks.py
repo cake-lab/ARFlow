@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pytest
 
-from arflow import ARFlowServicer, ClientConfiguration, DecodedDataFrame
+from arflow import ARFlowServicer, DecodedDataFrame, RegisterClientRequest
 from arflow._types import EnrichedARFlowRequest, HashableClientIdentifier
-from arflow_grpc.service_pb2 import DataFrame
+from arflow_grpc.service_pb2 import ProcessFrameRequest
 
 
 class UserExtendedService(ARFlowServicer):
@@ -19,7 +19,7 @@ class UserExtendedService(ARFlowServicer):
         self.num_clients = 0
         self.num_frames = 0
 
-    def on_register(self, request: ClientConfiguration) -> None:
+    def on_register(self, request: RegisterClientRequest) -> None:
         self.num_clients += 1
 
     def on_frame_received(self, decoded_data_frame: DecodedDataFrame) -> None:
@@ -33,16 +33,16 @@ def user_service():
 
 
 def test_on_register(user_service: UserExtendedService):
-    request = ClientConfiguration()
+    request = RegisterClientRequest()
     for i in range(3):
         assert user_service.num_clients == i
         user_service.RegisterClient(request)
 
 
 def test_on_frame_received(user_service: UserExtendedService):
-    config = ClientConfiguration()
+    config = RegisterClientRequest()
     response = user_service.RegisterClient(config)
-    request = DataFrame(uid=response.uid)
+    request = ProcessFrameRequest(uid=response.uid)
     for i in range(3):
         assert user_service.num_frames == i
         user_service.ProcessFrame(request)
@@ -50,10 +50,10 @@ def test_on_frame_received(user_service: UserExtendedService):
 
 def test_on_program_exit(user_service: UserExtendedService):
     # Add some mock data to the service
-    enriched_request = EnrichedARFlowRequest(timestamp=1, data=DataFrame())
+    enriched_request = EnrichedARFlowRequest(timestamp=1, data=ProcessFrameRequest())
     user_service._requests_history.append(enriched_request)
     client_id = HashableClientIdentifier("test_client")
-    user_service._client_configurations[client_id] = ClientConfiguration()
+    user_service._client_configurations[client_id] = RegisterClientRequest()
 
     # Use tempfile to create a temporary directory
     with tempfile.TemporaryDirectory() as temp_dir:

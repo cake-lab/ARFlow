@@ -46,16 +46,16 @@ from arflow._types import (
 )
 from arflow_grpc import service_pb2_grpc
 from arflow_grpc.service_pb2 import (
-    Acknowledgement,
-    ClientConfiguration,
-    ClientIdentifier,
-    DataFrame,
+    ProcessFrameRequest,
+    ProcessFrameResponse,
+    RegisterClientRequest,
+    RegisterClientResponse,
 )
 
 logger = logging.getLogger(__name__)
 
 
-class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
+class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
     """Provides methods that implement the functionality of the ARFlow gRPC server."""
 
     def __init__(self) -> None:
@@ -77,10 +77,10 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
 
     def RegisterClient(
         self,
-        request: ClientConfiguration,
+        request: RegisterClientRequest,
         context: grpc.ServicerContext | None = None,
         init_uid: str | None = None,
-    ) -> ClientIdentifier:
+    ) -> RegisterClientResponse:
         """Register a client.
 
         @private
@@ -100,13 +100,13 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
         # Call the for user extension code.
         self.on_register(request)
 
-        return ClientIdentifier(uid=init_uid)
+        return RegisterClientResponse(uid=init_uid)
 
     def ProcessFrame(
         self,
-        request: DataFrame,
+        request: ProcessFrameRequest,
         context: grpc.ServicerContext | None = None,
-    ) -> Acknowledgement:
+    ) -> ProcessFrameResponse:
         """Process an incoming frame.
 
         @private
@@ -324,7 +324,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
                 self.recorder.log("world/audio", rr.Scalar(i))
 
         if client_config.meshing.enabled:
-            logger.debug("Number of meshes: ", len(request.meshes))
+            logger.debug("Number of meshes: %s", len(request.meshes))
             # Binary arrays can be empty if no mesh is sent. This could be due to non-supporting devices. We can log this in the future.
             binary_arrays = request.meshes
             index = 0
@@ -364,9 +364,9 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServicer):
             )
         )
 
-        return Acknowledgement(message="OK")
+        return ProcessFrameResponse(message="OK")
 
-    def on_register(self, request: ClientConfiguration) -> None:
+    def on_register(self, request: RegisterClientRequest) -> None:
         """Called when a new device is registered. Override this method to process the data."""
         pass
 
@@ -413,7 +413,7 @@ def run_server(  # pragma: no cover
             ("grpc.max_receive_message_length", -1),
         ],
     )
-    service_pb2_grpc.add_ARFlowServicer_to_server(servicer, server)  # pyright: ignore [reportUnknownMemberType]
+    service_pb2_grpc.add_ARFlowServiceServicer_to_server(servicer, server)  # pyright: ignore [reportUnknownMemberType]
     server.add_insecure_port("[::]:%s" % port)
     server.start()
     logger.info("Server started, listening on %s", port)

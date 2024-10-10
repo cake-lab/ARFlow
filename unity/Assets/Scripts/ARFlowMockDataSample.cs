@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using Unity.Collections;
-using static ARFlow.DataFrame.Types.Mesh;
+using static ARFlow.ProcessFrameRequest.Types.Mesh;
 
 /// <summary>
 /// Class for sending mock data to the server.
@@ -44,10 +44,10 @@ public class ARFlowMockDataSample : MonoBehaviour
 
         _sampleSize = new Vector2Int(256, 192);
 
-        _client.Connect(new ClientConfiguration()
+        _client.Connect(new RegisterClientRequest()
         {
             DeviceName = "MockDataTestbed",
-            CameraIntrinsics = new ClientConfiguration.Types.CameraIntrinsics()
+            CameraIntrinsics = new RegisterClientRequest.Types.CameraIntrinsics()
             {
                 FocalLengthX = 128,
                 FocalLengthY = 96,
@@ -56,30 +56,30 @@ public class ARFlowMockDataSample : MonoBehaviour
                 PrincipalPointX = 128,
                 PrincipalPointY = 96
             },
-            CameraColor = new ClientConfiguration.Types.CameraColor()
+            CameraColor = new RegisterClientRequest.Types.CameraColor()
             {
                 Enabled = true,
                 DataType = "YCbCr420",
                 ResizeFactorX = 1.0f,
                 ResizeFactorY = 1.0f,
             },
-            CameraDepth = new ClientConfiguration.Types.CameraDepth()
+            CameraDepth = new RegisterClientRequest.Types.CameraDepth()
             {
                 Enabled = false,
             },
-            CameraTransform = new ClientConfiguration.Types.CameraTransform()
+            CameraTransform = new RegisterClientRequest.Types.CameraTransform()
             {
                 Enabled = false
             },
-            Gyroscope = new ClientConfiguration.Types.Gyroscope()
+            Gyroscope = new RegisterClientRequest.Types.Gyroscope()
             {
                 Enabled = true,
             },
-            Meshing = new ClientConfiguration.Types.Meshing()
+            Meshing = new RegisterClientRequest.Types.Meshing()
             {
                 Enabled = true,
             },
-            CameraPlaneDetection = new ClientConfiguration.Types.CameraPlaneDetection()
+            CameraPlaneDetection = new RegisterClientRequest.Types.CameraPlaneDetection()
             {
                 Enabled = true,
             }
@@ -97,12 +97,12 @@ public class ARFlowMockDataSample : MonoBehaviour
         var colorBytes = new byte[size];
         _rnd.NextBytes(colorBytes);
 
-        var dataFrame = new DataFrame()
+        var dataFrame = new ProcessFrameRequest()
         {
             Color = ByteString.CopyFrom(colorBytes)
         };
 
-        dataFrame.Gyroscope = new DataFrame.Types.gyroscope_data();
+        dataFrame.Gyroscope = new ProcessFrameRequest.Types.GyroscopeData();
         Quaternion attitude = Input.gyro.attitude;
         Vector3 rotation_rate = Input.gyro.rotationRateUnbiased;
         Vector3 gravity = Input.gyro.gravity;
@@ -120,7 +120,7 @@ public class ARFlowMockDataSample : MonoBehaviour
         {
             foreach (var meshElement in encodedMesh)
             {
-                var meshProto = new DataFrame.Types.Mesh();
+                var meshProto = new ProcessFrameRequest.Types.Mesh();
                 meshProto.Data = ByteString.CopyFrom(meshElement);
 
                 dataFrame.Meshes.Add(meshProto);
@@ -128,14 +128,14 @@ public class ARFlowMockDataSample : MonoBehaviour
         }
 
         // Test plane
-        var plane = new DataFrame.Types.Plane();
+        var plane = new ProcessFrameRequest.Types.Plane();
         plane.Center = unityVector3ToProto(new Vector3(1, 2, 3));
         plane.Normal = unityVector3ToProto(new Vector3(0, 2, 5));
         plane.Size = unityVector2ToProto(new Vector2(5, 5));
-        plane.BoundaryPoints.Add(new []
+        plane.BoundaryPoints.Add(new[]
             { unityVector2ToProto(new Vector2(0, 2)),
             unityVector2ToProto(new Vector2(1, 3)),
-            unityVector2ToProto(new Vector2(2, 4)), 
+            unityVector2ToProto(new Vector2(2, 4)),
             unityVector2ToProto(new Vector2(1, 5)),
             unityVector2ToProto(new Vector2(2, 1)) }
         );
@@ -144,9 +144,9 @@ public class ARFlowMockDataSample : MonoBehaviour
         _client.SendFrame(dataFrame);
     }
 
-    DataFrame.Types.Vector3 unityVector3ToProto(Vector3 a)
+    ProcessFrameRequest.Types.Vector3 unityVector3ToProto(Vector3 a)
     {
-        return new DataFrame.Types.Vector3()
+        return new ProcessFrameRequest.Types.Vector3()
         {
             X = a.x,
             Y = a.y,
@@ -154,9 +154,9 @@ public class ARFlowMockDataSample : MonoBehaviour
         };
     }
 
-    DataFrame.Types.Quaternion unityQuaternionToProto(Quaternion a)
+    ProcessFrameRequest.Types.Quaternion unityQuaternionToProto(Quaternion a)
     {
-        return new DataFrame.Types.Quaternion()
+        return new ProcessFrameRequest.Types.Quaternion()
         {
             X = a.x,
             Y = a.y,
@@ -165,9 +165,9 @@ public class ARFlowMockDataSample : MonoBehaviour
         };
     }
 
-    DataFrame.Types.Vector2 unityVector2ToProto(Vector2 a)
+    ProcessFrameRequest.Types.Vector2 unityVector2ToProto(Vector2 a)
     {
-        return new DataFrame.Types.Vector2()
+        return new ProcessFrameRequest.Types.Vector2()
         {
             X = a.x,
             Y = a.y,

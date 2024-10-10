@@ -53,14 +53,14 @@ namespace ARFlow
         };
 
         public static readonly List<string> MODALITIES = new()
-        { 
-            "CameraColor", 
-            "CameraDepth", 
-            "CameraTransform", 
-            "CameraPointCloud", 
-            "PlaneDetection", 
-            "Gyroscope", 
-            "Audio", 
+        {
+            "CameraColor",
+            "CameraDepth",
+            "CameraTransform",
+            "CameraPointCloud",
+            "PlaneDetection",
+            "Gyroscope",
+            "Audio",
             "Meshing"
         };
 
@@ -158,13 +158,13 @@ namespace ARFlow
 
         private void ResetState()
         {
-            if ( _isStreaming)
+            if (_isStreaming)
             {
                 StopDataStreaming();
             }
         }
 
-        private ClientConfiguration GetClientConfiguration()
+        private RegisterClientRequest GetClientConfiguration()
         {
             _cameraManager.TryGetIntrinsics(out var k);
             _cameraManager.TryAcquireLatestCpuImage(out var colorImage);
@@ -172,10 +172,10 @@ namespace ARFlow
 
             _sampleSize = depthImage.dimensions;
 
-            var requestData = new ClientConfiguration()
+            var requestData = new RegisterClientRequest()
             {
                 DeviceName = SystemInfo.deviceName,
-                CameraIntrinsics = new ClientConfiguration.Types.CameraIntrinsics()
+                CameraIntrinsics = new RegisterClientRequest.Types.CameraIntrinsics()
                 {
                     FocalLengthX = k.focalLength.x,
                     FocalLengthY = k.focalLength.y,
@@ -188,7 +188,7 @@ namespace ARFlow
             };
             if (_activatedDataModalities["CameraColor"])
             {
-                var CameraColor = new ClientConfiguration.Types.CameraColor()
+                var CameraColor = new RegisterClientRequest.Types.CameraColor()
                 {
                     Enabled = true,
                     DataType = "YCbCr420",
@@ -199,15 +199,15 @@ namespace ARFlow
             }
             if (_activatedDataModalities["CameraDepth"])
             {
-                var CameraDepth = new ClientConfiguration.Types.CameraDepth()
+                var CameraDepth = new RegisterClientRequest.Types.CameraDepth()
                 {
                     Enabled = true,
-    #if UNITY_ANDROID
+#if UNITY_ANDROID
                     DataType = "u16", // f32 for iOS, u16 for Android
-    #endif
-    #if UNITY_IOS
+#endif
+#if UNITY_IOS
                     DataType = "f32",
-    #endif
+#endif
                     ConfidenceFilteringLevel = 0,
                     ResolutionX = depthImage.dimensions.x,
                     ResolutionY = depthImage.dimensions.y
@@ -217,7 +217,7 @@ namespace ARFlow
 
             if (_activatedDataModalities["CameraTransform"])
             {
-                var CameraTransform = new ClientConfiguration.Types.CameraTransform()
+                var CameraTransform = new RegisterClientRequest.Types.CameraTransform()
                 {
                     Enabled = true
                 };
@@ -226,7 +226,7 @@ namespace ARFlow
 
             if (_activatedDataModalities["CameraPointCloud"])
             {
-                var CameraPointCloud = new ClientConfiguration.Types.CameraPointCloud()
+                var CameraPointCloud = new RegisterClientRequest.Types.CameraPointCloud()
                 {
                     Enabled = true,
                     DepthUpscaleFactor = 1.0f,
@@ -236,7 +236,7 @@ namespace ARFlow
 
             if (_activatedDataModalities["PlaneDetection"])
             {
-                var CameraPlaneDetection = new ClientConfiguration.Types.CameraPlaneDetection()
+                var CameraPlaneDetection = new RegisterClientRequest.Types.CameraPlaneDetection()
                 {
                     Enabled = true
                 };
@@ -245,7 +245,7 @@ namespace ARFlow
 
             if (_activatedDataModalities["Gyroscope"])
             {
-                var Gyroscope = new ClientConfiguration.Types.Gyroscope()
+                var Gyroscope = new RegisterClientRequest.Types.Gyroscope()
                 {
                     Enabled = true
                 };
@@ -254,7 +254,7 @@ namespace ARFlow
 
             if (_activatedDataModalities["Audio"])
             {
-                var Audio = new ClientConfiguration.Types.Audio()
+                var Audio = new RegisterClientRequest.Types.Audio()
                 {
                     Enabled = true
                 };
@@ -263,7 +263,7 @@ namespace ARFlow
 
             if (_activatedDataModalities["Meshing"])
             {
-                var Meshing = new ClientConfiguration.Types.Meshing()
+                var Meshing = new RegisterClientRequest.Types.Meshing()
                 {
                     Enabled = true
                 };
@@ -310,9 +310,9 @@ namespace ARFlow
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        DataFrame.Types.Vector3 UnityVector3ToProto(Vector3 a)
+        ProcessFrameRequest.Types.Vector3 UnityVector3ToProto(Vector3 a)
         {
-            return new DataFrame.Types.Vector3 ()
+            return new ProcessFrameRequest.Types.Vector3()
             {
                 X = a.x,
                 Y = a.y,
@@ -320,18 +320,18 @@ namespace ARFlow
             };
         }
 
-        DataFrame.Types.Vector2 UnityVector2ToProto(Vector2 a)
+        ProcessFrameRequest.Types.Vector2 UnityVector2ToProto(Vector2 a)
         {
-            return new DataFrame.Types.Vector2()
+            return new ProcessFrameRequest.Types.Vector2()
             {
                 X = a.x,
                 Y = a.y,
             };
         }
 
-        DataFrame.Types.Quaternion UnityQuaternionToProto(Quaternion a)
+        ProcessFrameRequest.Types.Quaternion UnityQuaternionToProto(Quaternion a)
         {
-            return new DataFrame.Types.Quaternion ()
+            return new ProcessFrameRequest.Types.Quaternion()
             {
                 X = a.x,
                 Y = a.y,
@@ -349,7 +349,7 @@ namespace ARFlow
         public void StartDataStreaming()
         {
             _isStreaming = true;
-            if (_activatedDataModalities["Audio"]) 
+            if (_activatedDataModalities["Audio"])
             {
                 _audioStreaming.initializeAudioRecording(DEFAULT_SAMPLE_RATE, DEFAULT_FRAME_LENGTH);
             }
@@ -372,9 +372,9 @@ namespace ARFlow
         /// Collect data frame's data for sending to server
         /// </summary>
         /// <returns></returns>
-        public DataFrame CollectDataFrame()
+        public ProcessFrameRequest CollectDataFrame()
         {
-            var dataFrame = new DataFrame();
+            var dataFrame = new ProcessFrameRequest();
 
             if (_activatedDataModalities["CameraColor"])
             {
@@ -412,7 +412,7 @@ namespace ARFlow
             {
                 foreach (ARPlane plane in _planeManager.trackables)
                 {
-                    var protoPlane = new DataFrame.Types.Plane();
+                    var protoPlane = new ProcessFrameRequest.Types.Plane();
                     protoPlane.Center = UnityVector3ToProto(plane.center);
                     protoPlane.Normal = UnityVector3ToProto(plane.normal);
                     protoPlane.Size = UnityVector2ToProto(plane.size);
@@ -424,7 +424,7 @@ namespace ARFlow
 
             if (_activatedDataModalities["Gyroscope"])
             {
-                dataFrame.Gyroscope = new DataFrame.Types.gyroscope_data();
+                dataFrame.Gyroscope = new ProcessFrameRequest.Types.GyroscopeData();
                 Quaternion attitude = AttitudeSensor.current.attitude.ReadValue();
                 Vector3 rotation_rate = UnityEngine.InputSystem.Gyroscope.current.angularVelocity.ReadValue();
                 Vector3 gravity = GravitySensor.current.gravity.ReadValue();
@@ -455,7 +455,7 @@ namespace ARFlow
 
                     foreach (var meshElement in encodedMesh)
                     {
-                        var meshProto = new DataFrame.Types.Mesh();
+                        var meshProto = new ProcessFrameRequest.Types.Mesh();
                         meshProto.Data = ByteString.CopyFrom(meshElement);
 
                         dataFrame.Meshes.Add(meshProto);

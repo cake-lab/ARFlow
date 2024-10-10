@@ -13,12 +13,16 @@ import pytest
 from arflow import ARFlowServicer
 from arflow._error_interceptor import ErrorInterceptor
 from arflow_grpc import service_pb2_grpc
-from arflow_grpc.service_pb2 import ClientConfiguration, ClientIdentifier, DataFrame
-from arflow_grpc.service_pb2_grpc import ARFlowStub
+from arflow_grpc.service_pb2 import (
+    ProcessFrameRequest,
+    RegisterClientRequest,
+    RegisterClientResponse,
+)
+from arflow_grpc.service_pb2_grpc import ARFlowServiceStub
 
 
 @pytest.fixture(scope="function")
-def stub() -> Generator[ARFlowStub, Any, None]:
+def stub() -> Generator[ARFlowServiceStub, Any, None]:
     servicer = ARFlowServicer()
     interceptors = [ErrorInterceptor()]
     server = grpc.server(
@@ -31,36 +35,36 @@ def stub() -> Generator[ARFlowStub, Any, None]:
             ("grpc.max_receive_message_length", -1),
         ],
     )
-    service_pb2_grpc.add_ARFlowServicer_to_server(servicer, server)
+    service_pb2_grpc.add_ARFlowServiceServicer_to_server(servicer, server)
     port = server.add_insecure_port("[::]:0")
     server.start()
 
     try:
         with grpc.insecure_channel(f"localhost:{port}") as channel:
-            yield ARFlowStub(channel)
+            yield ARFlowServiceStub(channel)
     finally:
         server.stop(None)
 
 
-def test_register_client(stub: ARFlowStub):
-    request = ClientConfiguration()
+def test_register_client(stub: ARFlowServiceStub):
+    request = RegisterClientRequest()
 
-    response: ClientIdentifier = stub.RegisterClient(request)
+    response: RegisterClientResponse = stub.RegisterClient(request)
     assert len(response.uid) == 36
 
 
-# def test_register_client_with_init_uid(stub: ARFlowStub):
-#     request = ClientConfiguration()
+# def test_register_client_with_init_uid(stub: ARFlowServiceStub):
+#     request = RegisterClientRequest()
 
-#     response: ClientIdentifier = stub.RegisterClient(request, init_uid="1234")
+#     response: RegisterClientResponse = stub.RegisterClient(request, init_uid="1234")
 #     assert response.uid == "1234"
 
 
-def test_multiple_clients(stub: ARFlowStub):
+def test_multiple_clients(stub: ARFlowServiceStub):
     """Flaky since UUIDs might collide."""
     uids = []
     for _ in range(3):
-        request = ClientConfiguration()
+        request = RegisterClientRequest()
         response = stub.RegisterClient(request)
         assert len(response.uid) == 36
         assert response.uid not in uids
@@ -68,8 +72,8 @@ def test_multiple_clients(stub: ARFlowStub):
     assert len(uids) == 3
 
 
-# def test_register_same_client_twice(stub: ARFlowStub):
-#     request = ClientConfiguration()
+# def test_register_same_client_twice(stub: ARFlowServiceStub):
+#     request = RegisterClientRequest()
 #     response = stub.RegisterClient(request)
 #     uid = response.uid
 
@@ -77,17 +81,17 @@ def test_multiple_clients(stub: ARFlowStub):
 #     assert response.uid == uid
 
 
-def test_process_frame(stub: ARFlowStub):
-    client_config = ClientConfiguration(
-        camera_color=ClientConfiguration.CameraColor(
+def test_process_frame(stub: ARFlowServiceStub):
+    client_config = RegisterClientRequest(
+        camera_color=RegisterClientRequest.CameraColor(
             enabled=True, data_type="RGB24", resize_factor_x=1.0, resize_factor_y=1.0
         ),
-        camera_depth=ClientConfiguration.CameraDepth(
+        camera_depth=RegisterClientRequest.CameraDepth(
             enabled=True, data_type="f32", resolution_x=4, resolution_y=4
         ),
-        camera_transform=ClientConfiguration.CameraTransform(enabled=True),
-        camera_point_cloud=ClientConfiguration.CameraPointCloud(enabled=True),
-        camera_intrinsics=ClientConfiguration.CameraIntrinsics(
+        camera_transform=RegisterClientRequest.CameraTransform(enabled=True),
+        camera_point_cloud=RegisterClientRequest.CameraPointCloud(enabled=True),
+        camera_intrinsics=RegisterClientRequest.CameraIntrinsics(
             resolution_x=4,
             resolution_y=4,
             focal_length_x=1.0,
@@ -99,7 +103,7 @@ def test_process_frame(stub: ARFlowStub):
     response = stub.RegisterClient(client_config)
     client_id = response.uid
 
-    frame = DataFrame(
+    frame = ProcessFrameRequest(
         uid=client_id,
         color=np.random.randint(0, 255, 4 * 4 * 3, dtype=np.uint8).tobytes(),  # pyright: ignore [reportUnknownMemberType]
         depth=np.random.rand(4, 4).astype(np.float32).tobytes(),
@@ -110,8 +114,8 @@ def test_process_frame(stub: ARFlowStub):
     assert response.message == "OK"
 
 
-def test_process_frame_with_unregistered_client(stub: ARFlowStub):
-    invalid_frame = DataFrame(uid="invalid_id")
+def test_process_frame_with_unregistered_client(stub: ARFlowServiceStub):
+    invalid_frame = ProcessFrameRequest(uid="invalid_id")
 
     with pytest.raises(grpc.RpcError) as excinfo:
         stub.ProcessFrame(invalid_frame)
@@ -121,17 +125,17 @@ def test_process_frame_with_unregistered_client(stub: ARFlowStub):
 @pytest.mark.parametrize(
     "client_config",
     [
-        ClientConfiguration(
+        RegisterClientRequest(
             camera_color=(
-                ClientConfiguration.CameraColor(
+                RegisterClientRequest.CameraColor(
                     enabled=True,
                     data_type="unknown",
                 )
             )
         ),
-        ClientConfiguration(
+        RegisterClientRequest(
             camera_depth=(
-                ClientConfiguration.CameraDepth(
+                RegisterClientRequest.CameraDepth(
                     enabled=True,
                     data_type="unknown",
                 )
@@ -140,11 +144,11 @@ def test_process_frame_with_unregistered_client(stub: ARFlowStub):
     ],
 )
 def test_process_frame_with_invalid_data_types(
-    client_config: ClientConfiguration, stub: ARFlowStub
+    client_config: RegisterClientRequest, stub: ARFlowServiceStub
 ):
     response = stub.RegisterClient(client_config)
     client_id = response.uid
-    invalid_frame = DataFrame(
+    invalid_frame = ProcessFrameRequest(
         uid=client_id,
     )
     with pytest.raises(grpc.RpcError) as excinfo:
@@ -156,55 +160,55 @@ def test_process_frame_with_invalid_data_types(
     "client_config, corrupted_frame",
     [
         (
-            ClientConfiguration(
-                camera_color=ClientConfiguration.CameraColor(
+            RegisterClientRequest(
+                camera_color=RegisterClientRequest.CameraColor(
                     enabled=True,
                     data_type="RGB24",
                     resize_factor_x=1.0,
                     resize_factor_y=1.0,
                 ),
-                camera_intrinsics=ClientConfiguration.CameraIntrinsics(
+                camera_intrinsics=RegisterClientRequest.CameraIntrinsics(
                     resolution_x=4,
                     resolution_y=4,
                 ),
             ),
-            DataFrame(
+            ProcessFrameRequest(
                 color=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
                     0, 255, (4, 4, 2), dtype=np.uint8
                 ).tobytes(),  # Incorrect size
             ),
         ),
         (
-            ClientConfiguration(
-                camera_color=ClientConfiguration.CameraColor(
+            RegisterClientRequest(
+                camera_color=RegisterClientRequest.CameraColor(
                     enabled=False,
                 ),
-                camera_depth=ClientConfiguration.CameraDepth(
+                camera_depth=RegisterClientRequest.CameraDepth(
                     enabled=True, resolution_x=4, resolution_y=4, data_type="f32"
                 ),
             ),
-            DataFrame(
+            ProcessFrameRequest(
                 depth=np.random.rand(4 * 4)
                 .astype(np.float32)
                 .tobytes()[:1],  # Incorrect size
             ),
         ),
         (
-            ClientConfiguration(
-                camera_color=ClientConfiguration.CameraColor(
+            RegisterClientRequest(
+                camera_color=RegisterClientRequest.CameraColor(
                     enabled=False,
                     resize_factor_x=1.0,
                     resize_factor_y=1.0,
                 ),
-                camera_transform=ClientConfiguration.CameraTransform(enabled=True),
-                camera_intrinsics=ClientConfiguration.CameraIntrinsics(
+                camera_transform=RegisterClientRequest.CameraTransform(enabled=True),
+                camera_intrinsics=RegisterClientRequest.CameraIntrinsics(
                     focal_length_x=1.0,
                     focal_length_y=1.0,
                     principal_point_x=1.0,
                     principal_point_y=1.0,
                 ),
             ),
-            DataFrame(
+            ProcessFrameRequest(
                 transform=np.random.rand(8 // 4)
                 .astype(np.float32)
                 .tobytes(),  # Incorrect size
@@ -213,9 +217,9 @@ def test_process_frame_with_invalid_data_types(
     ],
 )
 def test_process_frame_with_corrupted_data(
-    client_config: ClientConfiguration,
-    corrupted_frame: DataFrame,
-    stub: ARFlowStub,
+    client_config: RegisterClientRequest,
+    corrupted_frame: ProcessFrameRequest,
+    stub: ARFlowServiceStub,
 ):
     response = stub.RegisterClient(
         client_config,

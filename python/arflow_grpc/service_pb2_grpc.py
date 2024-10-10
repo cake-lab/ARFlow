@@ -25,7 +25,7 @@ if _version_not_supported:
     )
 
 
-class ARFlowStub(object):
+class ARFlowServiceStub(object):
     """The ARFlow service definition.
     """
 
@@ -36,18 +36,18 @@ class ARFlowStub(object):
             channel: A grpc.Channel.
         """
         self.RegisterClient = channel.unary_unary(
-                '/arflow.ARFlow/RegisterClient',
-                request_serializer=arflow__grpc_dot_service__pb2.ClientConfiguration.SerializeToString,
-                response_deserializer=arflow__grpc_dot_service__pb2.ClientIdentifier.FromString,
+                '/arflow.v1.ARFlowService/RegisterClient',
+                request_serializer=arflow__grpc_dot_service__pb2.RegisterClientRequest.SerializeToString,
+                response_deserializer=arflow__grpc_dot_service__pb2.RegisterClientResponse.FromString,
                 _registered_method=True)
         self.ProcessFrame = channel.unary_unary(
-                '/arflow.ARFlow/ProcessFrame',
-                request_serializer=arflow__grpc_dot_service__pb2.DataFrame.SerializeToString,
-                response_deserializer=arflow__grpc_dot_service__pb2.Acknowledgement.FromString,
+                '/arflow.v1.ARFlowService/ProcessFrame',
+                request_serializer=arflow__grpc_dot_service__pb2.ProcessFrameRequest.SerializeToString,
+                response_deserializer=arflow__grpc_dot_service__pb2.ProcessFrameResponse.FromString,
                 _registered_method=True)
 
 
-class ARFlowServicer(object):
+class ARFlowServiceServicer(object):
     """The ARFlow service definition.
     """
 
@@ -63,33 +63,38 @@ class ARFlowServicer(object):
 
     def ProcessFrame(self, request, context):
         """Accepts a data frame from a client, returning an acknowledgment.
+
+        Errors:
+        - NOT_FOUND: If the client configuration is not found.
+        - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+        is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_ARFlowServicer_to_server(servicer, server):
+def add_ARFlowServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'RegisterClient': grpc.unary_unary_rpc_method_handler(
                     servicer.RegisterClient,
-                    request_deserializer=arflow__grpc_dot_service__pb2.ClientConfiguration.FromString,
-                    response_serializer=arflow__grpc_dot_service__pb2.ClientIdentifier.SerializeToString,
+                    request_deserializer=arflow__grpc_dot_service__pb2.RegisterClientRequest.FromString,
+                    response_serializer=arflow__grpc_dot_service__pb2.RegisterClientResponse.SerializeToString,
             ),
             'ProcessFrame': grpc.unary_unary_rpc_method_handler(
                     servicer.ProcessFrame,
-                    request_deserializer=arflow__grpc_dot_service__pb2.DataFrame.FromString,
-                    response_serializer=arflow__grpc_dot_service__pb2.Acknowledgement.SerializeToString,
+                    request_deserializer=arflow__grpc_dot_service__pb2.ProcessFrameRequest.FromString,
+                    response_serializer=arflow__grpc_dot_service__pb2.ProcessFrameResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'arflow.ARFlow', rpc_method_handlers)
+            'arflow.v1.ARFlowService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('arflow.ARFlow', rpc_method_handlers)
+    server.add_registered_method_handlers('arflow.v1.ARFlowService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class ARFlow(object):
+class ARFlowService(object):
     """The ARFlow service definition.
     """
 
@@ -107,9 +112,9 @@ class ARFlow(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/arflow.ARFlow/RegisterClient',
-            arflow__grpc_dot_service__pb2.ClientConfiguration.SerializeToString,
-            arflow__grpc_dot_service__pb2.ClientIdentifier.FromString,
+            '/arflow.v1.ARFlowService/RegisterClient',
+            arflow__grpc_dot_service__pb2.RegisterClientRequest.SerializeToString,
+            arflow__grpc_dot_service__pb2.RegisterClientResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -134,9 +139,9 @@ class ARFlow(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/arflow.ARFlow/ProcessFrame',
-            arflow__grpc_dot_service__pb2.DataFrame.SerializeToString,
-            arflow__grpc_dot_service__pb2.Acknowledgement.FromString,
+            '/arflow.v1.ARFlowService/ProcessFrame',
+            arflow__grpc_dot_service__pb2.ProcessFrameRequest.SerializeToString,
+            arflow__grpc_dot_service__pb2.ProcessFrameResponse.FromString,
             options,
             channel_credentials,
             insecure,

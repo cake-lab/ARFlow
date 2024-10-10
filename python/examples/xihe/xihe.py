@@ -42,7 +42,7 @@ class XiheService(arflow.ARFlowServicer):
 
         self.calculator = xihenet_utils.JointEntropyCalculator()
 
-    def on_register(self, request: arflow.ClientConfiguration):
+    def on_register(self, request: arflow.RegisterClientRequest):
         self.num_frame = 0
 
     def on_frame_received(self, decoded_data_frame: arflow.DecodedDataFrame):

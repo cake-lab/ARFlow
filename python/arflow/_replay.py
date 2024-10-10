@@ -9,7 +9,7 @@ from typing import Type
 
 from arflow._core import ARFlowServicer
 from arflow._types import EnrichedARFlowRequest, RequestsHistory
-from arflow_grpc.service_pb2 import ClientConfiguration, DataFrame
+from arflow_grpc.service_pb2 import ProcessFrameRequest, RegisterClientRequest
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +28,10 @@ class ARFlowPlayer(threading.Thread):
 
         if not raw_data:
             raise ValueError("No data to replay.")
-        if not isinstance(raw_data[0].data, ClientConfiguration):
-            raise ValueError("The first request should be a ClientConfiguration.")
-        if not isinstance(raw_data[1].data, DataFrame):
-            raise ValueError("The second request should be a DataFrame.")
+        if not isinstance(raw_data[0].data, RegisterClientRequest):
+            raise ValueError("The first request should be a RegisterClientRequest.")
+        if not isinstance(raw_data[1].data, ProcessFrameRequest):
+            raise ValueError("The second request should be a ProcessFrameRequest.")
 
         start_delta = 0
         for i, data in enumerate(raw_data):
@@ -52,8 +52,8 @@ class ARFlowPlayer(threading.Thread):
                 )
 
         sent_dataframe = self._requests_history[1].data
-        if not isinstance(sent_dataframe, DataFrame):
-            raise ValueError("The second request should be a DataFrame.")
+        if not isinstance(sent_dataframe, ProcessFrameRequest):
+            raise ValueError("The second request should be a ProcessFrameRequest.")
         else:
             self._uid = sent_dataframe.uid
 
@@ -79,9 +79,9 @@ class ARFlowPlayer(threading.Thread):
 
             if t - current_time < 0.001:
                 data = self._requests_history[self._n_frame].data
-                if self._n_frame == 0 and isinstance(data, ClientConfiguration):
+                if self._n_frame == 0 and isinstance(data, RegisterClientRequest):
                     self._service.RegisterClient(data, None, init_uid=self._uid)
-                elif isinstance(data, DataFrame):
+                elif isinstance(data, ProcessFrameRequest):
                     self._service.ProcessFrame(data, None)
                 else:
                     raise ValueError("Unknown request data type.")

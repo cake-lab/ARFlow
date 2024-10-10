@@ -4,7 +4,7 @@
 
 # from unittest.mock import MagicMock, patch
 
-# from arflow import ARFlowPlayer, ClientConfiguration
+# from arflow import ARFlowPlayer, RegisterClientRequest
 # from arflow._types import EnrichedARFlowRequest
 
 
@@ -13,8 +13,8 @@
 
 #     # Mock the pickle load to simulate the requests history
 #     mock_requests_history = [
-#         EnrichedARFlowRequest(timestamp=1, data=ClientConfiguration()),
-#         EnrichedARFlowRequest(timestamp=2, data=ClientConfiguration()),
+#         EnrichedARFlowRequest(timestamp=1, data=RegisterClientRequest()),
+#         EnrichedARFlowRequest(timestamp=2, data=RegisterClientRequest()),
 #     ]
 
 #     with patch("pickle.load", return_value=mock_requests_history):
