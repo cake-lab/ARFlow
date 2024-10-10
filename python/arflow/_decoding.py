@@ -1,9 +1,9 @@
-from typing import Literal
-
 import numpy as np
 
 from arflow._types import (
+    ColorDataType,
     ColorRGB,
+    DepthDataType,
     DepthImg,
     Intrinsic,
     PlaneBoundaryPoints2D,
@@ -21,7 +21,7 @@ def decode_rgb_image(
     resolution_x: int,
     resize_factor_y: float,
     resize_factor_x: float,
-    data_type: Literal["RGB24", "YCbCr420"],
+    data_type: ColorDataType,
     buffer: bytes,
 ) -> ColorRGB:
     """Decode the color image from the buffer.
@@ -64,7 +64,7 @@ def decode_rgb_image(
 def decode_depth_image(
     resolution_y: int,
     resolution_x: int,
-    data_type: Literal["f32", "u16"],
+    data_type: DepthDataType,
     buffer: bytes,
 ) -> DepthImg:
     """Decode the depth image from the buffer.
@@ -177,7 +177,7 @@ def decode_point_cloud(
     return pcd.astype(np.float32), clr
 
 
-def to_3d_boundary_points(
+def convert_2d_to_3d_boundary_points(
     boundary_points_2d: PlaneBoundaryPoints2D, normal: PlaneNormal, center: PlaneCenter
 ) -> PlaneBoundaryPoints3D:
     # Check boundary points validity
@@ -187,18 +187,18 @@ def to_3d_boundary_points(
         raise ValueError("At least 3 boundary points are required")
 
     # Check normal validity
-    if normal.shape[0] != 3:
-        raise ValueError("Normal should be in 3D")
     if len(normal.shape) != 1:
         raise ValueError("There should only be 1 normal")
+    if normal.shape[0] != 3:
+        raise ValueError("Normal should be in 3D")
     if np.linalg.norm(normal) == 0:
         raise ValueError("Normal should be non-zero")
 
     # Check center validity
+    if len(center.shape) != 1:
+        raise ValueError("There should only be 1 center")
     if center.shape[0] != 3:
         raise ValueError("Center should be in 3D")
-    if len(normal.shape) != 1:
-        raise ValueError("There should only be 1 center")
 
     # Ensure the normal is normalized
     normal = normal / np.linalg.norm(normal)
@@ -224,4 +224,4 @@ def to_3d_boundary_points(
         [center + point_2d[0] * u + point_2d[1] * v for point_2d in boundary_points_2d]
     )
 
-    return np.array(boundary_points_3d)
+    return np.array(boundary_points_3d, dtype=np.float32)

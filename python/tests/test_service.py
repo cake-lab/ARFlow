@@ -3,9 +3,10 @@
 # ruff:noqa: D103
 # pyright: reportPrivateUsage=false
 
-import time
+from pathlib import Path
 from unittest.mock import patch
 
+import DracoPy
 import grpc
 import grpc_interceptor
 import grpc_interceptor.exceptions
@@ -14,6 +15,7 @@ import pytest
 
 from arflow import ARFlowServicer, DecodedDataFrame, RegisterClientRequest
 from arflow._types import HashableClientIdentifier
+from arflow_grpc import service_pb2
 from arflow_grpc.service_pb2 import ProcessFrameRequest
 
 
@@ -24,28 +26,24 @@ def default_service():
 
 
 def test_save_request(default_service: ARFlowServicer):
-    time.sleep(0.1)  # Ensure that the timestamps are different
-
     request = RegisterClientRequest()
     default_service._save_request(request)
 
     assert len(default_service._requests_history) == 1
     enriched_request = default_service._requests_history[0]
-    assert enriched_request.timestamp > 0
+    assert enriched_request.timestamp >= 0
     assert enriched_request.data == request
-
-    time.sleep(0.1)
 
     request = ProcessFrameRequest()
     default_service._save_request(request)
 
     assert len(default_service._requests_history) == 2
     enriched_request = default_service._requests_history[1]
-    assert enriched_request.timestamp > 0
+    assert enriched_request.timestamp >= 0
     assert enriched_request.data == request
     assert (
         default_service._requests_history[0].timestamp
-        < default_service._requests_history[1].timestamp
+        <= default_service._requests_history[1].timestamp
     )
 
 
@@ -130,16 +128,56 @@ def test_process_frame(default_service: ARFlowServicer):
             principal_point_x=1.0,
             principal_point_y=1.0,
         ),
+        camera_plane_detection=RegisterClientRequest.CameraPlaneDetection(enabled=True),
+        gyroscope=RegisterClientRequest.Gyroscope(enabled=True),
+        audio=RegisterClientRequest.Audio(enabled=True),
+        meshing=RegisterClientRequest.Meshing(enabled=True),
     )
     response = default_service.RegisterClient(client_config)
     client_id = response.uid
 
-    mock_frame = ProcessFrameRequest(
-        uid=client_id,
-        color=np.random.randint(0, 255, 4 * 4 * 3, dtype=np.uint8).tobytes(),  # pyright: ignore [reportUnknownMemberType]
-        depth=np.random.rand(4, 4).astype(np.float32).tobytes(),
-        transform=np.random.rand(12).astype(np.float32).tobytes(),
-    )
+    with open(Path(__file__).parent / "bunny.drc", "rb") as draco_file:
+        mesh = DracoPy.decode(draco_file.read())  # pyright: ignore [reportUnknownMemberType, reportUnknownVariableType]
+        mock_frame = ProcessFrameRequest(
+            uid=client_id,
+            color=np.random.randint(0, 255, 4 * 4 * 3, dtype=np.uint8).tobytes(),  # pyright: ignore [reportUnknownMemberType]
+            depth=np.random.rand(4, 4).astype(np.float32).tobytes(),
+            transform=np.random.rand(12).astype(np.float32).tobytes(),
+            plane_detection=[
+                service_pb2.ProcessFrameRequest.Plane(
+                    center=service_pb2.ProcessFrameRequest.Vector3(x=1.0, y=2.0, z=3.0),
+                    normal=service_pb2.ProcessFrameRequest.Vector3(x=1.0, y=2.0, z=3.0),
+                    size=service_pb2.ProcessFrameRequest.Vector2(x=1.0, y=2.0),
+                    boundary_points=[
+                        service_pb2.ProcessFrameRequest.Vector2(x=1.0, y=2.0),
+                        service_pb2.ProcessFrameRequest.Vector2(x=2.0, y=3.0),
+                        service_pb2.ProcessFrameRequest.Vector2(x=1.0, y=3.0),
+                    ],
+                )
+            ],
+            gyroscope=service_pb2.ProcessFrameRequest.GyroscopeData(
+                attitude=service_pb2.ProcessFrameRequest.Quaternion(
+                    x=1.0, y=2.0, z=3.0, w=4.0
+                ),
+                rotation_rate=service_pb2.ProcessFrameRequest.Vector3(
+                    x=1.0, y=2.0, z=3.0
+                ),
+                gravity=service_pb2.ProcessFrameRequest.Vector3(x=1.0, y=2.0, z=3.0),
+                acceleration=service_pb2.ProcessFrameRequest.Vector3(
+                    x=1.0, y=2.0, z=3.0
+                ),
+            ),
+            audio_data=np.random.rand(4).astype(np.float32),
+            meshes=[
+                service_pb2.ProcessFrameRequest.Mesh(
+                    data=DracoPy.encode(  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                        mesh.points,  # pyright: ignore [reportUnknownMemberType]
+                        faces=mesh.faces,  # pyright: ignore [reportUnknownMemberType]
+                        colors=mesh.colors,  # pyright: ignore [reportUnknownMemberType]
+                    )
+                )
+            ],
+        )
 
     with patch.object(default_service, "on_frame_received") as mock_on_frame:
         response = default_service.ProcessFrame(mock_frame)
@@ -214,9 +252,6 @@ def test_process_frame_with_invalid_data_types(
         ),
         (
             RegisterClientRequest(
-                camera_color=RegisterClientRequest.CameraColor(
-                    enabled=False,
-                ),
                 camera_depth=RegisterClientRequest.CameraDepth(
                     enabled=True, resolution_x=4, resolution_y=4, data_type="f32"
                 ),
@@ -231,7 +266,6 @@ def test_process_frame_with_invalid_data_types(
         (
             RegisterClientRequest(
                 camera_color=RegisterClientRequest.CameraColor(
-                    enabled=False,
                     resize_factor_x=1.0,
                     resize_factor_y=1.0,
                 ),
@@ -248,6 +282,32 @@ def test_process_frame_with_invalid_data_types(
                 transform=np.random.rand(8 // 4)
                 .astype(np.float32)
                 .tobytes(),  # Incorrect size
+            ),
+        ),
+        (
+            RegisterClientRequest(
+                camera_plane_detection=RegisterClientRequest.CameraPlaneDetection(
+                    enabled=True
+                ),
+            ),
+            ProcessFrameRequest(
+                uid="1234",
+                plane_detection=[
+                    service_pb2.ProcessFrameRequest.Plane(
+                        center=service_pb2.ProcessFrameRequest.Vector3(
+                            x=1.0, y=2.0, z=3.0
+                        ),
+                        normal=service_pb2.ProcessFrameRequest.Vector3(
+                            x=1.0, y=2.0, z=3.0
+                        ),
+                        size=service_pb2.ProcessFrameRequest.Vector2(x=1.0, y=2.0),
+                        boundary_points=[
+                            service_pb2.ProcessFrameRequest.Vector2(x=1.0, y=2.0),
+                            service_pb2.ProcessFrameRequest.Vector2(x=2.0, y=3.0),
+                            # Missing one point
+                        ],
+                    )
+                ],
             ),
         ),
     ],

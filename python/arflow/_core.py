@@ -8,7 +8,7 @@ import uuid
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from typing import Any, List, Type
+from typing import Any, List, Type, cast
 
 import DracoPy
 import grpc
@@ -17,20 +17,22 @@ import rerun as rr
 from grpc_interceptor.exceptions import InvalidArgument, NotFound
 
 from arflow._decoding import (
+    convert_2d_to_3d_boundary_points,
     decode_depth_image,
     decode_intrinsic,
     decode_point_cloud,
     decode_rgb_image,
     decode_transform,
-    to_3d_boundary_points,
 )
 from arflow._error_interceptor import ErrorInterceptor
 from arflow._types import (
     ARFlowRequest,
     Audio,
     ClientConfigurations,
+    ColorDataType,
     ColorRGB,
     DecodedDataFrame,
+    DepthDataType,
     DepthImg,
     EnrichedARFlowRequest,
     GyroscopeInfo,
@@ -134,11 +136,6 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         audio_data: Audio | None = None
 
         if client_config.camera_color.enabled:
-            if client_config.camera_color.data_type not in ("RGB24", "YCbCr420"):
-                raise InvalidArgument(
-                    f"Unknown color data type: {client_config.camera_color.data_type}"
-                )
-
             try:
                 color_rgb = np.flipud(
                     decode_rgb_image(
@@ -146,7 +143,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                         client_config.camera_intrinsics.resolution_x,
                         client_config.camera_color.resize_factor_y,
                         client_config.camera_color.resize_factor_x,
-                        client_config.camera_color.data_type,
+                        cast(ColorDataType, client_config.camera_color.data_type),
                         request.color,
                     )
                 )
@@ -156,16 +153,12 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
             self.recorder.log("rgb", rr.Image(color_rgb))
 
         if client_config.camera_depth.enabled:
-            if client_config.camera_depth.data_type not in ("f32", "u16"):
-                raise InvalidArgument(
-                    f"Unknown depth data type: {client_config.camera_depth.data_type}"
-                )
             try:
                 depth_img = np.flipud(
                     decode_depth_image(
                         client_config.camera_depth.resolution_y,
                         client_config.camera_depth.resolution_x,
-                        client_config.camera_depth.data_type,
+                        cast(DepthDataType, client_config.camera_depth.data_type),
                         request.depth,
                     )
                 )
@@ -245,9 +238,12 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                     boundary_points=np.array(boundary_points_2d),
                 )
 
-                boundary_3d = to_3d_boundary_points(
-                    plane.boundary_points, plane.normal, plane.center
-                )
+                try:
+                    boundary_3d = convert_2d_to_3d_boundary_points(
+                        plane.boundary_points, plane.normal, plane.center
+                    )
+                except ValueError as e:
+                    raise InvalidArgument(str(e))
 
                 # Close the boundary by adding the first point to the end.
                 boundary_3d = np.vstack([boundary_3d, boundary_3d[0]])
@@ -294,7 +290,6 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                     ]
                 ),
             )
-            print(gyro_data.attitude)
             attitude = rr.Quaternion(
                 xyzw=gyro_data.attitude,
             )
@@ -328,17 +323,16 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
             logger.debug("Number of meshes: %s", len(request.meshes))
             # Binary arrays can be empty if no mesh is sent. This could be due to non-supporting devices. We can log this in the future.
             binary_arrays = request.meshes
-            index = 0
-            for mesh_data in binary_arrays:
+            for index, mesh_data in enumerate(binary_arrays):
                 # We are ignoring type because DracoPy is written with Cython, and Pyright cannot infer types from a native module.
                 dracoMesh = DracoPy.decode(mesh_data.data)  # pyright: ignore [reportUnknownMemberType, reportUnknownVariableType]
 
                 mesh = Mesh(
-                    dracoMesh.faces,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-                    dracoMesh.points,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-                    dracoMesh.normals,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-                    dracoMesh.tex_coord,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-                    dracoMesh.colors,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                    faces=dracoMesh.faces,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                    points=dracoMesh.points,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                    normals=dracoMesh.normals,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                    tex_coord=dracoMesh.tex_coord,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+                    colors=dracoMesh.colors,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
                 )
 
                 rr.log(
@@ -351,7 +345,6 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                         vertex_texcoords=mesh.tex_coord,
                     ),
                 )
-                index += 1
 
         # Call the for user extension code.
         self.on_frame_received(

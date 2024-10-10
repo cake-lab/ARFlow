@@ -12,7 +12,7 @@ import pytest
 
 from arflow import ARFlowServicer
 from arflow._error_interceptor import ErrorInterceptor
-from arflow_grpc import service_pb2_grpc
+from arflow_grpc import service_pb2, service_pb2_grpc
 from arflow_grpc.service_pb2 import (
     ProcessFrameRequest,
     RegisterClientRequest,
@@ -212,6 +212,31 @@ def test_process_frame_with_invalid_data_types(
                 transform=np.random.rand(8 // 4)
                 .astype(np.float32)
                 .tobytes(),  # Incorrect size
+            ),
+        ),
+        (
+            RegisterClientRequest(
+                camera_plane_detection=RegisterClientRequest.CameraPlaneDetection(
+                    enabled=True
+                ),
+            ),
+            ProcessFrameRequest(
+                plane_detection=[
+                    service_pb2.ProcessFrameRequest.Plane(
+                        center=service_pb2.ProcessFrameRequest.Vector3(
+                            x=1.0, y=2.0, z=3.0
+                        ),
+                        normal=service_pb2.ProcessFrameRequest.Vector3(
+                            x=1.0, y=2.0, z=3.0
+                        ),
+                        size=service_pb2.ProcessFrameRequest.Vector2(x=1.0, y=2.0),
+                        boundary_points=[
+                            service_pb2.ProcessFrameRequest.Vector2(x=1.0, y=2.0),
+                            service_pb2.ProcessFrameRequest.Vector2(x=2.0, y=3.0),
+                            # Missing one point
+                        ],
+                    )
+                ],
             ),
         ),
     ],

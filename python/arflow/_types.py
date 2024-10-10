@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, NewType
+from typing import Dict, List, Literal, NewType
 
 import numpy as np
 import numpy.typing as npt
@@ -22,6 +22,10 @@ class EnrichedARFlowRequest:
     data: ARFlowRequest
     """The ARFlow request data."""
 
+
+ColorDataType = Literal["RGB24", "YCbCr420"]
+DepthDataType = Literal["f32", "u16"]
+"""The depth data type. `f32` for iOS, `u16` for Android."""
 
 ColorRGB = npt.NDArray[np.uint8]
 DepthImg = npt.NDArray[np.float32]
