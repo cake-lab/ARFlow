@@ -294,8 +294,9 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                     ]
                 ),
             )
+            print(gyro_data.attitude)
             attitude = rr.Quaternion(
-                xyzw=[gyro_data.attitude],
+                xyzw=gyro_data.attitude,
             )
             rotation_rate = rr.datatypes.Vec3D(gyro_data.rotation_rate)
             gravity = rr.datatypes.Vec3D(gyro_data.gravity)
