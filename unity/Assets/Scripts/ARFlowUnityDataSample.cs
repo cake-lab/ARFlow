@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.Profiling;
 
-using static Utils;
+using static ARFlow.OtherUtils;
 
 public class ARFlowUnityDataSample : MonoBehaviour
 {

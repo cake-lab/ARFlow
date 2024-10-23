@@ -3,7 +3,7 @@ using Cysharp.Net.Http;
 using Grpc.Net.Client;
 using UnityEngine;
 
-using static Utils;
+using static ARFlow.OtherUtils;
 
 namespace ARFlow
 {

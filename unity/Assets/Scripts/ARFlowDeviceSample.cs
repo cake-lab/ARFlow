@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Security.Cryptography;
 
-using static Utils;
+using static ARFlow.OtherUtils;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
@@ -58,6 +58,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     private Task connectTask = null;
 
     private IAudioStreaming _audioStreaming;
+    private IMeshEncoder _meshEncoder;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,13 +66,15 @@ public class ARFlowDeviceSample : MonoBehaviour
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
 
         _audioStreaming = new AudioStreaming();
+        _meshEncoder = new MeshEncoder();
 
         _clientManager = new ARFlowClientManager(
             cameraManager: cameraManager,
             occlusionManager: occlusionManager,
             planeManager: planeManager,
             meshManager: meshManager,
-            audioStreaming: _audioStreaming
+            audioStreaming: _audioStreaming,
+            meshEncoder: _meshEncoder
          );
 
         AddModalityOptionsToConfig();

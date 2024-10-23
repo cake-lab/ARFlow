@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using static ARFlow.ProcessFrameRequest.Types.Mesh;
 
-using static Utils;
+using static ARFlow.OtherUtils;
 
 /// <summary>
 /// Class for sending mock data to the server.
@@ -117,7 +117,9 @@ public class ARFlowMockDataSample : MonoBehaviour
 
         // Test meshing data encode + test server handling
         Mesh meshdata = testBunny.GetComponent<MeshFilter>().sharedMesh;
-        List<NativeArray<byte>> encodedMesh = MeshingEncoder.EncodeMesh(meshdata);
+
+        var meshEncoder = new MeshEncoder();
+        List<NativeArray<byte>> encodedMesh = meshEncoder.EncodeMesh(meshdata);
         for (int i = 0; i < 20; i++)
         {
             foreach (var meshElement in encodedMesh)

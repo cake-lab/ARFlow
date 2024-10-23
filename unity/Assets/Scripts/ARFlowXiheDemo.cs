@@ -9,7 +9,7 @@ using ARFlow;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.Rendering;
 
-using static Utils;
+using static ARFlow.OtherUtils;
 
 public class ARFlowXiheDemo : MonoBehaviour
 {

@@ -15,7 +15,7 @@ using Unity.Collections;
 using System.Linq;
 using UnityEngine.Android;
 
-using static Utils;
+using static ARFlow.OtherUtils;
 
 namespace ARFlow
 {
@@ -31,13 +31,16 @@ namespace ARFlow
         private AROcclusionManager _occlusionManager;
         private Vector2Int _sampleSize;
         private Dictionary<string, bool> _activatedDataModalities;
-        private IAudioStreaming _audioStreaming;
         private ARMeshManager _meshManager;
         private ARPlaneManager _planeManager;
 
         private Task oldTask = null;
 
         private bool _isStreaming = false;
+
+        // Interfaces for implementations using other packages
+        private IAudioStreaming _audioStreaming;
+        private IMeshEncoder _meshEncoder;
 
         //TODO
         //private Dictionary<string, Dictionary<string, Any>> _modalityConfig
@@ -74,7 +77,8 @@ namespace ARFlow
             AROcclusionManager occlusionManager = null,
             ARPlaneManager planeManager = null,
             ARMeshManager meshManager = null,
-            IAudioStreaming audioStreaming = null
+            IAudioStreaming audioStreaming = null,
+            IMeshEncoder meshEncoder = null
         )
         {
             if (UnityEngine.InputSystem.Gyroscope.current != null)
@@ -96,9 +100,12 @@ namespace ARFlow
             _cameraManager = cameraManager;
             _occlusionManager = occlusionManager;
 
-            _audioStreaming = audioStreaming;
             _planeManager = planeManager;
             _meshManager = meshManager;
+
+            _audioStreaming = audioStreaming;
+            _meshEncoder = meshEncoder;
+
 #if UNITY_ANDROID
             if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
             {
@@ -454,7 +461,7 @@ namespace ARFlow
                 foreach (MeshFilter meshFilter in meshFilters)
                 {
                     Mesh mesh = meshFilter.sharedMesh;
-                    List<NativeArray<byte>> encodedMesh = MeshingEncoder.EncodeMesh(mesh);
+                    List<NativeArray<byte>> encodedMesh = _meshEncoder.EncodeMesh(mesh);
 
                     foreach (var meshElement in encodedMesh)
                     {
