@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Unity.Collections;
 using static ARFlow.ProcessFrameRequest.Types.Mesh;
 
+using static Utils;
+
 /// <summary>
 /// Class for sending mock data to the server.
 /// Used in the MockData scene.

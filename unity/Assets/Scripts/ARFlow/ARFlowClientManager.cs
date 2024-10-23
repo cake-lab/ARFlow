@@ -15,6 +15,8 @@ using Unity.Collections;
 using System.Linq;
 using UnityEngine.Android;
 
+using static Utils;
+
 namespace ARFlow
 {
     /// <summary>
@@ -29,7 +31,7 @@ namespace ARFlow
         private AROcclusionManager _occlusionManager;
         private Vector2Int _sampleSize;
         private Dictionary<string, bool> _activatedDataModalities;
-        private AudioStreaming _audioStreaming;
+        private IAudioStreaming _audioStreaming;
         private ARMeshManager _meshManager;
         private ARPlaneManager _planeManager;
 
@@ -71,8 +73,8 @@ namespace ARFlow
             ARCameraManager cameraManager = null,
             AROcclusionManager occlusionManager = null,
             ARPlaneManager planeManager = null,
-            ARMeshManager meshManager = null
-
+            ARMeshManager meshManager = null,
+            IAudioStreaming audioStreaming = null
         )
         {
             if (UnityEngine.InputSystem.Gyroscope.current != null)
@@ -94,7 +96,7 @@ namespace ARFlow
             _cameraManager = cameraManager;
             _occlusionManager = occlusionManager;
 
-            _audioStreaming = new AudioStreaming();
+            _audioStreaming = audioStreaming;
             _planeManager = planeManager;
             _meshManager = meshManager;
 #if UNITY_ANDROID
@@ -149,7 +151,7 @@ namespace ARFlow
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                PrintDebug(e.Message);
 
             }
 
@@ -302,7 +304,7 @@ namespace ARFlow
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                PrintDebug(e.Message);
             }
         }
 
@@ -352,7 +354,7 @@ namespace ARFlow
             _isStreaming = true;
             if (_activatedDataModalities["Audio"])
             {
-                _audioStreaming.initializeAudioRecording(DEFAULT_SAMPLE_RATE, DEFAULT_FRAME_LENGTH);
+                _audioStreaming.InitializeAudioRecording(DEFAULT_SAMPLE_RATE, DEFAULT_FRAME_LENGTH);
             }
         }
 
@@ -365,7 +367,7 @@ namespace ARFlow
             _isStreaming = false;
             if (_activatedDataModalities["Audio"])
             {
-                _audioStreaming.disposeAudioRecording();
+                _audioStreaming.DisposeAudioRecording();
             }
         }
 
@@ -439,16 +441,16 @@ namespace ARFlow
 
             if (_activatedDataModalities["Audio"])
             {
-                Debug.Log("audio");
-                dataFrame.AudioData.Add(_audioStreaming.UnsentFrames);
-                _audioStreaming.clearFrameList();
+                PrintDebug("audio");
+                dataFrame.AudioData.Add(_audioStreaming.GetFrames());
+                _audioStreaming.ClearFrameList();
                 //Buffer.BlockCopy
             }
 
             if (_activatedDataModalities["Meshing"])
             {
                 IList<MeshFilter> meshFilters = _meshManager.meshes;
-                Debug.Log($"Number of mesh filters: {meshFilters.Count}");
+                PrintDebug($"Number of mesh filters: {meshFilters.Count}");
                 foreach (MeshFilter meshFilter in meshFilters)
                 {
                     Mesh mesh = meshFilter.sharedMesh;

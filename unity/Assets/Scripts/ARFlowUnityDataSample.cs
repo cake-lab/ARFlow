@@ -7,6 +7,8 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.Profiling;
 
+using static Utils;
+
 public class ARFlowUnityDataSample : MonoBehaviour
 {
     private bool _enabled;

@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Security.Cryptography;
 
+using static Utils;
+
 public class ARFlowDeviceSample : MonoBehaviour
 {
     /// <summary>
@@ -54,18 +56,26 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     private bool _isConnected = false;
     private Task connectTask = null;
+
+    private IAudioStreaming _audioStreaming;
     // Start is called before the first frame update
     void Start()
     {
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
+
+        _audioStreaming = new AudioStreaming();
+
         _clientManager = new ARFlowClientManager(
             cameraManager: cameraManager,
             occlusionManager: occlusionManager,
             planeManager: planeManager,
-            meshManager: meshManager);
+            meshManager: meshManager,
+            audioStreaming: _audioStreaming
+         );
 
         AddModalityOptionsToConfig();
+
 
         // OnConnectButtonClick();
 
@@ -150,11 +160,11 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             if (t.IsFaulted)
             {
-                Debug.Log("Connection failed.");
+                PrintDebug("Connection failed.");
             }
             if (t.IsCompletedSuccessfully)
             {
-                Debug.Log("Connected successfully.");
+                PrintDebug("Connected successfully.");
             }
         });
         _isConnected = false;
@@ -185,7 +195,7 @@ public class ARFlowDeviceSample : MonoBehaviour
             //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
             log += string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
         }
-        Debug.Log(log);
+        PrintDebug(log);
     }
 
     /// <summary>
@@ -194,7 +204,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void OnStartPauseButtonClick()
     {
-        Debug.Log($"Current framerate: {Application.targetFrameRate}");
+        PrintDebug($"Current framerate: {Application.targetFrameRate}");
         if (enabled)
         {
             if (!_isConnected)

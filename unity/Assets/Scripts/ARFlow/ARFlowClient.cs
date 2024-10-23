@@ -3,6 +3,8 @@ using Cysharp.Net.Http;
 using Grpc.Net.Client;
 using UnityEngine;
 
+using static Utils;
+
 namespace ARFlow
 {
     /// <summary>
@@ -21,7 +23,7 @@ namespace ARFlow
         /// <param name="address">The address (AKA server URL) to connect to</param>
         public ARFlowClient(string address)
         {
-            Debug.Log("Initialize client for " + address);
+            PrintDebug("Initialize client for " + address);
             var handler = new YetAnotherHttpHandler() { Http2Only = true };
             _channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions()
             {
@@ -46,7 +48,7 @@ namespace ARFlow
             var response = _client.RegisterClient(requestData);
             _sessionId = response.Uid;
 
-            Debug.Log(response.Uid);
+            PrintDebug(response.Uid);
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace ARFlow
                 // _client.data_frameAsync(frameData)
                 // .ResponseAsync.ContinueWith(response =>
                 // {
-                //     Debug.Log(response);
+                //     PrintDebug(response);
                 // });
                 var response = _client.ProcessFrame(frameData);
                 res = response.Message;
@@ -71,7 +73,7 @@ namespace ARFlow
             {
                 // Try to catch any exceptions.
                 // Network, device image, camera intrinsics
-                Debug.LogError(e);
+                PrintDebug(e.Message);
             }
 
             return res;

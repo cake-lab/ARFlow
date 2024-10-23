@@ -3,6 +3,8 @@
 
 #additional files
 .grpc_tools/**
+act.exe
+my.secrets
 
 ### macOS ###
 # General
