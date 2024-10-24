@@ -21,7 +21,7 @@ https://github.com/Picovoice/unity-voice-processor/blob/main/unity-voice-process
 
 3. To install the latest package version, specify the following URL in `Add package from git URL...` of Package Manager on Unity
 ```
-https://github.com/FelixNgFender/ARFlow.git?path=unity/Assets/ARFlowPackage/ARFlow
+https://github.com/cake-lab/ARFlow.git?path=unity/Assets/ARFlowPackage/ARFlow
 ```
 ## Implementation details
 
