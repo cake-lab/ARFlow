@@ -57,24 +57,17 @@ public class ARFlowDeviceSample : MonoBehaviour
     private bool _isConnected = false;
     private Task connectTask = null;
 
-    private IAudioStreaming _audioStreaming;
-    private IMeshEncoder _meshEncoder;
     // Start is called before the first frame update
     void Start()
     {
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
 
-        _audioStreaming = new AudioStreaming();
-        _meshEncoder = new MeshEncoder();
-
         _clientManager = new ARFlowClientManager(
             cameraManager: cameraManager,
             occlusionManager: occlusionManager,
             planeManager: planeManager,
-            meshManager: meshManager,
-            audioStreaming: _audioStreaming,
-            meshEncoder: _meshEncoder
+            meshManager: meshManager
          );
 
         AddModalityOptionsToConfig();

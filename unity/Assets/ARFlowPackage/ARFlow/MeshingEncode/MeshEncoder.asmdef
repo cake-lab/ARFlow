@@ -2,8 +2,7 @@
     "name": "MeshingEncoderAssembly",
     "rootNamespace": "",
     "references": [
-        "GUID:411961ebab96043d8a061c656d3a461c",
-        "GUID:32105e0090382574e9f663b4802eb134"
+        "GUID:411961ebab96043d8a061c656d3a461c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

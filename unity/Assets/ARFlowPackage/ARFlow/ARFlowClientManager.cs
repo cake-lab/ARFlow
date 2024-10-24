@@ -39,8 +39,8 @@ namespace ARFlow
         private bool _isStreaming = false;
 
         // Interfaces for implementations using other packages
-        private IAudioStreaming _audioStreaming;
-        private IMeshEncoder _meshEncoder;
+        private AudioStreaming _audioStreaming;
+        private MeshEncoder _meshEncoder;
 
         //TODO
         //private Dictionary<string, Dictionary<string, Any>> _modalityConfig
@@ -76,9 +76,7 @@ namespace ARFlow
             ARCameraManager cameraManager = null,
             AROcclusionManager occlusionManager = null,
             ARPlaneManager planeManager = null,
-            ARMeshManager meshManager = null,
-            IAudioStreaming audioStreaming = null,
-            IMeshEncoder meshEncoder = null
+            ARMeshManager meshManager = null
         )
         {
             if (UnityEngine.InputSystem.Gyroscope.current != null)
@@ -103,8 +101,8 @@ namespace ARFlow
             _planeManager = planeManager;
             _meshManager = meshManager;
 
-            _audioStreaming = audioStreaming;
-            _meshEncoder = meshEncoder;
+            _audioStreaming = new AudioStreaming();
+            _meshEncoder = new MeshEncoder();
 
 #if UNITY_ANDROID
             if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
