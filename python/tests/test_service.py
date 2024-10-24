@@ -136,7 +136,7 @@ def test_process_frame(default_service: ARFlowServicer):
     response = default_service.RegisterClient(client_config)
     client_id = response.uid
 
-    with open(Path(__file__).parent / "bunny.drc", "rb") as draco_file:
+    with (Path(__file__).parent / "bunny.drc").open("rb") as draco_file:
         mesh = DracoPy.decode(draco_file.read())  # pyright: ignore [reportUnknownMemberType, reportUnknownVariableType]
         mock_frame = ProcessFrameRequest(
             uid=client_id,

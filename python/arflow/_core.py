@@ -1,7 +1,6 @@
 """Data exchanging service."""
 
 import logging
-import os
 import pickle
 import time
 import uuid
@@ -375,12 +374,12 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         """
         logger.debug("Saving the data...")
         # Ensure the directory exists.
-        os.makedirs(path_to_save, exist_ok=True)
+        path_to_save.mkdir(parents=True, exist_ok=True)
         save_path = (
             path_to_save
             / f"frames_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.pkl"
         )
-        with open(save_path, "wb") as f:
+        with save_path.open("wb") as f:
             pickle.dump(self._requests_history, f)
 
         logger.info("Data saved to %s", save_path)

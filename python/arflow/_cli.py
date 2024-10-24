@@ -2,7 +2,6 @@
 
 import argparse
 import logging
-import os
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -14,14 +13,16 @@ def _validate_dir_path(path_as_str: str | None) -> str | None:
     """Check if the path is a valid directory."""
     if path_as_str is None:
         return None
-    if not os.path.isdir(path_as_str):
+    path = Path(path_as_str)
+    if not path.is_dir():
         raise argparse.ArgumentTypeError(f"{path_as_str} is not a valid path.")
     return path_as_str
 
 
 def _validate_file_path(path_as_str: str) -> str:
     """Check if the path is a valid file."""
-    if not os.path.isfile(path_as_str):
+    path = Path(path_as_str)
+    if not path.is_file():
         raise argparse.ArgumentTypeError(f"{path_as_str} is not a valid file.")
     return path_as_str
 

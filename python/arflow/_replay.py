@@ -23,7 +23,7 @@ class ARFlowPlayer(threading.Thread):
         self._service = service()
         self._requests_history: RequestsHistory = []
 
-        with open(frame_data_path, "rb") as f:
+        with frame_data_path.open("rb") as f:
             raw_data: RequestsHistory = pickle.load(f)
 
         if not raw_data:
