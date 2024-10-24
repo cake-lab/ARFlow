@@ -142,27 +142,17 @@ namespace ARFlow
             if (activatedDataModalities == null)
                 _activatedDataModalities = DEFAULT_MODALITIES;
 
-            try
-            {
-                // To avoid old method calls to log message 
-                oldTask?.ContinueWith(t => { });
+            // To avoid old method calls to log message 
+            oldTask?.ContinueWith(t => { });
 
-                var requestData = GetClientConfiguration();
-                var task = Task.Run(() => _client.Connect(requestData));
-                if (taskFinishedHook is not null)
-                    task.ContinueWith(taskFinishedHook);
+            var requestData = GetClientConfiguration();
+            var task = Task.Run(() => _client.Connect(requestData));
+            if (taskFinishedHook is not null)
+                task.ContinueWith(taskFinishedHook);
 
-                oldTask = task;
+            oldTask = task;
 
-                return task;
-            }
-            catch (Exception e)
-            {
-                PrintDebug(e.Message);
-
-            }
-
-            return null;
+            return task;
         }
 
 
@@ -451,7 +441,6 @@ namespace ARFlow
                 PrintDebug("audio");
                 dataFrame.AudioData.Add(_audioStreaming.GetFrames());
                 _audioStreaming.ClearFrameList();
-                //Buffer.BlockCopy
             }
 
             if (_activatedDataModalities["Meshing"])

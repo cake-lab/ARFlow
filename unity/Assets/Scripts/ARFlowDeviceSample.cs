@@ -161,14 +161,6 @@ public class ARFlowDeviceSample : MonoBehaviour
             GetModalityOptions(), 
             t =>
         {
-            if (t.IsFaulted)
-            {
-                PrintDebug("Connection failed.");
-            }
-            if (t.IsCompletedSuccessfully)
-            {
-                PrintDebug("Connected successfully.");
-            }
         });
         _isConnected = false;
     }
@@ -179,6 +171,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             if (connectTask.IsFaulted)
             {
+                PrintDebug(connectTask.Exception);
                 connectTask = null;
                 Toast.Show("Connection failed.", ToastColor.Red);
             }
