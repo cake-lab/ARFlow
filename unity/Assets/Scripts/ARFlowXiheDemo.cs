@@ -9,6 +9,8 @@ using ARFlow;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.Rendering;
 
+using static ARFlow.OtherUtils;
+
 public class ARFlowXiheDemo : MonoBehaviour
 {
     public TMP_InputField addressInput;
@@ -105,7 +107,7 @@ public class ARFlowXiheDemo : MonoBehaviour
 
     private void OnStartPauseButtonClick()
     {
-        Debug.Log($"Current framerate: {Application.targetFrameRate}");
+        PrintDebug($"Current framerate: {Application.targetFrameRate}");
 
         _enabled = !_enabled;
         startPauseButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";

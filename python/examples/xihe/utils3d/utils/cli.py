@@ -13,6 +13,6 @@ def pretty_print_matrix(mat):
 
         res_rows.append(res_cols)
 
-    df = pd.DataFrame(res_rows)
+    df = pd.ProcessFrameRequest(res_rows)
 
     print(df)

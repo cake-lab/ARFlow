@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "simple"
+version = "0.1.0"
+description = ""
+authors = ["Felix Nguyen <ngthinh302@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.13"
+arflow = { path = "../.." }
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+simple = "simple:main"

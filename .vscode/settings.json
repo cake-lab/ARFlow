@@ -12,8 +12,11 @@
     },
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
-  "python.analysis.typeCheckingMode": "off", // TODO: Enable strict type checking
+  "python.analysis.typeCheckingMode": "strict",
   "python.analysis.autoImportCompletions": true,
+  "python.testing.pytestArgs": ["python"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
   "[csharp]": {
     "editor.formatOnSave": true,
     "editor.maxTokenizationLineLength": 2500,
@@ -26,7 +29,7 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "**/__pycache__": true,
+    "**/__pycache__": true
   },
   "cSpell.words": [
     "arange",

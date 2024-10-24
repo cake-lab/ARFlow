@@ -1,0 +1,18 @@
+{
+  "name": "com.cakelab.arflow",
+  "version": "0.0.4",
+  "displayName": "ARFlow Client",
+  "description": "The ARFlow client is responsible for on-device AR data collection and high-performance AR data streaming. We implement the ARFlow client as a Unity application that can be easily ported to different platforms and devices.",
+  "unity": "2022.3",
+  "documentationUrl": "https://cake.wpi.edu/ARFlow/",
+  "changelogUrl": "https://github.com/cake-lab/ARFlow",
+ "keywords": [
+    "AR",
+    "ARFoundation",
+    "Client"
+  ],
+  "author": {
+    "name": "Cake lab",
+    "url": "https://cake.wpi.edu/"
+  }
+}

@@ -1,0 +1,65 @@
+name: Pre-release
+
+on:
+  push:
+    tags:
+      - "*"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python
+        id: install_python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.8.3"
+
+      - name: Setup a local virtual environment (if no poetry.toml file)
+        working-directory: ./python
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+
+      - name: Restore cached virtualenv
+        uses: actions/cache/restore@v4
+        with:
+          path: ./python/.venv
+          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+
+      - name: Install dependencies (skipped if cache hit, fallback to install)
+        working-directory: ./python
+        run: |
+          poetry install
+          echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
+          echo "VIRTUAL_ENV=$(poetry env info --path)/bin" >> $GITHUB_ENV
+
+      - name: Saved cached virtualenv
+        uses: actions/cache/save@v4
+        with:
+          path: ./python/.venv
+          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+
+      - name: Configure Test PyPI with Poetry
+        working-directory: ./python
+        run: |
+          poetry config repositories.testpypi https://test.pypi.org/legacy/
+          poetry config pypi-token.testpypi ${{ secrets.TEST_PYPI_API_TOKEN }}
+
+      - name: Build and publish the package
+        working-directory: ./python
+        run: poetry publish --build -r testpypi

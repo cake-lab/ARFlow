@@ -1,0 +1,22 @@
+{
+    "name": "ARFlow",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a9420e37d7990b54abdef6688edbe313",
+        "GUID:c3bc0afe4a069b54aa23296f3c18a871",
+        "GUID:21b0c8d1703a94250bfac916590cea4f",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:92703082f92b41ba80f0d6912de66115",
+        "GUID:8a68004c08665e8449ab651ffdc7bee0",
+        "GUID:1504f36c4fe570349afad1ff2291fbd0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

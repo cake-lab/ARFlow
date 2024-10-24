@@ -3,6 +3,11 @@ using ARFlow;
 using Google.Protobuf;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using Unity.Collections;
+using static ARFlow.ProcessFrameRequest.Types.Mesh;
+
+using static ARFlow.OtherUtils;
 
 /// <summary>
 /// Class for sending mock data to the server.
@@ -13,6 +18,8 @@ public class ARFlowMockDataSample : MonoBehaviour
     public TMP_InputField addressInput;
     public Button connectButton;
     public Button sendButton;
+
+    public GameObject testBunny;
 
     private ARFlowClient _client;
     /// <summary>
@@ -39,10 +46,10 @@ public class ARFlowMockDataSample : MonoBehaviour
 
         _sampleSize = new Vector2Int(256, 192);
 
-        _client.Connect(new RegisterRequest()
+        _client.Connect(new RegisterClientRequest()
         {
             DeviceName = "MockDataTestbed",
-            CameraIntrinsics = new RegisterRequest.Types.CameraIntrinsics()
+            CameraIntrinsics = new RegisterClientRequest.Types.CameraIntrinsics()
             {
                 FocalLengthX = 128,
                 FocalLengthY = 96,
@@ -51,22 +58,30 @@ public class ARFlowMockDataSample : MonoBehaviour
                 PrincipalPointX = 128,
                 PrincipalPointY = 96
             },
-            CameraColor = new RegisterRequest.Types.CameraColor()
+            CameraColor = new RegisterClientRequest.Types.CameraColor()
             {
                 Enabled = true,
                 DataType = "YCbCr420",
                 ResizeFactorX = 1.0f,
                 ResizeFactorY = 1.0f,
             },
-            CameraDepth = new RegisterRequest.Types.CameraDepth()
+            CameraDepth = new RegisterClientRequest.Types.CameraDepth()
             {
                 Enabled = false,
             },
-            CameraTransform = new RegisterRequest.Types.CameraTransform()
+            CameraTransform = new RegisterClientRequest.Types.CameraTransform()
             {
                 Enabled = false
             },
-            Gyroscope = new RegisterRequest.Types.Gyroscope()
+            Gyroscope = new RegisterClientRequest.Types.Gyroscope()
+            {
+                Enabled = true,
+            },
+            Meshing = new RegisterClientRequest.Types.Meshing()
+            {
+                Enabled = true,
+            },
+            CameraPlaneDetection = new RegisterClientRequest.Types.CameraPlaneDetection()
             {
                 Enabled = true,
             }
@@ -84,32 +99,58 @@ public class ARFlowMockDataSample : MonoBehaviour
         var colorBytes = new byte[size];
         _rnd.NextBytes(colorBytes);
 
-        var dataFrameRequest = new DataFrameRequest()
+        var dataFrame = new ProcessFrameRequest()
         {
             Color = ByteString.CopyFrom(colorBytes)
         };
 
-        dataFrameRequest.Gyroscope = new DataFrameRequest.Types.gyroscope_data();
+        dataFrame.Gyroscope = new ProcessFrameRequest.Types.GyroscopeData();
         Quaternion attitude = Input.gyro.attitude;
         Vector3 rotation_rate = Input.gyro.rotationRateUnbiased;
         Vector3 gravity = Input.gyro.gravity;
         Vector3 acceleration = Input.gyro.userAcceleration;
 
-        dataFrameRequest.Gyroscope.Attitude = unityQuaternionToProto(attitude);
-        dataFrameRequest.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);
-        dataFrameRequest.Gyroscope.Gravity = unityVector3ToProto(gravity);
-        dataFrameRequest.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
+        dataFrame.Gyroscope.Attitude = unityQuaternionToProto(attitude);
+        dataFrame.Gyroscope.RotationRate = unityVector3ToProto(rotation_rate);
+        dataFrame.Gyroscope.Gravity = unityVector3ToProto(gravity);
+        dataFrame.Gyroscope.Acceleration = unityVector3ToProto(acceleration);
 
-        _client.SendFrame(new DataFrameRequest()
+        // Test meshing data encode + test server handling
+        Mesh meshdata = testBunny.GetComponent<MeshFilter>().sharedMesh;
+
+        var meshEncoder = new MeshEncoder();
+        List<NativeArray<byte>> encodedMesh = meshEncoder.EncodeMesh(meshdata);
+        for (int i = 0; i < 20; i++)
         {
-            Color = ByteString.CopyFrom(colorBytes)
+            foreach (var meshElement in encodedMesh)
+            {
+                var meshProto = new ProcessFrameRequest.Types.Mesh();
+                meshProto.Data = ByteString.CopyFrom(meshElement);
 
-        });
+                dataFrame.Meshes.Add(meshProto);
+            }
+        }
+
+        // Test plane
+        var plane = new ProcessFrameRequest.Types.Plane();
+        plane.Center = unityVector3ToProto(new Vector3(1, 2, 3));
+        plane.Normal = unityVector3ToProto(new Vector3(0, 2, 5));
+        plane.Size = unityVector2ToProto(new Vector2(5, 5));
+        plane.BoundaryPoints.Add(new[]
+            { unityVector2ToProto(new Vector2(0, 2)),
+            unityVector2ToProto(new Vector2(1, 3)),
+            unityVector2ToProto(new Vector2(2, 4)),
+            unityVector2ToProto(new Vector2(1, 5)),
+            unityVector2ToProto(new Vector2(2, 1)) }
+        );
+        dataFrame.PlaneDetection.Add(plane);
+
+        _client.SendFrame(dataFrame);
     }
 
-    DataFrameRequest.Types.Vector3 unityVector3ToProto(Vector3 a)
+    ProcessFrameRequest.Types.Vector3 unityVector3ToProto(Vector3 a)
     {
-        return new DataFrameRequest.Types.Vector3()
+        return new ProcessFrameRequest.Types.Vector3()
         {
             X = a.x,
             Y = a.y,
@@ -117,14 +158,23 @@ public class ARFlowMockDataSample : MonoBehaviour
         };
     }
 
-    DataFrameRequest.Types.Quaternion unityQuaternionToProto(Quaternion a)
+    ProcessFrameRequest.Types.Quaternion unityQuaternionToProto(Quaternion a)
     {
-        return new DataFrameRequest.Types.Quaternion()
+        return new ProcessFrameRequest.Types.Quaternion()
         {
             X = a.x,
             Y = a.y,
             Z = a.z,
             W = a.w
+        };
+    }
+
+    ProcessFrameRequest.Types.Vector2 unityVector2ToProto(Vector2 a)
+    {
+        return new ProcessFrameRequest.Types.Vector2()
+        {
+            X = a.x,
+            Y = a.y,
         };
     }
 

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+# type: ignore
 """A demo integration with Xihe.
+
+Note: `# type: ignore` is added to the first line to suppress typecheck errors.
+In case you want to copy this code, please remove the first line if you are using typecheck.
 
 Reference:
 - Yiqin Zhao and Tian Guo. 2021. Xihe: A 3D Vision-Based Lighting
@@ -9,25 +13,24 @@ and Services (MobiSys'21). 28-40.
 """
 
 from threading import Thread
-from typing import Any, Dict
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 import torch
-import utils3d as u3d
-import xihenet_utils
 
 # This import is necessary to avoid an "operator not found" error when loading
 # DO NOT REMOVE (please)
 # To install this (workaround currently), enter "poetry shell" and run:
 # pip install wheel
 # pip install torch-cluster -f https://data.pyg.org/whl/torch-2.4.0+${CUDA}.html (this will take very long).
-import torch_cluster
+import utils3d as u3d
+import xihenet_utils
 
 import arflow
 
 
-class XiheService(arflow.ARFlowService):
+class XiheService(arflow.ARFlowServicer):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__()
 
@@ -39,25 +42,28 @@ class XiheService(arflow.ARFlowService):
 
         self.calculator = xihenet_utils.JointEntropyCalculator()
 
-    def on_register(self, request: arflow.RegisterRequest):
+    def on_register(self, request: arflow.RegisterClientRequest):
         self.num_frame = 0
 
-    def on_frame_received(self, frame_data: Dict[str, Any]):
+    def on_frame_received(self, decoded_data_frame: arflow.DecodedDataFrame):
         # Run XiheNet inference.
-        pcd = frame_data["point_cloud_pcd"]
-        clr = frame_data["point_cloud_clr"]
         if self.num_frame % 100 == 0:
             thread = Thread(
-                target=self.run_xihenet_inference, args=(pcd.copy(), clr.copy())
+                target=self.run_xihenet_inference, args=(decoded_data_frame.point_cloud_pcd.copy(), decoded_data_frame.point_cloud_clr.copy())
             )
             thread.start()
 
         self.num_frame = self.num_frame + 1
 
-    def run_xihenet_inference(self, xyz: np.ndarray, rgb: np.ndarray):
+    def run_xihenet_inference(self, xyz: npt.NDArray[np.float32], rgb: npt.NDArray[np.uint8]):
         # Log input entropy.
         entropy = self.calculator.forward(torch.from_numpy(xyz).float())
-        self.recorder.log("Xihe/input_entropy", self.recorder.TimeSeriesScalar(entropy))
+
+        # TODO: FIX THIS https://rerun.io/docs/reference/migration/migration-0-13#timeseriesscalar-deprecated-in-favor-of-scalartypesarchetypesscalarmd--serieslinetypesarchetypesserieslinemdseriespointtypesarchetypesseriespointmd
+        # self.recorder.log("Xihe/input_entropy", self.recorder.TimeSeriesScalar(entropy))
+        self.recorder.log("Xihe/input_entropy", self.recorder.Scalar(entropy))
+        # self.recorder.log("Xihe/input_entropy", self.recorder.SeriesPoint(entropy))
+        # self.recorder.log("Xihe/input_entropy", self.recorder.SeriesLine(entropy))
 
         # Inference preprocessing code copied from previous
         # lighting estimation visualization code.
@@ -99,7 +105,7 @@ class XiheService(arflow.ARFlowService):
 
 
 def main():
-    arflow.create_server(XiheService, port=8500, path_to_save=None)
+    arflow.run_server(XiheService, port=8500, path_to_save=None)
 
 
 if __name__ == "__main__":

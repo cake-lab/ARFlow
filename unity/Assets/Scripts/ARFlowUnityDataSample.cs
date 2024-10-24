@@ -7,6 +7,8 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.Profiling;
 
+using static ARFlow.OtherUtils;
+
 public class ARFlowUnityDataSample : MonoBehaviour
 {
     private bool _enabled;
@@ -86,10 +88,10 @@ public class ARFlowUnityDataSample : MonoBehaviour
 
         // _sampleSize = new Vector2Int(screenWidth, screenHeight);
 
-        _client.Connect(new RegisterRequest()
+        _client.Connect(new RegisterClientRequest()
         {
             DeviceName = "UnityDataTestbed",
-            CameraIntrinsics = new RegisterRequest.Types.CameraIntrinsics()
+            CameraIntrinsics = new RegisterClientRequest.Types.CameraIntrinsics()
             {
                 FocalLengthX = focalLengthX,
                 FocalLengthY = focalLengthY,
@@ -98,21 +100,21 @@ public class ARFlowUnityDataSample : MonoBehaviour
                 PrincipalPointX = principalPointX,
                 PrincipalPointY = principalPointY
             },
-            CameraColor = new RegisterRequest.Types.CameraColor()
+            CameraColor = new RegisterClientRequest.Types.CameraColor()
             {
                 Enabled = true,
                 DataType = "RGB24",
                 ResizeFactorX = 1.0f,
                 ResizeFactorY = 1.0f,
             },
-            CameraDepth = new RegisterRequest.Types.CameraDepth()
+            CameraDepth = new RegisterClientRequest.Types.CameraDepth()
             {
                 Enabled = true,
                 DataType = "f32",
                 ResolutionX = screenWidth,
                 ResolutionY = screenHeight
             },
-            CameraTransform = new RegisterRequest.Types.CameraTransform()
+            CameraTransform = new RegisterClientRequest.Types.CameraTransform()
             {
                 Enabled = false
             }
@@ -152,8 +154,8 @@ public class ARFlowUnityDataSample : MonoBehaviour
         _depthTexture.Apply();
         var depthBytes = _depthTexture.GetRawTextureData();
 
-        Debug.Log($"pixelBytes length: {pixelBytes.Length}, depthBytes length: {depthBytes.Length}");
-        _client.SendFrame(new DataFrameRequest()
+        PrintDebug($"pixelBytes length: {pixelBytes.Length}, depthBytes length: {depthBytes.Length}");
+        _client.SendFrame(new ProcessFrameRequest()
         {
             Color = ByteString.CopyFrom(pixelBytes),
             Depth = ByteString.CopyFrom(depthBytes)

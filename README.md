@@ -5,7 +5,7 @@ This project aims to provide a tool to democratize and accelerate AR research an
 
 [Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#how-to-cite-arflow) | [Project Page](https://cake.wpi.edu/ARFlow/) | [Video](https://youtu.be/mml8YrCgfTk)
 
-## Getting Started
+## Quick Start
 
 ### Device Preparation
 
@@ -15,39 +15,10 @@ Make sure you have the developer mode enabled on your device.
 
 ### Server Setup
 
-Next, create your own ARFlow server instance to start playing with the device collected AR data. Here we show the steps to build a simple server:
+Next, start up your own ARFlow server instance:
 
-```bash
-# Create a python environment using your favorite tool, then
-pip install arflow
-```
-
-Create a Python file `simple_arflow_server.py` and paste the following code:
-
-```python
-"""A simple example of extending the ARFlow server."""
-
-import arflow
-
-
-class CustomService(arflow.ARFlowService):
-    def on_frame_received(self, frame: arflow.DataFrameRequest):
-        """Called when a frame is received."""
-        print("Frame received!")
-
-
-def main():
-    arflow.create_server(CustomService, port=8500, path_to_save="./")
-
-
-if __name__ == "__main__":
-    main()
-```
-
-Run it!
-
-```
-python simple_arflow_server.py
+```shell
+arflow serve # This will start the server on port 8500
 ```
 
 ### Client Setup
@@ -55,35 +26,34 @@ python simple_arflow_server.py
 Next, go to the [releases](https://github.com/cake-lab/ARFlow/releases) page and find the prebuilt items for Android and iOS.
 For Android, directly install the prebuilt apk on your device. For iOS, compile the generated Xcode project to deploy the ARFlow client app to your iOS device. Note that you will need to configure the developer credentials in the Xcode project.
 
-After lunching the ARFlow client app, follow the onscreen instruction to input the server address and port (8500 for the previous example) information, then tap **connect** and **start**. 
+After launching the ARFlow client app, follow the onscreen instruction to input the server address and port (8500 for the previous example) information, then tap **connect** and **start**.
 
 Watch our demo video:
 
 [![Demo video](https://img.youtube.com/vi/mml8YrCgfTk/maxresdefault.jpg)](https://youtu.be/mml8YrCgfTk)
 
-
 ## Contribution
 
 Please read the [CONTRIBUTING](./CONTRIBUTING.md) guideline first, and refer to the individual [server](./python/README.md) and [client](./unity/README.md) installation guides.
 
-### Contributors 
+### Contributors
 
 <!-- readme: contributors -start -->
 <table>
 	<tbody>
 		<tr>
             <td align="center">
-                <a href="https://github.com/YiqinZhao">
-                    <img src="https://avatars.githubusercontent.com/u/11468820?v=4" width="100;" alt="YiqinZhao"/>
-                    <br />
-                    <sub><b>Yiqin Zhao</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/legoeruro">
                     <img src="https://avatars.githubusercontent.com/u/68761938?v=4" width="100;" alt="legoeruro"/>
                     <br />
                     <sub><b>Khang Luu</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/YiqinZhao">
+                    <img src="https://avatars.githubusercontent.com/u/11468820?v=4" width="100;" alt="YiqinZhao"/>
+                    <br />
+                    <sub><b>Yiqin Zhao</b></sub>
                 </a>
             </td>
             <td align="center">

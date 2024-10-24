@@ -1,6 +1,29 @@
 # ARFlow Client
+[![release](https://img.shields.io/badge/release-0.0.4-blue)]()
+[![license](https://img.shields.io/badge/License-GNU%20GPL-green)](https://www.gnu.org/licenses/gpl-3.0.html)
 
 The ARFlow client is responsible for on-device AR data collection and high-performance AR data streaming. We implement the ARFlow client as a Unity application that can be easily ported to different platforms and devices.
+
+## Installation
+This package can be installed with Unity Package Manager's Install from Git feature. This package has some dependencies that must be installed seperately.
+
+1. Install these dependency packages by specifying the following URL in `Add package from git URL...`
+```
+https://github.com/Cysharp/YetAnotherHttpHandler.git?path=src/YetAnotherHttpHandler#{1.0.0}
+```
+```
+https://github.com/atteneder/DracoUnity.git
+```
+2. Install the Unity Voice Processor package by importing the following `.unitypackage` into your Unity Project (dragging and dropping)
+```
+https://github.com/Picovoice/unity-voice-processor/blob/main/unity-voice-processor-1.0.0.unitypackage
+```
+
+3. To install the latest package version, specify the following URL in `Add package from git URL...` of Package Manager on Unity
+```
+https://github.com/cake-lab/ARFlow.git?path=unity/Assets/ARFlowPackage/ARFlow
+```
+## Implementation details
 
 The core functions are implemented in `unity/Assets/Scripts/ARFlow`. We show three example ARFlow integration of three different data sources:
 

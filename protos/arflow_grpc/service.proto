@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+option csharp_namespace = "ARFlow";
+
+package arflow.v1;
+
+// The ARFlow service definition.
+service ARFlowService {
+    // Registers a client with the given specifications.
+    //
+    // The client is registered with the server and is assigned a unique identifier.
+    // The client can then send data frames to the server using the assigned identifier.
+    rpc RegisterClient(RegisterClientRequest) returns (RegisterClientResponse);
+
+    // Accepts a data frame from a client, returning an acknowledgment.
+    //
+    // Errors:
+    // - NOT_FOUND: If the client configuration is not found.
+    // - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+    // is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
+    rpc ProcessFrame(ProcessFrameRequest) returns (ProcessFrameResponse);
+}
+
+message RegisterClientRequest {
+    // TODO: Add documentation for each field, units of measurement, etc.
+    string device_name = 1;
+
+    message CameraIntrinsics {
+        float focal_length_x = 1;
+        float focal_length_y = 2;
+
+        float principal_point_x = 3;
+        float principal_point_y = 4;
+
+        int32 resolution_x = 5;
+        int32 resolution_y = 6;
+    }
+    CameraIntrinsics camera_intrinsics = 2;
+
+    message CameraColor {
+        bool enabled = 1;
+
+        string data_type = 2;
+        float resize_factor_x = 3;
+        float resize_factor_y = 4;
+    }
+    CameraColor camera_color = 3;
+
+    message CameraDepth {
+        bool enabled = 1;
+
+        string data_type = 2;
+        int32 confidence_filtering_level = 3;
+
+        int32 resolution_x = 4;
+        int32 resolution_y = 5;
+    }
+    CameraDepth camera_depth = 4;
+
+    message CameraTransform {
+        bool enabled = 1;
+    }
+    CameraTransform camera_transform = 5;
+
+    message CameraPointCloud {
+        bool enabled = 1;
+        float depth_upscale_factor = 2;
+    }
+    CameraPointCloud camera_point_cloud = 6;
+
+    message CameraPlaneDetection {
+        bool enabled = 1;
+    }
+    CameraPlaneDetection camera_plane_detection = 7;
+
+    message Gyroscope {
+        bool enabled = 1;
+    } 
+    Gyroscope gyroscope = 8;
+
+    message Audio {
+        bool enabled = 1;
+    }
+    Audio audio = 9;
+
+    message Meshing {
+        bool enabled = 1;
+    }
+    Meshing meshing = 10;
+}
+
+message RegisterClientResponse {
+    string uid = 1;
+}
+
+message ProcessFrameRequest {
+    string uid = 1;
+    bytes color = 2;
+    bytes depth = 3;
+    bytes transform = 4;
+
+    message Vector3 {
+        float x = 1;
+        float y = 2;
+        float z = 3;
+    }
+
+    message Vector2 {
+        float x = 1;
+        float y = 2;
+    }
+    message Plane {
+        Vector3 center = 1;
+        Vector3 normal = 2;
+        Vector2 size = 3;
+        repeated Vector2 boundary_points = 4;
+    }
+    repeated Plane plane_detection = 5;
+    
+    message Quaternion {
+        float x = 1;
+        float y = 2;
+        float z = 3;
+        float w = 4;
+    }
+    message GyroscopeData {
+        Quaternion attitude = 1;
+        Vector3 rotation_rate = 2;
+        Vector3 gravity = 3;
+        Vector3 acceleration = 4;
+    }
+    GyroscopeData gyroscope = 6;
+
+    repeated float audio_data = 8;
+    
+    // Represent a mesh
+    message Mesh {
+        bytes data = 1;
+    }
+    // Multiple meshes can be sent in a single frame
+    repeated Mesh meshes = 9;
+}
+
+message ProcessFrameResponse {
+    string message = 1;
+}

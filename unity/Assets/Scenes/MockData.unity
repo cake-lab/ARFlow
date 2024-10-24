@@ -978,6 +978,7 @@ MonoBehaviour:
   addressInput: {fileID: 1270866979}
   connectButton: {fileID: 1214793587}
   sendButton: {fileID: 1408228369}
+  testBunny: {fileID: 1604160832}
 --- !u!1 &1214793585
 GameObject:
   m_ObjectHideFlags: 0
@@ -1395,6 +1396,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1408228367}
   m_CullTransparentMesh: 1
+--- !u!1001 &1595986975
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+      propertyPath: m_Name
+      value: stanford-bunny-for-testing
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+--- !u!1 &1604160832 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: 8f8e96fa5f453460fa1d6acc0d072483, type: 3}
+  m_PrefabInstance: {fileID: 1595986975}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1933430752
 GameObject:
   m_ObjectHideFlags: 0
@@ -1692,3 +1755,4 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 236938469}
   - {fileID: 274001180}
+  - {fileID: 1595986975}

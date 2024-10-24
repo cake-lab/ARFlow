@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# security: restrict permissions for CI jobs.
+permissions:
+  contents: read
+
+jobs:
+  server-ci:
+    name: Server CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python
+        id: install_python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.8.3"
+
+      - name: Setup a local virtual environment (if no poetry.toml file)
+        working-directory: ./python
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+
+      - name: Restore cached virtualenv
+        uses: actions/cache/restore@v4
+        with:
+          path: ./python/.venv
+          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+
+      - name: Install dependencies (used by later workflows)
+        working-directory: ./python
+        run: |
+          poetry install
+          echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
+          echo "VIRTUAL_ENV=$(poetry env info --path)/bin" >> $GITHUB_ENV
+
+      - name: Saved cached virtualenv
+        uses: actions/cache/save@v4
+        with:
+          path: ./python/.venv
+          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+
+      - name: Lint with ruff
+        working-directory: ./python
+        run: ruff check --output-format=github
+
+      - name: Typecheck with pyright
+        working-directory: ./python
+        run: pyright arflow
+
+      - name: Test with pytest
+        working-directory: ./python
+        timeout-minutes: 5 # pytest sometimes hangs for (yet) unknown reasons
+        # TODO: Add coverage tracking once we have a stable test suite
+        run: |
+          pytest

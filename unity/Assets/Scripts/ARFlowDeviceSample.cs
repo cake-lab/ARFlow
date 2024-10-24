@@ -10,6 +10,13 @@ using UnityEngine.XR.ARFoundation;
 using System.Collections.Generic;
 using System.Collections;
 
+using EasyUI.Toast;
+using System.Threading.Tasks;
+using System.Net;
+using System.Security.Cryptography;
+
+using static ARFlow.OtherUtils;
+
 public class ARFlowDeviceSample : MonoBehaviour
 {
     /// <summary>
@@ -26,6 +33,11 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     public ARPlaneManager planeManager;
 
+    /// <summary>
+    /// Plane detection
+    /// </summary>
+    public ARMeshManager meshManager;
+
     public Button connectButton;
     public Button startPauseButton;
 
@@ -38,18 +50,28 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public GameObject OptionsContainer;
 
-    private Dictionary<string, GameObject> _optionObjects = new Dictionary<string, GameObject>();
+    private readonly Dictionary<string, GameObject> _optionObjects = new();
 
-    private string _defaultConnection = "http://192.168.1.219:8500";
+    private readonly string _defaultConnection = "http://192.168.1.219:8500";
+
+    private bool _isConnected = false;
+    private Task connectTask = null;
 
     // Start is called before the first frame update
     void Start()
     {
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
-        _clientManager = new ARFlowClientManager(cameraManager, occlusionManager);
 
-        addModalityOptionsToConfig();
+        _clientManager = new ARFlowClientManager(
+            cameraManager: cameraManager,
+            occlusionManager: occlusionManager,
+            planeManager: planeManager,
+            meshManager: meshManager
+         );
+
+        AddModalityOptionsToConfig();
+
 
         // OnConnectButtonClick();
 
@@ -58,7 +80,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Application.targetFrameRate = 30;
     }
 
-    void addModalityOptionsToConfig()
+    void AddModalityOptionsToConfig()
     {
         // Get first child, WITH THE ASSUMPTION that it's a checkbox
         GameObject firstChild = OptionsContainer.transform.GetChild(0).gameObject;
@@ -69,20 +91,20 @@ public class ARFlowDeviceSample : MonoBehaviour
                 firstChild, 
                 parent: OptionsContainer.transform
             );
-            newOption.GetComponent<Text>().text = splitByCapital(modality);
+            newOption.GetComponent<Text>().text = SplitByCapital(modality);
 
             _optionObjects.Add( modality, newOption );
         }
     }
 
-    string splitByCapital(string s)
+    string SplitByCapital(string s)
     {
         return Regex.Replace(s, "([a-z])([A-Z])", "$1 $2");
     }
 
-    Dictionary<string, bool> modalityOptions()
+    Dictionary<string, bool> GetModalityOptions()
     {
-        Dictionary<string, bool> res = new Dictionary<string, bool>();
+        Dictionary<string, bool> res = new();
         foreach (var option in  _optionObjects)
         {
             var optionName = option.Key;
@@ -99,12 +121,12 @@ public class ARFlowDeviceSample : MonoBehaviour
         return res;
     }
 
-    bool validIP (string ipField)
+    bool IsIpValid (string ipField)
     {
         return Regex.IsMatch(ipField, @"(\d){1,3}\.(\d){1,3}\.(\d){1,3}\.(\d){1,3}");
     }
 
-    bool validPort(string portField)
+    bool IsPortValid(string portField)
     {
         return Regex.IsMatch(portField, @"(\d){1,5}");
     }
@@ -115,19 +137,46 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void OnConnectButtonClick()
     {
+
         var serverURL = _defaultConnection;
-        if (validIP(ipField.text) && validPort(portField.text))
+        if (IsIpValid(ipField.text) && IsPortValid(portField.text))
         {
             serverURL = "http://" + ipField.text + ":" + portField.text;
         }
-        var modalities = modalityOptions();
 
-        prettyPrintDictionary(modalities);
+        // To update status of task to user
+        Toast.Show($"Connecting to {serverURL}", 3f, ToastColor.Yellow);
 
-        _clientManager.Connect(serverURL, modalityOptions());
+        // Since toast can only be called from main thread (we cannot use the hook to display toast)
+        // these flags are updated and signals connection result to display to user.
+        connectTask = _clientManager.ConnectTask(
+            serverURL, 
+            GetModalityOptions(), 
+            t =>
+        {
+        });
+        _isConnected = false;
     }
 
-    public static void prettyPrintDictionary(Dictionary<string, bool> dict)
+    private void UpdateConnectionStatus()
+    {
+        if (connectTask is not null && connectTask.IsCompleted)
+        {
+            if (connectTask.IsFaulted)
+            {
+                PrintDebug(connectTask.Exception);
+                connectTask = null;
+                Toast.Show("Connection failed.", ToastColor.Red);
+            }
+            else if (connectTask.IsCompletedSuccessfully)
+            {
+                _isConnected = true;
+                Toast.Show("Connected successfully.", ToastColor.Green);
+            }
+        }
+    }
+
+    public static void PrettyPrintDictionary(Dictionary<string, bool> dict)
     {
         string log = "";
         foreach (var kvp in dict)
@@ -135,7 +184,7 @@ public class ARFlowDeviceSample : MonoBehaviour
             //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
             log += string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
         }
-        Debug.Log(log);
+        PrintDebug(log);
     }
 
     /// <summary>
@@ -144,26 +193,36 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void OnStartPauseButtonClick()
     {
-        Debug.Log($"Current framerate: {Application.targetFrameRate}");
+        PrintDebug($"Current framerate: {Application.targetFrameRate}");
+        if (enabled)
+        {
+            if (!_isConnected)
+            {
+                Toast.Show("Connnection not established. Cannot send dataframe.");
+                _enabled = false;
+                return;
+            }
+
+            _clientManager.StartDataStreaming();
+        }
+        else
+        {
+            _clientManager.StopDataStreaming();
+        }
 
         _enabled = !_enabled;
         startPauseButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        if (!_isConnected)
+        {
+            UpdateConnectionStatus();
+        }
         if (!_enabled) return;
-        UploadFrame();
-    }
-
-    /// <summary>
-    /// Get color image and depth information, and copy camera's transform from float to bytes. 
-    /// This data is sent over the server.
-    /// </summary>
-    private void UploadFrame()
-    {
-        _clientManager.GetAndSendFrame();
+        _clientManager.GetAndSendFrameTask();
     }
 
 }
