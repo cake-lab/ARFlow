@@ -43,17 +43,17 @@ Please read the [CONTRIBUTING](./CONTRIBUTING.md) guideline first, and refer to 
 	<tbody>
 		<tr>
             <td align="center">
-                <a href="https://github.com/YiqinZhao">
-                    <img src="https://avatars.githubusercontent.com/u/11468820?v=4" width="100;" alt="YiqinZhao"/>
-                    <br />
-                    <sub><b>Yiqin Zhao</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/legoeruro">
                     <img src="https://avatars.githubusercontent.com/u/68761938?v=4" width="100;" alt="legoeruro"/>
                     <br />
                     <sub><b>Khang Luu</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/YiqinZhao">
+                    <img src="https://avatars.githubusercontent.com/u/11468820?v=4" width="100;" alt="YiqinZhao"/>
+                    <br />
+                    <sub><b>Yiqin Zhao</b></sub>
                 </a>
             </td>
             <td align="center">
