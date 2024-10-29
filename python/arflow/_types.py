@@ -3,25 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Literal, NewType
+from typing import Dict, Literal, NamedTuple, NewType
 
 import numpy as np
 import numpy.typing as npt
+from rerun import RecordingStream
 
-from arflow_grpc.service_pb2 import ProcessFrameRequest, RegisterClientRequest
-
-ARFlowRequest = ProcessFrameRequest | RegisterClientRequest
-
-
-@dataclass
-class EnrichedARFlowRequest:
-    """An enriched ARFlow request."""
-
-    timestamp: float
-    """The timestamp of the request."""
-    data: ARFlowRequest
-    """The ARFlow request data."""
-
+from arflow_grpc.service_pb2 import RegisterClientRequest
 
 ColorDataType = Literal["RGB24", "YCbCr420"]
 DepthDataType = Literal["f32", "u16"]
@@ -116,7 +104,13 @@ class DecodedDataFrame:
     """The point cloud colors in RGB format."""
 
 
-RequestsHistory = List[EnrichedARFlowRequest]
 HashableClientIdentifier = NewType("HashableClientIdentifier", str)
 """This should match a hashable field in the `RegisterClientRequest` message."""
-ClientConfigurations = Dict[HashableClientIdentifier, RegisterClientRequest]
+
+
+class ClientInfo(NamedTuple):
+    config: RegisterClientRequest
+    rerun_stream: RecordingStream
+
+
+ClientRegistry = Dict[HashableClientIdentifier, ClientInfo]

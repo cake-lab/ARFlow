@@ -40,6 +40,11 @@ class ARFlowServiceStub(object):
                 request_serializer=arflow__grpc_dot_service__pb2.RegisterClientRequest.SerializeToString,
                 response_deserializer=arflow__grpc_dot_service__pb2.RegisterClientResponse.FromString,
                 _registered_method=True)
+        self.JoinSession = channel.unary_unary(
+                '/arflow.v1.ARFlowService/JoinSession',
+                request_serializer=arflow__grpc_dot_service__pb2.JoinSessionRequest.SerializeToString,
+                response_deserializer=arflow__grpc_dot_service__pb2.JoinSessionResponse.FromString,
+                _registered_method=True)
         self.ProcessFrame = channel.unary_unary(
                 '/arflow.v1.ARFlowService/ProcessFrame',
                 request_serializer=arflow__grpc_dot_service__pb2.ProcessFrameRequest.SerializeToString,
@@ -61,12 +66,18 @@ class ARFlowServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def JoinSession(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def ProcessFrame(self, request, context):
         """Accepts a data frame from a client, returning an acknowledgment.
 
         Errors:
         - NOT_FOUND: If the client configuration is not found.
-        - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+        - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type
         is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -80,6 +91,11 @@ def add_ARFlowServiceServicer_to_server(servicer, server):
                     servicer.RegisterClient,
                     request_deserializer=arflow__grpc_dot_service__pb2.RegisterClientRequest.FromString,
                     response_serializer=arflow__grpc_dot_service__pb2.RegisterClientResponse.SerializeToString,
+            ),
+            'JoinSession': grpc.unary_unary_rpc_method_handler(
+                    servicer.JoinSession,
+                    request_deserializer=arflow__grpc_dot_service__pb2.JoinSessionRequest.FromString,
+                    response_serializer=arflow__grpc_dot_service__pb2.JoinSessionResponse.SerializeToString,
             ),
             'ProcessFrame': grpc.unary_unary_rpc_method_handler(
                     servicer.ProcessFrame,
@@ -115,6 +131,33 @@ class ARFlowService(object):
             '/arflow.v1.ARFlowService/RegisterClient',
             arflow__grpc_dot_service__pb2.RegisterClientRequest.SerializeToString,
             arflow__grpc_dot_service__pb2.RegisterClientResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def JoinSession(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/arflow.v1.ARFlowService/JoinSession',
+            arflow__grpc_dot_service__pb2.JoinSessionRequest.SerializeToString,
+            arflow__grpc_dot_service__pb2.JoinSessionResponse.FromString,
             options,
             channel_credentials,
             insecure,

@@ -1,3 +1,4 @@
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
@@ -106,8 +107,22 @@ class RegisterClientResponse(_message.Message):
     uid: str
     def __init__(self, uid: _Optional[str] = ...) -> None: ...
 
+class JoinSessionRequest(_message.Message):
+    __slots__ = ("session_uid", "client_config")
+    SESSION_UID_FIELD_NUMBER: _ClassVar[int]
+    CLIENT_CONFIG_FIELD_NUMBER: _ClassVar[int]
+    session_uid: str
+    client_config: RegisterClientRequest
+    def __init__(self, session_uid: _Optional[str] = ..., client_config: _Optional[_Union[RegisterClientRequest, _Mapping]] = ...) -> None: ...
+
+class JoinSessionResponse(_message.Message):
+    __slots__ = ("uid",)
+    UID_FIELD_NUMBER: _ClassVar[int]
+    uid: str
+    def __init__(self, uid: _Optional[str] = ...) -> None: ...
+
 class ProcessFrameRequest(_message.Message):
-    __slots__ = ("uid", "color", "depth", "transform", "plane_detection", "gyroscope", "audio_data", "meshes")
+    __slots__ = ("uid", "timestamp", "color", "depth", "transform", "plane_detection", "gyroscope", "audio_data", "meshes")
     class Vector3(_message.Message):
         __slots__ = ("x", "y", "z")
         X_FIELD_NUMBER: _ClassVar[int]
@@ -163,6 +178,7 @@ class ProcessFrameRequest(_message.Message):
         data: bytes
         def __init__(self, data: _Optional[bytes] = ...) -> None: ...
     UID_FIELD_NUMBER: _ClassVar[int]
+    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     COLOR_FIELD_NUMBER: _ClassVar[int]
     DEPTH_FIELD_NUMBER: _ClassVar[int]
     TRANSFORM_FIELD_NUMBER: _ClassVar[int]
@@ -171,6 +187,7 @@ class ProcessFrameRequest(_message.Message):
     AUDIO_DATA_FIELD_NUMBER: _ClassVar[int]
     MESHES_FIELD_NUMBER: _ClassVar[int]
     uid: str
+    timestamp: _timestamp_pb2.Timestamp
     color: bytes
     depth: bytes
     transform: bytes
@@ -178,7 +195,7 @@ class ProcessFrameRequest(_message.Message):
     gyroscope: ProcessFrameRequest.GyroscopeData
     audio_data: _containers.RepeatedScalarFieldContainer[float]
     meshes: _containers.RepeatedCompositeFieldContainer[ProcessFrameRequest.Mesh]
-    def __init__(self, uid: _Optional[str] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[ProcessFrameRequest.Plane, _Mapping]]] = ..., gyroscope: _Optional[_Union[ProcessFrameRequest.GyroscopeData, _Mapping]] = ..., audio_data: _Optional[_Iterable[float]] = ..., meshes: _Optional[_Iterable[_Union[ProcessFrameRequest.Mesh, _Mapping]]] = ...) -> None: ...
+    def __init__(self, uid: _Optional[str] = ..., timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., color: _Optional[bytes] = ..., depth: _Optional[bytes] = ..., transform: _Optional[bytes] = ..., plane_detection: _Optional[_Iterable[_Union[ProcessFrameRequest.Plane, _Mapping]]] = ..., gyroscope: _Optional[_Union[ProcessFrameRequest.GyroscopeData, _Mapping]] = ..., audio_data: _Optional[_Iterable[float]] = ..., meshes: _Optional[_Iterable[_Union[ProcessFrameRequest.Mesh, _Mapping]]] = ...) -> None: ...
 
 class ProcessFrameResponse(_message.Message):
     __slots__ = ("message",)

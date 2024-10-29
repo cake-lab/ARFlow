@@ -22,9 +22,10 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19\x61rflow_grpc/service.proto\x12\tarflow.v1\"\x99\n\n\x15RegisterClientRequest\x12\x13\n\x0b\x64\x65vice_name\x18\x01 \x01(\t\x12L\n\x11\x63\x61mera_intrinsics\x18\x02 \x01(\x0b\x32\x31.arflow.v1.RegisterClientRequest.CameraIntrinsics\x12\x42\n\x0c\x63\x61mera_color\x18\x03 \x01(\x0b\x32,.arflow.v1.RegisterClientRequest.CameraColor\x12\x42\n\x0c\x63\x61mera_depth\x18\x04 \x01(\x0b\x32,.arflow.v1.RegisterClientRequest.CameraDepth\x12J\n\x10\x63\x61mera_transform\x18\x05 \x01(\x0b\x32\x30.arflow.v1.RegisterClientRequest.CameraTransform\x12M\n\x12\x63\x61mera_point_cloud\x18\x06 \x01(\x0b\x32\x31.arflow.v1.RegisterClientRequest.CameraPointCloud\x12U\n\x16\x63\x61mera_plane_detection\x18\x07 \x01(\x0b\x32\x35.arflow.v1.RegisterClientRequest.CameraPlaneDetection\x12=\n\tgyroscope\x18\x08 \x01(\x0b\x32*.arflow.v1.RegisterClientRequest.Gyroscope\x12\x35\n\x05\x61udio\x18\t \x01(\x0b\x32&.arflow.v1.RegisterClientRequest.Audio\x12\x39\n\x07meshing\x18\n \x01(\x0b\x32(.arflow.v1.RegisterClientRequest.Meshing\x1a\xa4\x01\n\x10\x43\x61meraIntrinsics\x12\x16\n\x0e\x66ocal_length_x\x18\x01 \x01(\x02\x12\x16\n\x0e\x66ocal_length_y\x18\x02 \x01(\x02\x12\x19\n\x11principal_point_x\x18\x03 \x01(\x02\x12\x19\n\x11principal_point_y\x18\x04 \x01(\x02\x12\x14\n\x0cresolution_x\x18\x05 \x01(\x05\x12\x14\n\x0cresolution_y\x18\x06 \x01(\x05\x1a\x63\n\x0b\x43\x61meraColor\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x11\n\tdata_type\x18\x02 \x01(\t\x12\x17\n\x0fresize_factor_x\x18\x03 \x01(\x02\x12\x17\n\x0fresize_factor_y\x18\x04 \x01(\x02\x1a\x81\x01\n\x0b\x43\x61meraDepth\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x11\n\tdata_type\x18\x02 \x01(\t\x12\"\n\x1a\x63onfidence_filtering_level\x18\x03 \x01(\x05\x12\x14\n\x0cresolution_x\x18\x04 \x01(\x05\x12\x14\n\x0cresolution_y\x18\x05 \x01(\x05\x1a\"\n\x0f\x43\x61meraTransform\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x1a\x41\n\x10\x43\x61meraPointCloud\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x1c\n\x14\x64\x65pth_upscale_factor\x18\x02 \x01(\x02\x1a\'\n\x14\x43\x61meraPlaneDetection\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x1a\x1c\n\tGyroscope\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x1a\x18\n\x05\x41udio\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x1a\x1a\n\x07Meshing\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"%\n\x16RegisterClientResponse\x12\x0b\n\x03uid\x18\x01 \x01(\t\"\xaf\x07\n\x13ProcessFrameRequest\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\r\n\x05\x63olor\x18\x02 \x01(\x0c\x12\r\n\x05\x64\x65pth\x18\x03 \x01(\x0c\x12\x11\n\ttransform\x18\x04 \x01(\x0c\x12=\n\x0fplane_detection\x18\x05 \x03(\x0b\x32$.arflow.v1.ProcessFrameRequest.Plane\x12?\n\tgyroscope\x18\x06 \x01(\x0b\x32,.arflow.v1.ProcessFrameRequest.GyroscopeData\x12\x12\n\naudio_data\x18\x08 \x03(\x02\x12\x33\n\x06meshes\x18\t \x03(\x0b\x32#.arflow.v1.ProcessFrameRequest.Mesh\x1a*\n\x07Vector3\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\x1a\x1f\n\x07Vector2\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x1a\xee\x01\n\x05Plane\x12\x36\n\x06\x63\x65nter\x18\x01 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x12\x36\n\x06normal\x18\x02 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x12\x34\n\x04size\x18\x03 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector2\x12?\n\x0f\x62oundary_points\x18\x04 \x03(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector2\x1a\x38\n\nQuaternion\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\x12\t\n\x01w\x18\x04 \x01(\x02\x1a\x82\x02\n\rGyroscopeData\x12;\n\x08\x61ttitude\x18\x01 \x01(\x0b\x32).arflow.v1.ProcessFrameRequest.Quaternion\x12=\n\rrotation_rate\x18\x02 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x12\x37\n\x07gravity\x18\x03 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x12<\n\x0c\x61\x63\x63\x65leration\x18\x04 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x1a\x14\n\x04Mesh\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"\'\n\x14ProcessFrameResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2\xb7\x01\n\rARFlowService\x12U\n\x0eRegisterClient\x12 .arflow.v1.RegisterClientRequest\x1a!.arflow.v1.RegisterClientResponse\x12O\n\x0cProcessFrame\x12\x1e.arflow.v1.ProcessFrameRequest\x1a\x1f.arflow.v1.ProcessFrameResponseB\t\xaa\x02\x06\x41RFlowb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19\x61rflow_grpc/service.proto\x12\tarflow.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\x99\n\n\x15RegisterClientRequest\x12\x13\n\x0b\x64\x65vice_name\x18\x01 \x01(\t\x12L\n\x11\x63\x61mera_intrinsics\x18\x02 \x01(\x0b\x32\x31.arflow.v1.RegisterClientRequest.CameraIntrinsics\x12\x42\n\x0c\x63\x61mera_color\x18\x03 \x01(\x0b\x32,.arflow.v1.RegisterClientRequest.CameraColor\x12\x42\n\x0c\x63\x61mera_depth\x18\x04 \x01(\x0b\x32,.arflow.v1.RegisterClientRequest.CameraDepth\x12J\n\x10\x63\x61mera_transform\x18\x05 \x01(\x0b\x32\x30.arflow.v1.RegisterClientRequest.CameraTransform\x12M\n\x12\x63\x61mera_point_cloud\x18\x06 \x01(\x0b\x32\x31.arflow.v1.RegisterClientRequest.CameraPointCloud\x12U\n\x16\x63\x61mera_plane_detection\x18\x07 \x01(\x0b\x32\x35.arflow.v1.RegisterClientRequest.CameraPlaneDetection\x12=\n\tgyroscope\x18\x08 \x01(\x0b\x32*.arflow.v1.RegisterClientRequest.Gyroscope\x12\x35\n\x05\x61udio\x18\t \x01(\x0b\x32&.arflow.v1.RegisterClientRequest.Audio\x12\x39\n\x07meshing\x18\n \x01(\x0b\x32(.arflow.v1.RegisterClientRequest.Meshing\x1a\xa4\x01\n\x10\x43\x61meraIntrinsics\x12\x16\n\x0e\x66ocal_length_x\x18\x01 \x01(\x02\x12\x16\n\x0e\x66ocal_length_y\x18\x02 \x01(\x02\x12\x19\n\x11principal_point_x\x18\x03 \x01(\x02\x12\x19\n\x11principal_point_y\x18\x04 \x01(\x02\x12\x14\n\x0cresolution_x\x18\x05 \x01(\x05\x12\x14\n\x0cresolution_y\x18\x06 \x01(\x05\x1a\x63\n\x0b\x43\x61meraColor\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x11\n\tdata_type\x18\x02 \x01(\t\x12\x17\n\x0fresize_factor_x\x18\x03 \x01(\x02\x12\x17\n\x0fresize_factor_y\x18\x04 \x01(\x02\x1a\x81\x01\n\x0b\x43\x61meraDepth\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x11\n\tdata_type\x18\x02 \x01(\t\x12\"\n\x1a\x63onfidence_filtering_level\x18\x03 \x01(\x05\x12\x14\n\x0cresolution_x\x18\x04 \x01(\x05\x12\x14\n\x0cresolution_y\x18\x05 \x01(\x05\x1a\"\n\x0f\x43\x61meraTransform\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x1a\x41\n\x10\x43\x61meraPointCloud\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x1c\n\x14\x64\x65pth_upscale_factor\x18\x02 \x01(\x02\x1a\'\n\x14\x43\x61meraPlaneDetection\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x1a\x1c\n\tGyroscope\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x1a\x18\n\x05\x41udio\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x1a\x1a\n\x07Meshing\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"%\n\x16RegisterClientResponse\x12\x0b\n\x03uid\x18\x01 \x01(\t\"b\n\x12JoinSessionRequest\x12\x13\n\x0bsession_uid\x18\x01 \x01(\t\x12\x37\n\rclient_config\x18\x02 \x01(\x0b\x32 .arflow.v1.RegisterClientRequest\"\"\n\x13JoinSessionResponse\x12\x0b\n\x03uid\x18\x01 \x01(\t\"\xde\x07\n\x13ProcessFrameRequest\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\r\n\x05\x63olor\x18\x03 \x01(\x0c\x12\r\n\x05\x64\x65pth\x18\x04 \x01(\x0c\x12\x11\n\ttransform\x18\x05 \x01(\x0c\x12=\n\x0fplane_detection\x18\x06 \x03(\x0b\x32$.arflow.v1.ProcessFrameRequest.Plane\x12?\n\tgyroscope\x18\x07 \x01(\x0b\x32,.arflow.v1.ProcessFrameRequest.GyroscopeData\x12\x12\n\naudio_data\x18\x08 \x03(\x02\x12\x33\n\x06meshes\x18\t \x03(\x0b\x32#.arflow.v1.ProcessFrameRequest.Mesh\x1a*\n\x07Vector3\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\x1a\x1f\n\x07Vector2\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x1a\xee\x01\n\x05Plane\x12\x36\n\x06\x63\x65nter\x18\x01 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x12\x36\n\x06normal\x18\x02 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x12\x34\n\x04size\x18\x03 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector2\x12?\n\x0f\x62oundary_points\x18\x04 \x03(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector2\x1a\x38\n\nQuaternion\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\x12\t\n\x01w\x18\x04 \x01(\x02\x1a\x82\x02\n\rGyroscopeData\x12;\n\x08\x61ttitude\x18\x01 \x01(\x0b\x32).arflow.v1.ProcessFrameRequest.Quaternion\x12=\n\rrotation_rate\x18\x02 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x12\x37\n\x07gravity\x18\x03 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x12<\n\x0c\x61\x63\x63\x65leration\x18\x04 \x01(\x0b\x32&.arflow.v1.ProcessFrameRequest.Vector3\x1a\x14\n\x04Mesh\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"\'\n\x14ProcessFrameResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2\x85\x02\n\rARFlowService\x12U\n\x0eRegisterClient\x12 .arflow.v1.RegisterClientRequest\x1a!.arflow.v1.RegisterClientResponse\x12L\n\x0bJoinSession\x12\x1d.arflow.v1.JoinSessionRequest\x1a\x1e.arflow.v1.JoinSessionResponse\x12O\n\x0cProcessFrame\x12\x1e.arflow.v1.ProcessFrameRequest\x1a\x1f.arflow.v1.ProcessFrameResponseB\t\xaa\x02\x06\x41RFlowb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,44 +33,48 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'arflow_grpc.service_pb2', _
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\006ARFlow'
-  _globals['_REGISTERCLIENTREQUEST']._serialized_start=41
-  _globals['_REGISTERCLIENTREQUEST']._serialized_end=1346
-  _globals['_REGISTERCLIENTREQUEST_CAMERAINTRINSICS']._serialized_start=721
-  _globals['_REGISTERCLIENTREQUEST_CAMERAINTRINSICS']._serialized_end=885
-  _globals['_REGISTERCLIENTREQUEST_CAMERACOLOR']._serialized_start=887
-  _globals['_REGISTERCLIENTREQUEST_CAMERACOLOR']._serialized_end=986
-  _globals['_REGISTERCLIENTREQUEST_CAMERADEPTH']._serialized_start=989
-  _globals['_REGISTERCLIENTREQUEST_CAMERADEPTH']._serialized_end=1118
-  _globals['_REGISTERCLIENTREQUEST_CAMERATRANSFORM']._serialized_start=1120
-  _globals['_REGISTERCLIENTREQUEST_CAMERATRANSFORM']._serialized_end=1154
-  _globals['_REGISTERCLIENTREQUEST_CAMERAPOINTCLOUD']._serialized_start=1156
-  _globals['_REGISTERCLIENTREQUEST_CAMERAPOINTCLOUD']._serialized_end=1221
-  _globals['_REGISTERCLIENTREQUEST_CAMERAPLANEDETECTION']._serialized_start=1223
-  _globals['_REGISTERCLIENTREQUEST_CAMERAPLANEDETECTION']._serialized_end=1262
-  _globals['_REGISTERCLIENTREQUEST_GYROSCOPE']._serialized_start=1264
-  _globals['_REGISTERCLIENTREQUEST_GYROSCOPE']._serialized_end=1292
-  _globals['_REGISTERCLIENTREQUEST_AUDIO']._serialized_start=1294
-  _globals['_REGISTERCLIENTREQUEST_AUDIO']._serialized_end=1318
-  _globals['_REGISTERCLIENTREQUEST_MESHING']._serialized_start=1320
-  _globals['_REGISTERCLIENTREQUEST_MESHING']._serialized_end=1346
-  _globals['_REGISTERCLIENTRESPONSE']._serialized_start=1348
-  _globals['_REGISTERCLIENTRESPONSE']._serialized_end=1385
-  _globals['_PROCESSFRAMEREQUEST']._serialized_start=1388
-  _globals['_PROCESSFRAMEREQUEST']._serialized_end=2331
-  _globals['_PROCESSFRAMEREQUEST_VECTOR3']._serialized_start=1674
-  _globals['_PROCESSFRAMEREQUEST_VECTOR3']._serialized_end=1716
-  _globals['_PROCESSFRAMEREQUEST_VECTOR2']._serialized_start=1718
-  _globals['_PROCESSFRAMEREQUEST_VECTOR2']._serialized_end=1749
-  _globals['_PROCESSFRAMEREQUEST_PLANE']._serialized_start=1752
-  _globals['_PROCESSFRAMEREQUEST_PLANE']._serialized_end=1990
-  _globals['_PROCESSFRAMEREQUEST_QUATERNION']._serialized_start=1992
-  _globals['_PROCESSFRAMEREQUEST_QUATERNION']._serialized_end=2048
-  _globals['_PROCESSFRAMEREQUEST_GYROSCOPEDATA']._serialized_start=2051
-  _globals['_PROCESSFRAMEREQUEST_GYROSCOPEDATA']._serialized_end=2309
-  _globals['_PROCESSFRAMEREQUEST_MESH']._serialized_start=2311
-  _globals['_PROCESSFRAMEREQUEST_MESH']._serialized_end=2331
-  _globals['_PROCESSFRAMERESPONSE']._serialized_start=2333
-  _globals['_PROCESSFRAMERESPONSE']._serialized_end=2372
-  _globals['_ARFLOWSERVICE']._serialized_start=2375
-  _globals['_ARFLOWSERVICE']._serialized_end=2558
+  _globals['_REGISTERCLIENTREQUEST']._serialized_start=74
+  _globals['_REGISTERCLIENTREQUEST']._serialized_end=1379
+  _globals['_REGISTERCLIENTREQUEST_CAMERAINTRINSICS']._serialized_start=754
+  _globals['_REGISTERCLIENTREQUEST_CAMERAINTRINSICS']._serialized_end=918
+  _globals['_REGISTERCLIENTREQUEST_CAMERACOLOR']._serialized_start=920
+  _globals['_REGISTERCLIENTREQUEST_CAMERACOLOR']._serialized_end=1019
+  _globals['_REGISTERCLIENTREQUEST_CAMERADEPTH']._serialized_start=1022
+  _globals['_REGISTERCLIENTREQUEST_CAMERADEPTH']._serialized_end=1151
+  _globals['_REGISTERCLIENTREQUEST_CAMERATRANSFORM']._serialized_start=1153
+  _globals['_REGISTERCLIENTREQUEST_CAMERATRANSFORM']._serialized_end=1187
+  _globals['_REGISTERCLIENTREQUEST_CAMERAPOINTCLOUD']._serialized_start=1189
+  _globals['_REGISTERCLIENTREQUEST_CAMERAPOINTCLOUD']._serialized_end=1254
+  _globals['_REGISTERCLIENTREQUEST_CAMERAPLANEDETECTION']._serialized_start=1256
+  _globals['_REGISTERCLIENTREQUEST_CAMERAPLANEDETECTION']._serialized_end=1295
+  _globals['_REGISTERCLIENTREQUEST_GYROSCOPE']._serialized_start=1297
+  _globals['_REGISTERCLIENTREQUEST_GYROSCOPE']._serialized_end=1325
+  _globals['_REGISTERCLIENTREQUEST_AUDIO']._serialized_start=1327
+  _globals['_REGISTERCLIENTREQUEST_AUDIO']._serialized_end=1351
+  _globals['_REGISTERCLIENTREQUEST_MESHING']._serialized_start=1353
+  _globals['_REGISTERCLIENTREQUEST_MESHING']._serialized_end=1379
+  _globals['_REGISTERCLIENTRESPONSE']._serialized_start=1381
+  _globals['_REGISTERCLIENTRESPONSE']._serialized_end=1418
+  _globals['_JOINSESSIONREQUEST']._serialized_start=1420
+  _globals['_JOINSESSIONREQUEST']._serialized_end=1518
+  _globals['_JOINSESSIONRESPONSE']._serialized_start=1520
+  _globals['_JOINSESSIONRESPONSE']._serialized_end=1554
+  _globals['_PROCESSFRAMEREQUEST']._serialized_start=1557
+  _globals['_PROCESSFRAMEREQUEST']._serialized_end=2547
+  _globals['_PROCESSFRAMEREQUEST_VECTOR3']._serialized_start=1890
+  _globals['_PROCESSFRAMEREQUEST_VECTOR3']._serialized_end=1932
+  _globals['_PROCESSFRAMEREQUEST_VECTOR2']._serialized_start=1934
+  _globals['_PROCESSFRAMEREQUEST_VECTOR2']._serialized_end=1965
+  _globals['_PROCESSFRAMEREQUEST_PLANE']._serialized_start=1968
+  _globals['_PROCESSFRAMEREQUEST_PLANE']._serialized_end=2206
+  _globals['_PROCESSFRAMEREQUEST_QUATERNION']._serialized_start=2208
+  _globals['_PROCESSFRAMEREQUEST_QUATERNION']._serialized_end=2264
+  _globals['_PROCESSFRAMEREQUEST_GYROSCOPEDATA']._serialized_start=2267
+  _globals['_PROCESSFRAMEREQUEST_GYROSCOPEDATA']._serialized_end=2525
+  _globals['_PROCESSFRAMEREQUEST_MESH']._serialized_start=2527
+  _globals['_PROCESSFRAMEREQUEST_MESH']._serialized_end=2547
+  _globals['_PROCESSFRAMERESPONSE']._serialized_start=2549
+  _globals['_PROCESSFRAMERESPONSE']._serialized_end=2588
+  _globals['_ARFLOWSERVICE']._serialized_start=2591
+  _globals['_ARFLOWSERVICE']._serialized_end=2852
 # @@protoc_insertion_point(module_scope)

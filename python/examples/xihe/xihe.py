@@ -105,7 +105,7 @@ class XiheService(arflow.ARFlowServicer):
 
 
 def main():
-    arflow.run_server(XiheService, port=8500, path_to_save=None)
+    arflow.run_server(XiheService, port=8500, save_dir=None)
 
 
 if __name__ == "__main__":

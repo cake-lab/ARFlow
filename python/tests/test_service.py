@@ -25,28 +25,6 @@ def default_service():
     return ARFlowServicer()
 
 
-def test_save_request(default_service: ARFlowServicer):
-    request = RegisterClientRequest()
-    default_service._save_request(request)
-
-    assert len(default_service._requests_history) == 1
-    enriched_request = default_service._requests_history[0]
-    assert enriched_request.timestamp >= 0
-    assert enriched_request.data == request
-
-    request = ProcessFrameRequest()
-    default_service._save_request(request)
-
-    assert len(default_service._requests_history) == 2
-    enriched_request = default_service._requests_history[1]
-    assert enriched_request.timestamp >= 0
-    assert enriched_request.data == request
-    assert (
-        default_service._requests_history[0].timestamp
-        <= default_service._requests_history[1].timestamp
-    )
-
-
 def test_register_client(default_service: ARFlowServicer):
     request = RegisterClientRequest()
 
@@ -69,7 +47,7 @@ def test_multiple_clients(default_service: ARFlowServicer):
         response = default_service.RegisterClient(request)
         assert len(response.uid) == 36
 
-    assert len(default_service._client_configurations) == 3
+    assert len(default_service._client_registry) == 3
 
 
 def test_register_same_client_twice(default_service: ARFlowServicer):
@@ -105,7 +83,7 @@ def test_ensure_correct_config(
     response = default_service.RegisterClient(client_config)
     client_id = HashableClientIdentifier(response.uid)
     assert (
-        default_service._client_configurations[client_id].camera_color.enabled
+        default_service._client_registry[client_id].camera_color.enabled
         == expected_enabled
     )
 

@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from arflow import ARFlowServicer, DecodedDataFrame, RegisterClientRequest
-from arflow._types import EnrichedARFlowRequest, HashableClientIdentifier
+from arflow._types import HashableClientIdentifier
 from arflow_grpc.service_pb2 import ProcessFrameRequest
 
 
@@ -53,7 +53,7 @@ def test_on_program_exit(user_service: UserExtendedService):
     enriched_request = EnrichedARFlowRequest(timestamp=1, data=ProcessFrameRequest())
     user_service._requests_history.append(enriched_request)
     client_id = HashableClientIdentifier("test_client")
-    user_service._client_configurations[client_id] = RegisterClientRequest()
+    user_service._client_registry[client_id] = RegisterClientRequest()
 
     # Use tempfile to create a temporary directory
     with tempfile.TemporaryDirectory() as temp_dir:

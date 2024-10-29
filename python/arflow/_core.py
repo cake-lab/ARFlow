@@ -1,12 +1,12 @@
 """Data exchanging service."""
 
 import logging
-import pickle
 import time
 import uuid
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
+from tempfile import gettempdir
 from typing import Any, List, Type, cast
 
 import DracoPy
@@ -25,15 +25,14 @@ from arflow._decoding import (
 )
 from arflow._error_interceptor import ErrorInterceptor
 from arflow._types import (
-    ARFlowRequest,
     Audio,
-    ClientConfigurations,
+    ClientInfo,
+    ClientRegistry,
     ColorDataType,
     ColorRGB,
     DecodedDataFrame,
     DepthDataType,
     DepthImg,
-    EnrichedARFlowRequest,
     GyroscopeInfo,
     HashableClientIdentifier,
     Intrinsic,
@@ -42,11 +41,12 @@ from arflow._types import (
     PlaneInfo,
     PointCloudCLR,
     PointCloudPCD,
-    RequestsHistory,
     Transform,
 )
 from arflow_grpc import service_pb2_grpc
 from arflow_grpc.service_pb2 import (
+    JoinSessionRequest,
+    JoinSessionResponse,
     ProcessFrameRequest,
     ProcessFrameResponse,
     RegisterClientRequest,
@@ -59,22 +59,24 @@ logger = logging.getLogger(__name__)
 class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
     """Provides methods that implement the functionality of the ARFlow gRPC server."""
 
-    def __init__(self) -> None:
-        """Initialize the ARFlowServicer."""
-        self._start_time = time.time_ns()
-        self._requests_history: RequestsHistory = []
-        self._client_configurations: ClientConfigurations = {}
-        self.recorder = rr
-        """A recorder object for logging data."""
-        super().__init__()
+    def __init__(self, save_dir: Path | None = None, spawn_viewer: bool = True) -> None:
+        """Initialize the ARFlowServicer.
 
-    def _save_request(self, request: ARFlowRequest):
-        timestamp = (time.time_ns() - self._start_time) / 1e9
-        enriched_request = EnrichedARFlowRequest(
-            timestamp=timestamp,
-            data=request,
-        )
-        self._requests_history.append(enriched_request)
+        Args:
+            save_dir: The path to save the data to. If None, defaults to a temporary directory located at `gettempdir()` in the `arflow` subdirectory.
+            spawn_viewer: Whether to spawn the Rerun Viewer in another process.
+        """
+        self._client_registry: ClientRegistry = {}
+
+        if save_dir is None:
+            save_dir = Path(gettempdir()) / "arflow"
+        self._save_dir = save_dir
+        """The directory to save the data to."""
+        self._save_dir.mkdir(parents=True, exist_ok=True)
+        # Initializes SDK with an "empty" global recording. We don't want to log anything into the global recording.
+        # We will create a new recording for each client.
+        rr.init(application_id="arflow", spawn=spawn_viewer)
+        super().__init__()
 
     def RegisterClient(
         self,
@@ -86,22 +88,74 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
 
         @private
         """
-        self._save_request(request)
-
         if init_uid is None:
-            init_uid = str(uuid.uuid4())
+            init_uid = uuid.uuid4().hex
 
-        self._client_configurations[HashableClientIdentifier(init_uid)] = request
-
-        self.recorder.init(f"{request.device_name} - ARFlow", spawn=True)
-        logger.debug(
-            "Registered a client with UUID: %s, Request: %s", init_uid, request
+        stream = rr.new_recording(
+            application_id="arflow",
+            recording_id=init_uid,
+            # spawn=True,
         )
+        self._client_registry[HashableClientIdentifier(init_uid)] = ClientInfo(
+            config=request, rerun_stream=stream
+        )
+        logger.info("Registered a client with UUID: %s, Config: %s", init_uid, request)
+
+        save_path = self._save_dir / Path(
+            f"{request.device_name}_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.rrd"
+        )
+        rr.save(
+            path=save_path,
+            recording=stream,
+        )
+        logger.info("Saving data of client %s to %s", init_uid, save_path)
 
         # Call the for user extension code.
         self.on_register(request)
 
         return RegisterClientResponse(uid=init_uid)
+
+    def JoinSession(
+        self, request: JoinSessionRequest, context: grpc.ServicerContext | None = None
+    ) -> JoinSessionResponse:
+        """Join a session.
+
+        @private
+        """
+        logger.info("A client wants to join session %s", request.session_uid)
+        try:
+            session_info = self._client_registry[
+                HashableClientIdentifier(request.session_uid)
+            ]
+        except KeyError:
+            raise NotFound("Session not found")
+
+        logger.debug("Found existing session %s", request.session_uid)
+        client_uid = uuid.uuid4().hex
+        self._client_registry[HashableClientIdentifier(client_uid)] = ClientInfo(
+            config=request.client_config,
+            # Share the same recording stream
+            rerun_stream=session_info.rerun_stream,
+        )
+        logger.debug(
+            "Registered a client with UUID: %s, Config: %s",
+            client_uid,
+            request.client_config,
+        )
+
+        # TODO: Test to see Rerun behavior when rr.save has already been called before
+        # save_path = self._save_dir / Path(
+        #     f"{request.client_config.device_name}_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.rrd"
+        # )
+        # rr.save(
+        #     path=save_path,
+        #     recording=session_info.rerun_stream,
+        # )
+
+        # Call the for user extension code.
+        self.on_join_session(request)
+
+        return JoinSessionResponse(uid=client_uid)
 
     def ProcessFrame(
         self,
@@ -117,14 +171,10 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
             grpc_interceptor.exceptions.InvalidArgument: If the color data type is not recognized
             or the depth data type is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
         """
-        self._save_request(request)
-
         try:
-            client_config = self._client_configurations[
-                HashableClientIdentifier(request.uid)
-            ]
+            client_info = self._client_registry[HashableClientIdentifier(request.uid)]
         except KeyError:
-            raise NotFound("Client configuration not found")
+            raise NotFound("Client info not found")
 
         color_rgb: ColorRGB | None = None
         depth_img: DepthImg | None = None
@@ -134,39 +184,59 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         point_cloud_clr: PointCloudCLR | None = None
         audio_data: Audio | None = None
 
-        if client_config.camera_color.enabled:
+        # Used for all subsequent logging on the same thread until the next call to `rr.set_time_seconds()` (which
+        # is the next `ProcessFrame()` call).
+        rr.set_time_seconds(
+            "stable_time",
+            request.timestamp.seconds + request.timestamp.nanos / 1e9,
+            recording=client_info.rerun_stream,
+        )
+
+        if client_info.config.camera_color.enabled:
             try:
                 color_rgb = np.flipud(
                     decode_rgb_image(
-                        client_config.camera_intrinsics.resolution_y,
-                        client_config.camera_intrinsics.resolution_x,
-                        client_config.camera_color.resize_factor_y,
-                        client_config.camera_color.resize_factor_x,
-                        cast(ColorDataType, client_config.camera_color.data_type),
+                        client_info.config.camera_intrinsics.resolution_y,
+                        client_info.config.camera_intrinsics.resolution_x,
+                        client_info.config.camera_color.resize_factor_y,
+                        client_info.config.camera_color.resize_factor_x,
+                        cast(ColorDataType, client_info.config.camera_color.data_type),
                         request.color,
                     )
                 )
             except ValueError as e:
                 raise InvalidArgument(str(e))
 
-            self.recorder.log("rgb", rr.Image(color_rgb))
+            rr.log(
+                f"arflow/{request.uid}/rgb",
+                rr.Image(color_rgb),
+                recording=client_info.rerun_stream,
+            )
 
-        if client_config.camera_depth.enabled:
+        if client_info.config.camera_depth.enabled:
             try:
                 depth_img = np.flipud(
                     decode_depth_image(
-                        client_config.camera_depth.resolution_y,
-                        client_config.camera_depth.resolution_x,
-                        cast(DepthDataType, client_config.camera_depth.data_type),
+                        client_info.config.camera_depth.resolution_y,
+                        client_info.config.camera_depth.resolution_x,
+                        cast(DepthDataType, client_info.config.camera_depth.data_type),
                         request.depth,
                     )
                 )
             except ValueError as e:
                 raise InvalidArgument(str(e))
-            self.recorder.log("depth", rr.DepthImage(depth_img, meter=1.0))
+            rr.log(
+                f"arflow/{request.uid}/depth",
+                rr.DepthImage(depth_img, meter=1.0),
+                recording=client_info.rerun_stream,
+            )
 
-        if client_config.camera_transform.enabled:
-            self.recorder.log("world/origin", rr.ViewCoordinates.RIGHT_HAND_Y_DOWN)
+        if client_info.config.camera_transform.enabled:
+            rr.log(
+                f"arflow/{request.uid}/world/origin",
+                rr.ViewCoordinates.RIGHT_HAND_Y_DOWN,
+                recording=client_info.rerun_stream,
+            )
             # self.logger.log(
             #     "world/xyz",
             #     rr.Arrows3D(
@@ -179,28 +249,35 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                 transform = decode_transform(request.transform)
             except ValueError as e:
                 raise InvalidArgument(str(e))
-            self.recorder.log(
-                "world/camera",
-                self.recorder.Transform3D(
-                    mat3x3=transform[:3, :3], translation=transform[:3, 3]
-                ),
+            rr.log(
+                f"arflow/{request.uid}/world/camera",
+                rr.Transform3D(mat3x3=transform[:3, :3], translation=transform[:3, 3]),
+                recording=client_info.rerun_stream,
             )
 
             # Won't thow any potential exceptions for now.
             k = decode_intrinsic(
-                client_config.camera_color.resize_factor_y,
-                client_config.camera_color.resize_factor_x,
-                client_config.camera_intrinsics.focal_length_y,
-                client_config.camera_intrinsics.focal_length_x,
-                client_config.camera_intrinsics.principal_point_y,
-                client_config.camera_intrinsics.principal_point_x,
+                client_info.config.camera_color.resize_factor_y,
+                client_info.config.camera_color.resize_factor_x,
+                client_info.config.camera_intrinsics.focal_length_y,
+                client_info.config.camera_intrinsics.focal_length_x,
+                client_info.config.camera_intrinsics.principal_point_y,
+                client_info.config.camera_intrinsics.principal_point_x,
             )
 
-            self.recorder.log("world/camera", rr.Pinhole(image_from_camera=k))
+            rr.log(
+                f"arflow/{request.uid}/world/camera",
+                rr.Pinhole(image_from_camera=k),
+                recording=client_info.rerun_stream,
+            )
             if color_rgb is not None:
-                self.recorder.log("world/camera", rr.Image(np.flipud(color_rgb)))
+                rr.log(
+                    f"arflow/{request.uid}/world/camera",
+                    rr.Image(np.flipud(color_rgb)),
+                    recording=client_info.rerun_stream,
+                )
 
-        if client_config.camera_point_cloud.enabled:
+        if client_info.config.camera_point_cloud.enabled:
             if (
                 k is not None
                 and color_rgb is not None
@@ -209,21 +286,22 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
             ):
                 # Won't thow any potential exceptions for now.
                 point_cloud_pcd, point_cloud_clr = decode_point_cloud(
-                    client_config.camera_intrinsics.resolution_y,
-                    client_config.camera_intrinsics.resolution_x,
-                    client_config.camera_color.resize_factor_y,
-                    client_config.camera_color.resize_factor_x,
+                    client_info.config.camera_intrinsics.resolution_y,
+                    client_info.config.camera_intrinsics.resolution_x,
+                    client_info.config.camera_color.resize_factor_y,
+                    client_info.config.camera_color.resize_factor_x,
                     k,
                     color_rgb,
                     depth_img,
                     transform,
                 )
-                self.recorder.log(
-                    "world/point_cloud",
+                rr.log(
+                    f"arflow/{request.uid}/world/point_cloud",
                     rr.Points3D(point_cloud_pcd, colors=point_cloud_clr),
+                    recording=client_info.rerun_stream,
                 )
 
-        if client_config.camera_plane_detection.enabled:
+        if client_info.config.camera_plane_detection.enabled:
             strips: List[PlaneBoundaryPoints3D] = []
             for plane in request.plane_detection:
                 boundary_points_2d: List[List[float]] = list(
@@ -247,16 +325,17 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                 # Close the boundary by adding the first point to the end.
                 boundary_3d = np.vstack([boundary_3d, boundary_3d[0]])
                 strips.append(boundary_3d)
-            self.recorder.log(
-                f"world/detected-planes",
+            rr.log(
+                f"arflow/{request.uid}/world/detected-planes",
                 rr.LineStrips3D(
                     strips=strips,
                     colors=[[255, 0, 0]],
                     radii=rr.Radius.ui_points(5.0),
                 ),
+                recording=client_info.rerun_stream,
             )
 
-        if client_config.gyroscope.enabled:
+        if client_info.config.gyroscope.enabled:
             gyro_data_proto = request.gyroscope
             gyro_data = GyroscopeInfo(
                 attitude=np.array(
@@ -297,28 +376,36 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
             acceleration = rr.datatypes.Vec3D(gyro_data.acceleration)
             # Attitute is displayed as a box, and the other acceleration variables are displayed as arrows.
             rr.log(
-                "rotations/gyroscope/attitude",
+                f"arflow/{request.uid}/world/rotations/gyroscope/attitude",
                 rr.Boxes3D(half_sizes=[0.5, 0.5, 0.5], quaternions=[attitude]),
+                recording=client_info.rerun_stream,
             )
             rr.log(
-                "rotations/gyroscope/rotation_rate",
+                f"arflow/{request.uid}/world/rotations/gyroscope/rotation_rate",
                 rr.Arrows3D(vectors=[rotation_rate], colors=[[0, 255, 0]]),
+                recording=client_info.rerun_stream,
             )
             rr.log(
-                "rotations/gyroscope/gravity",
+                f"arflow/{request.uid}/world/rotations/gyroscope/gravity",
                 rr.Arrows3D(vectors=[gravity], colors=[[0, 0, 255]]),
+                recording=client_info.rerun_stream,
             )
             rr.log(
-                "rotations/gyroscope/acceleration",
+                f"arflow/{request.uid}/world/rotations/gyroscope/acceleration",
                 rr.Arrows3D(vectors=[acceleration], colors=[[255, 255, 0]]),
+                recording=client_info.rerun_stream,
             )
 
-        if client_config.audio.enabled:
+        if client_info.config.audio.enabled:
             audio_data = np.array(request.audio_data)
             for i in audio_data:
-                self.recorder.log("world/audio", rr.Scalar(i))
+                rr.log(
+                    f"arflow/{request.uid}/world/audio",
+                    rr.Scalar(i),
+                    recording=client_info.rerun_stream,
+                )
 
-        if client_config.meshing.enabled:
+        if client_info.config.meshing.enabled:
             logger.debug("Number of meshes: %s", len(request.meshes))
             # Binary arrays can be empty if no mesh is sent. This could be due to non-supporting devices. We can log this in the future.
             binary_arrays = request.meshes
@@ -335,7 +422,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                 )
 
                 rr.log(
-                    f"world/mesh/mesh-{index}",
+                    f"arflow/{request.uid}/world/mesh/mesh-{index}",
                     rr.Mesh3D(
                         vertex_positions=mesh.points,
                         triangle_indices=mesh.faces,
@@ -343,6 +430,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                         vertex_colors=mesh.colors,
                         vertex_texcoords=mesh.tex_coord,
                     ),
+                    recording=client_info.rerun_stream,
                 )
 
         # Call the for user extension code.
@@ -363,40 +451,44 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         """Called when a new device is registered. Override this method to process the data."""
         pass
 
+    def on_join_session(self, request: JoinSessionRequest) -> None:
+        """Called when a new device joins a session. Override this method to process the data."""
+        pass
+
     def on_frame_received(self, decoded_data_frame: DecodedDataFrame) -> None:
         """Called when a frame is received. Override this method to process the data."""
         pass  # pragma: no cover
 
-    def on_program_exit(self, path_to_save: Path) -> None:
-        """Save the data and exit.
+    def on_program_exit(self) -> None:
+        """Closes all TCP connections, servers, and files.
 
         @private
         """
-        logger.debug("Saving the data...")
-        # Ensure the directory exists.
-        path_to_save.mkdir(parents=True, exist_ok=True)
-        save_path = (
-            path_to_save
-            / f"frames_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.pkl"
-        )
-        with save_path.open("wb") as f:
-            pickle.dump(self._requests_history, f)
-
-        logger.info("Data saved to %s", save_path)
+        logger.info("Closing all TCP connections, servers, and files...")
+        # Disconnects the global recording. Without this, this function will hang indefinitely.
+        rr.disconnect()
+        for client_id, client_info in self._client_registry.items():
+            rr.disconnect(client_info.rerun_stream)
+            logger.debug("Disconnected client %s", client_id)
+        logger.info("All clients disconnected")
 
 
 # TODO: Integration tests once more infrastructure work has been done (e.g., Docker). Remove pragma once implemented.
 def run_server(  # pragma: no cover
-    service: Type[ARFlowServicer], port: int = 8500, path_to_save: Path | None = None
+    service: Type[ARFlowServicer],
+    port: int = 8500,
+    save_dir: Path | None = None,
+    spawn_viewer: bool = True,
 ) -> None:
     """Run gRPC server.
 
     Args:
         service: The service class to use. Custom servers should subclass `arflow.ARFlowServicer`.
         port: The port to listen on.
-        path_to_save: The path to save data to.
+        save_dir: The path to save the data to. If None, defaults to a temporary directory located at `gettempdir()` in the `arflow` subdirectory.
+        spawn_viewer: Whether to spawn the Rerun Viewer in another process.
     """
-    servicer = service()
+    servicer = service(save_dir=save_dir, spawn_viewer=spawn_viewer)
     interceptors = [ErrorInterceptor()]  # pyright: ignore [reportUnknownVariableType]
     server = grpc.server(  # pyright: ignore [reportUnknownMemberType]
         futures.ThreadPoolExecutor(max_workers=10),
@@ -426,16 +518,15 @@ def run_server(  # pragma: no cover
         3. Wait on the `threading.Event` object returned by `server.stop(30)` to ensure Python does not exit prematurely.
         4. Optionally, perform cleanup procedures and save any necessary data before shutting down completely.
         """
-        logger.debug("Shutting down gracefully")
+        logger.info("Shutting down gracefully")
         all_rpcs_done_event = server.stop(30)
         all_rpcs_done_event.wait(30)
 
-        if path_to_save is not None:
-            servicer.on_program_exit(path_to_save)
+        servicer.on_program_exit()
 
         # TODO: Discuss hook for user-defined cleanup procedures.
 
-        logger.debug("Server shut down gracefully")
+        logger.info("Server shut down gracefully")
 
     signal(SIGTERM, handle_shutdown)
     signal(SIGINT, handle_shutdown)
