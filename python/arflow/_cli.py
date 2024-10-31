@@ -2,132 +2,130 @@
 
 import argparse
 import logging
+import os
 from pathlib import Path
+from tempfile import gettempdir
 from typing import Any, Sequence
 
 from arflow._core import ARFlowServicer, run_server
 
 
-def _validate_dir_path(path_as_str: str | None) -> str | None:
+def _validate_dir_path(path_as_str: str) -> str:
     """Check if the path is a valid directory."""
-    if path_as_str is None:
-        return None
     path = Path(path_as_str)
     if not path.is_dir():
         raise argparse.ArgumentTypeError(f"{path_as_str} is not a valid path.")
     return path_as_str
 
 
-def _validate_file_path(path_as_str: str) -> str:
-    """Check if the path is a valid file."""
-    path = Path(path_as_str)
-    if not path.is_file():
-        raise argparse.ArgumentTypeError(f"{path_as_str} is not a valid file.")
-    return path_as_str
-
-
-def serve(args: Any):
-    """Run the ARFlow server."""
+def view(args: Any):
+    """Run the ARFlow server and view live data from the clients."""
     run_server(
         ARFlowServicer,
+        spawn_viewer=True,
+        save_dir=None,
         port=args.port,
-        save_dir=Path(args.save_dir) if args.save_dir else None,
-        spawn_viewer=not args.headless,
     )
 
 
-def replay(args: Any):
-    """Replay an ARFlow data file."""
-    # player = ARFlowPlayer(ARFlowServicer, Path(args.file_path))
-    # player.run()
+def save(args: Any):
+    """Run the ARFlow server and save the session data to disk."""
+    run_server(
+        ARFlowServicer,
+        spawn_viewer=False,
+        save_dir=Path(args.save_dir),
+        port=args.port,
+    )
+
+
+def rerun(args: list[str]):
+    """Wrapper around the [Rerun CLI](https://rerun.io/docs/reference/cli)."""
+    os.execvp("rerun", ["rerun"] + args)
 
 
 def parse_args(
     argv: Sequence[str] | None = None,
-) -> tuple[argparse.ArgumentParser, argparse.Namespace]:
+) -> tuple[argparse.ArgumentParser, argparse.Namespace, list[str]]:
     parser = argparse.ArgumentParser(description="ARFlow CLI")
     subparsers = parser.add_subparsers()
 
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument(
+    log_group = parser.add_mutually_exclusive_group()
+    log_group.add_argument(
         "-d",
         "--debug",
         help="Print debug information.",
         action="store_const",
         dest="loglevel",
         const=logging.DEBUG,
-        default=logging.WARNING,
+        default=logging.INFO,
     )
-    group.add_argument(
-        "-v",
-        "--verbose",
-        help="Print verbose information.",
+    log_group.add_argument(
+        "-q",
+        "--quiet",
+        help="Print only warnings and errors.",
         action="store_const",
         dest="loglevel",
-        const=logging.INFO,
+        const=logging.WARNING,
     )
 
-    # Serve subcommand
-    serve_parser = subparsers.add_parser("serve", help="Run a simple ARFlow server")
-    serve_parser.add_argument(
+    # View subcommand
+    view_parser = subparsers.add_parser(
+        "view", help="Run the ARFlow server and view live data from the clients."
+    )
+    view_parser.add_argument(
         "-p",
         "--port",
         type=int,
         default=8500,
-        help="Port to run the server on.",
+        help=f"Port to run the server on (default: %(default)s).",
     )
-    # TODO: https://rerun.io/docs/reference/sdk/operating-modes. mutually exclusive operating modes: view or save.
-    # serve_subparsers = serve_parser.add_subparsers()
+    view_parser.set_defaults(func=view)
 
-    # serve_group = serve_parser.add_mutually_exclusive_group()
-    # serve_group.add_argument(
-    #     "--view",
-    #     help="View the data in the Rerun Viewer.",
-    #     action="store_true",
-    # )
-    # serve_group.add_argument(
-    #     "--save",
-    #     help="Save the data to disk.",
-    #     action="store_true",
-    # )
-
-    serve_parser.add_argument(
+    # Save subcommand
+    save_parser = subparsers.add_parser(
+        "save", help="Run the ARFlow server and save the session data to disk."
+    )
+    save_parser.add_argument(
         "-s",
         "--save-dir",
         type=_validate_dir_path,
-        default=None,
-        help="The path to save the data to. If None, defaults to a temporary directory located at `gettempdir()` in the `arflow` subdirectory.",
+        default=str(Path(gettempdir()) / "arflow"),
+        help="The path to save the data to (default: %(default)s).",
     )
-    serve_parser.add_argument(
-        "--headless",
-        help="Do not spawn the Rerun Viewer in another process.",
-        action="store_true",
+    save_parser.add_argument(
+        "-p",
+        "--port",
+        type=int,
+        default=8500,
+        help=f"Port to run the server on (default: %(default)s).",
     )
-    serve_parser.set_defaults(func=serve)
+    save_parser.set_defaults(func=save)
 
-    # Replay subcommand
-    replay_parser = subparsers.add_parser("replay", help="Replay an ARFlow data file")
-    replay_parser.add_argument(
-        "file-path",
-        type=_validate_file_path,
-        help="Path to the ARFlow data file.",
+    # Rerun subcommand
+    rerun_parser = subparsers.add_parser(
+        "rerun",
+        help="Wrapper around the [Rerun CLI](https://rerun.io/docs/reference/cli). Everything after `arflow rerun` will be passed as is to `rerun` CLI. Helpful for visualizing and manipulating ARFlow session data files (`.rrd`).",
+        add_help=False,  # Disable default help to pass through `-h`
     )
-    replay_parser.set_defaults(func=replay)
+    rerun_parser.set_defaults(func=rerun)
 
-    parsed_args = parser.parse_args(argv)
+    parsed_args, rerun_args = parser.parse_known_args(argv)
 
     logging.basicConfig(
         level=parsed_args.loglevel,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)",
     )
 
-    return parser, parsed_args
+    return parser, parsed_args, rerun_args
 
 
 def main(argv: Sequence[str] | None = None):  # pragma: no cover
-    parser, args = parse_args(argv)
+    parser, args, rerun_args = parse_args(argv)
     if hasattr(args, "func"):
-        args.func(args)
+        if args.func == rerun:
+            args.func(rerun_args)
+        else:
+            args.func(args)
     else:
         parser.print_help()
 

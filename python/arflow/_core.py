@@ -6,7 +6,6 @@ import uuid
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from tempfile import gettempdir
 from typing import Any, List, Type, cast
 
 import DracoPy
@@ -59,23 +58,35 @@ logger = logging.getLogger(__name__)
 class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
     """Provides methods that implement the functionality of the ARFlow gRPC server."""
 
-    def __init__(self, save_dir: Path | None = None, spawn_viewer: bool = True) -> None:
+    def __init__(
+        self,
+        spawn_viewer: bool = True,
+        save_dir: Path | None = None,
+    ) -> None:
         """Initialize the ARFlowServicer.
 
         Args:
-            save_dir: The path to save the data to. If None, defaults to a temporary directory located at `gettempdir()` in the `arflow` subdirectory.
             spawn_viewer: Whether to spawn the Rerun Viewer in another process.
-        """
-        self._client_registry: ClientRegistry = {}
+            save_dir: The path to save the data to.
 
-        if save_dir is None:
-            save_dir = Path(gettempdir()) / "arflow"
+        Raises:
+            ValueError: If neither or both operational modes are selected.
+        """
+        if (spawn_viewer and save_dir is not None) or (
+            not spawn_viewer and save_dir is None
+        ):
+            raise ValueError(
+                "Either spawn the viewer or save the data, but not both, and neither can be disabled."
+            )
+
+        self._client_registry: ClientRegistry = {}
+        self._spawn_viewer = spawn_viewer
         self._save_dir = save_dir
-        """The directory to save the data to."""
-        self._save_dir.mkdir(parents=True, exist_ok=True)
+        if self._save_dir is not None:
+            self._save_dir.mkdir(parents=True, exist_ok=True)
         # Initializes SDK with an "empty" global recording. We don't want to log anything into the global recording.
         # We will create a new recording for each client.
-        rr.init(application_id="arflow", spawn=spawn_viewer)
+        rr.init(application_id="arflow", spawn=self._spawn_viewer)
         super().__init__()
 
     def RegisterClient(
@@ -94,21 +105,26 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         stream = rr.new_recording(
             application_id="arflow",
             recording_id=init_uid,
-            # spawn=True,
+            spawn=self._spawn_viewer,
         )
         self._client_registry[HashableClientIdentifier(init_uid)] = ClientInfo(
             config=request, rerun_stream=stream
         )
-        logger.info("Registered a client with UUID: %s, Config: %s", init_uid, request)
+        logger.info(
+            "Registered a client with UUID %s",
+            init_uid,
+        )
+        logger.debug("Config of the client: %s", request)
 
-        save_path = self._save_dir / Path(
-            f"{request.device_name}_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.rrd"
-        )
-        rr.save(
-            path=save_path,
-            recording=stream,
-        )
-        logger.info("Saving data of client %s to %s", init_uid, save_path)
+        if self._save_dir is not None:
+            save_path = self._save_dir / Path(
+                f"{request.device_name}_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.rrd"
+            )
+            rr.save(
+                path=save_path,
+                recording=stream,
+            )
+            logger.info("Saving data of client %s to %s", init_uid, save_path)
 
         # Call the for user extension code.
         self.on_register(request)
@@ -137,9 +153,12 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
             # Share the same recording stream
             rerun_stream=session_info.rerun_stream,
         )
-        logger.debug(
-            "Registered a client with UUID: %s, Config: %s",
+        logger.info(
+            "Registered a client with UUID %s",
             client_uid,
+        )
+        logger.debug(
+            "Config of the client: %s",
             request.client_config,
         )
 
@@ -476,19 +495,25 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
 # TODO: Integration tests once more infrastructure work has been done (e.g., Docker). Remove pragma once implemented.
 def run_server(  # pragma: no cover
     service: Type[ARFlowServicer],
-    port: int = 8500,
-    save_dir: Path | None = None,
     spawn_viewer: bool = True,
+    save_dir: Path | None = None,
+    port: int = 8500,
 ) -> None:
     """Run gRPC server.
 
     Args:
         service: The service class to use. Custom servers should subclass `arflow.ARFlowServicer`.
-        port: The port to listen on.
-        save_dir: The path to save the data to. If None, defaults to a temporary directory located at `gettempdir()` in the `arflow` subdirectory.
         spawn_viewer: Whether to spawn the Rerun Viewer in another process.
+        save_dir: The path to save the data to.
+        port: The port to listen on.
+
+    Raises:
+        ValueError: If neither or both operational modes are selected.
     """
-    servicer = service(save_dir=save_dir, spawn_viewer=spawn_viewer)
+    try:
+        servicer = service(spawn_viewer=spawn_viewer, save_dir=save_dir)
+    except ValueError as e:
+        raise e
     interceptors = [ErrorInterceptor()]  # pyright: ignore [reportUnknownVariableType]
     server = grpc.server(  # pyright: ignore [reportUnknownMemberType]
         futures.ThreadPoolExecutor(max_workers=10),

@@ -18,7 +18,7 @@ from arflow._cli import (
     _validate_file_path,
     parse_args,
     replay,
-    serve,
+    view,
 )
 
 
@@ -64,7 +64,7 @@ def test_serve():
         args.port = 1234
         args.save_path = "/tmp/save_path"
 
-        serve(args)
+        view(args)
 
         mock_run_server.assert_called_once_with(
             mock_servicer, port=1234, path_to_save=Path("/tmp/save_path")
@@ -164,7 +164,7 @@ def test_parse_args(
             assert args.loglevel == logging.INFO
 
         if subcommand == "serve":
-            assert args.func == serve
+            assert args.func == view
             assert args.port == port
             assert args.save_path == save_path
         elif subcommand == "replay":
