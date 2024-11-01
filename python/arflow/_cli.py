@@ -9,13 +9,34 @@ from typing import Any, Sequence
 
 from arflow._core import ARFlowServicer, run_server
 
+logger = logging.getLogger(__name__)
+
 
 def _validate_dir_path(path_as_str: str) -> str:
-    """Check if the path is a valid directory."""
-    path = Path(path_as_str)
-    if not path.is_dir():
-        raise argparse.ArgumentTypeError(f"{path_as_str} is not a valid path.")
-    return path_as_str
+    """Check if the path is a valid directory. Prompt to help users create the directory if it doesn't exist."""
+    if os.path.isdir(path_as_str):
+        logger.debug(f"Directory '{path_as_str}' exists.")
+        return path_as_str
+
+    while True:
+        response = (
+            input(
+                f"The directory '{path_as_str}' does not exist. Would you like to create it? (y/n): "
+            )
+            .strip()
+            .lower()
+        )
+
+        if response == "y":
+            os.makedirs(path_as_str)
+            logger.info(f"Directory '{path_as_str}' created.")
+            return path_as_str
+        elif response == "n":
+            path_as_str = input("Please enter a new directory path: ").strip()
+            if os.path.isdir(path_as_str):
+                return path_as_str
+        else:
+            logger.warning("Please enter 'y' or 'n'.")
 
 
 def view(args: Any):

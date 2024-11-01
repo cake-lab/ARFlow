@@ -67,7 +67,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
 
         Args:
             spawn_viewer: Whether to spawn the Rerun Viewer in another process.
-            save_dir: The path to save the data to.
+            save_dir: The path to save the data to. Assumed to be an existing directory.
 
         Raises:
             ValueError: If neither or both operational modes are selected.
@@ -82,8 +82,6 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         self._client_registry: ClientRegistry = {}
         self._spawn_viewer = spawn_viewer
         self._save_dir = save_dir
-        if self._save_dir is not None:
-            self._save_dir.mkdir(parents=True, exist_ok=True)
         # Initializes SDK with an "empty" global recording. We don't want to log anything into the global recording.
         # We will create a new recording for each client.
         rr.init(application_id="arflow", spawn=self._spawn_viewer)

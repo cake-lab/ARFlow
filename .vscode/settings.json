@@ -14,7 +14,9 @@
   },
   "python.analysis.typeCheckingMode": "strict",
   "python.analysis.autoImportCompletions": true,
-  "python.testing.pytestArgs": ["python"],
+  "python.testing.pytestArgs": [
+    "python"
+  ],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
   "[csharp]": {
@@ -46,5 +48,11 @@
     "thecakelab",
     "Xihe"
   ],
-  "conventionalCommits.scopes": ["server", "client", "examples", "others"]
+  "conventionalCommits.scopes": [
+    "server",
+    "cli",
+    "client",
+    "examples",
+    "others"
+  ]
 }
