@@ -7,7 +7,7 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class RegisterClientRequest(_message.Message):
-    __slots__ = ("device_name", "camera_intrinsics", "camera_color", "camera_depth", "camera_transform", "camera_point_cloud", "camera_plane_detection", "gyroscope", "audio", "meshing")
+    __slots__ = ("init_uid", "device_name", "camera_intrinsics", "camera_color", "camera_depth", "camera_transform", "camera_point_cloud", "camera_plane_detection", "gyroscope", "audio", "meshing")
     class CameraIntrinsics(_message.Message):
         __slots__ = ("focal_length_x", "focal_length_y", "principal_point_x", "principal_point_y", "resolution_x", "resolution_y")
         FOCAL_LENGTH_X_FIELD_NUMBER: _ClassVar[int]
@@ -79,6 +79,7 @@ class RegisterClientRequest(_message.Message):
         ENABLED_FIELD_NUMBER: _ClassVar[int]
         enabled: bool
         def __init__(self, enabled: bool = ...) -> None: ...
+    INIT_UID_FIELD_NUMBER: _ClassVar[int]
     DEVICE_NAME_FIELD_NUMBER: _ClassVar[int]
     CAMERA_INTRINSICS_FIELD_NUMBER: _ClassVar[int]
     CAMERA_COLOR_FIELD_NUMBER: _ClassVar[int]
@@ -89,6 +90,7 @@ class RegisterClientRequest(_message.Message):
     GYROSCOPE_FIELD_NUMBER: _ClassVar[int]
     AUDIO_FIELD_NUMBER: _ClassVar[int]
     MESHING_FIELD_NUMBER: _ClassVar[int]
+    init_uid: str
     device_name: str
     camera_intrinsics: RegisterClientRequest.CameraIntrinsics
     camera_color: RegisterClientRequest.CameraColor
@@ -99,7 +101,7 @@ class RegisterClientRequest(_message.Message):
     gyroscope: RegisterClientRequest.Gyroscope
     audio: RegisterClientRequest.Audio
     meshing: RegisterClientRequest.Meshing
-    def __init__(self, device_name: _Optional[str] = ..., camera_intrinsics: _Optional[_Union[RegisterClientRequest.CameraIntrinsics, _Mapping]] = ..., camera_color: _Optional[_Union[RegisterClientRequest.CameraColor, _Mapping]] = ..., camera_depth: _Optional[_Union[RegisterClientRequest.CameraDepth, _Mapping]] = ..., camera_transform: _Optional[_Union[RegisterClientRequest.CameraTransform, _Mapping]] = ..., camera_point_cloud: _Optional[_Union[RegisterClientRequest.CameraPointCloud, _Mapping]] = ..., camera_plane_detection: _Optional[_Union[RegisterClientRequest.CameraPlaneDetection, _Mapping]] = ..., gyroscope: _Optional[_Union[RegisterClientRequest.Gyroscope, _Mapping]] = ..., audio: _Optional[_Union[RegisterClientRequest.Audio, _Mapping]] = ..., meshing: _Optional[_Union[RegisterClientRequest.Meshing, _Mapping]] = ...) -> None: ...
+    def __init__(self, init_uid: _Optional[str] = ..., device_name: _Optional[str] = ..., camera_intrinsics: _Optional[_Union[RegisterClientRequest.CameraIntrinsics, _Mapping]] = ..., camera_color: _Optional[_Union[RegisterClientRequest.CameraColor, _Mapping]] = ..., camera_depth: _Optional[_Union[RegisterClientRequest.CameraDepth, _Mapping]] = ..., camera_transform: _Optional[_Union[RegisterClientRequest.CameraTransform, _Mapping]] = ..., camera_point_cloud: _Optional[_Union[RegisterClientRequest.CameraPointCloud, _Mapping]] = ..., camera_plane_detection: _Optional[_Union[RegisterClientRequest.CameraPlaneDetection, _Mapping]] = ..., gyroscope: _Optional[_Union[RegisterClientRequest.Gyroscope, _Mapping]] = ..., audio: _Optional[_Union[RegisterClientRequest.Audio, _Mapping]] = ..., meshing: _Optional[_Union[RegisterClientRequest.Meshing, _Mapping]] = ...) -> None: ...
 
 class RegisterClientResponse(_message.Message):
     __slots__ = ("uid",)

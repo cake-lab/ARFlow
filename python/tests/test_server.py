@@ -1,4 +1,4 @@
-"""gRPC server tests with an end-to-end fashion."""
+"""End-to-end gRPC server tests."""
 
 # ruff:noqa: D103
 # pyright: reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false
@@ -14,6 +14,7 @@ from arflow import ARFlowServicer
 from arflow._error_interceptor import ErrorInterceptor
 from arflow_grpc import service_pb2, service_pb2_grpc
 from arflow_grpc.service_pb2 import (
+    JoinSessionRequest,
     ProcessFrameRequest,
     RegisterClientRequest,
     RegisterClientResponse,
@@ -50,14 +51,14 @@ def test_register_client(stub: ARFlowServiceStub):
     request = RegisterClientRequest()
 
     response: RegisterClientResponse = stub.RegisterClient(request)
-    assert len(response.uid) == 36
+    assert len(response.uid) == 32
 
 
-# def test_register_client_with_init_uid(stub: ARFlowServiceStub):
-#     request = RegisterClientRequest()
+def test_register_client_with_init_uid(stub: ARFlowServiceStub):
+    request = RegisterClientRequest(init_uid="1234")
 
-#     response: RegisterClientResponse = stub.RegisterClient(request, init_uid="1234")
-#     assert response.uid == "1234"
+    response: RegisterClientResponse = stub.RegisterClient(request)
+    assert response.uid == "1234"
 
 
 def test_multiple_clients(stub: ARFlowServiceStub):
@@ -66,19 +67,64 @@ def test_multiple_clients(stub: ARFlowServiceStub):
     for _ in range(3):
         request = RegisterClientRequest()
         response = stub.RegisterClient(request)
-        assert len(response.uid) == 36
+        assert len(response.uid) == 32
         assert response.uid not in uids
         uids.append(response.uid)
     assert len(uids) == 3
 
 
-# def test_register_same_client_twice(stub: ARFlowServiceStub):
-#     request = RegisterClientRequest()
-#     response = stub.RegisterClient(request)
-#     uid = response.uid
+def test_register_same_client_twice(stub: ARFlowServiceStub):
+    request = RegisterClientRequest()
+    response = stub.RegisterClient(request)
+    request.init_uid = response.uid
 
-#     response = stub.RegisterClient(request, init_uid=uid)
-#     assert response.uid == uid
+    response = stub.RegisterClient(request)
+    assert response.uid == request.init_uid
+
+
+def test_join_session(stub: ARFlowServiceStub):
+    request = RegisterClientRequest()
+    register_response = stub.RegisterClient(request)
+    join_request = JoinSessionRequest(session_uid=register_response.uid)
+    join_response = stub.JoinSession(join_request)
+    assert len(join_response.uid) == 32
+    assert join_response.uid != register_response.uid
+
+
+def test_join_nonexistent_session(stub: ARFlowServiceStub):
+    request = JoinSessionRequest(session_uid="nonexistent")
+    with pytest.raises(grpc.RpcError) as excinfo:
+        stub.JoinSession(request)
+    assert excinfo.value.code() == grpc.StatusCode.NOT_FOUND
+
+
+def test_join_session_multiple_clients(stub: ARFlowServiceStub):
+    request = RegisterClientRequest()
+    register_response = stub.RegisterClient(request)
+    for _ in range(3):
+        join_request = JoinSessionRequest(session_uid=register_response.uid)
+        join_response = stub.JoinSession(join_request)
+        assert len(join_response.uid) == 32
+        assert join_response.uid != register_response.uid
+
+
+def test_join_session_chaining_multiple_clients(
+    stub: ARFlowServiceStub,
+):
+    """Client A starts session, B joins A using A's ID, C joins B using C's ID."""
+    request = RegisterClientRequest()
+    register_response = stub.RegisterClient(request)
+    join_request = JoinSessionRequest(session_uid=register_response.uid)
+    join_response = stub.JoinSession(join_request)
+    assert len(join_response.uid) == 32
+    assert join_response.uid != register_response.uid
+    for _ in range(3):
+        previous_join_response = join_response
+        join_request = JoinSessionRequest(session_uid=join_response.uid)
+        join_response = stub.JoinSession(join_request)
+        assert len(join_response.uid) == 32
+        assert join_response.uid != previous_join_response.uid
+        assert join_response.uid != register_response.uid
 
 
 def test_process_frame(stub: ARFlowServiceStub):

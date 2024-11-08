@@ -91,26 +91,25 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         self,
         request: RegisterClientRequest,
         context: grpc.ServicerContext | None = None,
-        init_uid: str | None = None,
     ) -> RegisterClientResponse:
         """Register a client.
 
         @private
         """
-        if init_uid is None:
-            init_uid = uuid.uuid4().hex
+        if request.init_uid == "":
+            request.init_uid = uuid.uuid4().hex
 
         stream = rr.new_recording(
             application_id="arflow",
-            recording_id=init_uid,
+            recording_id=request.init_uid,
             spawn=self._spawn_viewer,
         )
-        self._client_registry[HashableClientIdentifier(init_uid)] = ClientInfo(
+        self._client_registry[HashableClientIdentifier(request.init_uid)] = ClientInfo(
             config=request, rerun_stream=stream
         )
         logger.info(
             "Registered a client with UUID %s",
-            init_uid,
+            request.init_uid,
         )
         logger.debug("Config of the client: %s", request)
 
@@ -122,12 +121,12 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                 path=save_path,
                 recording=stream,
             )
-            logger.info("Saving data of client %s to %s", init_uid, save_path)
+            logger.debug("Saving data of client %s to %s", request.init_uid, save_path)
 
         # Call the for user extension code.
         self.on_register(request)
 
-        return RegisterClientResponse(uid=init_uid)
+        return RegisterClientResponse(uid=request.init_uid)
 
     def JoinSession(
         self, request: JoinSessionRequest, context: grpc.ServicerContext | None = None
@@ -136,7 +135,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
 
         @private
         """
-        logger.info("A client wants to join session %s", request.session_uid)
+        logger.debug("A client wants to join session %s", request.session_uid)
         try:
             session_info = self._client_registry[
                 HashableClientIdentifier(request.session_uid)
@@ -145,16 +144,15 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
             raise NotFound("Session not found")
 
         logger.debug("Found existing session %s", request.session_uid)
+
         client_uid = uuid.uuid4().hex
         self._client_registry[HashableClientIdentifier(client_uid)] = ClientInfo(
             config=request.client_config,
             # Share the same recording stream
             rerun_stream=session_info.rerun_stream,
         )
-        logger.info(
-            "Registered a client with UUID %s",
-            client_uid,
-        )
+
+        logger.info("Client %s joined session %s", client_uid, request.session_uid)
         logger.debug(
             "Config of the client: %s",
             request.client_config,
@@ -194,7 +192,9 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
             raise NotFound("Client info not found")
 
         logger.debug(
-            f"Recieved frame for timestamp: {request.timestamp.seconds}.{request.timestamp.nanos}"
+            "Received frame for timestamp: %s.%s",
+            request.timestamp.seconds,
+            request.timestamp.nanos,
         )
 
         color_rgb: ColorRGB | None = None
@@ -485,13 +485,13 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
 
         @private
         """
-        logger.info("Closing all TCP connections, servers, and files...")
+        logger.debug("Closing all TCP connections, servers, and files...")
         # Disconnects the global recording. Without this, this function will hang indefinitely.
         rr.disconnect()
         for client_id, client_info in self._client_registry.items():
             rr.disconnect(client_info.rerun_stream)
             logger.debug("Disconnected client %s", client_id)
-        logger.info("All clients disconnected")
+        logger.debug("All clients disconnected")
 
 
 # TODO: Integration tests once more infrastructure work has been done (e.g., Docker). Remove pragma once implemented.
@@ -545,7 +545,7 @@ def run_server(  # pragma: no cover
         3. Wait on the `threading.Event` object returned by `server.stop(30)` to ensure Python does not exit prematurely.
         4. Optionally, perform cleanup procedures and save any necessary data before shutting down completely.
         """
-        logger.info("Shutting down gracefully")
+        logger.debug("Shutting down gracefully")
         all_rpcs_done_event = server.stop(30)
         all_rpcs_done_event.wait(30)
 

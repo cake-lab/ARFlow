@@ -4,7 +4,12 @@
 from arflow._core import ARFlowServicer as ARFlowServicer
 from arflow._core import run_server as run_server
 from arflow._types import DecodedDataFrame as DecodedDataFrame
-from arflow_grpc.service_pb2 import RegisterClientRequest as RegisterClientRequest
+from arflow_grpc.service_pb2 import (
+    JoinSessionRequest as JoinSessionRequest,
+)
+from arflow_grpc.service_pb2 import (
+    RegisterClientRequest as RegisterClientRequest,
+)
 
 __docformat__ = "google"  # Should match Ruff docstring format in ../pyproject.toml
 
@@ -14,4 +19,5 @@ __all__ = [
     "ARFlowServicer",
     "DecodedDataFrame",
     "RegisterClientRequest",
+    "JoinSessionRequest",
 ]

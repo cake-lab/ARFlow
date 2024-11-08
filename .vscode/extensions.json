@@ -6,6 +6,7 @@
     "charliermarsh.ruff",
     "ms-toolsai.jupyter",
     "streetsidesoftware.code-spell-checker",
-    "visualstudiotoolsforunity.vstuc"
+    "visualstudiotoolsforunity.vstuc",
+    "DavidAnson.vscode-markdownlint"
   ]
 }

@@ -12,7 +12,7 @@ from arflow._core import ARFlowServicer, run_server
 logger = logging.getLogger(__name__)
 
 
-def _validate_dir_path(path_as_str: str) -> str:
+def _prompt_until_valid_dir(path_as_str: str) -> str:
     """Check if the path is a valid directory. Prompt to help users create the directory if it doesn't exist."""
     if os.path.isdir(path_as_str):
         logger.debug(f"Directory '{path_as_str}' exists.")
@@ -35,7 +35,7 @@ def _validate_dir_path(path_as_str: str) -> str:
             path_as_str = input("Please enter a new directory path: ").strip()
             if os.path.isdir(path_as_str):
                 return path_as_str
-        else:
+        else:  # pragma: no cover
             logger.warning("Please enter 'y' or 'n'.")
 
 
@@ -109,7 +109,7 @@ def parse_args(
     save_parser.add_argument(
         "-s",
         "--save-dir",
-        type=_validate_dir_path,
+        type=_prompt_until_valid_dir,
         default=str(Path(gettempdir()) / "arflow"),
         help="The path to save the data to (default: %(default)s).",
     )
@@ -134,7 +134,9 @@ def parse_args(
 
     logging.basicConfig(
         level=parsed_args.loglevel,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)",
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s (%(filename)s:%(lineno)d)"
+        if parsed_args.loglevel == logging.DEBUG
+        else "%(asctime)s - %(levelname)s - arflow - %(message)s",
     )
 
     return parser, parsed_args, rerun_args

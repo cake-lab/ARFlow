@@ -16,46 +16,104 @@ import pytest
 from arflow import ARFlowServicer, DecodedDataFrame, RegisterClientRequest
 from arflow._types import HashableClientIdentifier
 from arflow_grpc import service_pb2
-from arflow_grpc.service_pb2 import ProcessFrameRequest
+from arflow_grpc.service_pb2 import JoinSessionRequest, ProcessFrameRequest
 
 
-@pytest.fixture
-def default_service():
-    """A default ARFlow service that can be shared across tests."""
-    return ARFlowServicer()
+@pytest.mark.parametrize(
+    "spawn_viewer, save_dir",
+    [(False, None), (True, Path())],
+)
+def test_invalid_servicer_init(spawn_viewer: bool, save_dir: Path | None):
+    with pytest.raises(ValueError):
+        ARFlowServicer(spawn_viewer=spawn_viewer, save_dir=save_dir)
 
 
-def test_register_client(default_service: ARFlowServicer):
+def test_register_client(default_service_fixture: ARFlowServicer):
     request = RegisterClientRequest()
+    response = default_service_fixture.RegisterClient(request)
+    assert len(response.uid) == 32
 
-    response = default_service.RegisterClient(request)
-    assert len(response.uid) == 36
 
-
-def test_register_client_with_init_uid(default_service: ARFlowServicer):
-    request = RegisterClientRequest()
-
-    response = default_service.RegisterClient(request, init_uid="1234")
+def test_register_client_with_init_uid(default_service_fixture: ARFlowServicer):
+    request = RegisterClientRequest(init_uid="1234")
+    response = default_service_fixture.RegisterClient(request)
     assert response.uid == "1234"
 
 
-def test_multiple_clients(default_service: ARFlowServicer):
+def test_register_client_with_save_dir(
+    service_fixture_with_save_dir: ARFlowServicer, tmp_path: Path
+):
+    request = RegisterClientRequest()
+    assert service_fixture_with_save_dir._save_dir == tmp_path
+
+    with patch("rerun.save") as mock_save:
+        service_fixture_with_save_dir.RegisterClient(request)
+        mock_save.assert_called_once()
+
+
+def test_multiple_clients(default_service_fixture: ARFlowServicer):
     """Flaky since UUIDs might collide."""
     # Register multiple clients
     for _ in range(3):
         request = RegisterClientRequest()
-        response = default_service.RegisterClient(request)
-        assert len(response.uid) == 36
+        response = default_service_fixture.RegisterClient(request)
+        assert len(response.uid) == 32
 
-    assert len(default_service._client_registry) == 3
+    assert len(default_service_fixture._client_registry) == 3
 
 
-def test_register_same_client_twice(default_service: ARFlowServicer):
+def test_register_same_client_twice(default_service_fixture: ARFlowServicer):
     request = RegisterClientRequest()
-    response1 = default_service.RegisterClient(request)
-    response2 = default_service.RegisterClient(request, init_uid=response1.uid)
+    response1 = default_service_fixture.RegisterClient(request)
+    request.init_uid = response1.uid
+    response2 = default_service_fixture.RegisterClient(request)
 
     assert response1.uid == response2.uid
+
+
+def test_join_session(default_service_fixture: ARFlowServicer):
+    request = RegisterClientRequest()
+    register_response = default_service_fixture.RegisterClient(request)
+    join_request = JoinSessionRequest(session_uid=register_response.uid)
+    join_response = default_service_fixture.JoinSession(join_request)
+    assert len(join_response.uid) == 32
+    assert join_response.uid != register_response.uid
+
+
+def test_join_nonexistent_session(default_service_fixture: ARFlowServicer):
+    request = JoinSessionRequest(session_uid="nonexistent")
+    with pytest.raises(grpc_interceptor.exceptions.GrpcException) as excinfo:
+        default_service_fixture.JoinSession(request)
+    assert excinfo.value.status_code == grpc.StatusCode.NOT_FOUND
+
+
+def test_join_session_multiple_clients(default_service_fixture: ARFlowServicer):
+    request = RegisterClientRequest()
+    register_response = default_service_fixture.RegisterClient(request)
+    for _ in range(3):
+        join_request = JoinSessionRequest(session_uid=register_response.uid)
+        join_response = default_service_fixture.JoinSession(join_request)
+        assert len(join_response.uid) == 32
+        assert join_response.uid != register_response.uid
+
+
+def test_join_session_chaining_multiple_clients(
+    default_service_fixture: ARFlowServicer,
+):
+    """Client A starts session, B joins A using A's ID, C joins B using C's ID."""
+    request = RegisterClientRequest()
+    register_response = default_service_fixture.RegisterClient(request)
+    join_request = JoinSessionRequest(session_uid=register_response.uid)
+    join_response = default_service_fixture.JoinSession(join_request)
+    assert len(join_response.uid) == 32
+    assert join_response.uid != register_response.uid
+    for _ in range(3):
+        previous_join_response = join_response
+        join_request = JoinSessionRequest(session_uid=join_response.uid)
+        join_response = default_service_fixture.JoinSession(join_request)
+        assert len(join_response.uid) == 32
+        assert join_response.uid != previous_join_response.uid
+        assert join_response.uid != register_response.uid
 
 
 @pytest.mark.parametrize(
@@ -76,19 +134,19 @@ def test_register_same_client_twice(default_service: ARFlowServicer):
     ],
 )
 def test_ensure_correct_config(
-    default_service: ARFlowServicer,
+    default_service_fixture: ARFlowServicer,
     client_config: RegisterClientRequest,
     expected_enabled: bool,
 ):
-    response = default_service.RegisterClient(client_config)
+    response = default_service_fixture.RegisterClient(client_config)
     client_id = HashableClientIdentifier(response.uid)
     assert (
-        default_service._client_registry[client_id].camera_color.enabled
+        default_service_fixture._client_registry[client_id].config.camera_color.enabled
         == expected_enabled
     )
 
 
-def test_process_frame(default_service: ARFlowServicer):
+def test_process_frame(default_service_fixture: ARFlowServicer):
     client_config = RegisterClientRequest(
         camera_color=RegisterClientRequest.CameraColor(
             enabled=True, data_type="RGB24", resize_factor_x=1.0, resize_factor_y=1.0
@@ -111,7 +169,7 @@ def test_process_frame(default_service: ARFlowServicer):
         audio=RegisterClientRequest.Audio(enabled=True),
         meshing=RegisterClientRequest.Meshing(enabled=True),
     )
-    response = default_service.RegisterClient(client_config)
+    response = default_service_fixture.RegisterClient(client_config)
     client_id = response.uid
 
     with (Path(__file__).parent / "bunny.drc").open("rb") as draco_file:
@@ -157,17 +215,19 @@ def test_process_frame(default_service: ARFlowServicer):
             ],
         )
 
-    with patch.object(default_service, "on_frame_received") as mock_on_frame:
-        response = default_service.ProcessFrame(mock_frame)
+    with patch.object(default_service_fixture, "on_frame_received") as mock_on_frame:
+        response = default_service_fixture.ProcessFrame(mock_frame)
         assert response.message == "OK"
         mock_on_frame.assert_called_once()
         assert isinstance(mock_on_frame.call_args[0][0], DecodedDataFrame)
 
 
-def test_process_frame_with_unregistered_client(default_service: ARFlowServicer):
+def test_process_frame_with_unregistered_client(
+    default_service_fixture: ARFlowServicer,
+):
     invalid_frame = ProcessFrameRequest(uid="invalid_id")
     with pytest.raises(grpc_interceptor.exceptions.GrpcException) as excinfo:
-        default_service.ProcessFrame(invalid_frame)
+        default_service_fixture.ProcessFrame(invalid_frame)
     assert excinfo.value.status_code == grpc.StatusCode.NOT_FOUND
 
 
@@ -193,15 +253,15 @@ def test_process_frame_with_unregistered_client(default_service: ARFlowServicer)
     ],
 )
 def test_process_frame_with_invalid_data_types(
-    client_config: RegisterClientRequest, default_service: ARFlowServicer
+    client_config: RegisterClientRequest, default_service_fixture: ARFlowServicer
 ):
-    response = default_service.RegisterClient(client_config)
+    response = default_service_fixture.RegisterClient(client_config)
     client_id = response.uid
     invalid_frame = ProcessFrameRequest(
         uid=client_id,
     )
     with pytest.raises(grpc_interceptor.exceptions.GrpcException) as excinfo:
-        default_service.ProcessFrame(invalid_frame)
+        default_service_fixture.ProcessFrame(invalid_frame)
     assert excinfo.value.status_code == grpc.StatusCode.INVALID_ARGUMENT
 
 
@@ -210,6 +270,7 @@ def test_process_frame_with_invalid_data_types(
     [
         (
             RegisterClientRequest(
+                init_uid="1234",
                 camera_color=RegisterClientRequest.CameraColor(
                     enabled=True,
                     data_type="RGB24",
@@ -230,6 +291,7 @@ def test_process_frame_with_invalid_data_types(
         ),
         (
             RegisterClientRequest(
+                init_uid="1234",
                 camera_depth=RegisterClientRequest.CameraDepth(
                     enabled=True, resolution_x=4, resolution_y=4, data_type="f32"
                 ),
@@ -243,6 +305,7 @@ def test_process_frame_with_invalid_data_types(
         ),
         (
             RegisterClientRequest(
+                init_uid="1234",
                 camera_color=RegisterClientRequest.CameraColor(
                     resize_factor_x=1.0,
                     resize_factor_y=1.0,
@@ -264,6 +327,7 @@ def test_process_frame_with_invalid_data_types(
         ),
         (
             RegisterClientRequest(
+                init_uid="1234",
                 camera_plane_detection=RegisterClientRequest.CameraPlaneDetection(
                     enabled=True
                 ),
@@ -293,15 +357,14 @@ def test_process_frame_with_invalid_data_types(
 def test_process_frame_with_corrupted_data(
     client_config: RegisterClientRequest,
     corrupted_frame: ProcessFrameRequest,
-    default_service: ARFlowServicer,
+    default_service_fixture: ARFlowServicer,
 ):
-    default_service.RegisterClient(
+    default_service_fixture.RegisterClient(
         client_config,
-        init_uid="1234",
     )
 
     with pytest.raises(grpc_interceptor.exceptions.InvalidArgument) as excinfo:
-        default_service.ProcessFrame(
+        default_service_fixture.ProcessFrame(
             corrupted_frame,
         )
     assert excinfo.value.status_code == grpc.StatusCode.INVALID_ARGUMENT
