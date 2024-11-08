@@ -10,9 +10,9 @@ making a contribution.
   - [Server Development](#server-development)
     - [Server Setup](#server-setup)
     - [Packages and Tools](#packages-and-tools)
-      - [`poetry`](#poetry)
-      - [`protobuf`](#protobuf)
-      - [`rerun.io`](#rerunio)
+      - [Poetry](#poetry)
+      - [Protobuf](#protobuf)
+      - [Rerun](#rerun)
     - [Guidelines](#guidelines)
       - [Code Style](#code-style)
       - [Type Completeness](#type-completeness)
@@ -31,7 +31,7 @@ making a contribution.
   - [Client Development](#client-development)
     - [Client Setup](#client-setup)
     - [Architecture](#architecture)
-    - [Document Generation](#document-generation)
+    - [Documentation Generation](#documentation-generation)
   - [Common Issues](#common-issues)
     - [VSCode Force Changes Locale](#vscode-force-changes-locale)
     - [Running Rerun on WSL2](#running-rerun-on-wsl2)
@@ -46,7 +46,7 @@ making a contribution.
 Fork the ARFlow repository into your account:
 [https://github.com/cake-lab/ARFlow/fork](https://github.com/cake-lab/ARFlow/fork)
 
-ARFlow uses [`poetry`](https://python-poetry.org) for dependency management.
+ARFlow uses [Poetry](https://python-poetry.org) for dependency management.
 Install it [here](https://python-poetry.org/docs/).
 
 Clone the forked repository:
@@ -59,35 +59,33 @@ poetry install
 
 ### Packages and Tools
 
-#### `poetry`
+#### Poetry
 
-ARFlow uses [`poetry`](https://python-poetry.org) to manage dependencies and run
-commands. Commands can be found in the `pyproject.toml` file in the
-`[tool.poetry.scripts]` section and can be run via `poetry run <command>`. Or if
-you have activated the virtual environment with `poetry shell`, you could just
-simply run the command `<command>`.
+ARFlow uses [Poetry](https://python-poetry.org) to manage dependencies and run
+commands. Dependencies and configuration are stored in the
+[pyproject.toml](./python/pyproject.toml) file.
 
-#### `protobuf`
+#### Protobuf
 
-ARFlow uses [`protobuf`](https://protobuf.dev) to define the communication
+ARFlow uses [Protobuf](https://protobuf.dev) to define the communication
 protocol between the server and the client. The protocol is defined in
-[`service.proto`](./protos/arflow_grpc/service.proto) and can be compiled using
-[`compile.sh`](./scripts/compile.sh).
+[service.proto](./protos/arflow_grpc/service.proto) and can be compiled using
+[compile.sh](./scripts/compile.sh).
 
-#### `rerun.io`
+#### Rerun
 
-ARFlow uses the [`rerun.io`](https://github.com/rerun-io/rerun) Python SDK to
-visualize the data collected by the ARFlow server. We also use the RRD data
-format to store Rerun-compatible recordings.
+ARFlow uses the [Rerun](https://github.com/rerun-io/rerun) Python SDK to
+visualize data collected by the ARFlow server. We also use the RRD data format
+to store Rerun-compatible recordings.
 
 ### Guidelines
 
 #### Code Style
 
-ARFlow uses [`ruff`](https://docs.astral.sh/ruff/) for linting and formatting.
-We also use [`pyright`](https://github.com/microsoft/pyright) for type checking.
-Make sure you have the appropriate extensions or corresponding LSPs installed in
-your editor.
+ARFlow uses [ruff](https://docs.astral.sh/ruff/) for linting and formatting. We
+also use [pyright](https://github.com/microsoft/pyright) for type checking. Make
+sure you have the appropriate extensions or corresponding LSPs installed in your
+editor.
 
 These tools should run automatically in your editor. If you want to run them
 manually, you can also use the following commands:
@@ -101,7 +99,7 @@ poetry run ruff format # format the code
 ```
 
 All of these quality checks are run automatically before every commit using
-[`pre-commit`](https://pre-commit.com). To install the pre-commit hooks, run:
+[pre-commit](https://pre-commit.com). To install the pre-commit hooks, run:
 
 ```shell
 poetry run pre-commit install
@@ -117,7 +115,7 @@ poetry run pre-commit run --all-files
 
 Library authors are encouraged to prioritize bringing their public API to 100%
 type coverage. Although this is very hard in ARFlow's case due to our dependency
-on `gRPC`, we should still strive to achieve this goal. To check for type
+on gRPC, we should still strive to achieve this goal. To check for type
 completeness, run:
 
 ```shell
@@ -131,11 +129,12 @@ by Dagster.
 
 #### Testing
 
-ARFlow uses [`pytest`](https://pytest.org). Make sure you are in the `python`
-directory and then run tests with:
+ARFlow uses [pytest](https://pytest.org). Pytest configuration can be found in
+the [pyproject.toml](./python/pyproject.toml) file. To run tests, use:
 
 ```shell
-poetry run pytest
+# in the python directory
+poetry run pytest # this will automatically pick up configuration in pyproject.toml
 ```
 
 #### Logging
@@ -169,7 +168,7 @@ practices to keep in mind when working with gRPC:
 
 ##### Input validation
 
-All fields in `proto3` are optional, so you’ll need to validate that they’re all
+All fields in proto3 are optional, so you’ll need to validate that they’re all
 set. If you leave one unset, then it’ll default to zero for numeric types or to
 an empty string for strings.
 
@@ -180,12 +179,13 @@ code. This allows clients to take different actions based on the code they
 receive. Proper error handling also allows middleware, like monitoring systems,
 to log how many requests have errors.
 
-ARFlow uses the `grpc_interceptor` library to handle exceptions. This library
-provides a way to raise exceptions in your service handlers, and have them
-automatically converted to gRPC status codes. Check out an example usage
+ARFlow uses the [grpc_interceptor](https://pypi.org/project/grpc-interceptor/)
+library to handle exceptions. This library provides a way to raise exceptions in
+your service handlers, and have them automatically converted to gRPC status
+codes. Check out an example usage
 [here](https://github.com/d5h-foss/grpc-interceptor/tree/master?tab=readme-ov-file#server-interceptor).
 
-`grpc_interceptor` also provides a testing framework to run a gRPC service with
+The library also provides a testing framework to run a gRPC service with
 interceptors. You can check out the example usage
 [here](./python/tests/test_interceptor.py).
 
@@ -197,12 +197,14 @@ This way, clients that use the old field will still work.
 
 ##### Protobuf linting
 
-We use `buf` to lint our protobuf files. You can install it by following the
-instructions [here](https://buf.build/docs/installation).
+We use [buf](https://buf.build/) to lint our protobuf files. You can install it
+by following the instructions [here](https://buf.build/docs/installation).
 
 ##### Type checking Protobuf bindings
 
-We use `pyright` and `grpc-stubs` to type check our Protobuf-generated code.
+We use [pyright](https://github.com/microsoft/pyright) and
+[grpc-stubs](https://pypi.org/project/grpc-stubs/) to type check our
+Protobuf-generated code.
 
 ##### Graceful shutdown
 
@@ -228,7 +230,7 @@ poetry run pytest # testing
 
 #### Documentation
 
-ARFlow uses [`pdoc`](https://pdoc.dev). You can refer to their documentation for
+ARFlow uses [pdoc](https://pdoc.dev). You can refer to their documentation for
 more information on how to generate documentation.
 
 To preview the documentation locally, run:
@@ -272,15 +274,15 @@ https://github.com/cake-lab/ARFlow.git?path=unity/Assets/ARFlowPackage/ARFlow
 ### Architecture
 
 The core functions are implemented in
-[`unity/Assets/Scripts`](unity/Assets/Scripts) directory . We show three example
-ARFlow integration of three different data sources:
+[`unity/Assets/Scripts`](./unity/Assets/Scripts) directory. We show three
+example ARFlow integration of three different data sources:
 
 - Mock data: inside
-  [ARFlowMockDataSample.cs](unity/Assets/Scripts/ARFlowMockDataSample.cs)
+  [ARFlowMockDataSample.cs](./unity/Assets/Scripts/MockDataSample/ARFlowMockDataSample.cs)
 - ARFoundation device data: inside
-  [ARFlowDeviceSample.cs](unity/Assets/Scripts/ARFlowDeviceSample.cs)
+  [ARFlowDeviceSample.cs](./unity/Assets/Scripts/DeviceSample/ARFlowDeviceSample.cs)
 - Unity scene data: inside
-  [ARFlowUnityDataSample.cs](unity/Assets/Scripts/ARFlowUnityDataSample.cs)
+  [ARFlowUnityDataSample.cs](./unity/Assets/Scripts/UnityDataSample/ARFlowUnityDataSample.cs)
 
 To use ARFlow with your own device, you should directly deploy our client code
 to your AR device. Please compile the Unity code for your target deployment
@@ -294,13 +296,15 @@ Currently, we support the following platforms:
 
 <!-- TODO: client side address input and screenshot. -->
 
-### Document Generation
+### Documentation Generation
 
-This document for the C# code was generated by a tool called `Docfx`. To get
-started on building the document:
+Documentation for the C# code was generated
+[docfx](https://dotnet.github.io/docfx/). To get started on building the
+document:
 
-1. Make sure you have `dotnet` installed (preferably dotnet 6).
-2. Run either [build.cmd](`unity/Documentation/scripts/build.cmd`) or
+1. Make sure you have [dotnet](https://dotnet.microsoft.com/en-us/) installed
+   (preferably dotnet 6).
+2. Run either [build.cmd](./unity/Documentation/scripts/build.cmd) or
    [build.sh](unity/Documentation/scripts/build.sh)
 
 If you want to have the web page served locally, instead of the script run:
@@ -327,10 +331,10 @@ Please refer to their documentation
 
 ### Black screen when opening the app
 
-In Build Settings, add Scenes/DeviceData to the scenes in Build. Add the
+In Build Settings, add `Scenes/DeviceData` to the scenes in Build. Add the
 corresponding scene of which you want to run
 
-- Sample data to test cameras (depth, RGB): add the DeviceData scene to build
+- Sample data to test cameras (depth, RGB): add the `DeviceData` scene to build
 - Demos: add the corresponding demo scene to build.
 
 ### Problem building the Android app/app crashes immediately
@@ -339,12 +343,12 @@ Building on Android is prone to some issues, regarding target SDK version
 (Android version), graphics API, and more. Below are some build configuration
 that has worked on our devices:
 
-- In Build Settings, add Scenes/DeviceData to the scenes in Build.
-- In Player Settings, uncheck Auto Graphics API, remove Vulkan.
-- In Player Settings, change Android minimal SDK version to at least 24 (Android
-  7.0).
-- In Player Settings, change Scripting Backend to IL2CPP
-- In Player Settings, check ARMv7 and ARM64 in Target Architectures. (Check any
-  other architectures if needed).
-- In Player Settings, change Active Input Handling to Input System Package
-  (New).
+- In `Build Settings`, add `Scenes/DeviceData` to the scenes in `Build`.
+- In `Player Settings`, uncheck `Auto Graphics API`, remove `Vulkan`.
+- In `Player Settings`, change `Android minimal SDK version` to at least `24`
+  (Android 7.0).
+- In `Player Settings`, change `Scripting Backend` to `IL2CPP`.
+- In `Player Settings`, check `ARMv7` and `ARM64` in `Target Architectures`.
+  (Check any other architectures if needed).
+- In `Player Settings`, change `Active Input Handling` to
+  `Input System Package (New)`.
