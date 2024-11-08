@@ -34,13 +34,14 @@ public class QRManager
     {
 
     }
-    public string readQRCode(BinaryBitmap image)
+    public string readQRCode(byte[] image, int width, int height)
     {
         var qrReader = new QRCodeReader();
         var res = "";
         try
         {
-            var result = qrReader.decode(image);
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new RGBLuminanceSource(image, width, height)));
+            var result = qrReader.decode(bitmap);
             if (result != null)
             {
                 res = result.Text;

@@ -16,6 +16,7 @@ using System.Net;
 using System.Security.Cryptography;
 
 using static ARFlow.OtherUtils;
+using UnityEngine.XR.ARSubsystems;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
@@ -56,6 +57,8 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     private bool _isConnected = false;
     private Task connectTask = null;
+
+    public Camera camera;
 
 
     [Serializable]
@@ -266,12 +269,35 @@ public class ARFlowDeviceSample : MonoBehaviour
         GUIUtility.systemCopyBuffer = _clientManager.getSessionId();
     }
 
+    private Texture2D getCameraTexture()
+    {
+        int width = camera.pixelWidth;
+        int height = camera.pixelHeight;
+
+        Texture2D capture = new Texture2D(width, height);
+        camera.Render();
+
+        RenderTexture.active = camera.targetTexture;
+        capture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        capture.Apply();
+
+        return capture;
+    }
+
     public void ConnectByQr()
     {
-        cameraManager.TryAcquireLatestCpuImage(out var cpuImage);
+        var XRimage = _clientManager.GetColorImage();
 
+        //var img = getCameraTexture().GetPixels32();
+        var uid = QRManager.Instance.readQRCode(XRimage.Encode(), XRimage.Size().x, XRimage.Size().y);
 
+        if (uid != null)
+        {
+            PrintDebug(null);
+            _clientManager.JoinSessionTask(uid);
+        }
 
+        XRimage.Dispose();
     }
 
     public void ConnectFromClipboard()

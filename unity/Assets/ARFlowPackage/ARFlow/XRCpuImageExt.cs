@@ -130,7 +130,7 @@ namespace ARFlow
     /// <summary>
     /// Color image information
     /// </summary>
-    internal struct XRYCbCrColorImage : IXRCpuImageEncodable
+    public struct XRYCbCrColorImage : IXRCpuImageEncodable
     {
         private XRCpuImage _image;
         private readonly float _scale;
@@ -144,6 +144,11 @@ namespace ARFlow
             {
                 return _image.timestamp;
             }
+        }
+
+        public Vector2Int Size()
+        {
+            return _image.dimensions;
         }
 
         /// <summary>

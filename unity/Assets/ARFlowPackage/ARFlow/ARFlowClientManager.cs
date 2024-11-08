@@ -537,6 +537,11 @@ namespace ARFlow
         {
             return _client.sessionId;
         }
+
+        public XRYCbCrColorImage GetColorImage()
+        {
+            return new XRYCbCrColorImage(_cameraManager, _sampleSize);
+        }
     }
 }
 
