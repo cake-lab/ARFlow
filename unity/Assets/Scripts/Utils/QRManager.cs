@@ -5,62 +5,62 @@ using UnityEngine;
 using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
+using ZXing.Client.Result;
 
 using System;
 
 using ARFlow;
 using Unity.VisualScripting;
 
-public class QRManager
+public static class QRManager
 {
-    private static QRManager instance;
     private static readonly object padlock;
-    public static QRManager Instance
-    {
-        get
-        {
-            lock (padlock)
-            {
-                if (instance == null)
-                {
-                    instance = new QRManager();
-                }
-                return instance;
-            }
-        }
-    }
-    Texture2D lastTexture;
-    QRManager()
+
+    /// <summary>
+    /// Read QR from image bytes, assuming image is in RGBA32 format.
+    /// </summary>
+    /// <returns></returns>
+    public static string readQRCode(byte[] image, int width, int height)
     {
 
-    }
-    public string readQRCode(byte[] image, int width, int height)
-    {
-        var qrReader = new QRCodeReader();
+        var reader = new BarcodeReaderGeneric();
+
         var res = "";
         try
         {
-            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new RGBLuminanceSource(image, width, height)));
-            var result = qrReader.decode(bitmap);
+
+            //BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new RGBLuminanceSource(image, width, height)));
+            var result = reader.Decode(image, width, height, RGBLuminanceSource.BitmapFormat.RGBA32);
+
             if (result != null)
             {
                 res = result.Text;
             }
+
         }
         catch (Exception e)
         {
             OtherUtils.PrintDebug(e);
         }
 
+
         return res;
     }
 
-    public Texture2D encode(string toEncode, int width = 512, int height = 512)
+    public static Texture2D encode(string toEncode, int width = 512, int height = 512)
     {
+        
+
         var writer = new QRCodeWriter();
         BitMatrix imageMat = writer.encode(toEncode, BarcodeFormat.QR_CODE, width, height);
 
-        Texture2D encodeRes = new Texture2D(width, height,TextureFormat.RGBA32, false);
+        return BitMatToTexture2D(imageMat, width, height);
+    }
+
+    private static Texture2D BitMatToTexture2D (BitMatrix imageMat, int width, int height)
+    {
+        Texture2D encodeRes = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        encodeRes.hideFlags = HideFlags.DontSave;
         Color[] pixels = encodeRes.GetPixels();
 
         int k = 0;
@@ -92,7 +92,6 @@ public class QRManager
         encodeRes.SetPixels(pixels);
         encodeRes.Apply();
 
-        lastTexture = encodeRes;
 
         return encodeRes;
     }

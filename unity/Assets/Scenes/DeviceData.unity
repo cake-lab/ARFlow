@@ -369,7 +369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &126932677
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1254,7 +1254,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 626530734}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1571631377}
+        m_TargetAssemblyTypeName: ARFlowDeviceSample, Assembly-CSharp
+        m_MethodName: ConnectFromClipboard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &626530734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1376,13 +1388,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 471338401}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1571631377}
+        m_TargetAssemblyTypeName: ARFlowDeviceSample, Assembly-CSharp
+        m_MethodName: ShowQR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7092,7 +7104,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 944139496}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1571631377}
+        m_TargetAssemblyTypeName: ARFlowDeviceSample, Assembly-CSharp
+        m_MethodName: CopyUID
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &944139496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8106,7 +8130,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1380781671}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1571631377}
+        m_TargetAssemblyTypeName: ARFlowDeviceSample, Assembly-CSharp
+        m_MethodName: ConnectByQr
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1380781671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8737,6 +8773,7 @@ MonoBehaviour:
   ipField: {fileID: 1994881639}
   portField: {fileID: 1405679188}
   OptionsContainer: {fileID: 6234637625898487392}
+  camera: {fileID: 853469698}
   buttonOptionHandler:
     options:
     - {fileID: 1594908813}
@@ -8744,8 +8781,8 @@ MonoBehaviour:
     - {fileID: 126932676}
     toggleButton: {fileID: 880672785}
   QR:
-    rawQR: {fileID: 0}
-    window: {fileID: 0}
+    rawQR: {fileID: 1232599548}
+    window: {fileID: 471338401}
 --- !u!1 &1572649766
 GameObject:
   m_ObjectHideFlags: 0
@@ -8879,7 +8916,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 518653703}
   m_HandleRect: {fileID: 518653702}
   m_Direction: 2
-  m_Value: -0.0000013041687
+  m_Value: 0.0000013041687
   m_Size: 0.9417185
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9398,7 +9435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1970272707
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15369,7 +15406,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000076293945, y: -177.35088}
+  m_AnchoredPosition: {x: -0.000076293945, y: -177.35092}
   m_SizeDelta: {x: -4.7499847, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6234637625898487408

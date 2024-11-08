@@ -17,6 +17,8 @@ using System.Security.Cryptography;
 
 using static ARFlow.OtherUtils;
 using UnityEngine.XR.ARSubsystems;
+using Unity.Collections;
+using System.Net.Http;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
@@ -256,9 +258,9 @@ public class ARFlowDeviceSample : MonoBehaviour
     }
 
     // Button event handlers
-    public void OnShowQR()
+    public void ShowQR()
     {
-        Texture2D tex = QRManager.Instance.encode(_clientManager.getSessionId());
+        Texture2D tex = QRManager.encode(_clientManager.getSessionId());
 
         QR.rawQR.texture = tex;
         QR.window.SetActive(true);
@@ -269,35 +271,77 @@ public class ARFlowDeviceSample : MonoBehaviour
         GUIUtility.systemCopyBuffer = _clientManager.getSessionId();
     }
 
-    private Texture2D getCameraTexture()
+    /// <summary>
+    /// Get texture from camera in RGBA32 format
+    /// </summary>
+    /// <returns></returns>
+    //private Texture2D getCameraTexture()
+    //{
+    //    int width = camera.pixelWidth;
+    //    int height = camera.pixelHeight;
+
+
+    //    RenderTexture lastRT = RenderTexture.active;
+
+    //    RenderTexture.active = camera.targetTexture;
+
+    //    camera.Render();
+
+    //    Texture2D capture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+    //    capture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+    //    capture.Apply();
+
+    //    RenderTexture.active = lastRT;
+
+    //    return capture;
+    //}
+
+    
+    private byte[] GetCpuImage(out int width, out int height)
     {
-        int width = camera.pixelWidth;
-        int height = camera.pixelHeight;
+        try
+        {
+            cameraManager.TryAcquireLatestCpuImage(out var cpuImg);
+            width = cpuImg.width; height = cpuImg.height;
 
-        Texture2D capture = new Texture2D(width, height);
-        camera.Render();
+            var conversionParams = new XRCpuImage.ConversionParams(
+                cpuImg, 
+                TextureFormat.RGBA32
+            );
 
-        RenderTexture.active = camera.targetTexture;
-        capture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-        capture.Apply();
+            int conversionSize = cpuImg.GetConvertedDataSize(conversionParams);
+            var nativeBytes = new NativeArray<byte>(new byte[conversionSize], Allocator.Temp);
+            var nativeSlice = new NativeSlice<byte>(nativeBytes);
 
-        return capture;
+            cpuImg.Convert(conversionParams, nativeSlice);
+            var byteArr = nativeSlice.ToArray();
+            return byteArr;
+        }
+        catch (Exception e)
+        {
+            PrintDebug(e);
+        }
+        width = 0;
+        height = 0;
+        return null;
     }
 
     public void ConnectByQr()
     {
-        var XRimage = _clientManager.GetColorImage();
-
+        var img = GetCpuImage(out var width, out var height);
         //var img = getCameraTexture().GetPixels32();
-        var uid = QRManager.Instance.readQRCode(XRimage.Encode(), XRimage.Size().x, XRimage.Size().y);
+        var uid = QRManager.readQRCode(img, width, height);
 
-        if (uid != null)
+        if (uid != null && uid != "")
         {
-            PrintDebug(null);
+            PrintDebug($"Join session with UID: {uid}");
             _clientManager.JoinSessionTask(uid);
+            Toast.Show($"Joining session with UID {uid}", ToastColor.Green);
         }
-
-        XRimage.Dispose();
+        else
+        {
+            Toast.Show("No QR Code found", ToastColor.Red);
+        }
     }
 
     public void ConnectFromClipboard()
