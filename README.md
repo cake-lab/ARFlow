@@ -1,32 +1,57 @@
 # ARFlow
 
-ARFlow is a data-sharing layer that enables developer-friendly data streaming, storage, and visualization for augmented reality (AR) device data.
-This project aims to provide a tool to democratize and accelerate AR research and development.
+[![image](https://img.shields.io/pypi/v/arflow.svg)](https://pypi.python.org/pypi/arflow)
+[![image](https://img.shields.io/pypi/l/arflow.svg)](https://github.com/cake-lab/ARFlow/blob/main/LICENSE)
+[![image](https://img.shields.io/pypi/pyversions/arflow.svg)](https://pypi.python.org/pypi/arflow)
+[![CI status](https://github.com/cake-lab/ARFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/cake-lab/ARFlow/actions)
+[![Release status](https://github.com/cake-lab/ARFlow/actions/workflows/release.yml/badge.svg)](https://github.com/cake-lab/ARFlow/actions)
 
-[Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#how-to-cite-arflow) | [Project Page](https://cake.wpi.edu/ARFlow/) | [Video](https://youtu.be/mml8YrCgfTk)
+ARFlow is a data-sharing layer that enables developer-friendly data streaming,
+storage, and visualization for augmented reality (AR) device data. This project
+aims to provide a tool to democratize and accelerate AR research and
+development.
+
+[Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#how-to-cite-arflow)
+| [Project Page](https://cake.wpi.edu/ARFlow/) |
+[Video](https://youtu.be/mml8YrCgfTk)
 
 ## Quick Start
 
 ### Device Preparation
 
-First, you need an AR device.
-We currently support iOS and Android phones and tablets. Meta Quests 3 support is being developed.
-Make sure you have the developer mode enabled on your device.
+First, you need an AR device. We currently support iOS and Android phones and
+tablets. Meta Quests 3 support is being developed. Make sure you have the
+developer mode enabled on your device.
 
 ### Server Setup
 
-Next, start up your own ARFlow server instance:
+The ARFlow server can be simply installed via `pip`:
 
 ```shell
-arflow serve # This will start the server on port 8500
+# Create a python environment using your favorite tool, then
+pip install arflow
 ```
+
+Next, start up your own ARFlow server instance with the ARFlow CLI:
+
+```shell
+arflow view # This will start the server on port 8500
+```
+
+Besides from the `view` mode, ARFlow also has other powerful options. You can
+check out some examples [here](python/README.md#server-cli).
 
 ### Client Setup
 
-Next, go to the [releases](https://github.com/cake-lab/ARFlow/releases) page and find the prebuilt items for Android and iOS.
-For Android, directly install the prebuilt apk on your device. For iOS, compile the generated Xcode project to deploy the ARFlow client app to your iOS device. Note that you will need to configure the developer credentials in the Xcode project.
+Next, go to the [releases](https://github.com/cake-lab/ARFlow/releases) page and
+find the prebuilt items for Android and iOS. For Android, directly install the
+prebuilt `apk` on your device. For iOS, compile the generated Xcode project to
+deploy the ARFlow client app to your iOS device. Note that you will need to
+configure the developer credentials in the Xcode project.
 
-After launching the ARFlow client app, follow the onscreen instruction to input the server address and port (8500 for the previous example) information, then tap **connect** and **start**.
+After launching the ARFlow client app, follow the onscreen instruction to input
+the server address and port (8500 for the previous example) information, then
+tap **connect** and **start**.
 
 Watch our demo video:
 
@@ -34,10 +59,13 @@ Watch our demo video:
 
 ## Contribution
 
-Please read the [CONTRIBUTING](./CONTRIBUTING.md) guideline first, and refer to the individual [server](./python/README.md) and [client](./unity/README.md) installation guides.
+Please read the [CONTRIBUTING](./CONTRIBUTING.md) guideline first, and refer to
+the individual [server](./python/README.md) and [client](./unity/README.md)
+installation guides.
 
 ### Contributors
 
+<!-- markdownlint-disable -->
 <!-- readme: contributors -start -->
 <table>
 	<tbody>
@@ -67,10 +95,12 @@ Please read the [CONTRIBUTING](./CONTRIBUTING.md) guideline first, and refer to 
 	<tbody>
 </table>
 <!-- readme: contributors -end -->
+<!-- markdownlint-restore -->
 
 ## How to cite ARFlow
 
-Please add the following citation in your publication if you used our code for your research project.
+Please add the following citation in your publication if you used our code for
+your research project.
 
 ```bibtex
 @inproceedings{zhao2024arflow,
@@ -93,4 +123,5 @@ series = {HOTMOBILE '24}
 
 ## Acknowledgement
 
-This work was supported in part by NSF Grants #2105564 and #2236987, and a VMware grant.
+This work was supported in part by NSF Grants #2105564 and #2236987, and a
+VMware grant.
