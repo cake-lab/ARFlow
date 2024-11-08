@@ -64,4 +64,4 @@ exclude = ["examples", "arflow_grpc/**.py", "arflow_grpc/**.pyi"]
 
 [tool.pytest.ini_options]
 # coverage report for only `arflow` package with missing lines with 5 slowest tests
-addopts = "-vv --durations 5 --cov arflow --cov-report term-missing"
+addopts = "-vv --durations 5 --cov arflow --cov-report term-missing --cov-fail-under=100"
