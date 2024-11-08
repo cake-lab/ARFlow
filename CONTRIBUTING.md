@@ -274,8 +274,8 @@ https://github.com/cake-lab/ARFlow.git?path=unity/Assets/ARFlowPackage/ARFlow
 ### Architecture
 
 The core functions are implemented in
-[`unity/Assets/Scripts`](./unity/Assets/Scripts) directory. We show three
-example ARFlow integration of three different data sources:
+[unity/Assets/Scripts](./unity/Assets/Scripts) directory. We show three example
+ARFlow integration of three different data sources:
 
 - Mock data: inside
   [ARFlowMockDataSample.cs](./unity/Assets/Scripts/MockDataSample/ARFlowMockDataSample.cs)
@@ -331,7 +331,7 @@ Please refer to their documentation
 
 ### Black screen when opening the app
 
-In Build Settings, add `Scenes/DeviceData` to the scenes in Build. Add the
+In `Build Settings`, add `Scenes/DeviceData` to the scenes in `Build`. Add the
 corresponding scene of which you want to run
 
 - Sample data to test cameras (depth, RGB): add the `DeviceData` scene to build
