@@ -1,20 +1,19 @@
 # ARFlow Server Examples
 
-The simplest example is [`simple`](simple/simple.py). You may want to start
-there!
+The simplest example is [simple](simple/simple.py). You may want to start there!
 
 ## Setup
 
-If you're using `pip`, you should create and activate a virtual environment
-before installing any example's dependencies:
+If you're using pip, you should create and activate a virtual environment before
+installing any example's dependencies:
 
 ```shell
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-If you're using `poetry` instead, you can just install the dependencies
-directly, as shown below.
+If you're using Poetry instead, you can just install the dependencies directly,
+as shown below.
 
 ## Installing the example
 
@@ -57,5 +56,5 @@ simple
 Feel free to open a PR to add a new example!
 
 See the
-[`CONTRIBUTING.md`](https://github.com/cake-lab/ARFlow/blob/main/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/cake-lab/ARFlow/blob/main/CONTRIBUTING.md)
 file for details on how to contribute.
