@@ -193,6 +193,10 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         except KeyError:
             raise NotFound("Client info not found")
 
+        logger.debug(
+            f"Recieved frame for timestamp: {request.timestamp.seconds}.{request.timestamp.nanos}"
+        )
+
         color_rgb: ColorRGB | None = None
         depth_img: DepthImg | None = None
         transform: Transform | None = None
