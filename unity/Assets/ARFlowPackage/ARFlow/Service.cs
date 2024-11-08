@@ -25,65 +25,71 @@ namespace ARFlow {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiBwcm90b3MvYXJmbG93X2dycGMvc2VydmljZS5wcm90bxIJYXJmbG93LnYx",
-            "IpkKChVSZWdpc3RlckNsaWVudFJlcXVlc3QSEwoLZGV2aWNlX25hbWUYASAB",
-            "KAkSTAoRY2FtZXJhX2ludHJpbnNpY3MYAiABKAsyMS5hcmZsb3cudjEuUmVn",
-            "aXN0ZXJDbGllbnRSZXF1ZXN0LkNhbWVyYUludHJpbnNpY3MSQgoMY2FtZXJh",
-            "X2NvbG9yGAMgASgLMiwuYXJmbG93LnYxLlJlZ2lzdGVyQ2xpZW50UmVxdWVz",
-            "dC5DYW1lcmFDb2xvchJCCgxjYW1lcmFfZGVwdGgYBCABKAsyLC5hcmZsb3cu",
-            "djEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkNhbWVyYURlcHRoEkoKEGNhbWVy",
-            "YV90cmFuc2Zvcm0YBSABKAsyMC5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRS",
-            "ZXF1ZXN0LkNhbWVyYVRyYW5zZm9ybRJNChJjYW1lcmFfcG9pbnRfY2xvdWQY",
-            "BiABKAsyMS5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkNhbWVy",
-            "YVBvaW50Q2xvdWQSVQoWY2FtZXJhX3BsYW5lX2RldGVjdGlvbhgHIAEoCzI1",
-            "LmFyZmxvdy52MS5SZWdpc3RlckNsaWVudFJlcXVlc3QuQ2FtZXJhUGxhbmVE",
-            "ZXRlY3Rpb24SPQoJZ3lyb3Njb3BlGAggASgLMiouYXJmbG93LnYxLlJlZ2lz",
-            "dGVyQ2xpZW50UmVxdWVzdC5HeXJvc2NvcGUSNQoFYXVkaW8YCSABKAsyJi5h",
-            "cmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkF1ZGlvEjkKB21lc2hp",
-            "bmcYCiABKAsyKC5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0Lk1l",
-            "c2hpbmcapAEKEENhbWVyYUludHJpbnNpY3MSFgoOZm9jYWxfbGVuZ3RoX3gY",
-            "ASABKAISFgoOZm9jYWxfbGVuZ3RoX3kYAiABKAISGQoRcHJpbmNpcGFsX3Bv",
-            "aW50X3gYAyABKAISGQoRcHJpbmNpcGFsX3BvaW50X3kYBCABKAISFAoMcmVz",
-            "b2x1dGlvbl94GAUgASgFEhQKDHJlc29sdXRpb25feRgGIAEoBRpjCgtDYW1l",
-            "cmFDb2xvchIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgCIAEoCRIX",
-            "Cg9yZXNpemVfZmFjdG9yX3gYAyABKAISFwoPcmVzaXplX2ZhY3Rvcl95GAQg",
-            "ASgCGoEBCgtDYW1lcmFEZXB0aBIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFf",
-            "dHlwZRgCIAEoCRIiChpjb25maWRlbmNlX2ZpbHRlcmluZ19sZXZlbBgDIAEo",
-            "BRIUCgxyZXNvbHV0aW9uX3gYBCABKAUSFAoMcmVzb2x1dGlvbl95GAUgASgF",
-            "GiIKD0NhbWVyYVRyYW5zZm9ybRIPCgdlbmFibGVkGAEgASgIGkEKEENhbWVy",
-            "YVBvaW50Q2xvdWQSDwoHZW5hYmxlZBgBIAEoCBIcChRkZXB0aF91cHNjYWxl",
-            "X2ZhY3RvchgCIAEoAhonChRDYW1lcmFQbGFuZURldGVjdGlvbhIPCgdlbmFi",
-            "bGVkGAEgASgIGhwKCUd5cm9zY29wZRIPCgdlbmFibGVkGAEgASgIGhgKBUF1",
-            "ZGlvEg8KB2VuYWJsZWQYASABKAgaGgoHTWVzaGluZxIPCgdlbmFibGVkGAEg",
-            "ASgIIiUKFlJlZ2lzdGVyQ2xpZW50UmVzcG9uc2USCwoDdWlkGAEgASgJIq8H",
-            "ChNQcm9jZXNzRnJhbWVSZXF1ZXN0EgsKA3VpZBgBIAEoCRINCgVjb2xvchgC",
-            "IAEoDBINCgVkZXB0aBgDIAEoDBIRCgl0cmFuc2Zvcm0YBCABKAwSPQoPcGxh",
-            "bmVfZGV0ZWN0aW9uGAUgAygLMiQuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJl",
-            "cXVlc3QuUGxhbmUSPwoJZ3lyb3Njb3BlGAYgASgLMiwuYXJmbG93LnYxLlBy",
-            "b2Nlc3NGcmFtZVJlcXVlc3QuR3lyb3Njb3BlRGF0YRISCgphdWRpb19kYXRh",
-            "GAggAygCEjMKBm1lc2hlcxgJIAMoCzIjLmFyZmxvdy52MS5Qcm9jZXNzRnJh",
-            "bWVSZXF1ZXN0Lk1lc2gaKgoHVmVjdG9yMxIJCgF4GAEgASgCEgkKAXkYAiAB",
-            "KAISCQoBehgDIAEoAhofCgdWZWN0b3IyEgkKAXgYASABKAISCQoBeRgCIAEo",
-            "AhruAQoFUGxhbmUSNgoGY2VudGVyGAEgASgLMiYuYXJmbG93LnYxLlByb2Nl",
-            "c3NGcmFtZVJlcXVlc3QuVmVjdG9yMxI2CgZub3JtYWwYAiABKAsyJi5hcmZs",
-            "b3cudjEuUHJvY2Vzc0ZyYW1lUmVxdWVzdC5WZWN0b3IzEjQKBHNpemUYAyAB",
-            "KAsyJi5hcmZsb3cudjEuUHJvY2Vzc0ZyYW1lUmVxdWVzdC5WZWN0b3IyEj8K",
-            "D2JvdW5kYXJ5X3BvaW50cxgEIAMoCzImLmFyZmxvdy52MS5Qcm9jZXNzRnJh",
-            "bWVSZXF1ZXN0LlZlY3RvcjIaOAoKUXVhdGVybmlvbhIJCgF4GAEgASgCEgkK",
-            "AXkYAiABKAISCQoBehgDIAEoAhIJCgF3GAQgASgCGoICCg1HeXJvc2NvcGVE",
-            "YXRhEjsKCGF0dGl0dWRlGAEgASgLMikuYXJmbG93LnYxLlByb2Nlc3NGcmFt",
-            "ZVJlcXVlc3QuUXVhdGVybmlvbhI9Cg1yb3RhdGlvbl9yYXRlGAIgASgLMiYu",
-            "YXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3QuVmVjdG9yMxI3CgdncmF2",
-            "aXR5GAMgASgLMiYuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3QuVmVj",
-            "dG9yMxI8CgxhY2NlbGVyYXRpb24YBCABKAsyJi5hcmZsb3cudjEuUHJvY2Vz",
-            "c0ZyYW1lUmVxdWVzdC5WZWN0b3IzGhQKBE1lc2gSDAoEZGF0YRgBIAEoDCIn",
-            "ChRQcm9jZXNzRnJhbWVSZXNwb25zZRIPCgdtZXNzYWdlGAEgASgJMrcBCg1B",
-            "UkZsb3dTZXJ2aWNlElUKDlJlZ2lzdGVyQ2xpZW50EiAuYXJmbG93LnYxLlJl",
-            "Z2lzdGVyQ2xpZW50UmVxdWVzdBohLmFyZmxvdy52MS5SZWdpc3RlckNsaWVu",
-            "dFJlc3BvbnNlEk8KDFByb2Nlc3NGcmFtZRIeLmFyZmxvdy52MS5Qcm9jZXNz",
-            "RnJhbWVSZXF1ZXN0Gh8uYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlc3BvbnNl",
-            "QgmqAgZBUkZsb3diBnByb3RvMw=="));
+            "Gh9nb29nbGUvcHJvdG9idWYvdGltZXN0YW1wLnByb3RvIpkKChVSZWdpc3Rl",
+            "ckNsaWVudFJlcXVlc3QSEwoLZGV2aWNlX25hbWUYASABKAkSTAoRY2FtZXJh",
+            "X2ludHJpbnNpY3MYAiABKAsyMS5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRS",
+            "ZXF1ZXN0LkNhbWVyYUludHJpbnNpY3MSQgoMY2FtZXJhX2NvbG9yGAMgASgL",
+            "MiwuYXJmbG93LnYxLlJlZ2lzdGVyQ2xpZW50UmVxdWVzdC5DYW1lcmFDb2xv",
+            "chJCCgxjYW1lcmFfZGVwdGgYBCABKAsyLC5hcmZsb3cudjEuUmVnaXN0ZXJD",
+            "bGllbnRSZXF1ZXN0LkNhbWVyYURlcHRoEkoKEGNhbWVyYV90cmFuc2Zvcm0Y",
+            "BSABKAsyMC5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkNhbWVy",
+            "YVRyYW5zZm9ybRJNChJjYW1lcmFfcG9pbnRfY2xvdWQYBiABKAsyMS5hcmZs",
+            "b3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkNhbWVyYVBvaW50Q2xvdWQS",
+            "VQoWY2FtZXJhX3BsYW5lX2RldGVjdGlvbhgHIAEoCzI1LmFyZmxvdy52MS5S",
+            "ZWdpc3RlckNsaWVudFJlcXVlc3QuQ2FtZXJhUGxhbmVEZXRlY3Rpb24SPQoJ",
+            "Z3lyb3Njb3BlGAggASgLMiouYXJmbG93LnYxLlJlZ2lzdGVyQ2xpZW50UmVx",
+            "dWVzdC5HeXJvc2NvcGUSNQoFYXVkaW8YCSABKAsyJi5hcmZsb3cudjEuUmVn",
+            "aXN0ZXJDbGllbnRSZXF1ZXN0LkF1ZGlvEjkKB21lc2hpbmcYCiABKAsyKC5h",
+            "cmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0Lk1lc2hpbmcapAEKEENh",
+            "bWVyYUludHJpbnNpY3MSFgoOZm9jYWxfbGVuZ3RoX3gYASABKAISFgoOZm9j",
+            "YWxfbGVuZ3RoX3kYAiABKAISGQoRcHJpbmNpcGFsX3BvaW50X3gYAyABKAIS",
+            "GQoRcHJpbmNpcGFsX3BvaW50X3kYBCABKAISFAoMcmVzb2x1dGlvbl94GAUg",
+            "ASgFEhQKDHJlc29sdXRpb25feRgGIAEoBRpjCgtDYW1lcmFDb2xvchIPCgdl",
+            "bmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgCIAEoCRIXCg9yZXNpemVfZmFj",
+            "dG9yX3gYAyABKAISFwoPcmVzaXplX2ZhY3Rvcl95GAQgASgCGoEBCgtDYW1l",
+            "cmFEZXB0aBIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgCIAEoCRIi",
+            "Chpjb25maWRlbmNlX2ZpbHRlcmluZ19sZXZlbBgDIAEoBRIUCgxyZXNvbHV0",
+            "aW9uX3gYBCABKAUSFAoMcmVzb2x1dGlvbl95GAUgASgFGiIKD0NhbWVyYVRy",
+            "YW5zZm9ybRIPCgdlbmFibGVkGAEgASgIGkEKEENhbWVyYVBvaW50Q2xvdWQS",
+            "DwoHZW5hYmxlZBgBIAEoCBIcChRkZXB0aF91cHNjYWxlX2ZhY3RvchgCIAEo",
+            "AhonChRDYW1lcmFQbGFuZURldGVjdGlvbhIPCgdlbmFibGVkGAEgASgIGhwK",
+            "CUd5cm9zY29wZRIPCgdlbmFibGVkGAEgASgIGhgKBUF1ZGlvEg8KB2VuYWJs",
+            "ZWQYASABKAgaGgoHTWVzaGluZxIPCgdlbmFibGVkGAEgASgIIiUKFlJlZ2lz",
+            "dGVyQ2xpZW50UmVzcG9uc2USCwoDdWlkGAEgASgJImIKEkpvaW5TZXNzaW9u",
+            "UmVxdWVzdBITCgtzZXNzaW9uX3VpZBgBIAEoCRI3Cg1jbGllbnRfY29uZmln",
+            "GAIgASgLMiAuYXJmbG93LnYxLlJlZ2lzdGVyQ2xpZW50UmVxdWVzdCIiChNK",
+            "b2luU2Vzc2lvblJlc3BvbnNlEgsKA3VpZBgBIAEoCSLeBwoTUHJvY2Vzc0Zy",
+            "YW1lUmVxdWVzdBILCgN1aWQYASABKAkSLQoJdGltZXN0YW1wGAIgASgLMhou",
+            "Z29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBINCgVjb2xvchgDIAEoDBINCgVk",
+            "ZXB0aBgEIAEoDBIRCgl0cmFuc2Zvcm0YBSABKAwSPQoPcGxhbmVfZGV0ZWN0",
+            "aW9uGAYgAygLMiQuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3QuUGxh",
+            "bmUSPwoJZ3lyb3Njb3BlGAcgASgLMiwuYXJmbG93LnYxLlByb2Nlc3NGcmFt",
+            "ZVJlcXVlc3QuR3lyb3Njb3BlRGF0YRISCgphdWRpb19kYXRhGAggAygCEjMK",
+            "Bm1lc2hlcxgJIAMoCzIjLmFyZmxvdy52MS5Qcm9jZXNzRnJhbWVSZXF1ZXN0",
+            "Lk1lc2gaKgoHVmVjdG9yMxIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgD",
+            "IAEoAhofCgdWZWN0b3IyEgkKAXgYASABKAISCQoBeRgCIAEoAhruAQoFUGxh",
+            "bmUSNgoGY2VudGVyGAEgASgLMiYuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJl",
+            "cXVlc3QuVmVjdG9yMxI2CgZub3JtYWwYAiABKAsyJi5hcmZsb3cudjEuUHJv",
+            "Y2Vzc0ZyYW1lUmVxdWVzdC5WZWN0b3IzEjQKBHNpemUYAyABKAsyJi5hcmZs",
+            "b3cudjEuUHJvY2Vzc0ZyYW1lUmVxdWVzdC5WZWN0b3IyEj8KD2JvdW5kYXJ5",
+            "X3BvaW50cxgEIAMoCzImLmFyZmxvdy52MS5Qcm9jZXNzRnJhbWVSZXF1ZXN0",
+            "LlZlY3RvcjIaOAoKUXVhdGVybmlvbhIJCgF4GAEgASgCEgkKAXkYAiABKAIS",
+            "CQoBehgDIAEoAhIJCgF3GAQgASgCGoICCg1HeXJvc2NvcGVEYXRhEjsKCGF0",
+            "dGl0dWRlGAEgASgLMikuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3Qu",
+            "UXVhdGVybmlvbhI9Cg1yb3RhdGlvbl9yYXRlGAIgASgLMiYuYXJmbG93LnYx",
+            "LlByb2Nlc3NGcmFtZVJlcXVlc3QuVmVjdG9yMxI3CgdncmF2aXR5GAMgASgL",
+            "MiYuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3QuVmVjdG9yMxI8Cgxh",
+            "Y2NlbGVyYXRpb24YBCABKAsyJi5hcmZsb3cudjEuUHJvY2Vzc0ZyYW1lUmVx",
+            "dWVzdC5WZWN0b3IzGhQKBE1lc2gSDAoEZGF0YRgBIAEoDCInChRQcm9jZXNz",
+            "RnJhbWVSZXNwb25zZRIPCgdtZXNzYWdlGAEgASgJMoUCCg1BUkZsb3dTZXJ2",
+            "aWNlElUKDlJlZ2lzdGVyQ2xpZW50EiAuYXJmbG93LnYxLlJlZ2lzdGVyQ2xp",
+            "ZW50UmVxdWVzdBohLmFyZmxvdy52MS5SZWdpc3RlckNsaWVudFJlc3BvbnNl",
+            "EkwKC0pvaW5TZXNzaW9uEh0uYXJmbG93LnYxLkpvaW5TZXNzaW9uUmVxdWVz",
+            "dBoeLmFyZmxvdy52MS5Kb2luU2Vzc2lvblJlc3BvbnNlEk8KDFByb2Nlc3NG",
+            "cmFtZRIeLmFyZmxvdy52MS5Qcm9jZXNzRnJhbWVSZXF1ZXN0Gh8uYXJmbG93",
+            "LnYxLlByb2Nlc3NGcmFtZVJlc3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest), global::ARFlow.RegisterClientRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud", "CameraPlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest.Types.CameraIntrinsics), global::ARFlow.RegisterClientRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest.Types.CameraColor), global::ARFlow.RegisterClientRequest.Types.CameraColor.Parser, new[]{ "Enabled", "DataType", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
@@ -95,7 +101,9 @@ namespace ARFlow {
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest.Types.Audio), global::ARFlow.RegisterClientRequest.Types.Audio.Parser, new[]{ "Enabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest.Types.Meshing), global::ARFlow.RegisterClientRequest.Types.Meshing.Parser, new[]{ "Enabled" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientResponse), global::ARFlow.RegisterClientResponse.Parser, new[]{ "Uid" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ProcessFrameRequest), global::ARFlow.ProcessFrameRequest.Parser, new[]{ "Uid", "Color", "Depth", "Transform", "PlaneDetection", "Gyroscope", "AudioData", "Meshes" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ProcessFrameRequest.Types.Vector3), global::ARFlow.ProcessFrameRequest.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.JoinSessionRequest), global::ARFlow.JoinSessionRequest.Parser, new[]{ "SessionUid", "ClientConfig" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.JoinSessionResponse), global::ARFlow.JoinSessionResponse.Parser, new[]{ "Uid" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ProcessFrameRequest), global::ARFlow.ProcessFrameRequest.Parser, new[]{ "Uid", "Timestamp", "Color", "Depth", "Transform", "PlaneDetection", "Gyroscope", "AudioData", "Meshes" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ProcessFrameRequest.Types.Vector3), global::ARFlow.ProcessFrameRequest.Types.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ProcessFrameRequest.Types.Vector2), global::ARFlow.ProcessFrameRequest.Types.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ProcessFrameRequest.Types.Plane), global::ARFlow.ProcessFrameRequest.Types.Plane.Parser, new[]{ "Center", "Normal", "Size", "BoundaryPoints" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.ProcessFrameRequest.Types.Quaternion), global::ARFlow.ProcessFrameRequest.Types.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null),
@@ -555,7 +563,11 @@ namespace ARFlow {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -637,7 +649,11 @@ namespace ARFlow {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -1019,7 +1035,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1058,7 +1078,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -1336,7 +1360,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1367,7 +1395,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -1666,7 +1698,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1701,7 +1737,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -1888,7 +1928,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1907,7 +1951,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2107,7 +2155,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2130,7 +2182,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2305,7 +2361,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2324,7 +2384,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2495,7 +2559,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2514,7 +2582,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2685,7 +2757,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2704,7 +2780,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -2875,7 +2955,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -2894,7 +2978,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -3070,7 +3158,11 @@ namespace ARFlow {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3089,7 +3181,453 @@ namespace ARFlow {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Uid = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class JoinSessionRequest : pb::IMessage<JoinSessionRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<JoinSessionRequest> _parser = new pb::MessageParser<JoinSessionRequest>(() => new JoinSessionRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<JoinSessionRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ARFlow.ServiceReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public JoinSessionRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public JoinSessionRequest(JoinSessionRequest other) : this() {
+      sessionUid_ = other.sessionUid_;
+      clientConfig_ = other.clientConfig_ != null ? other.clientConfig_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public JoinSessionRequest Clone() {
+      return new JoinSessionRequest(this);
+    }
+
+    /// <summary>Field number for the "session_uid" field.</summary>
+    public const int SessionUidFieldNumber = 1;
+    private string sessionUid_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SessionUid {
+      get { return sessionUid_; }
+      set {
+        sessionUid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "client_config" field.</summary>
+    public const int ClientConfigFieldNumber = 2;
+    private global::ARFlow.RegisterClientRequest clientConfig_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ARFlow.RegisterClientRequest ClientConfig {
+      get { return clientConfig_; }
+      set {
+        clientConfig_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as JoinSessionRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(JoinSessionRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (SessionUid != other.SessionUid) return false;
+      if (!object.Equals(ClientConfig, other.ClientConfig)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (SessionUid.Length != 0) hash ^= SessionUid.GetHashCode();
+      if (clientConfig_ != null) hash ^= ClientConfig.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (SessionUid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(SessionUid);
+      }
+      if (clientConfig_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(ClientConfig);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (SessionUid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(SessionUid);
+      }
+      if (clientConfig_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(ClientConfig);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (SessionUid.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionUid);
+      }
+      if (clientConfig_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ClientConfig);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(JoinSessionRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.SessionUid.Length != 0) {
+        SessionUid = other.SessionUid;
+      }
+      if (other.clientConfig_ != null) {
+        if (clientConfig_ == null) {
+          ClientConfig = new global::ARFlow.RegisterClientRequest();
+        }
+        ClientConfig.MergeFrom(other.ClientConfig);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            SessionUid = input.ReadString();
+            break;
+          }
+          case 18: {
+            if (clientConfig_ == null) {
+              ClientConfig = new global::ARFlow.RegisterClientRequest();
+            }
+            input.ReadMessage(ClientConfig);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            SessionUid = input.ReadString();
+            break;
+          }
+          case 18: {
+            if (clientConfig_ == null) {
+              ClientConfig = new global::ARFlow.RegisterClientRequest();
+            }
+            input.ReadMessage(ClientConfig);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class JoinSessionResponse : pb::IMessage<JoinSessionResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<JoinSessionResponse> _parser = new pb::MessageParser<JoinSessionResponse>(() => new JoinSessionResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<JoinSessionResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ARFlow.ServiceReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public JoinSessionResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public JoinSessionResponse(JoinSessionResponse other) : this() {
+      uid_ = other.uid_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public JoinSessionResponse Clone() {
+      return new JoinSessionResponse(this);
+    }
+
+    /// <summary>Field number for the "uid" field.</summary>
+    public const int UidFieldNumber = 1;
+    private string uid_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Uid {
+      get { return uid_; }
+      set {
+        uid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as JoinSessionResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(JoinSessionResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Uid != other.Uid) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Uid.Length != 0) hash ^= Uid.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Uid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Uid);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Uid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Uid);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Uid.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Uid);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(JoinSessionResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Uid.Length != 0) {
+        Uid = other.Uid;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Uid = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3119,7 +3657,7 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ARFlow.ServiceReflection.Descriptor.MessageTypes[2]; }
+      get { return global::ARFlow.ServiceReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3140,6 +3678,7 @@ namespace ARFlow {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ProcessFrameRequest(ProcessFrameRequest other) : this() {
       uid_ = other.uid_;
+      timestamp_ = other.timestamp_ != null ? other.timestamp_.Clone() : null;
       color_ = other.color_;
       depth_ = other.depth_;
       transform_ = other.transform_;
@@ -3168,8 +3707,20 @@ namespace ARFlow {
       }
     }
 
+    /// <summary>Field number for the "timestamp" field.</summary>
+    public const int TimestampFieldNumber = 2;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp timestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp Timestamp {
+      get { return timestamp_; }
+      set {
+        timestamp_ = value;
+      }
+    }
+
     /// <summary>Field number for the "color" field.</summary>
-    public const int ColorFieldNumber = 2;
+    public const int ColorFieldNumber = 3;
     private pb::ByteString color_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3181,7 +3732,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "depth" field.</summary>
-    public const int DepthFieldNumber = 3;
+    public const int DepthFieldNumber = 4;
     private pb::ByteString depth_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3193,7 +3744,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "transform" field.</summary>
-    public const int TransformFieldNumber = 4;
+    public const int TransformFieldNumber = 5;
     private pb::ByteString transform_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3205,9 +3756,9 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "plane_detection" field.</summary>
-    public const int PlaneDetectionFieldNumber = 5;
+    public const int PlaneDetectionFieldNumber = 6;
     private static readonly pb::FieldCodec<global::ARFlow.ProcessFrameRequest.Types.Plane> _repeated_planeDetection_codec
-        = pb::FieldCodec.ForMessage(42, global::ARFlow.ProcessFrameRequest.Types.Plane.Parser);
+        = pb::FieldCodec.ForMessage(50, global::ARFlow.ProcessFrameRequest.Types.Plane.Parser);
     private readonly pbc::RepeatedField<global::ARFlow.ProcessFrameRequest.Types.Plane> planeDetection_ = new pbc::RepeatedField<global::ARFlow.ProcessFrameRequest.Types.Plane>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3216,7 +3767,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "gyroscope" field.</summary>
-    public const int GyroscopeFieldNumber = 6;
+    public const int GyroscopeFieldNumber = 7;
     private global::ARFlow.ProcessFrameRequest.Types.GyroscopeData gyroscope_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3268,6 +3819,7 @@ namespace ARFlow {
         return true;
       }
       if (Uid != other.Uid) return false;
+      if (!object.Equals(Timestamp, other.Timestamp)) return false;
       if (Color != other.Color) return false;
       if (Depth != other.Depth) return false;
       if (Transform != other.Transform) return false;
@@ -3283,6 +3835,7 @@ namespace ARFlow {
     public override int GetHashCode() {
       int hash = 1;
       if (Uid.Length != 0) hash ^= Uid.GetHashCode();
+      if (timestamp_ != null) hash ^= Timestamp.GetHashCode();
       if (Color.Length != 0) hash ^= Color.GetHashCode();
       if (Depth.Length != 0) hash ^= Depth.GetHashCode();
       if (Transform.Length != 0) hash ^= Transform.GetHashCode();
@@ -3312,21 +3865,25 @@ namespace ARFlow {
         output.WriteRawTag(10);
         output.WriteString(Uid);
       }
-      if (Color.Length != 0) {
+      if (timestamp_ != null) {
         output.WriteRawTag(18);
+        output.WriteMessage(Timestamp);
+      }
+      if (Color.Length != 0) {
+        output.WriteRawTag(26);
         output.WriteBytes(Color);
       }
       if (Depth.Length != 0) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(34);
         output.WriteBytes(Depth);
       }
       if (Transform.Length != 0) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(42);
         output.WriteBytes(Transform);
       }
       planeDetection_.WriteTo(output, _repeated_planeDetection_codec);
       if (gyroscope_ != null) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(58);
         output.WriteMessage(Gyroscope);
       }
       audioData_.WriteTo(output, _repeated_audioData_codec);
@@ -3345,21 +3902,25 @@ namespace ARFlow {
         output.WriteRawTag(10);
         output.WriteString(Uid);
       }
-      if (Color.Length != 0) {
+      if (timestamp_ != null) {
         output.WriteRawTag(18);
+        output.WriteMessage(Timestamp);
+      }
+      if (Color.Length != 0) {
+        output.WriteRawTag(26);
         output.WriteBytes(Color);
       }
       if (Depth.Length != 0) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(34);
         output.WriteBytes(Depth);
       }
       if (Transform.Length != 0) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(42);
         output.WriteBytes(Transform);
       }
       planeDetection_.WriteTo(ref output, _repeated_planeDetection_codec);
       if (gyroscope_ != null) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(58);
         output.WriteMessage(Gyroscope);
       }
       audioData_.WriteTo(ref output, _repeated_audioData_codec);
@@ -3376,6 +3937,9 @@ namespace ARFlow {
       int size = 0;
       if (Uid.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Uid);
+      }
+      if (timestamp_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Timestamp);
       }
       if (Color.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(Color);
@@ -3407,6 +3971,12 @@ namespace ARFlow {
       if (other.Uid.Length != 0) {
         Uid = other.Uid;
       }
+      if (other.timestamp_ != null) {
+        if (timestamp_ == null) {
+          Timestamp = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        Timestamp.MergeFrom(other.Timestamp);
+      }
       if (other.Color.Length != 0) {
         Color = other.Color;
       }
@@ -3436,7 +4006,11 @@ namespace ARFlow {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3445,22 +4019,29 @@ namespace ARFlow {
             break;
           }
           case 18: {
-            Color = input.ReadBytes();
+            if (timestamp_ == null) {
+              Timestamp = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(Timestamp);
             break;
           }
           case 26: {
-            Depth = input.ReadBytes();
+            Color = input.ReadBytes();
             break;
           }
           case 34: {
-            Transform = input.ReadBytes();
+            Depth = input.ReadBytes();
             break;
           }
           case 42: {
-            planeDetection_.AddEntriesFrom(input, _repeated_planeDetection_codec);
+            Transform = input.ReadBytes();
             break;
           }
           case 50: {
+            planeDetection_.AddEntriesFrom(input, _repeated_planeDetection_codec);
+            break;
+          }
+          case 58: {
             if (gyroscope_ == null) {
               Gyroscope = new global::ARFlow.ProcessFrameRequest.Types.GyroscopeData();
             }
@@ -3487,7 +4068,11 @@ namespace ARFlow {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3496,22 +4081,29 @@ namespace ARFlow {
             break;
           }
           case 18: {
-            Color = input.ReadBytes();
+            if (timestamp_ == null) {
+              Timestamp = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(Timestamp);
             break;
           }
           case 26: {
-            Depth = input.ReadBytes();
+            Color = input.ReadBytes();
             break;
           }
           case 34: {
-            Transform = input.ReadBytes();
+            Depth = input.ReadBytes();
             break;
           }
           case 42: {
-            planeDetection_.AddEntriesFrom(ref input, _repeated_planeDetection_codec);
+            Transform = input.ReadBytes();
             break;
           }
           case 50: {
+            planeDetection_.AddEntriesFrom(ref input, _repeated_planeDetection_codec);
+            break;
+          }
+          case 58: {
             if (gyroscope_ == null) {
               Gyroscope = new global::ARFlow.ProcessFrameRequest.Types.GyroscopeData();
             }
@@ -3751,7 +4343,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -3778,7 +4374,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -3986,7 +4586,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -4009,7 +4613,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -4269,7 +4877,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -4309,7 +4921,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -4588,7 +5204,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -4619,7 +5239,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -4901,7 +5525,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -4944,7 +5572,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -5142,7 +5774,11 @@ namespace ARFlow {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -5161,7 +5797,11 @@ namespace ARFlow {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -5196,7 +5836,7 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ARFlow.ServiceReflection.Descriptor.MessageTypes[3]; }
+      get { return global::ARFlow.ServiceReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5337,7 +5977,11 @@ namespace ARFlow {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -5356,7 +6000,11 @@ namespace ARFlow {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;

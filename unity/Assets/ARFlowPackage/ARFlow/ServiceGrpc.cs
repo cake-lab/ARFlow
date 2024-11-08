@@ -53,6 +53,10 @@ namespace ARFlow {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::ARFlow.RegisterClientResponse> __Marshaller_arflow_v1_RegisterClientResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.RegisterClientResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::ARFlow.JoinSessionRequest> __Marshaller_arflow_v1_JoinSessionRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.JoinSessionRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::ARFlow.JoinSessionResponse> __Marshaller_arflow_v1_JoinSessionResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.JoinSessionResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::ARFlow.ProcessFrameRequest> __Marshaller_arflow_v1_ProcessFrameRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.ProcessFrameRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::ARFlow.ProcessFrameResponse> __Marshaller_arflow_v1_ProcessFrameResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::ARFlow.ProcessFrameResponse.Parser));
@@ -64,6 +68,14 @@ namespace ARFlow {
         "RegisterClient",
         __Marshaller_arflow_v1_RegisterClientRequest,
         __Marshaller_arflow_v1_RegisterClientResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::ARFlow.JoinSessionRequest, global::ARFlow.JoinSessionResponse> __Method_JoinSession = new grpc::Method<global::ARFlow.JoinSessionRequest, global::ARFlow.JoinSessionResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "JoinSession",
+        __Marshaller_arflow_v1_JoinSessionRequest,
+        __Marshaller_arflow_v1_JoinSessionResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::ARFlow.ProcessFrameRequest, global::ARFlow.ProcessFrameResponse> __Method_ProcessFrame = new grpc::Method<global::ARFlow.ProcessFrameRequest, global::ARFlow.ProcessFrameResponse>(
@@ -98,12 +110,18 @@ namespace ARFlow {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::ARFlow.JoinSessionResponse> JoinSession(global::ARFlow.JoinSessionRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
       /// <summary>
       /// Accepts a data frame from a client, returning an acknowledgment.
       ///
       /// Errors:
       /// - NOT_FOUND: If the client configuration is not found.
-      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type
       /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request received from the client.</param>
@@ -204,12 +222,32 @@ namespace ARFlow {
       {
         return CallInvoker.AsyncUnaryCall(__Method_RegisterClient, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::ARFlow.JoinSessionResponse JoinSession(global::ARFlow.JoinSessionRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return JoinSession(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::ARFlow.JoinSessionResponse JoinSession(global::ARFlow.JoinSessionRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_JoinSession, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::ARFlow.JoinSessionResponse> JoinSessionAsync(global::ARFlow.JoinSessionRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return JoinSessionAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::ARFlow.JoinSessionResponse> JoinSessionAsync(global::ARFlow.JoinSessionRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_JoinSession, null, options, request);
+      }
       /// <summary>
       /// Accepts a data frame from a client, returning an acknowledgment.
       ///
       /// Errors:
       /// - NOT_FOUND: If the client configuration is not found.
-      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type
       /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -227,7 +265,7 @@ namespace ARFlow {
       ///
       /// Errors:
       /// - NOT_FOUND: If the client configuration is not found.
-      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type
       /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -243,7 +281,7 @@ namespace ARFlow {
       ///
       /// Errors:
       /// - NOT_FOUND: If the client configuration is not found.
-      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type
       /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -261,7 +299,7 @@ namespace ARFlow {
       ///
       /// Errors:
       /// - NOT_FOUND: If the client configuration is not found.
-      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type 
+      /// - INVALID_ARGUMENT: If the color data type is not recognized or the depth data type
       /// is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -287,6 +325,7 @@ namespace ARFlow {
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_RegisterClient, serviceImpl.RegisterClient)
+          .AddMethod(__Method_JoinSession, serviceImpl.JoinSession)
           .AddMethod(__Method_ProcessFrame, serviceImpl.ProcessFrame).Build();
     }
 
@@ -298,6 +337,7 @@ namespace ARFlow {
     public static void BindService(grpc::ServiceBinderBase serviceBinder, ARFlowServiceBase serviceImpl)
     {
       serviceBinder.AddMethod(__Method_RegisterClient, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::ARFlow.RegisterClientRequest, global::ARFlow.RegisterClientResponse>(serviceImpl.RegisterClient));
+      serviceBinder.AddMethod(__Method_JoinSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::ARFlow.JoinSessionRequest, global::ARFlow.JoinSessionResponse>(serviceImpl.JoinSession));
       serviceBinder.AddMethod(__Method_ProcessFrame, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::ARFlow.ProcessFrameRequest, global::ARFlow.ProcessFrameResponse>(serviceImpl.ProcessFrame));
     }
 

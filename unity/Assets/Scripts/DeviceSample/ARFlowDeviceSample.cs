@@ -57,7 +57,47 @@ public class ARFlowDeviceSample : MonoBehaviour
     private bool _isConnected = false;
     private Task connectTask = null;
 
-    // Start is called before the first frame update
+
+    [Serializable]
+    public class ButtonOptionHandler
+    {
+        public List<GameObject> options;
+        public Button toggleButton;
+
+        private int currentOption = 0;
+
+        public void toggleOption()
+        {
+            options[currentOption].SetActive(false);
+            currentOption = (currentOption + 1) % options.Count;
+            options[currentOption].SetActive(true);
+        }
+
+        public void disable()
+        {
+            options[currentOption].SetActive(false);
+            options[0].SetActive(true);
+            currentOption = 0;
+
+            toggleButton.interactable = false;
+        }
+
+        public void enable()
+        {
+            toggleButton.interactable = true;
+        }
+    }
+    public ButtonOptionHandler buttonOptionHandler;
+
+    [Serializable]
+    public class QRWindow
+    {
+        public RawImage rawQR;
+        public GameObject window;
+    }
+    public QRWindow QR;
+
+
     void Start()
     {
         connectButton.onClick.AddListener(OnConnectButtonClick);
@@ -78,6 +118,9 @@ public class ARFlowDeviceSample : MonoBehaviour
         // The following suppose to limit the fps to 30, but it doesn't work.
         // QualitySettings.vSyncCount = 0;
         // Application.targetFrameRate = 30;
+
+        buttonOptionHandler.toggleButton.onClick.AddListener(
+            buttonOptionHandler.toggleOption);
     }
 
     void AddModalityOptionsToConfig()
@@ -167,28 +210,23 @@ public class ARFlowDeviceSample : MonoBehaviour
                 PrintDebug(connectTask.Exception);
                 connectTask = null;
                 Toast.Show("Connection failed.", ToastColor.Red);
+
+                buttonOptionHandler.disable();
             }
             else if (connectTask.IsCompletedSuccessfully)
             {
                 _isConnected = true;
                 Toast.Show("Connected successfully.", ToastColor.Green);
+
+                buttonOptionHandler.enable();
             }
         }
     }
 
-    public static void PrettyPrintDictionary(Dictionary<string, bool> dict)
-    {
-        string log = "";
-        foreach (var kvp in dict)
-        {
-            //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-            log += string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-        }
-        PrintDebug(log);
-    }
+
 
     /// <summary>
-    /// On pause, pressing the button changes the _enabled flag to true  (and text display) and data starts sending in Update()
+    /// On pause, pressing the button changes the _eabled flag to true  (and text display) and data starts sending in Update()
     /// On start, pressing the button changes the _enabled flag to false and data stops sending
     /// </summary>
     private void OnStartPauseButtonClick()
@@ -212,6 +250,34 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         _enabled = !_enabled;
         startPauseButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";
+    }
+
+    // Button event handlers
+    public void OnShowQR()
+    {
+        Texture2D tex = QRManager.Instance.encode(_clientManager.getSessionId());
+
+        QR.rawQR.texture = tex;
+        QR.window.SetActive(true);
+    }
+
+    public void CopyUID()
+    {
+        GUIUtility.systemCopyBuffer = _clientManager.getSessionId();
+    }
+
+    public void ConnectByQr()
+    {
+        cameraManager.TryAcquireLatestCpuImage(out var cpuImage);
+
+
+
+    }
+
+    public void ConnectFromClipboard()
+    {
+        string uid = GUIUtility.systemCopyBuffer;
+        _clientManager.JoinSessionTask(uid);
     }
 
     // Update is called once per frame

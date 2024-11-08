@@ -20,6 +20,15 @@ namespace ARFlow
     {
         private XRCpuImage _image;
 
+        public double timeStamp
+        {
+            get
+            {
+                return _image.timestamp;
+            }
+        }
+
+
         /// <summary>
         /// Get Depth image from AROcclusionManager. 
         /// </summary>
@@ -51,6 +60,14 @@ namespace ARFlow
         private XRCpuImage _depthImage;
         private XRCpuImage _confidenceImage;
         private readonly int _minConfidence;
+
+        public double timeStamp
+        {
+            get
+            {
+                return _depthImage.timestamp;
+            }
+        }
 
         public Vector2Int Size()
         {
@@ -120,6 +137,14 @@ namespace ARFlow
 
         private readonly Vector2Int _nativeSize;
         private readonly Vector2Int _sampleSize;
+
+        public double timeStamp
+        {
+            get
+            {
+                return _image.timestamp;
+            }
+        }
 
         /// <summary>
         /// Get image from ARCameraManager, and set scale to relative of sample (depth) size.

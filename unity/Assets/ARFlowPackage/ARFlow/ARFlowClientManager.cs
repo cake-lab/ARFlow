@@ -304,6 +304,40 @@ namespace ARFlow
         }
 
         /// <summary>
+        /// Join multiplayer session async
+        /// </summary>
+        /// <param name="sessionId">Session ID to join</param>
+        /// <param name="taskFinishedHook">Hook to run after task completes</param>
+        /// <returns></returns>
+        public Task<string> JoinSessionTask(string sessionId, Action<Task> taskFinishedHook = null)
+        {
+            JoinSessionRequest joinSessionRequest = new JoinSessionRequest();
+            joinSessionRequest.SessionUid = sessionId;
+            joinSessionRequest.ClientConfig = GetClientConfiguration();
+            var task = Task.Run(() => _client.JoinSession(joinSessionRequest));
+            if (taskFinishedHook is not null)
+                task.ContinueWith(taskFinishedHook);
+
+            oldTask = task;
+            return task;
+        }
+
+        /// <summary>
+        /// Join multiplayer session
+        /// </summary>
+        /// <param name="sessionId">Session ID to join</param>
+        /// <returns></returns>
+        public string JoinSession(string sessionId)
+        {
+            JoinSessionRequest joinSessionRequest = new JoinSessionRequest();
+            joinSessionRequest.SessionUid = sessionId;
+            joinSessionRequest.ClientConfig = GetClientConfiguration();
+            var res = _client.JoinSession(joinSessionRequest);
+
+            return res;
+        }
+
+        /// <summary>
         /// Helper function to convert from unity data types to custom proto types
         /// </summary>
         /// <param name="v"></param>
@@ -374,10 +408,17 @@ namespace ARFlow
         {
             var dataFrame = new ProcessFrameRequest();
 
+            if (!_activatedDataModalities["CameraColor"] || _activatedDataModalities["CameraColor"])
+                dataFrame.Timestamp = Timestamp.FromDateTime(System.DateTime.UtcNow);
+
             if (_activatedDataModalities["CameraColor"])
             {
                 var colorImage = new XRYCbCrColorImage(_cameraManager, _sampleSize);
                 dataFrame.Color = ByteString.CopyFrom(colorImage.Encode());
+                var dateTime = DateTime.FromOADate(colorImage.timeStamp);
+                dataFrame.Timestamp = Timestamp.FromDateTime(
+                    dateTime
+                    );
 
                 colorImage.Dispose();
             }
@@ -386,7 +427,10 @@ namespace ARFlow
             {
                 var depthImage = new XRConfidenceFilteredDepthImage(_occlusionManager, 0);
                 dataFrame.Depth = ByteString.CopyFrom(depthImage.Encode());
-
+                var dateTime = DateTime.FromOADate(depthImage.timeStamp);
+                dataFrame.Timestamp = Timestamp.FromDateTime(
+                    dateTime
+                    );
                 depthImage.Dispose();
             }
 
@@ -487,6 +531,11 @@ namespace ARFlow
 
             string serverMessage = _client.SendFrame(dataFrame);
             return serverMessage;
+        }
+
+        public string getSessionId()
+        {
+            return _client.sessionId;
         }
     }
 }

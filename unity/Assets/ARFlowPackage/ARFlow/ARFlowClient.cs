@@ -17,6 +17,11 @@ namespace ARFlow
         private readonly ARFlowService.ARFlowServiceClient _client;
         private string _sessionId;
 
+        public string sessionId
+        {
+            get { return _sessionId; }
+        }
+
         /// <summary>
         /// Initialize the client
         /// </summary>
@@ -68,6 +73,29 @@ namespace ARFlow
                 // });
                 var response = _client.ProcessFrame(frameData);
                 res = response.Message;
+            }
+            catch (Exception e)
+            {
+                // Try to catch any exceptions.
+                // Network, device image, camera intrinsics
+                PrintDebug(e.Message);
+            }
+
+            return res;
+        }
+
+        public string JoinSession(JoinSessionRequest joinSessionRequest)
+        {
+            string res = "";
+            try
+            {
+                // _client.data_frameAsync(frameData)
+                // .ResponseAsync.ContinueWith(response =>
+                // {
+                //     PrintDebug(response);
+                // });
+                var response = _client.JoinSession(joinSessionRequest);
+                res = response.Uid;
             }
             catch (Exception e)
             {
