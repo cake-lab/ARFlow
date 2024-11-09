@@ -346,7 +346,8 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
                     raise InvalidArgument(str(e))
 
                 # Close the boundary by adding the first point to the end.
-                boundary_3d = np.vstack([boundary_3d, boundary_3d[0]])
+                if boundary_3d.shape[0] > 0:
+                    boundary_3d = np.vstack([boundary_3d, boundary_3d[0]])
                 strips.append(boundary_3d)
             rr.log(
                 f"arflow/{request.uid}/world/detected-planes",

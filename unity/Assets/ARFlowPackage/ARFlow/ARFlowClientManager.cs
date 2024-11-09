@@ -420,8 +420,8 @@ namespace ARFlow
         {
             var dataFrame = new ProcessFrameRequest();
 
-            if (!_activatedDataModalities["CameraColor"] || _activatedDataModalities["CameraColor"])
-                dataFrame.Timestamp = Timestamp.FromDateTime(System.DateTime.UtcNow);
+            //if (!_activatedDataModalities["CameraColor"] || !_activatedDataModalities["CameraDepth"])
+            //    dataFrame.Timestamp = Timestamp.FromDateTime(System.DateTime.UtcNow);
 
             if (_activatedDataModalities["CameraColor"])
             {

@@ -96,6 +96,8 @@ namespace ARFlow
                 // });
                 var response = _client.JoinSession(joinSessionRequest);
                 res = response.Uid;
+
+                _sessionId = response.Uid;
             }
             catch (Exception e)
             {

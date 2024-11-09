@@ -215,15 +215,11 @@ public class ARFlowDeviceSample : MonoBehaviour
                 PrintDebug(connectTask.Exception);
                 connectTask = null;
                 Toast.Show("Connection failed.", ToastColor.Red);
-
-                buttonOptionHandler.disable();
             }
             else if (connectTask.IsCompletedSuccessfully)
             {
                 _isConnected = true;
                 Toast.Show("Connected successfully.", ToastColor.Green);
-
-                buttonOptionHandler.enable();
             }
         }
     }
@@ -260,6 +256,12 @@ public class ARFlowDeviceSample : MonoBehaviour
     // Button event handlers
     public void ShowQR()
     {
+        var uid = _clientManager.getSessionId();
+        if (string.IsNullOrWhiteSpace(uid))
+        {
+            Toast.Show("To share Uid, first conenct to a session", ToastColor.Red);
+            return;
+        }
         Texture2D tex = QRManager.encode(_clientManager.getSessionId());
 
         QR.rawQR.texture = tex;
@@ -268,7 +270,14 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public void CopyUID()
     {
-        GUIUtility.systemCopyBuffer = _clientManager.getSessionId();
+        var uid = _clientManager.getSessionId();
+        if (string.IsNullOrWhiteSpace(uid))
+        {
+            Toast.Show("To share Uid, first conenct to a session", ToastColor.Red);
+            return;
+        }
+        GUIUtility.systemCopyBuffer = uid;
+        Toast.Show("Copied to clipboard", ToastColor.Green);
     }
 
     /// <summary>
@@ -296,7 +305,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     //    return capture;
     //}
 
-    
+
     private byte[] GetCpuImage(out int width, out int height)
     {
         try

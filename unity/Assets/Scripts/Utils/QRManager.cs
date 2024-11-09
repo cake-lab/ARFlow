@@ -24,6 +24,7 @@ public static class QRManager
     {
 
         var reader = new BarcodeReaderGeneric();
+        reader.Options.TryHarder = true;
 
         var res = "";
         try
