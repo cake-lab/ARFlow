@@ -42,6 +42,8 @@ namespace ARFlow
         private AudioStreaming _audioStreaming;
         private MeshEncoder _meshEncoder;
 
+        private string currentUid = null;
+
         //TODO
         //private Dictionary<string, Dictionary<string, Any>> _modalityConfig
 
@@ -144,7 +146,10 @@ namespace ARFlow
             oldTask?.ContinueWith(t => { });
 
             var requestData = GetClientConfiguration();
-            var task = Task.Run(() => _client.Connect(requestData));
+            var task = Task.Run(() => {
+                _client.Connect(requestData);
+                currentUid = _client.sessionId;
+            });
             if (taskFinishedHook is not null)
                 task.ContinueWith(taskFinishedHook);
 
@@ -153,6 +158,35 @@ namespace ARFlow
             return task;
         }
 
+        /// <summary>
+        /// Connect to the server at an address, and with data modalities activated or not.
+        /// </summary>
+        /// <param name="address">Server address</param>
+        /// <param name="activatedDataModalities">Dictionary of all data modalities, either activated or not</param>
+        public void Connect(
+            string address,
+            Dictionary<string, bool> activatedDataModalities = null
+        )
+        {
+            ResetState();
+            _client = new ARFlowClient(address);
+
+            _activatedDataModalities = activatedDataModalities;
+            if (activatedDataModalities == null)
+                _activatedDataModalities = DEFAULT_MODALITIES;
+
+            try
+            {
+                var requestData = GetClientConfiguration();
+                _client.Connect(requestData);
+
+                currentUid = _client.sessionId;
+            }
+            catch (Exception e)
+            {
+                PrintDebug(e.Message);
+            }
+        }
 
         private void ResetState()
         {
@@ -184,6 +218,10 @@ namespace ARFlow
                 }
 
             };
+            if (currentUid != null)
+            {
+                requestData.InitUid = currentUid;
+            }
             if (_activatedDataModalities["CameraColor"])
             {
                 var CameraColor = new RegisterClientRequest.Types.CameraColor()
@@ -275,33 +313,7 @@ namespace ARFlow
 
         }
 
-        /// <summary>
-        /// Connect to the server at an address, and with data modalities activated or not.
-        /// </summary>
-        /// <param name="address">Server address</param>
-        /// <param name="activatedDataModalities">Dictionary of all data modalities, either activated or not</param>
-        public void Connect(
-            string address,
-            Dictionary<string, bool> activatedDataModalities = null
-        )
-        {
-            ResetState();
-            _client = new ARFlowClient(address);
 
-            _activatedDataModalities = activatedDataModalities;
-            if (activatedDataModalities == null)
-                _activatedDataModalities = DEFAULT_MODALITIES;
-
-            try
-            {
-                var requestData = GetClientConfiguration();
-                _client.Connect(requestData);
-            }
-            catch (Exception e)
-            {
-                PrintDebug(e.Message);
-            }
-        }
 
         /// <summary>
         /// Join multiplayer session async
@@ -539,7 +551,7 @@ namespace ARFlow
 
         public string getSessionId()
         {
-            return _client.sessionId;
+            return currentUid;
         }
 
         public XRYCbCrColorImage GetColorImage()

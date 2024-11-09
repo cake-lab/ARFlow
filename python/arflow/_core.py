@@ -98,6 +98,8 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         """
         if request.init_uid == "":
             request.init_uid = uuid.uuid4().hex
+        else:
+            logger.debug("Client has provided a UUID: %s", request.init_uid)
 
         stream = rr.new_recording(
             application_id="arflow",

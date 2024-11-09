@@ -25,73 +25,74 @@ namespace ARFlow {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiBwcm90b3MvYXJmbG93X2dycGMvc2VydmljZS5wcm90bxIJYXJmbG93LnYx",
-            "Gh9nb29nbGUvcHJvdG9idWYvdGltZXN0YW1wLnByb3RvIpkKChVSZWdpc3Rl",
-            "ckNsaWVudFJlcXVlc3QSEwoLZGV2aWNlX25hbWUYASABKAkSTAoRY2FtZXJh",
-            "X2ludHJpbnNpY3MYAiABKAsyMS5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRS",
-            "ZXF1ZXN0LkNhbWVyYUludHJpbnNpY3MSQgoMY2FtZXJhX2NvbG9yGAMgASgL",
-            "MiwuYXJmbG93LnYxLlJlZ2lzdGVyQ2xpZW50UmVxdWVzdC5DYW1lcmFDb2xv",
-            "chJCCgxjYW1lcmFfZGVwdGgYBCABKAsyLC5hcmZsb3cudjEuUmVnaXN0ZXJD",
-            "bGllbnRSZXF1ZXN0LkNhbWVyYURlcHRoEkoKEGNhbWVyYV90cmFuc2Zvcm0Y",
-            "BSABKAsyMC5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkNhbWVy",
-            "YVRyYW5zZm9ybRJNChJjYW1lcmFfcG9pbnRfY2xvdWQYBiABKAsyMS5hcmZs",
-            "b3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkNhbWVyYVBvaW50Q2xvdWQS",
-            "VQoWY2FtZXJhX3BsYW5lX2RldGVjdGlvbhgHIAEoCzI1LmFyZmxvdy52MS5S",
-            "ZWdpc3RlckNsaWVudFJlcXVlc3QuQ2FtZXJhUGxhbmVEZXRlY3Rpb24SPQoJ",
-            "Z3lyb3Njb3BlGAggASgLMiouYXJmbG93LnYxLlJlZ2lzdGVyQ2xpZW50UmVx",
-            "dWVzdC5HeXJvc2NvcGUSNQoFYXVkaW8YCSABKAsyJi5hcmZsb3cudjEuUmVn",
-            "aXN0ZXJDbGllbnRSZXF1ZXN0LkF1ZGlvEjkKB21lc2hpbmcYCiABKAsyKC5h",
-            "cmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0Lk1lc2hpbmcapAEKEENh",
-            "bWVyYUludHJpbnNpY3MSFgoOZm9jYWxfbGVuZ3RoX3gYASABKAISFgoOZm9j",
-            "YWxfbGVuZ3RoX3kYAiABKAISGQoRcHJpbmNpcGFsX3BvaW50X3gYAyABKAIS",
-            "GQoRcHJpbmNpcGFsX3BvaW50X3kYBCABKAISFAoMcmVzb2x1dGlvbl94GAUg",
-            "ASgFEhQKDHJlc29sdXRpb25feRgGIAEoBRpjCgtDYW1lcmFDb2xvchIPCgdl",
-            "bmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgCIAEoCRIXCg9yZXNpemVfZmFj",
-            "dG9yX3gYAyABKAISFwoPcmVzaXplX2ZhY3Rvcl95GAQgASgCGoEBCgtDYW1l",
-            "cmFEZXB0aBIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgCIAEoCRIi",
-            "Chpjb25maWRlbmNlX2ZpbHRlcmluZ19sZXZlbBgDIAEoBRIUCgxyZXNvbHV0",
-            "aW9uX3gYBCABKAUSFAoMcmVzb2x1dGlvbl95GAUgASgFGiIKD0NhbWVyYVRy",
-            "YW5zZm9ybRIPCgdlbmFibGVkGAEgASgIGkEKEENhbWVyYVBvaW50Q2xvdWQS",
-            "DwoHZW5hYmxlZBgBIAEoCBIcChRkZXB0aF91cHNjYWxlX2ZhY3RvchgCIAEo",
-            "AhonChRDYW1lcmFQbGFuZURldGVjdGlvbhIPCgdlbmFibGVkGAEgASgIGhwK",
-            "CUd5cm9zY29wZRIPCgdlbmFibGVkGAEgASgIGhgKBUF1ZGlvEg8KB2VuYWJs",
-            "ZWQYASABKAgaGgoHTWVzaGluZxIPCgdlbmFibGVkGAEgASgIIiUKFlJlZ2lz",
-            "dGVyQ2xpZW50UmVzcG9uc2USCwoDdWlkGAEgASgJImIKEkpvaW5TZXNzaW9u",
-            "UmVxdWVzdBITCgtzZXNzaW9uX3VpZBgBIAEoCRI3Cg1jbGllbnRfY29uZmln",
-            "GAIgASgLMiAuYXJmbG93LnYxLlJlZ2lzdGVyQ2xpZW50UmVxdWVzdCIiChNK",
-            "b2luU2Vzc2lvblJlc3BvbnNlEgsKA3VpZBgBIAEoCSLeBwoTUHJvY2Vzc0Zy",
-            "YW1lUmVxdWVzdBILCgN1aWQYASABKAkSLQoJdGltZXN0YW1wGAIgASgLMhou",
-            "Z29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBINCgVjb2xvchgDIAEoDBINCgVk",
-            "ZXB0aBgEIAEoDBIRCgl0cmFuc2Zvcm0YBSABKAwSPQoPcGxhbmVfZGV0ZWN0",
-            "aW9uGAYgAygLMiQuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3QuUGxh",
-            "bmUSPwoJZ3lyb3Njb3BlGAcgASgLMiwuYXJmbG93LnYxLlByb2Nlc3NGcmFt",
-            "ZVJlcXVlc3QuR3lyb3Njb3BlRGF0YRISCgphdWRpb19kYXRhGAggAygCEjMK",
-            "Bm1lc2hlcxgJIAMoCzIjLmFyZmxvdy52MS5Qcm9jZXNzRnJhbWVSZXF1ZXN0",
-            "Lk1lc2gaKgoHVmVjdG9yMxIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgD",
-            "IAEoAhofCgdWZWN0b3IyEgkKAXgYASABKAISCQoBeRgCIAEoAhruAQoFUGxh",
-            "bmUSNgoGY2VudGVyGAEgASgLMiYuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJl",
-            "cXVlc3QuVmVjdG9yMxI2CgZub3JtYWwYAiABKAsyJi5hcmZsb3cudjEuUHJv",
-            "Y2Vzc0ZyYW1lUmVxdWVzdC5WZWN0b3IzEjQKBHNpemUYAyABKAsyJi5hcmZs",
-            "b3cudjEuUHJvY2Vzc0ZyYW1lUmVxdWVzdC5WZWN0b3IyEj8KD2JvdW5kYXJ5",
-            "X3BvaW50cxgEIAMoCzImLmFyZmxvdy52MS5Qcm9jZXNzRnJhbWVSZXF1ZXN0",
-            "LlZlY3RvcjIaOAoKUXVhdGVybmlvbhIJCgF4GAEgASgCEgkKAXkYAiABKAIS",
-            "CQoBehgDIAEoAhIJCgF3GAQgASgCGoICCg1HeXJvc2NvcGVEYXRhEjsKCGF0",
-            "dGl0dWRlGAEgASgLMikuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3Qu",
-            "UXVhdGVybmlvbhI9Cg1yb3RhdGlvbl9yYXRlGAIgASgLMiYuYXJmbG93LnYx",
-            "LlByb2Nlc3NGcmFtZVJlcXVlc3QuVmVjdG9yMxI3CgdncmF2aXR5GAMgASgL",
-            "MiYuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3QuVmVjdG9yMxI8Cgxh",
-            "Y2NlbGVyYXRpb24YBCABKAsyJi5hcmZsb3cudjEuUHJvY2Vzc0ZyYW1lUmVx",
-            "dWVzdC5WZWN0b3IzGhQKBE1lc2gSDAoEZGF0YRgBIAEoDCInChRQcm9jZXNz",
-            "RnJhbWVSZXNwb25zZRIPCgdtZXNzYWdlGAEgASgJMoUCCg1BUkZsb3dTZXJ2",
-            "aWNlElUKDlJlZ2lzdGVyQ2xpZW50EiAuYXJmbG93LnYxLlJlZ2lzdGVyQ2xp",
-            "ZW50UmVxdWVzdBohLmFyZmxvdy52MS5SZWdpc3RlckNsaWVudFJlc3BvbnNl",
-            "EkwKC0pvaW5TZXNzaW9uEh0uYXJmbG93LnYxLkpvaW5TZXNzaW9uUmVxdWVz",
-            "dBoeLmFyZmxvdy52MS5Kb2luU2Vzc2lvblJlc3BvbnNlEk8KDFByb2Nlc3NG",
-            "cmFtZRIeLmFyZmxvdy52MS5Qcm9jZXNzRnJhbWVSZXF1ZXN0Gh8uYXJmbG93",
-            "LnYxLlByb2Nlc3NGcmFtZVJlc3BvbnNlQgmqAgZBUkZsb3diBnByb3RvMw=="));
+            "Gh9nb29nbGUvcHJvdG9idWYvdGltZXN0YW1wLnByb3RvIqsKChVSZWdpc3Rl",
+            "ckNsaWVudFJlcXVlc3QSEAoIaW5pdF91aWQYASABKAkSEwoLZGV2aWNlX25h",
+            "bWUYAiABKAkSTAoRY2FtZXJhX2ludHJpbnNpY3MYAyABKAsyMS5hcmZsb3cu",
+            "djEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkNhbWVyYUludHJpbnNpY3MSQgoM",
+            "Y2FtZXJhX2NvbG9yGAQgASgLMiwuYXJmbG93LnYxLlJlZ2lzdGVyQ2xpZW50",
+            "UmVxdWVzdC5DYW1lcmFDb2xvchJCCgxjYW1lcmFfZGVwdGgYBSABKAsyLC5h",
+            "cmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkNhbWVyYURlcHRoEkoK",
+            "EGNhbWVyYV90cmFuc2Zvcm0YBiABKAsyMC5hcmZsb3cudjEuUmVnaXN0ZXJD",
+            "bGllbnRSZXF1ZXN0LkNhbWVyYVRyYW5zZm9ybRJNChJjYW1lcmFfcG9pbnRf",
+            "Y2xvdWQYByABKAsyMS5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0",
+            "LkNhbWVyYVBvaW50Q2xvdWQSVQoWY2FtZXJhX3BsYW5lX2RldGVjdGlvbhgI",
+            "IAEoCzI1LmFyZmxvdy52MS5SZWdpc3RlckNsaWVudFJlcXVlc3QuQ2FtZXJh",
+            "UGxhbmVEZXRlY3Rpb24SPQoJZ3lyb3Njb3BlGAkgASgLMiouYXJmbG93LnYx",
+            "LlJlZ2lzdGVyQ2xpZW50UmVxdWVzdC5HeXJvc2NvcGUSNQoFYXVkaW8YCiAB",
+            "KAsyJi5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1ZXN0LkF1ZGlvEjkK",
+            "B21lc2hpbmcYCyABKAsyKC5hcmZsb3cudjEuUmVnaXN0ZXJDbGllbnRSZXF1",
+            "ZXN0Lk1lc2hpbmcapAEKEENhbWVyYUludHJpbnNpY3MSFgoOZm9jYWxfbGVu",
+            "Z3RoX3gYASABKAISFgoOZm9jYWxfbGVuZ3RoX3kYAiABKAISGQoRcHJpbmNp",
+            "cGFsX3BvaW50X3gYAyABKAISGQoRcHJpbmNpcGFsX3BvaW50X3kYBCABKAIS",
+            "FAoMcmVzb2x1dGlvbl94GAUgASgFEhQKDHJlc29sdXRpb25feRgGIAEoBRpj",
+            "CgtDYW1lcmFDb2xvchIPCgdlbmFibGVkGAEgASgIEhEKCWRhdGFfdHlwZRgC",
+            "IAEoCRIXCg9yZXNpemVfZmFjdG9yX3gYAyABKAISFwoPcmVzaXplX2ZhY3Rv",
+            "cl95GAQgASgCGoEBCgtDYW1lcmFEZXB0aBIPCgdlbmFibGVkGAEgASgIEhEK",
+            "CWRhdGFfdHlwZRgCIAEoCRIiChpjb25maWRlbmNlX2ZpbHRlcmluZ19sZXZl",
+            "bBgDIAEoBRIUCgxyZXNvbHV0aW9uX3gYBCABKAUSFAoMcmVzb2x1dGlvbl95",
+            "GAUgASgFGiIKD0NhbWVyYVRyYW5zZm9ybRIPCgdlbmFibGVkGAEgASgIGkEK",
+            "EENhbWVyYVBvaW50Q2xvdWQSDwoHZW5hYmxlZBgBIAEoCBIcChRkZXB0aF91",
+            "cHNjYWxlX2ZhY3RvchgCIAEoAhonChRDYW1lcmFQbGFuZURldGVjdGlvbhIP",
+            "CgdlbmFibGVkGAEgASgIGhwKCUd5cm9zY29wZRIPCgdlbmFibGVkGAEgASgI",
+            "GhgKBUF1ZGlvEg8KB2VuYWJsZWQYASABKAgaGgoHTWVzaGluZxIPCgdlbmFi",
+            "bGVkGAEgASgIIiUKFlJlZ2lzdGVyQ2xpZW50UmVzcG9uc2USCwoDdWlkGAEg",
+            "ASgJImIKEkpvaW5TZXNzaW9uUmVxdWVzdBITCgtzZXNzaW9uX3VpZBgBIAEo",
+            "CRI3Cg1jbGllbnRfY29uZmlnGAIgASgLMiAuYXJmbG93LnYxLlJlZ2lzdGVy",
+            "Q2xpZW50UmVxdWVzdCIiChNKb2luU2Vzc2lvblJlc3BvbnNlEgsKA3VpZBgB",
+            "IAEoCSLeBwoTUHJvY2Vzc0ZyYW1lUmVxdWVzdBILCgN1aWQYASABKAkSLQoJ",
+            "dGltZXN0YW1wGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIN",
+            "CgVjb2xvchgDIAEoDBINCgVkZXB0aBgEIAEoDBIRCgl0cmFuc2Zvcm0YBSAB",
+            "KAwSPQoPcGxhbmVfZGV0ZWN0aW9uGAYgAygLMiQuYXJmbG93LnYxLlByb2Nl",
+            "c3NGcmFtZVJlcXVlc3QuUGxhbmUSPwoJZ3lyb3Njb3BlGAcgASgLMiwuYXJm",
+            "bG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3QuR3lyb3Njb3BlRGF0YRISCgph",
+            "dWRpb19kYXRhGAggAygCEjMKBm1lc2hlcxgJIAMoCzIjLmFyZmxvdy52MS5Q",
+            "cm9jZXNzRnJhbWVSZXF1ZXN0Lk1lc2gaKgoHVmVjdG9yMxIJCgF4GAEgASgC",
+            "EgkKAXkYAiABKAISCQoBehgDIAEoAhofCgdWZWN0b3IyEgkKAXgYASABKAIS",
+            "CQoBeRgCIAEoAhruAQoFUGxhbmUSNgoGY2VudGVyGAEgASgLMiYuYXJmbG93",
+            "LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3QuVmVjdG9yMxI2CgZub3JtYWwYAiAB",
+            "KAsyJi5hcmZsb3cudjEuUHJvY2Vzc0ZyYW1lUmVxdWVzdC5WZWN0b3IzEjQK",
+            "BHNpemUYAyABKAsyJi5hcmZsb3cudjEuUHJvY2Vzc0ZyYW1lUmVxdWVzdC5W",
+            "ZWN0b3IyEj8KD2JvdW5kYXJ5X3BvaW50cxgEIAMoCzImLmFyZmxvdy52MS5Q",
+            "cm9jZXNzRnJhbWVSZXF1ZXN0LlZlY3RvcjIaOAoKUXVhdGVybmlvbhIJCgF4",
+            "GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAhIJCgF3GAQgASgCGoICCg1H",
+            "eXJvc2NvcGVEYXRhEjsKCGF0dGl0dWRlGAEgASgLMikuYXJmbG93LnYxLlBy",
+            "b2Nlc3NGcmFtZVJlcXVlc3QuUXVhdGVybmlvbhI9Cg1yb3RhdGlvbl9yYXRl",
+            "GAIgASgLMiYuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlcXVlc3QuVmVjdG9y",
+            "MxI3CgdncmF2aXR5GAMgASgLMiYuYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJl",
+            "cXVlc3QuVmVjdG9yMxI8CgxhY2NlbGVyYXRpb24YBCABKAsyJi5hcmZsb3cu",
+            "djEuUHJvY2Vzc0ZyYW1lUmVxdWVzdC5WZWN0b3IzGhQKBE1lc2gSDAoEZGF0",
+            "YRgBIAEoDCInChRQcm9jZXNzRnJhbWVSZXNwb25zZRIPCgdtZXNzYWdlGAEg",
+            "ASgJMoUCCg1BUkZsb3dTZXJ2aWNlElUKDlJlZ2lzdGVyQ2xpZW50EiAuYXJm",
+            "bG93LnYxLlJlZ2lzdGVyQ2xpZW50UmVxdWVzdBohLmFyZmxvdy52MS5SZWdp",
+            "c3RlckNsaWVudFJlc3BvbnNlEkwKC0pvaW5TZXNzaW9uEh0uYXJmbG93LnYx",
+            "LkpvaW5TZXNzaW9uUmVxdWVzdBoeLmFyZmxvdy52MS5Kb2luU2Vzc2lvblJl",
+            "c3BvbnNlEk8KDFByb2Nlc3NGcmFtZRIeLmFyZmxvdy52MS5Qcm9jZXNzRnJh",
+            "bWVSZXF1ZXN0Gh8uYXJmbG93LnYxLlByb2Nlc3NGcmFtZVJlc3BvbnNlQgmq",
+            "AgZBUkZsb3diBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest), global::ARFlow.RegisterClientRequest.Parser, new[]{ "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud", "CameraPlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest.Types.CameraIntrinsics), global::ARFlow.RegisterClientRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest), global::ARFlow.RegisterClientRequest.Parser, new[]{ "InitUid", "DeviceName", "CameraIntrinsics", "CameraColor", "CameraDepth", "CameraTransform", "CameraPointCloud", "CameraPlaneDetection", "Gyroscope", "Audio", "Meshing" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest.Types.CameraIntrinsics), global::ARFlow.RegisterClientRequest.Types.CameraIntrinsics.Parser, new[]{ "FocalLengthX", "FocalLengthY", "PrincipalPointX", "PrincipalPointY", "ResolutionX", "ResolutionY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest.Types.CameraColor), global::ARFlow.RegisterClientRequest.Types.CameraColor.Parser, new[]{ "Enabled", "DataType", "ResizeFactorX", "ResizeFactorY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest.Types.CameraDepth), global::ARFlow.RegisterClientRequest.Types.CameraDepth.Parser, new[]{ "Enabled", "DataType", "ConfidenceFilteringLevel", "ResolutionX", "ResolutionY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ARFlow.RegisterClientRequest.Types.CameraTransform), global::ARFlow.RegisterClientRequest.Types.CameraTransform.Parser, new[]{ "Enabled" }, null, null, null, null),
@@ -151,6 +152,7 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public RegisterClientRequest(RegisterClientRequest other) : this() {
+      initUid_ = other.initUid_;
       deviceName_ = other.deviceName_;
       cameraIntrinsics_ = other.cameraIntrinsics_ != null ? other.cameraIntrinsics_.Clone() : null;
       cameraColor_ = other.cameraColor_ != null ? other.cameraColor_.Clone() : null;
@@ -170,12 +172,24 @@ namespace ARFlow {
       return new RegisterClientRequest(this);
     }
 
-    /// <summary>Field number for the "device_name" field.</summary>
-    public const int DeviceNameFieldNumber = 1;
-    private string deviceName_ = "";
+    /// <summary>Field number for the "init_uid" field.</summary>
+    public const int InitUidFieldNumber = 1;
+    private string initUid_ = "";
     /// <summary>
     /// TODO: Add documentation for each field, units of measurement, etc.
     /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string InitUid {
+      get { return initUid_; }
+      set {
+        initUid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "device_name" field.</summary>
+    public const int DeviceNameFieldNumber = 2;
+    private string deviceName_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string DeviceName {
@@ -186,7 +200,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "camera_intrinsics" field.</summary>
-    public const int CameraIntrinsicsFieldNumber = 2;
+    public const int CameraIntrinsicsFieldNumber = 3;
     private global::ARFlow.RegisterClientRequest.Types.CameraIntrinsics cameraIntrinsics_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -198,7 +212,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "camera_color" field.</summary>
-    public const int CameraColorFieldNumber = 3;
+    public const int CameraColorFieldNumber = 4;
     private global::ARFlow.RegisterClientRequest.Types.CameraColor cameraColor_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -210,7 +224,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "camera_depth" field.</summary>
-    public const int CameraDepthFieldNumber = 4;
+    public const int CameraDepthFieldNumber = 5;
     private global::ARFlow.RegisterClientRequest.Types.CameraDepth cameraDepth_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -222,7 +236,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "camera_transform" field.</summary>
-    public const int CameraTransformFieldNumber = 5;
+    public const int CameraTransformFieldNumber = 6;
     private global::ARFlow.RegisterClientRequest.Types.CameraTransform cameraTransform_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -234,7 +248,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "camera_point_cloud" field.</summary>
-    public const int CameraPointCloudFieldNumber = 6;
+    public const int CameraPointCloudFieldNumber = 7;
     private global::ARFlow.RegisterClientRequest.Types.CameraPointCloud cameraPointCloud_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -246,7 +260,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "camera_plane_detection" field.</summary>
-    public const int CameraPlaneDetectionFieldNumber = 7;
+    public const int CameraPlaneDetectionFieldNumber = 8;
     private global::ARFlow.RegisterClientRequest.Types.CameraPlaneDetection cameraPlaneDetection_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -258,7 +272,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "gyroscope" field.</summary>
-    public const int GyroscopeFieldNumber = 8;
+    public const int GyroscopeFieldNumber = 9;
     private global::ARFlow.RegisterClientRequest.Types.Gyroscope gyroscope_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -270,7 +284,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "audio" field.</summary>
-    public const int AudioFieldNumber = 9;
+    public const int AudioFieldNumber = 10;
     private global::ARFlow.RegisterClientRequest.Types.Audio audio_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -282,7 +296,7 @@ namespace ARFlow {
     }
 
     /// <summary>Field number for the "meshing" field.</summary>
-    public const int MeshingFieldNumber = 10;
+    public const int MeshingFieldNumber = 11;
     private global::ARFlow.RegisterClientRequest.Types.Meshing meshing_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -308,6 +322,7 @@ namespace ARFlow {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (InitUid != other.InitUid) return false;
       if (DeviceName != other.DeviceName) return false;
       if (!object.Equals(CameraIntrinsics, other.CameraIntrinsics)) return false;
       if (!object.Equals(CameraColor, other.CameraColor)) return false;
@@ -325,6 +340,7 @@ namespace ARFlow {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (InitUid.Length != 0) hash ^= InitUid.GetHashCode();
       if (DeviceName.Length != 0) hash ^= DeviceName.GetHashCode();
       if (cameraIntrinsics_ != null) hash ^= CameraIntrinsics.GetHashCode();
       if (cameraColor_ != null) hash ^= CameraColor.GetHashCode();
@@ -353,44 +369,48 @@ namespace ARFlow {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (DeviceName.Length != 0) {
+      if (InitUid.Length != 0) {
         output.WriteRawTag(10);
+        output.WriteString(InitUid);
+      }
+      if (DeviceName.Length != 0) {
+        output.WriteRawTag(18);
         output.WriteString(DeviceName);
       }
       if (cameraIntrinsics_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(CameraIntrinsics);
       }
       if (cameraColor_ != null) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(34);
         output.WriteMessage(CameraColor);
       }
       if (cameraDepth_ != null) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(42);
         output.WriteMessage(CameraDepth);
       }
       if (cameraTransform_ != null) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(50);
         output.WriteMessage(CameraTransform);
       }
       if (cameraPointCloud_ != null) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(58);
         output.WriteMessage(CameraPointCloud);
       }
       if (cameraPlaneDetection_ != null) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(66);
         output.WriteMessage(CameraPlaneDetection);
       }
       if (gyroscope_ != null) {
-        output.WriteRawTag(66);
+        output.WriteRawTag(74);
         output.WriteMessage(Gyroscope);
       }
       if (audio_ != null) {
-        output.WriteRawTag(74);
+        output.WriteRawTag(82);
         output.WriteMessage(Audio);
       }
       if (meshing_ != null) {
-        output.WriteRawTag(82);
+        output.WriteRawTag(90);
         output.WriteMessage(Meshing);
       }
       if (_unknownFields != null) {
@@ -403,44 +423,48 @@ namespace ARFlow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (DeviceName.Length != 0) {
+      if (InitUid.Length != 0) {
         output.WriteRawTag(10);
+        output.WriteString(InitUid);
+      }
+      if (DeviceName.Length != 0) {
+        output.WriteRawTag(18);
         output.WriteString(DeviceName);
       }
       if (cameraIntrinsics_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(CameraIntrinsics);
       }
       if (cameraColor_ != null) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(34);
         output.WriteMessage(CameraColor);
       }
       if (cameraDepth_ != null) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(42);
         output.WriteMessage(CameraDepth);
       }
       if (cameraTransform_ != null) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(50);
         output.WriteMessage(CameraTransform);
       }
       if (cameraPointCloud_ != null) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(58);
         output.WriteMessage(CameraPointCloud);
       }
       if (cameraPlaneDetection_ != null) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(66);
         output.WriteMessage(CameraPlaneDetection);
       }
       if (gyroscope_ != null) {
-        output.WriteRawTag(66);
+        output.WriteRawTag(74);
         output.WriteMessage(Gyroscope);
       }
       if (audio_ != null) {
-        output.WriteRawTag(74);
+        output.WriteRawTag(82);
         output.WriteMessage(Audio);
       }
       if (meshing_ != null) {
-        output.WriteRawTag(82);
+        output.WriteRawTag(90);
         output.WriteMessage(Meshing);
       }
       if (_unknownFields != null) {
@@ -453,6 +477,9 @@ namespace ARFlow {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (InitUid.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(InitUid);
+      }
       if (DeviceName.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceName);
       }
@@ -494,6 +521,9 @@ namespace ARFlow {
     public void MergeFrom(RegisterClientRequest other) {
       if (other == null) {
         return;
+      }
+      if (other.InitUid.Length != 0) {
+        InitUid = other.InitUid;
       }
       if (other.DeviceName.Length != 0) {
         DeviceName = other.DeviceName;
@@ -572,66 +602,70 @@ namespace ARFlow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            DeviceName = input.ReadString();
+            InitUid = input.ReadString();
             break;
           }
           case 18: {
+            DeviceName = input.ReadString();
+            break;
+          }
+          case 26: {
             if (cameraIntrinsics_ == null) {
               CameraIntrinsics = new global::ARFlow.RegisterClientRequest.Types.CameraIntrinsics();
             }
             input.ReadMessage(CameraIntrinsics);
             break;
           }
-          case 26: {
+          case 34: {
             if (cameraColor_ == null) {
               CameraColor = new global::ARFlow.RegisterClientRequest.Types.CameraColor();
             }
             input.ReadMessage(CameraColor);
             break;
           }
-          case 34: {
+          case 42: {
             if (cameraDepth_ == null) {
               CameraDepth = new global::ARFlow.RegisterClientRequest.Types.CameraDepth();
             }
             input.ReadMessage(CameraDepth);
             break;
           }
-          case 42: {
+          case 50: {
             if (cameraTransform_ == null) {
               CameraTransform = new global::ARFlow.RegisterClientRequest.Types.CameraTransform();
             }
             input.ReadMessage(CameraTransform);
             break;
           }
-          case 50: {
+          case 58: {
             if (cameraPointCloud_ == null) {
               CameraPointCloud = new global::ARFlow.RegisterClientRequest.Types.CameraPointCloud();
             }
             input.ReadMessage(CameraPointCloud);
             break;
           }
-          case 58: {
+          case 66: {
             if (cameraPlaneDetection_ == null) {
               CameraPlaneDetection = new global::ARFlow.RegisterClientRequest.Types.CameraPlaneDetection();
             }
             input.ReadMessage(CameraPlaneDetection);
             break;
           }
-          case 66: {
+          case 74: {
             if (gyroscope_ == null) {
               Gyroscope = new global::ARFlow.RegisterClientRequest.Types.Gyroscope();
             }
             input.ReadMessage(Gyroscope);
             break;
           }
-          case 74: {
+          case 82: {
             if (audio_ == null) {
               Audio = new global::ARFlow.RegisterClientRequest.Types.Audio();
             }
             input.ReadMessage(Audio);
             break;
           }
-          case 82: {
+          case 90: {
             if (meshing_ == null) {
               Meshing = new global::ARFlow.RegisterClientRequest.Types.Meshing();
             }
@@ -658,66 +692,70 @@ namespace ARFlow {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            DeviceName = input.ReadString();
+            InitUid = input.ReadString();
             break;
           }
           case 18: {
+            DeviceName = input.ReadString();
+            break;
+          }
+          case 26: {
             if (cameraIntrinsics_ == null) {
               CameraIntrinsics = new global::ARFlow.RegisterClientRequest.Types.CameraIntrinsics();
             }
             input.ReadMessage(CameraIntrinsics);
             break;
           }
-          case 26: {
+          case 34: {
             if (cameraColor_ == null) {
               CameraColor = new global::ARFlow.RegisterClientRequest.Types.CameraColor();
             }
             input.ReadMessage(CameraColor);
             break;
           }
-          case 34: {
+          case 42: {
             if (cameraDepth_ == null) {
               CameraDepth = new global::ARFlow.RegisterClientRequest.Types.CameraDepth();
             }
             input.ReadMessage(CameraDepth);
             break;
           }
-          case 42: {
+          case 50: {
             if (cameraTransform_ == null) {
               CameraTransform = new global::ARFlow.RegisterClientRequest.Types.CameraTransform();
             }
             input.ReadMessage(CameraTransform);
             break;
           }
-          case 50: {
+          case 58: {
             if (cameraPointCloud_ == null) {
               CameraPointCloud = new global::ARFlow.RegisterClientRequest.Types.CameraPointCloud();
             }
             input.ReadMessage(CameraPointCloud);
             break;
           }
-          case 58: {
+          case 66: {
             if (cameraPlaneDetection_ == null) {
               CameraPlaneDetection = new global::ARFlow.RegisterClientRequest.Types.CameraPlaneDetection();
             }
             input.ReadMessage(CameraPlaneDetection);
             break;
           }
-          case 66: {
+          case 74: {
             if (gyroscope_ == null) {
               Gyroscope = new global::ARFlow.RegisterClientRequest.Types.Gyroscope();
             }
             input.ReadMessage(Gyroscope);
             break;
           }
-          case 74: {
+          case 82: {
             if (audio_ == null) {
               Audio = new global::ARFlow.RegisterClientRequest.Types.Audio();
             }
             input.ReadMessage(Audio);
             break;
           }
-          case 82: {
+          case 90: {
             if (meshing_ == null) {
               Meshing = new global::ARFlow.RegisterClientRequest.Types.Meshing();
             }
