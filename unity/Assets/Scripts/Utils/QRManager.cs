@@ -11,6 +11,7 @@ using System;
 
 using ARFlow;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 
 public static class QRManager
 {
@@ -25,14 +26,15 @@ public static class QRManager
 
         var reader = new BarcodeReaderGeneric();
         reader.Options.TryHarder = true;
-
+        reader.Options.TryInverted = true;
+        reader.AutoRotate = true;
         var res = "";
         try
         {
-
-            //BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new RGBLuminanceSource(image, width, height)));
+            new RGBLuminanceSource(image, width, height, RGBLuminanceSource.BitmapFormat.RGBA32);
             var result = reader.Decode(image, width, height, RGBLuminanceSource.BitmapFormat.RGBA32);
 
+            OtherUtils.PrintDebug(result);
             if (result != null)
             {
                 res = result.Text;

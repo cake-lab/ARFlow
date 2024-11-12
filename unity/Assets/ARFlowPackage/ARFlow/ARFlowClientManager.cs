@@ -321,8 +321,15 @@ namespace ARFlow
         /// <param name="sessionId">Session ID to join</param>
         /// <param name="taskFinishedHook">Hook to run after task completes</param>
         /// <returns></returns>
-        public Task<string> JoinSessionTask(string sessionId, Action<Task> taskFinishedHook = null)
+        public Task<string> JoinSessionTask(
+            string sessionId,
+            Dictionary<string, bool> activatedDataModalities = null,
+            Action<Task> taskFinishedHook = null)
         {
+            _activatedDataModalities = activatedDataModalities;
+            if (activatedDataModalities == null)
+                _activatedDataModalities = DEFAULT_MODALITIES;
+
             JoinSessionRequest joinSessionRequest = new JoinSessionRequest();
             joinSessionRequest.SessionUid = sessionId;
             joinSessionRequest.ClientConfig = GetClientConfiguration();
@@ -339,8 +346,12 @@ namespace ARFlow
         /// </summary>
         /// <param name="sessionId">Session ID to join</param>
         /// <returns></returns>
-        public string JoinSession(string sessionId)
+        public string JoinSession(string sessionId, Dictionary<string, bool> activatedDataModalities = null)
         {
+            _activatedDataModalities = activatedDataModalities;
+            if (activatedDataModalities == null)
+                _activatedDataModalities = DEFAULT_MODALITIES;
+
             JoinSessionRequest joinSessionRequest = new JoinSessionRequest();
             joinSessionRequest.SessionUid = sessionId;
             joinSessionRequest.ClientConfig = GetClientConfiguration();
