@@ -341,10 +341,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         //var img = getCameraTexture().GetPixels32();
         var uid = QRManager.readQRCode(img, width, height);
 
-        if (uid != null && uid != "")
+        if (!string.IsNullOrEmpty(uid))
         {
-            PrintDebug($"Join session with UID: {uid}");
-            _clientManager.JoinSessionTask(uid);
+            connectTask = _clientManager.JoinSessionTask(uid);
+            _isConnected = false;
             Toast.Show($"Joining session with UID {uid}", ToastColor.Green);
         }
         else
@@ -356,7 +356,16 @@ public class ARFlowDeviceSample : MonoBehaviour
     public void ConnectFromClipboard()
     {
         string uid = GUIUtility.systemCopyBuffer;
-        _clientManager.JoinSessionTask(uid);
+        if (!string.IsNullOrEmpty(uid))
+        {
+            connectTask = _clientManager.JoinSessionTask(uid);
+            _isConnected = false;
+            Toast.Show($"Joining session with UID {uid}", ToastColor.Green);
+        }
+        else
+        {
+            Toast.Show("No QR Code found", ToastColor.Red);
+        }
     }
 
     // Update is called once per frame

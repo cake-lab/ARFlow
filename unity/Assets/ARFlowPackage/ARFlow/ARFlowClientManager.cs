@@ -42,7 +42,7 @@ namespace ARFlow
         private AudioStreaming _audioStreaming;
         private MeshEncoder _meshEncoder;
 
-        private string currentUid = null;
+        private string _currentUid = null;
 
         //TODO
         //private Dictionary<string, Dictionary<string, Any>> _modalityConfig
@@ -148,7 +148,7 @@ namespace ARFlow
             var requestData = GetClientConfiguration();
             var task = Task.Run(() => {
                 _client.Connect(requestData);
-                currentUid = _client.sessionId;
+                _currentUid = _client.sessionId;
             });
             if (taskFinishedHook is not null)
                 task.ContinueWith(taskFinishedHook);
@@ -180,7 +180,7 @@ namespace ARFlow
                 var requestData = GetClientConfiguration();
                 _client.Connect(requestData);
 
-                currentUid = _client.sessionId;
+                _currentUid = _client.sessionId;
             }
             catch (Exception e)
             {
@@ -218,9 +218,9 @@ namespace ARFlow
                 }
 
             };
-            if (currentUid != null)
+            if (_currentUid != null)
             {
-                requestData.InitUid = currentUid;
+                requestData.InitUid = _currentUid;
             }
             if (_activatedDataModalities["CameraColor"])
             {
@@ -333,7 +333,15 @@ namespace ARFlow
             JoinSessionRequest joinSessionRequest = new JoinSessionRequest();
             joinSessionRequest.SessionUid = sessionId;
             joinSessionRequest.ClientConfig = GetClientConfiguration();
-            var task = Task.Run(() => _client.JoinSession(joinSessionRequest));
+            var task = Task.Run(() =>
+            {
+                var res = _client.JoinSession(joinSessionRequest);
+                _currentUid = sessionId;
+                return res;
+            });
+
+            //var task = Task.Run(() => 
+            //     _client.JoinSession(joinSessionRequest));
             if (taskFinishedHook is not null)
                 task.ContinueWith(taskFinishedHook);
 
@@ -356,6 +364,8 @@ namespace ARFlow
             joinSessionRequest.SessionUid = sessionId;
             joinSessionRequest.ClientConfig = GetClientConfiguration();
             var res = _client.JoinSession(joinSessionRequest);
+
+            _currentUid = sessionId;
 
             return res;
         }
@@ -562,7 +572,7 @@ namespace ARFlow
 
         public string getSessionId()
         {
-            return currentUid;
+            return _currentUid;
         }
 
         public XRYCbCrColorImage GetColorImage()
