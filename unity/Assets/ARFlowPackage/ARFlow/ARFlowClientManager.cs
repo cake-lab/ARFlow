@@ -168,8 +168,7 @@ namespace ARFlow
             Dictionary<string, bool> activatedDataModalities = null
         )
         {
-            ResetState();
-            _client = new ARFlowClient(address);
+            ResetState(address);
 
             _activatedDataModalities = activatedDataModalities;
             if (activatedDataModalities == null)
@@ -188,12 +187,22 @@ namespace ARFlow
             }
         }
 
-        private void ResetState()
+        /// <summary>
+        /// Reset the state of the client manager
+        /// </summary>
+        /// <param name="newAddress"></param>
+        private void ResetState(string newAddress = null)
         {
+            if (newAddress != null)
+            {
+                _client = new ARFlowClient(newAddress);
+            }
             if (_isStreaming)
             {
                 StopDataStreaming();
             }
+            oldTask?.ContinueWith(t => { });
+
         }
 
         private RegisterClientRequest GetClientConfiguration()
@@ -322,13 +331,16 @@ namespace ARFlow
         /// <param name="taskFinishedHook">Hook to run after task completes</param>
         /// <returns></returns>
         public Task<string> JoinSessionTask(
+            string address,
             string sessionId,
             Dictionary<string, bool> activatedDataModalities = null,
             Action<Task> taskFinishedHook = null)
         {
+            ResetState();
             _activatedDataModalities = activatedDataModalities;
             if (activatedDataModalities == null)
                 _activatedDataModalities = DEFAULT_MODALITIES;
+            _client = new ARFlowClient(address);
 
             JoinSessionRequest joinSessionRequest = new JoinSessionRequest();
             joinSessionRequest.SessionUid = sessionId;
@@ -336,7 +348,7 @@ namespace ARFlow
             var task = Task.Run(() =>
             {
                 var res = _client.JoinSession(joinSessionRequest);
-                _currentUid = sessionId;
+                _currentUid = _client.sessionId;
                 return res;
             });
 
@@ -441,8 +453,8 @@ namespace ARFlow
         {
             var dataFrame = new ProcessFrameRequest();
 
-            //if (!_activatedDataModalities["CameraColor"] || !_activatedDataModalities["CameraDepth"])
-            //    dataFrame.Timestamp = Timestamp.FromDateTime(System.DateTime.UtcNow);
+            if (!_activatedDataModalities["CameraColor"] || !_activatedDataModalities["CameraDepth"])
+                dataFrame.Timestamp = Timestamp.FromDateTime(System.DateTime.UtcNow);
 
             if (_activatedDataModalities["CameraColor"])
             {

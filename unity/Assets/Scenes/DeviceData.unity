@@ -582,7 +582,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Connect by QR
+  m_text: Join session by QR
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1185,7 +1185,7 @@ GameObject:
   - component: {fileID: 626530734}
   - component: {fileID: 626530733}
   m_Layer: 6
-  m_Name: ConnectByUID
+  m_Name: JoinByUID
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7288,7 +7288,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Connect by UID \nin clipboard"
+  m_text: "Join session by UID \nin clipboard"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8061,7 +8061,7 @@ GameObject:
   - component: {fileID: 1380781671}
   - component: {fileID: 1380781670}
   m_Layer: 6
-  m_Name: ConnectByQR
+  m_Name: JoinByQR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8916,8 +8916,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 518653703}
   m_HandleRect: {fileID: 518653702}
   m_Direction: 2
-  m_Value: -0.000007825012
-  m_Size: 0.94079995
+  m_Value: -0.0000065208433
+  m_Size: 0.9417185
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -15406,7 +15406,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000076293945, y: -177.3507}
+  m_AnchoredPosition: {x: -0.000076293945, y: -177.35074}
   m_SizeDelta: {x: -4.7499847, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6234637625898487408

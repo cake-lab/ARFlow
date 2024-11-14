@@ -185,13 +185,9 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void OnConnectButtonClick()
     {
-
-        var serverURL = _defaultConnection;
-        if (IsIpValid(ipField.text) && IsPortValid(portField.text))
-        {
-            serverURL = "http://" + ipField.text + ":" + portField.text;
-        }
-
+        
+        var serverURL = validateAndGetAddress(ipField.text, portField.text);
+        
         // To update status of task to user
         Toast.Show($"Connecting to {serverURL}", 3f, ToastColor.Yellow);
 
@@ -199,11 +195,17 @@ public class ARFlowDeviceSample : MonoBehaviour
         // these flags are updated and signals connection result to display to user.
         connectTask = _clientManager.ConnectTask(
             serverURL, 
-            GetModalityOptions(), 
-            t =>
-        {
-        });
+            GetModalityOptions());
         _isConnected = false;
+    }
+
+    private string validateAndGetAddress(string ip, string port)
+    {
+        if (IsIpValid(ip) && IsPortValid(port))
+        {
+            return "http://" + ip + ":" + port;
+        }
+        return _defaultConnection;
     }
 
     private void UpdateConnectionStatus()
@@ -324,6 +326,8 @@ public class ARFlowDeviceSample : MonoBehaviour
 
             cpuImg.Convert(conversionParams, nativeSlice);
             var byteArr = nativeSlice.ToArray();
+            cpuImg.Dispose();
+
             return byteArr;
         }
         catch (Exception e)
@@ -341,24 +345,21 @@ public class ARFlowDeviceSample : MonoBehaviour
         //var img = getCameraTexture().GetPixels32();
         var uid = QRManager.readQRCode(img, width, height);
 
-        if (!string.IsNullOrEmpty(uid))
-        {
-            connectTask = _clientManager.JoinSessionTask(uid);
-            _isConnected = false;
-            Toast.Show($"Joining session with UID {uid}", ToastColor.Green);
-        }
-        else
-        {
-            Toast.Show("No QR Code found", ToastColor.Red);
-        }
+        JoinSession(uid);
     }
 
     public void ConnectFromClipboard()
     {
         string uid = GUIUtility.systemCopyBuffer;
+        JoinSession(uid);
+    }
+
+    private void JoinSession(string uid)
+    {
+        var serverURL = validateAndGetAddress(ipField.text, portField.text);
         if (!string.IsNullOrEmpty(uid))
         {
-            connectTask = _clientManager.JoinSessionTask(uid);
+            connectTask = _clientManager.JoinSessionTask(serverURL, uid, GetModalityOptions());
             _isConnected = false;
             Toast.Show($"Joining session with UID {uid}", ToastColor.Green);
         }
