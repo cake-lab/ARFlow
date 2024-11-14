@@ -453,19 +453,12 @@ namespace ARFlow
         {
             var dataFrame = new ProcessFrameRequest();
 
-            if (!_activatedDataModalities["CameraColor"] || !_activatedDataModalities["CameraDepth"])
-                dataFrame.Timestamp = Timestamp.FromDateTime(System.DateTime.UtcNow);
+            dataFrame.Timestamp = Timestamp.FromDateTime(System.DateTime.UtcNow);
 
             if (_activatedDataModalities["CameraColor"])
             {
                 var colorImage = new XRYCbCrColorImage(_cameraManager, _sampleSize);
                 dataFrame.Color = ByteString.CopyFrom(colorImage.Encode());
-
-                var dateTime = DateTime.FromOADate(colorImage.timeStamp);
-                var dateTimeInUTC = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
-                dataFrame.Timestamp = Timestamp.FromDateTime(
-                    dateTimeInUTC
-                    );
 
                 colorImage.Dispose();
             }
@@ -475,11 +468,6 @@ namespace ARFlow
                 var depthImage = new XRConfidenceFilteredDepthImage(_occlusionManager, 0);
                 dataFrame.Depth = ByteString.CopyFrom(depthImage.Encode());
 
-                var dateTime = DateTime.FromOADate(depthImage.timeStamp);
-                var dateTimeInUTC = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
-                dataFrame.Timestamp = Timestamp.FromDateTime(
-                    dateTimeInUTC
-                    );
                 depthImage.Dispose();
             }
 
