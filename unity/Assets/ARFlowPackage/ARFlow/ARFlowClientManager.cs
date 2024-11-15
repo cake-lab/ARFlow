@@ -42,7 +42,8 @@ namespace ARFlow
         private AudioStreaming _audioStreaming;
         private MeshEncoder _meshEncoder;
 
-        private string _currentUid = null;
+        private string _currentUidToSendData = null;
+        private string _thisDeviceUid = null;
 
         //TODO
         //private Dictionary<string, Dictionary<string, Any>> _modalityConfig
@@ -135,24 +136,13 @@ namespace ARFlow
             Action<Task> taskFinishedHook = null
         )
         {
-            ResetState();
-            _client = new ARFlowClient(address);
+            ResetState(address, activatedDataModalities);
 
-            _activatedDataModalities = activatedDataModalities;
-            if (activatedDataModalities == null)
-                _activatedDataModalities = DEFAULT_MODALITIES;
-
-            // To avoid old method calls to log message 
-            oldTask?.ContinueWith(t => { });
-
-            var requestData = GetClientConfiguration();
             var task = Task.Run(() => {
-                _client.Connect(requestData);
-                _currentUid = _client.sessionId;
+                Connect(address, activatedDataModalities);
             });
             if (taskFinishedHook is not null)
                 task.ContinueWith(taskFinishedHook);
-
             oldTask = task;
 
             return task;
@@ -168,18 +158,15 @@ namespace ARFlow
             Dictionary<string, bool> activatedDataModalities = null
         )
         {
-            ResetState(address);
-
-            _activatedDataModalities = activatedDataModalities;
-            if (activatedDataModalities == null)
-                _activatedDataModalities = DEFAULT_MODALITIES;
+            ResetState(address, activatedDataModalities);
 
             try
             {
                 var requestData = GetClientConfiguration();
                 _client.Connect(requestData);
 
-                _currentUid = _client.sessionId;
+                _thisDeviceUid = _client.sessionId;
+                _currentUidToSendData = _thisDeviceUid;
             }
             catch (Exception e)
             {
@@ -188,10 +175,10 @@ namespace ARFlow
         }
 
         /// <summary>
-        /// Reset the state of the client manager
+        /// Reset the state of the client, and override activated data modalities with new input
         /// </summary>
         /// <param name="newAddress"></param>
-        private void ResetState(string newAddress = null)
+        private void ResetState(string newAddress = null, Dictionary<string, bool> activatedDataModalities = null)
         {
             if (newAddress != null)
             {
@@ -201,8 +188,13 @@ namespace ARFlow
             {
                 StopDataStreaming();
             }
+
+            // Old tasks hooks are cancelled
             oldTask?.ContinueWith(t => { });
 
+            _activatedDataModalities = activatedDataModalities;
+            if (activatedDataModalities == null)
+                _activatedDataModalities = DEFAULT_MODALITIES;
         }
 
         private RegisterClientRequest GetClientConfiguration()
@@ -227,9 +219,9 @@ namespace ARFlow
                 }
 
             };
-            if (_currentUid != null)
+            if (_thisDeviceUid != null)
             {
-                requestData.InitUid = _currentUid;
+                requestData.InitUid = _thisDeviceUid;
             }
             if (_activatedDataModalities["CameraColor"])
             {
@@ -336,20 +328,9 @@ namespace ARFlow
             Dictionary<string, bool> activatedDataModalities = null,
             Action<Task> taskFinishedHook = null)
         {
-            ResetState();
-            _activatedDataModalities = activatedDataModalities;
-            if (activatedDataModalities == null)
-                _activatedDataModalities = DEFAULT_MODALITIES;
-            _client = new ARFlowClient(address);
-
-            JoinSessionRequest joinSessionRequest = new JoinSessionRequest();
-            joinSessionRequest.SessionUid = sessionId;
-            joinSessionRequest.ClientConfig = GetClientConfiguration();
             var task = Task.Run(() =>
             {
-                var res = _client.JoinSession(joinSessionRequest);
-                _currentUid = _client.sessionId;
-                return res;
+                return JoinSession(address, sessionId, activatedDataModalities);
             });
 
             //var task = Task.Run(() => 
@@ -366,19 +347,17 @@ namespace ARFlow
         /// </summary>
         /// <param name="sessionId">Session ID to join</param>
         /// <returns></returns>
-        public string JoinSession(string sessionId, Dictionary<string, bool> activatedDataModalities = null)
+        public string JoinSession(string address, string sessionId, Dictionary<string, bool> activatedDataModalities = null)
         {
-            _activatedDataModalities = activatedDataModalities;
-            if (activatedDataModalities == null)
-                _activatedDataModalities = DEFAULT_MODALITIES;
+            ResetState(address, activatedDataModalities);
 
             JoinSessionRequest joinSessionRequest = new JoinSessionRequest();
             joinSessionRequest.SessionUid = sessionId;
             joinSessionRequest.ClientConfig = GetClientConfiguration();
             var res = _client.JoinSession(joinSessionRequest);
+            _currentUidToSendData = _client.sessionId;
 
-            _currentUid = sessionId;
-
+            _thisDeviceUid = res;
             return res;
         }
 
@@ -570,9 +549,14 @@ namespace ARFlow
             return serverMessage;
         }
 
-        public string getSessionId()
+        public string getSessionUid()
         {
-            return _currentUid;
+            return _currentUidToSendData;
+        }
+
+        public string getDeviceUid()
+        {
+            return _thisDeviceUid;
         }
 
         public XRYCbCrColorImage GetColorImage()

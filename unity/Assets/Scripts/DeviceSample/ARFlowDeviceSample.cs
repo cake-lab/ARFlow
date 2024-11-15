@@ -258,13 +258,13 @@ public class ARFlowDeviceSample : MonoBehaviour
     // Button event handlers
     public void ShowQR()
     {
-        var uid = _clientManager.getSessionId();
+        var uid = _clientManager.getSessionUid();
         if (string.IsNullOrWhiteSpace(uid))
         {
             Toast.Show("To share Uid, first conenct to a session", ToastColor.Red);
             return;
         }
-        Texture2D tex = QRManager.encode(_clientManager.getSessionId());
+        Texture2D tex = QRManager.encode(_clientManager.getDeviceUid());
 
         QR.rawQR.texture = tex;
         QR.window.SetActive(true);
@@ -272,7 +272,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public void CopyUID()
     {
-        var uid = _clientManager.getSessionId();
+        var uid = _clientManager.getSessionUid();
         if (string.IsNullOrWhiteSpace(uid))
         {
             Toast.Show("To share Uid, first conenct to a session", ToastColor.Red);
@@ -281,32 +281,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         GUIUtility.systemCopyBuffer = uid;
         Toast.Show("Copied to clipboard", ToastColor.Green);
     }
-
-    /// <summary>
-    /// Get texture from camera in RGBA32 format
-    /// </summary>
-    /// <returns></returns>
-    //private Texture2D getCameraTexture()
-    //{
-    //    int width = camera.pixelWidth;
-    //    int height = camera.pixelHeight;
-
-
-    //    RenderTexture lastRT = RenderTexture.active;
-
-    //    RenderTexture.active = camera.targetTexture;
-
-    //    camera.Render();
-
-    //    Texture2D capture = new Texture2D(width, height, TextureFormat.RGBA32, false);
-    //    capture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-    //    capture.Apply();
-
-    //    RenderTexture.active = lastRT;
-
-    //    return capture;
-    //}
-
 
     private byte[] GetCpuImage(out int width, out int height)
     {

@@ -180,13 +180,11 @@ def decode_point_cloud(
 def convert_2d_to_3d_boundary_points(
     boundary_points_2d: PlaneBoundaryPoints2D, normal: PlaneNormal, center: PlaneCenter
 ) -> PlaneBoundaryPoints3D:
-    if boundary_points_2d.shape[0] == 0:
-        return np.array([], dtype=np.float32)
+    if boundary_points_2d.shape[0] < 3:
+        raise ValueError("At least 3 boundary points are required")
     # Check boundary points validity
     if boundary_points_2d.shape[1] != 2:
         raise ValueError("Boundary points should be in 2D")
-    if boundary_points_2d.shape[0] < 3:
-        raise ValueError("At least 3 boundary points are required")
 
     # Check normal validity
     if len(normal.shape) != 1:

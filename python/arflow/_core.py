@@ -138,6 +138,14 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         @private
         """
         logger.debug("A client wants to join session %s", request.session_uid)
+
+        if request.client_config.init_uid == "":
+            request.client_config.init_uid = uuid.uuid4().hex
+        else:
+            logger.debug(
+                "Client has provided a UUID: %s", request.client_config.init_uid
+            )
+
         try:
             session_info = self._client_registry[
                 HashableClientIdentifier(request.session_uid)
@@ -147,7 +155,7 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
 
         logger.debug("Found existing session %s", request.session_uid)
 
-        client_uid = uuid.uuid4().hex
+        client_uid = request.client_config.init_uid
         self._client_registry[HashableClientIdentifier(client_uid)] = ClientInfo(
             config=request.client_config,
             # Share the same recording stream
