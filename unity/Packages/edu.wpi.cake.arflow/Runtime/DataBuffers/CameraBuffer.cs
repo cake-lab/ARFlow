@@ -19,7 +19,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public double ImageTimestamp;
         public XRCpuImage.Format Format;
-        public XRCpuImage.Plane[] Planes;
+        // public XRCpuImage.Plane[] Planes;
         public XRCameraIntrinsics Intrinsics;
         public byte[] Data;
 
@@ -81,6 +81,7 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_CameraManager = value;
         }
 
+        private CameraFrame.Types.Format m_DesiredFormat;
         private readonly List<RawCameraFrame> m_Buffer;
 
         public IReadOnlyList<RawCameraFrame> Buffer => m_Buffer;
@@ -91,10 +92,24 @@ namespace CakeLab.ARFlow.DataBuffers
         /// <remarks>
         /// See <a href="https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scenes/FaceTracking/ToggleCameraFacingDirectionOnAction.cs">ToggleCameraFacingDirectionOnAction.cs</a> for an example of how to use this class.
         /// </remarks>
-        public CameraBuffer(int initialBufferSize, ARCameraManager cameraManager)
+        public CameraBuffer(int initialBufferSize, ARCameraManager cameraManager, CameraFrame.Types.Format desiredFormat = CameraFrame.Types.Format.Rgb24)
         {
+            if (desiredFormat == CameraFrame.Types.Format.Unspecified)
+            {
+                throw new ArgumentException("Desired format cannot be Unspecified.", nameof(desiredFormat));
+            }
             m_Buffer = new List<RawCameraFrame>(initialBufferSize);
             m_CameraManager = cameraManager;
+            m_DesiredFormat = desiredFormat;
+        }
+
+        public void ChangeDesiredFormat(CameraFrame.Types.Format newFormat)
+        {
+            if (newFormat == CameraFrame.Types.Format.Unspecified)
+            {
+                throw new ArgumentException("New format cannot be Unspecified.", nameof(newFormat));
+            }
+            m_DesiredFormat = newFormat;
         }
 
         public void StartCapture()
@@ -118,41 +133,45 @@ namespace CakeLab.ARFlow.DataBuffers
                 return;
             }
 
-            AddToBufferAsync(image, intrinsics);
+            AddToBufferAsync(image, intrinsics, DateTime.UtcNow);
+            image.Dispose();
         }
 
-        private async void AddToBufferAsync(XRCpuImage image, XRCameraIntrinsics intrinsics)
+        private async void AddToBufferAsync(XRCpuImage image, XRCameraIntrinsics intrinsics, DateTime deviceTimestampAtCapture)
         {
-            using (image)
+            var format = m_DesiredFormat switch
             {
-                var format = TextureFormat.RGBA32;
-                var conversionParams = new XRCpuImage.ConversionParams(image, format);
-                var conversion = image.ConvertAsync(conversionParams);
-                using (conversion)
-                {
-                    while (conversion.status == XRCpuImage.AsyncConversionStatus.Pending || conversion.status == XRCpuImage.AsyncConversionStatus.Processing)
-                    {
-                        await Awaitable.NextFrameAsync(); // Potential point of contention
-                    }
-                    if (conversion.status != XRCpuImage.AsyncConversionStatus.Ready)
-                    {
-                        Debug.LogError("Failed to convert camera image to RGBA32");
-                        return;
-                    }
-                    var newFrame = new RawCameraFrame
-                    {
-                        DeviceTimestamp = DateTime.UtcNow,
-                        ImageTimestamp = image.timestamp,
-                        Intrinsics = intrinsics,
-                        Data = conversion.GetData<byte>().ToArray(),
-                    };
-                    m_Buffer.Add(newFrame);
-
-                    InternalDebug.Log(
-                        $"Device time: {newFrame.DeviceTimestamp}\nImage timestamp: {newFrame.ImageTimestamp}\nImage format: {newFrame.Format}\nImage plane count: {image.planeCount}\nIntrinsics: {newFrame.Intrinsics}"
-                    );
-                }
+                CameraFrame.Types.Format.Rgb24 => TextureFormat.RGB24,
+                CameraFrame.Types.Format.Rgba32 => TextureFormat.RGBA32,
+                CameraFrame.Types.Format.Unspecified => throw new ArgumentException("Desired format cannot be Unspecified.", nameof(m_DesiredFormat)),
+                _ => throw new ArgumentOutOfRangeException(nameof(m_DesiredFormat), m_DesiredFormat, "Desired format is not supported."),
+            };
+            var conversionParams = new XRCpuImage.ConversionParams(image, format);
+            var conversion = image.ConvertAsync(conversionParams);
+            while (conversion.status == XRCpuImage.AsyncConversionStatus.Pending || conversion.status == XRCpuImage.AsyncConversionStatus.Processing)
+            {
+                await Awaitable.NextFrameAsync(); // Potential point of contention
             }
+            if (conversion.status != XRCpuImage.AsyncConversionStatus.Ready)
+            {
+                InternalDebug.LogErrorFormat("Image conversion failed with status {0}", conversion.status);
+                // Dispose even if there is an error
+                conversion.Dispose();
+                return;
+            }
+            var newFrame = new RawCameraFrame
+            {
+                DeviceTimestamp = deviceTimestampAtCapture,
+                ImageTimestamp = image.timestamp,
+                Intrinsics = intrinsics,
+                Data = conversion.GetData<byte>().ToArray(),
+            };
+            m_Buffer.Add(newFrame);
+
+            InternalDebug.Log(
+                $"Device time: {newFrame.DeviceTimestamp}\nImage timestamp: {newFrame.ImageTimestamp}\nImage format: {newFrame.Format}\nImage plane count: {image.planeCount}\nIntrinsics: {newFrame.Intrinsics}"
+            );
+            conversion.Dispose();
         }
 
         public void ClearBuffer()

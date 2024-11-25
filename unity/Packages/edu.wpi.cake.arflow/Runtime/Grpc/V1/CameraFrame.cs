@@ -28,7 +28,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             "Y2FrZWxhYi5hcmZsb3dfZ3JwYy52MRokY2FrZWxhYi9hcmZsb3dfZ3JwYy92",
             "MS92ZWN0b3IyLnByb3RvGihjYWtlbGFiL2FyZmxvd19ncnBjL3YxL3ZlY3Rv",
             "cjJfaW50LnByb3RvGh9nb29nbGUvcHJvdG9idWYvdGltZXN0YW1wLnByb3Rv",
-            "IqwGCgtDYW1lcmFGcmFtZRJFChBkZXZpY2VfdGltZXN0YW1wGAEgASgLMhou",
+            "Is0ECgtDYW1lcmFGcmFtZRJFChBkZXZpY2VfdGltZXN0YW1wGAEgASgLMhou",
             "Z29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIPZGV2aWNlVGltZXN0YW1wEicK",
             "D2ltYWdlX3RpbWVzdGFtcBgCIAEoAVIOaW1hZ2VUaW1lc3RhbXASQgoGZm9y",
             "bWF0GAMgASgOMiouY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5DYW1lcmFGcmFt",
@@ -39,18 +39,13 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             "ZWN0b3IyUgtmb2NhbExlbmd0aBJICg9wcmluY2lwYWxfcG9pbnQYAiABKAsy",
             "Hy5jYWtlbGFiLmFyZmxvd19ncnBjLnYxLlZlY3RvcjJSDnByaW5jaXBhbFBv",
             "aW50EkIKCnJlc29sdXRpb24YAyABKAsyIi5jYWtlbGFiLmFyZmxvd19ncnBj",
-            "LnYxLlZlY3RvcjJJbnRSCnJlc29sdXRpb24iowIKBkZvcm1hdBIWChJGT1JN",
-            "QVRfVU5TUEVDSUZJRUQQABIeChpGT1JNQVRfQU5EUk9JRF9ZVVZfNDIwXzg4",
-            "OBABEjAKLEZPUk1BVF9JT1NfWVBfQ0JDUl80MjBfOEJJX1BMQU5BUl9GVUxM",
-            "X1JBTkdFEAISGAoURk9STUFUX09ORUNPTVBPTkVOVDgQAxIXChNGT1JNQVRf",
-            "REVQVEhGTE9BVDMyEAQSFgoSRk9STUFUX0RFUFRIVUlOVDE2EAUSGQoVRk9S",
-            "TUFUX09ORUNPTVBPTkVOVDMyEAYSEQoNRk9STUFUX0FSR0IzMhAHEhEKDUZP",
-            "Uk1BVF9SR0JBMzIQCBIRCg1GT1JNQVRfQkdSQTMyEAkSEAoMRk9STUFUX1JH",
-            "QjI0EApCpQEKGmNvbS5jYWtlbGFiLmFyZmxvd19ncnBjLnYxQhBDYW1lcmFG",
-            "cmFtZVByb3RvUAGiAgNDQViqAhZDYWtlTGFiLkFSRmxvdy5HcnBjLlYxygIV",
-            "Q2FrZWxhYlxBcmZsb3dHcnBjXFYx4gIhQ2FrZWxhYlxBcmZsb3dHcnBjXFYx",
-            "XEdQQk1ldGFkYXRh6gIXQ2FrZWxhYjo6QXJmbG93R3JwYzo6VjFiBnByb3Rv",
-            "Mw=="));
+            "LnYxLlZlY3RvcjJJbnRSCnJlc29sdXRpb24iRQoGRm9ybWF0EhYKEkZPUk1B",
+            "VF9VTlNQRUNJRklFRBAAEhEKDUZPUk1BVF9SR0JBMzIQCBIQCgxGT1JNQVRf",
+            "UkdCMjQQCkKlAQoaY29tLmNha2VsYWIuYXJmbG93X2dycGMudjFCEENhbWVy",
+            "YUZyYW1lUHJvdG9QAaICA0NBWKoCFkNha2VMYWIuQVJGbG93LkdycGMuVjHK",
+            "AhVDYWtlbGFiXEFyZmxvd0dycGNcVjHiAiFDYWtlbGFiXEFyZmxvd0dycGNc",
+            "VjFcR1BCTWV0YWRhdGHqAhdDYWtlbGFiOjpBcmZsb3dHcnBjOjpWMWIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.Vector2Reflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.Vector2IntReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -436,15 +431,20 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       /// </summary>
       public enum Format {
         [pbr::OriginalName("FORMAT_UNSPECIFIED")] Unspecified = 0,
-        [pbr::OriginalName("FORMAT_ANDROID_YUV_420_888")] AndroidYuv420888 = 1,
-        [pbr::OriginalName("FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE")] IosYpCbcr4208BiPlanarFullRange = 2,
-        [pbr::OriginalName("FORMAT_ONECOMPONENT8")] Onecomponent8 = 3,
-        [pbr::OriginalName("FORMAT_DEPTHFLOAT32")] Depthfloat32 = 4,
-        [pbr::OriginalName("FORMAT_DEPTHUINT16")] Depthuint16 = 5,
-        [pbr::OriginalName("FORMAT_ONECOMPONENT32")] Onecomponent32 = 6,
-        [pbr::OriginalName("FORMAT_ARGB32")] Argb32 = 7,
+        /// <summary>
+        /// @exclude The number in each field should match the enum XRCpuImage.Format for more convenient conversion.
+        /// @exclude FORMAT_ANDROID_YUV_420_888 = 1;
+        /// @exclude FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE = 2;
+        /// @exclude FORMAT_ONECOMPONENT8 = 3;
+        /// @exclude FORMAT_DEPTHFLOAT32 = 4;
+        /// @exclude FORMAT_DEPTHUINT16 = 5;
+        /// @exclude FORMAT_ONECOMPONENT32 = 6;
+        /// @exclude FORMAT_ARGB32 = 7;
+        /// </summary>
         [pbr::OriginalName("FORMAT_RGBA32")] Rgba32 = 8,
-        [pbr::OriginalName("FORMAT_BGRA32")] Bgra32 = 9,
+        /// <summary>
+        /// @exclude FORMAT_BGRA32 = 9;
+        /// </summary>
         [pbr::OriginalName("FORMAT_RGB24")] Rgb24 = 10,
       }
 

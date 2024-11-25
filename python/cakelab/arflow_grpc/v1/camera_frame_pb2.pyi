@@ -13,26 +13,10 @@ class CameraFrame(_message.Message):
     class Format(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
         __slots__ = ()
         FORMAT_UNSPECIFIED: _ClassVar[CameraFrame.Format]
-        FORMAT_ANDROID_YUV_420_888: _ClassVar[CameraFrame.Format]
-        FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE: _ClassVar[CameraFrame.Format]
-        FORMAT_ONECOMPONENT8: _ClassVar[CameraFrame.Format]
-        FORMAT_DEPTHFLOAT32: _ClassVar[CameraFrame.Format]
-        FORMAT_DEPTHUINT16: _ClassVar[CameraFrame.Format]
-        FORMAT_ONECOMPONENT32: _ClassVar[CameraFrame.Format]
-        FORMAT_ARGB32: _ClassVar[CameraFrame.Format]
         FORMAT_RGBA32: _ClassVar[CameraFrame.Format]
-        FORMAT_BGRA32: _ClassVar[CameraFrame.Format]
         FORMAT_RGB24: _ClassVar[CameraFrame.Format]
     FORMAT_UNSPECIFIED: CameraFrame.Format
-    FORMAT_ANDROID_YUV_420_888: CameraFrame.Format
-    FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE: CameraFrame.Format
-    FORMAT_ONECOMPONENT8: CameraFrame.Format
-    FORMAT_DEPTHFLOAT32: CameraFrame.Format
-    FORMAT_DEPTHUINT16: CameraFrame.Format
-    FORMAT_ONECOMPONENT32: CameraFrame.Format
-    FORMAT_ARGB32: CameraFrame.Format
     FORMAT_RGBA32: CameraFrame.Format
-    FORMAT_BGRA32: CameraFrame.Format
     FORMAT_RGB24: CameraFrame.Format
     class Intrinsics(_message.Message):
         __slots__ = ("focal_length", "principal_point", "resolution")
