@@ -1,12 +1,8 @@
 {
   "recommendations": [
-    "ms-python.python",
-    "ms-python.vscode-pylance",
     "redhat.vscode-yaml",
-    "charliermarsh.ruff",
-    "ms-toolsai.jupyter",
     "streetsidesoftware.code-spell-checker",
-    "visualstudiotoolsforunity.vstuc",
-    "DavidAnson.vscode-markdownlint"
+    "DavidAnson.vscode-markdownlint",
+    "bufbuild.vscode-buf"
   ]
 }

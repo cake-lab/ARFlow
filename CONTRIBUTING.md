@@ -57,6 +57,8 @@ cd ARFlow/python
 poetry install
 ```
 
+<!-- # TODO: Replace with instructions for running mise tasks -->
+
 ### Packages and Tools
 
 #### Poetry
@@ -66,6 +68,8 @@ commands. Dependencies and configuration are stored in the
 [pyproject.toml](./python/pyproject.toml) file.
 
 #### Protobuf
+
+<!-- # TODO: Replace with instructions for installing Buf CLI -->
 
 ARFlow uses [Protobuf](https://protobuf.dev) to define the communication
 protocol between the server and the client. The protocol is defined in
@@ -89,6 +93,8 @@ editor.
 
 These tools should run automatically in your editor. If you want to run them
 manually, you can also use the following commands:
+
+<!-- # TODO: Replace with instructions for running mise tasks -->
 
 ```shell
 poetry run ruff check # check for linting errors
@@ -219,6 +225,8 @@ ARFlow server yet. If you are interested in working on this, please let us know.
 
 #### Continuous Integration
 
+<!-- # TODO: Replace with tasks in mise.toml -->
+
 ARFlow uses GitHub Actions for continuous integration. The CI pipeline runs the
 following checks:
 
@@ -235,6 +243,8 @@ more information on how to generate documentation.
 
 To preview the documentation locally, run:
 
+<!-- # TODO: Replace with tasks in mise.toml -->
+
 ```shell
 poetry run pdoc arflow examples # or replace with module_name that you want to preview
 ```
@@ -244,7 +254,7 @@ poetry run pdoc arflow examples # or replace with module_name that you want to p
 ### Client Setup
 
 This package can be installed with Unity Package Manager's Install from Git
-feature. This package has some dependencies that must be installed seperately.
+feature. This package has some dependencies that must be installed separately.
 
 1. Install these dependency packages by specifying the following URL in
    `Add package from git URL...`
@@ -305,7 +315,7 @@ document:
 1. Make sure you have [dotnet](https://dotnet.microsoft.com/en-us/) installed
    (preferably dotnet 6).
 2. Run either [build.cmd](./unity/Documentation/scripts/build.cmd) or
-   [build.sh](unity/Documentation/scripts/build.sh)
+   [build.sh](./unity/Documentation/scripts/build.sh)
 
 If you want to have the web page served locally, instead of the script run:
 
@@ -352,3 +362,153 @@ that has worked on our devices:
   (Check any other architectures if needed).
 - In `Player Settings`, change `Active Input Handling` to
   `Input System Package (New)`.
+
+Intall Unity 6 open `unity` dir in Unity Hub
+
+Documentation: install .NET 8 SDK install docfx as a CLI dotnet tool update -g
+We follow the documentation conventions stated in
+<https://github.com/NormandErwan/DocFxForUnity>.
+
+We use Android Logcat to debug the Android app. Check out
+[how to use it](https://docs.unity3d.com/Packages/com.unity.mobile.android-logcat@1.4/manual/connect-to-a-device.html)
+
+We provide different `Build Profiles` for different platforms. To switch between
+profiles, go to `Build Settings` and select the desired profile.
+
+Add mise part for ease of use in Python (mise.toml)
+
+<!-- // manifest.json // probably unused /
+"com.unity.visualscripting": "1.9.4" // "com.unity.xr.mock-hmd":
+"1.4.0-preview.2",
+
+// cai qua unitypackage -->
+<!-- UnityXRContent -->
+
+numerous improvements:
+
+1. update all AR packages to match the latest version of Unity's official Mobile
+   AR template
+   (<https://docs.unity3d.com/Packages/com.unity.template.ar-mobile@2.0/manual/index.html>)
+
+2. switch to use Unity's Draco package instead of
+   <https://github.com/atteneder/DracoUnity>
+
+3. streamline (TODO: also add docs) Protobuf build process with Buf. Instruct to
+   install Buf CLI (<https://buf.build/docs/installation/>) and run
+   `buf generate` in the root directory to generate the Protobuf bindings.
+   `buf.yaml` defines a module and is the primary configuration file for Buf.
+   `buf.gen.yaml` defines the generation configuration for the Protobuf
+   bindings. `buf.gen.yaml` is used by Buf to generate the Protobuf bindings.
+   `buf lint` also helpful when editing Protobuf files.
+
+4. download suggested VSCode extensions
+
+5. use mise to manage tasks
+
+6. check for device support with ARSession
+   <https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/manual/features/session.html#check-for-device-support>
+
+7. improve grpc client performance: reusing existing grpc channels, controlling
+   how we're creating grpc clients, use multiple HTTP/2 connections, keep grpc
+   connection alive when idling
+
+tip: mise watch protoc gen <https://mise.jdx.dev/cli/watch.html>
+
+mention cross-platform task runner mise blabla
+
+future work: consolidate CI on github actions with tasks in mise
+
+set up mise autocompletions
+<https://mise.jdx.dev/installing-mise.html#autocompletion> to have a better dev
+experience. autocomplete tasks and options in the terminal.
+
+Unity test framework
+<https://docs.unity3d.com/Packages/com.unity.test-framework@1.1/manual/index.html>
+
+Unity automated testing
+<https://docs.unity3d.com/6000.0/Documentation/Manual/testing-editortestsrunner.html>
+
+Unity performance testing
+<https://docs.unity3d.com/Packages/com.unity.test-framework.performance@3.0/manual/index.html>
+
+ARFlow is an Unity Embedded package
+<https://docs.unity3d.com/Manual/CustomPackages.html>
+
+I recommend updating the installation instructions for your package(s) to
+explicitly state what dependencies users will need to download and how. in
+manifest.json. tell them to gitignore nugetforunity installed packages also
+
+[](./unity/Packages/edu.wpi.cake.arflow/Assets/Images/)
+[](./unity/Packages/edu.wpi.cake.arflow/Assets/Prefabs/)
+[](./unity/Packages/edu.wpi.cake.arflow/Assets/Materials/)
+[](./unity/Packages/edu.wpi.cake.arflow/Assets/Resources/)
+[](./unity/Packages/edu.wpi.cake.arflow/Assets/.gitignore) (moved to
+unity/.gitignore) [](./unity/Packages/edu.wpi.cake.arflow/Assets/Scripts/) moved
+to ./unity/Packages/edu.wpi.cake.arflow/Samples~/
+[](./unity/Packages/edu.wpi.cake.arflow/Assets/Scenes/) except SampleScene.unity
+
+sharing your package: <https://docs.unity3d.com/Manual/cus-share.html>
+
+Change doc link for Unity stuff (README + assets blabla)
+
+Organize samples <https://docs.unity3d.com/Manual/cus-samples.html>
+
+Use InternalDebug class for all your needs when debugging in Unity. See
+reasoning at top bla.
+
+CI build: <https://game.ci/docs/github/builder/>
+
+Configure gRPC HTTP2 keepalive according to their best practices
+<https://grpc.io/docs/guides/performance/>
+
+may need to upgrade manually created shader (CameraDepth)
+<https://docs.unity3d.com/6000.0/Documentation/Manual/urp/InstallURPIntoAProject.html#upgrading-your-shaders>
+
+since we're using AR Mobile template, there's already a sample scene template
+named AR (accessed from Ctrl/Cmd + N or File > New Scene) that's configured
+according to this guide
+<https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/manual/project-setup/scene-setup.html>
+
+Delete problem building the Android app/app crashes immediately cuz it's already
+saved in Unity project
+
+Installation: buf, mise, dotnet 8 + docfx (if want to do client docs), Unity 6
+(should prompt to install if open project in Unity Hub), use mise to install
+python + poetry + node 20 (needed for client docs). the rest is in mise r ...
+(mise.toml)
+
+Regenerate TOC
+
+clone the 2 repos and test out: some interesting examples: configuration
+chooser, check support, debug menu, menu
+
+May need to look at optional camera feature platform support
+<https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/manual/features/camera/platform-support.html#optional-features>
+
+<!--
+        private readonly IGrpcClient _grpcClient;
+        private readonly string _serverUrl;
+
+        public ARFlowManager(string serverUrl)
+        {
+            _grpcClient = new GrpcClient(serverUrl);
+            _serverUrl = serverUrl;
+        }
+
+        public async Task<GrpcResponseModel.NtpModel> GetNtpAsync()
+        {
+            return await _grpcClient.GetNtpAsync();
+        } -->
+
+problem cannot build scenes on Linux:
+<https://issuetracker.unity3d.com/issues/urp-samples-multiple-attempting-to-resolve-render-surface-and-other-errors-appear-when-setting-quality-pipeline-asset>
+
+Try switching to Vulkan API in Player Settings
+
+Include this in protobuf best practices
+<https://protobuf.dev/programming-guides/1-1-1/>
+
+idea: rerun log with rust or c++ to support async workflows
+<https://rerun.io/docs/concepts/app-model>
+
+Server Finder, Session Manager,

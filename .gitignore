@@ -1,11 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,visualstudiocode
 
-#additional files
-.grpc_tools/**
-act.exe
-my.secrets
-
 ### macOS ###
 # General
 .DS_Store

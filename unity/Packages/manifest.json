@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "com.cysharp.yetanotherhttphandler": "https://github.com/Cysharp/YetAnotherHttpHandler.git?path=src/YetAnotherHttpHandler#1.6.0",
+    "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+    "com.unity.xr-content.xr-sim-environments": "file:../ContentPackages/com.unity.xr-content.xr-sim-environments-2.0.1.tgz",
+    "edu.wpi.cake.arflow": "file:edu.wpi.cake.arflow"
+  }
+}

@@ -12,11 +12,11 @@ import grpc_interceptor
 import grpc_interceptor.exceptions
 import numpy as np
 import pytest
+from arflow_grpc import service_pb2
+from arflow_grpc.service_pb2 import JoinSessionRequest, ProcessFrameRequest
 
 from arflow import ARFlowServicer, DecodedDataFrame, RegisterClientRequest
 from arflow._types import HashableClientIdentifier
-from arflow_grpc import service_pb2
-from arflow_grpc.service_pb2 import JoinSessionRequest, ProcessFrameRequest
 
 
 @pytest.mark.parametrize(
@@ -59,7 +59,7 @@ def test_multiple_clients(default_service_fixture: ARFlowServicer):
         response = default_service_fixture.RegisterClient(request)
         assert len(response.uid) == 32
 
-    assert len(default_service_fixture._client_registry) == 3
+    assert len(default_service_fixture._client_sessions) == 3
 
 
 def test_register_same_client_twice(default_service_fixture: ARFlowServicer):
@@ -141,7 +141,7 @@ def test_ensure_correct_config(
     response = default_service_fixture.RegisterClient(client_config)
     client_id = HashableClientIdentifier(response.uid)
     assert (
-        default_service_fixture._client_registry[client_id].config.camera_color.enabled
+        default_service_fixture._client_sessions[client_id].config.camera_color.enabled
         == expected_enabled
     )
 

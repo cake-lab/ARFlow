@@ -1,0 +1,56 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../",
+          "files": ["Packages/edu.wpi.cake.arflow/Runtime/**/*.cs"]
+        }
+      ],
+      "globalNamespaceId": "Global",
+      "dest": "api",
+      "filter": "filterConfig.yml",
+      "allowCompilationErrors": true
+    }
+  ],
+  "build": {
+    "globalMetadata": {
+      "_appName": "ARFlow",
+      "_appTitle": "A framework for simplifying AR experimentation workflow.",
+      "_enableSearch": true,
+      "pdf": true
+    },
+    "content": [
+      {
+        "files": ["toc.yml", "index.md"]
+      },
+      {
+        "src": "api",
+        "files": ["*.yml"],
+        "dest": "api"
+      },
+      {
+        "src": "docs",
+        "files": ["toc.yml", "*.md"],
+        "dest": "docs"
+      }
+    ],
+    "overwrite": [
+      {
+        "files": ["namespaces/*.md"]
+      }
+    ],
+    "resource": [
+      {
+        "files": ["resources/**/*"]
+      }
+    ],
+    "sitemap": {
+      "baseUrl": "https://cake.wpi.edu/ARFlow/docs/client"
+    },
+    "xref": ["https://cake.wpi.edu/ARFlow/docs/client"],
+    "xrefService": ["https://xref.docs.microsoft.com/query?uid={uid}"],
+    "dest": "../../website/docs/client",
+    "template": ["default", "modern"]
+  }
+}

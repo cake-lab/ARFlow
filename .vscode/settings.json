@@ -1,4 +1,15 @@
 {
+  "editor.tabSize": 4,
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "[json]": {
+    "editor.tabSize": 2
+  },
+  "[yaml]": {
+    "editor.tabSize": 4
+  },
+  "editor.insertSpaces": true,
   "notebook.formatOnSave.enabled": true,
   "notebook.codeActionsOnSave": {
     "notebook.source.fixAll": "explicit",
@@ -14,15 +25,12 @@
   },
   "python.analysis.typeCheckingMode": "strict",
   "python.analysis.autoImportCompletions": true,
-  "python.testing.pytestArgs": [
-    "python"
-  ],
+  "python.testing.pytestArgs": ["python"],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
   "[csharp]": {
     "editor.formatOnSave": true,
-    "editor.maxTokenizationLineLength": 2500,
-    "editor.inlineSuggest.suppressSuggestions": false
+    "editor.maxTokenizationLineLength": 2500
   },
   "files.exclude": {
     "**/.git": true,

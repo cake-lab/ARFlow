@@ -1,0 +1,23 @@
+{
+    "name": "CakeLab.ARFlow",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a9420e37d7990b54abdef6688edbe313",
+        "GUID:c3bc0afe4a069b54aa23296f3c18a871",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:92703082f92b41ba80f0d6912de66115",
+        "GUID:d9149a4e0ef435c45b10905a79471258",
+        "GUID:411961ebab96043d8a061c656d3a461c",
+        "GUID:e40ba710768534012815d3193fa296cb",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

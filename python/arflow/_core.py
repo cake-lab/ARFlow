@@ -1,67 +1,61 @@
-"""Data exchanging service."""
+"""The ARFlow gRPC server implementation."""
 
 import logging
-import time
 import uuid
+from collections import defaultdict
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from typing import Any, List, Type, cast
+from typing import Any, DefaultDict, Iterable, Tuple, Type
 
-import DracoPy
 import grpc
 import numpy as np
 import rerun as rr
 from grpc_interceptor.exceptions import InvalidArgument, NotFound
 
-from arflow._decoding import (
-    convert_2d_to_3d_boundary_points,
-    decode_depth_image,
-    decode_intrinsic,
-    decode_point_cloud,
-    decode_rgb_image,
-    decode_transform,
-)
+from arflow._decoding import decode_camera_frames
 from arflow._error_interceptor import ErrorInterceptor
+from arflow._session_stream import SessionStream
 from arflow._types import (
-    Audio,
-    ClientInfo,
-    ClientRegistry,
-    ColorDataType,
-    ColorRGB,
-    DecodedDataFrame,
-    DepthDataType,
-    DepthImg,
-    GyroscopeInfo,
-    HashableClientIdentifier,
-    Intrinsic,
-    Mesh,
-    PlaneBoundaryPoints3D,
-    PlaneInfo,
-    PointCloudCLR,
-    PointCloudPCD,
-    Transform,
+    ARFrameType,
+    DecodedARFrames,
+    SupportedCameraFrameFormat,
 )
-from arflow_grpc import service_pb2_grpc
-from arflow_grpc.service_pb2 import (
-    JoinSessionRequest,
-    JoinSessionResponse,
-    ProcessFrameRequest,
-    ProcessFrameResponse,
-    RegisterClientRequest,
-    RegisterClientResponse,
+from cakelab.arflow_grpc.v1 import arflow_service_pb2_grpc
+from cakelab.arflow_grpc.v1.arframe_pb2 import ARFrame
+from cakelab.arflow_grpc.v1.camera_frame_pb2 import CameraFrame
+from cakelab.arflow_grpc.v1.create_session_request_pb2 import CreateSessionRequest
+from cakelab.arflow_grpc.v1.create_session_response_pb2 import CreateSessionResponse
+from cakelab.arflow_grpc.v1.delete_session_request_pb2 import DeleteSessionRequest
+from cakelab.arflow_grpc.v1.delete_session_response_pb2 import DeleteSessionResponse
+from cakelab.arflow_grpc.v1.device_pb2 import Device
+from cakelab.arflow_grpc.v1.get_session_request_pb2 import GetSessionRequest
+from cakelab.arflow_grpc.v1.get_session_response_pb2 import GetSessionResponse
+from cakelab.arflow_grpc.v1.join_session_request_pb2 import JoinSessionRequest
+from cakelab.arflow_grpc.v1.join_session_response_pb2 import JoinSessionResponse
+from cakelab.arflow_grpc.v1.leave_session_request_pb2 import LeaveSessionRequest
+from cakelab.arflow_grpc.v1.leave_session_response_pb2 import LeaveSessionResponse
+from cakelab.arflow_grpc.v1.list_sessions_request_pb2 import ListSessionsRequest
+from cakelab.arflow_grpc.v1.list_sessions_response_pb2 import ListSessionsResponse
+from cakelab.arflow_grpc.v1.save_ar_frames_request_pb2 import (
+    SaveARFramesRequest,
 )
+from cakelab.arflow_grpc.v1.save_ar_frames_response_pb2 import (
+    SaveARFramesResponse,
+)
+from cakelab.arflow_grpc.v1.session_pb2 import Session, SessionUuid
 
 logger = logging.getLogger(__name__)
 
 
-class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
+class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
     """Provides methods that implement the functionality of the ARFlow gRPC server."""
 
     def __init__(
         self,
         spawn_viewer: bool = True,
         save_dir: Path | None = None,
+        application_id: str = "arflow",
     ) -> None:
         """Initialize the ARFlowServicer.
 
@@ -78,57 +72,137 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
             raise ValueError(
                 "Either spawn the viewer or save the data, but not both, and neither can be disabled."
             )
-
-        self._client_registry: ClientRegistry = {}
         self._spawn_viewer = spawn_viewer
         self._save_dir = save_dir
+        self._application_id = application_id
+        self._client_sessions: dict[str, SessionStream] = {}
         # Initializes SDK with an "empty" global recording. We don't want to log anything into the global recording.
-        # We will create a new recording for each client.
-        rr.init(application_id="arflow", spawn=self._spawn_viewer)
+        rr.init(application_id=application_id, spawn=self._spawn_viewer)
         super().__init__()
 
-    def RegisterClient(
-        self,
-        request: RegisterClientRequest,
-        context: grpc.ServicerContext | None = None,
-    ) -> RegisterClientResponse:
-        """Register a client.
-
-        @private
-        """
-        if request.init_uid == "":
-            request.init_uid = uuid.uuid4().hex
-        else:
-            logger.debug("Client has provided a UUID: %s", request.init_uid)
-
-        stream = rr.new_recording(
-            application_id="arflow",
-            recording_id=request.init_uid,
+    def CreateSession(
+        self, request: CreateSessionRequest, context: grpc.ServicerContext | None = None
+    ) -> CreateSessionResponse:
+        new_session_id = str(uuid.uuid4())
+        new_rr_stream = rr.new_recording(
+            application_id=self._application_id,
+            recording_id=new_session_id,  # recording_id identifies streams
             spawn=self._spawn_viewer,
         )
-        self._client_registry[HashableClientIdentifier(request.init_uid)] = ClientInfo(
-            config=request, rerun_stream=stream
+        new_session = Session(
+            id=SessionUuid(new_session_id),
+            metadata=request.session_metadata,
+            devices=[request.device],
         )
-        logger.info(
-            "Registered a client with UUID %s",
-            request.init_uid,
+        new_session_stream = SessionStream(
+            info=new_session,
+            stream=new_rr_stream,
         )
-        logger.debug("Config of the client: %s", request)
+        self._client_sessions[new_session_id] = new_session_stream
+        logger.info("Created new session: %s", new_session_stream.info)
 
         if self._save_dir is not None:
-            save_path = self._save_dir / Path(
-                f"{request.device_name}_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.rrd"
-            )
+            save_path = self._save_dir / Path(f"{new_session_stream.info.id}.rrd")
+
+            # Overriding the save path if provided in session metadata
+            if len(request.session_metadata.save_path) != 0:
+                save_path = Path(request.session_metadata.save_path)
+
             rr.save(
                 path=save_path,
-                recording=stream,
+                recording=new_rr_stream,
             )
-            logger.debug("Saving data of client %s to %s", request.init_uid, save_path)
+            logger.debug("Session data path: %s", save_path)
 
-        # Call the for user extension code.
-        self.on_register(request)
+        self.on_create_session(
+            session_stream=new_session_stream,
+            device=request.device,
+        )
 
-        return RegisterClientResponse(uid=request.init_uid)
+        return CreateSessionResponse(session=new_session)
+
+    def on_create_session(self, session_stream: SessionStream, device: Device) -> None:
+        """Hook for user-defined procedures when a session is created.
+
+        Args:
+            session_stream: The session stream.
+            device: The device that created the session.
+        """
+        pass
+
+    def DeleteSession(
+        self, request: DeleteSessionRequest, context: grpc.ServicerContext | None = None
+    ) -> DeleteSessionResponse:
+        try:
+            session_stream = self._client_sessions.pop(request.session_id.value)
+        except KeyError:
+            logger.warning("Session not found")
+            raise NotFound("Session not found")
+
+        rr.disconnect(session_stream.stream)
+        logger.info("Deleted session: %s", session_stream.info)
+
+        self.on_delete_session(session_stream=session_stream)
+
+        return DeleteSessionResponse()
+
+    def on_delete_session(
+        self,
+        session_stream: SessionStream,
+    ) -> None:
+        """Hook for user-defined procedures when a session is deleted.
+
+        Args:
+            session_stream: The deleted session stream.
+        """
+        pass
+
+    def GetSession(
+        self, request: GetSessionRequest, context: grpc.ServicerContext | None = None
+    ) -> GetSessionResponse:
+        try:
+            session_stream = self._client_sessions[request.session_id.value]
+        except KeyError:
+            logger.warning("Session not found")
+            raise NotFound("Session not found")
+
+        logger.info("Retrieved session: %s", session_stream.info)
+
+        self.on_get_session(session_stream=session_stream)
+
+        return GetSessionResponse(session=session_stream.info)
+
+    def on_get_session(self, session_stream: SessionStream) -> None:
+        """Hook for user-defined procedures when a session is retrieved.
+
+        Args:
+            session_stream: The session stream.
+        """
+        pass
+
+    def ListSessions(
+        self, request: ListSessionsRequest, context: grpc.ServicerContext | None = None
+    ) -> ListSessionsResponse:
+        current_session_streams = [
+            session_stream for session_stream in self._client_sessions.values()
+        ]
+        current_sessions = [
+            session_stream.info for session_stream in current_session_streams
+        ]
+
+        logger.info("Listed current sessions: %s", current_session_streams)
+
+        self.on_list_sessions(session_streams=current_session_streams)
+
+        return ListSessionsResponse(sessions=current_sessions)
+
+    def on_list_sessions(self, session_streams: Iterable[SessionStream]) -> None:
+        """Hook for user-defined procedures when all sessions are requested.
+
+        Args:
+            session_streams: The session streams.
+        """
+        pass
 
     def JoinSession(
         self, request: JoinSessionRequest, context: grpc.ServicerContext | None = None
@@ -137,36 +211,19 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
 
         @private
         """
-        logger.debug("A client wants to join session %s", request.session_uid)
-
-        if request.client_config.init_uid == "":
-            request.client_config.init_uid = uuid.uuid4().hex
-        else:
-            logger.debug(
-                "Client has provided a UUID: %s", request.client_config.init_uid
-            )
-
         try:
-            session_info = self._client_registry[
-                HashableClientIdentifier(request.session_uid)
-            ]
+            session_stream = self._client_sessions[request.session_id.value]
         except KeyError:
+            logger.warning("Session not found")
             raise NotFound("Session not found")
 
-        logger.debug("Found existing session %s", request.session_uid)
+        if request.device in session_stream.info.devices:
+            logger.warning("Device already in session")
+            raise InvalidArgument("Device already in session")
 
-        client_uid = request.client_config.init_uid
-        self._client_registry[HashableClientIdentifier(client_uid)] = ClientInfo(
-            config=request.client_config,
-            # Share the same recording stream
-            rerun_stream=session_info.rerun_stream,
-        )
+        session_stream.info.devices.append(request.device)
 
-        logger.info("Client %s joined session %s", client_uid, request.session_uid)
-        logger.debug(
-            "Config of the client: %s",
-            request.client_config,
-        )
+        logger.info("Client %s joined session %s", request.device, request.session_id)
 
         # TODO: Test to see Rerun behavior when rr.save has already been called before
         # save_path = self._save_dir / Path(
@@ -177,319 +234,198 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         #     recording=session_info.rerun_stream,
         # )
 
-        # Call the for user extension code.
-        self.on_join_session(request)
+        self.on_join_session(session_stream=session_stream, device=request.device)
 
-        return JoinSessionResponse(uid=client_uid)
+        return JoinSessionResponse(session=session_stream.info)
 
-    def ProcessFrame(
+    def on_join_session(
         self,
-        request: ProcessFrameRequest,
-        context: grpc.ServicerContext | None = None,
-    ) -> ProcessFrameResponse:
-        """Process an incoming frame.
+        session_stream: SessionStream,
+        device: Device,
+    ) -> None:
+        """Hook for user-defined procedures when a new device joined a session.
+
+        Args:
+            session_stream: The session stream.
+            device: The device that joined the session.
+        """
+        pass
+
+    def LeaveSession(
+        self, request: LeaveSessionRequest, context: grpc.ServicerContext | None = None
+    ):
+        """Leave a session.
 
         @private
-
-        Raises:
-            grpc_interceptor.exceptions.NotFound: If the client configuration is not found.
-            grpc_interceptor.exceptions.InvalidArgument: If the color data type is not recognized
-            or the depth data type is not recognized or if the request's data cannot be decoded (e.g., corrupted or invalid data).
         """
         try:
-            client_info = self._client_registry[HashableClientIdentifier(request.uid)]
+            session_stream = self._client_sessions[request.session_id.value]
         except KeyError:
-            raise NotFound("Client info not found")
+            logger.warning("Session not found")
+            raise NotFound("Session not found")
 
-        logger.debug(
-            "Received frame for timestamp: %s.%s",
-            request.timestamp.seconds,
-            request.timestamp.nanos,
+        try:
+            session_stream.info.devices.remove(request.device)
+        except ValueError:
+            logger.warning("Device not in session")
+            raise InvalidArgument("Device not in session")
+
+        logger.info("Client %s left session %s", request.device, request.session_id)
+
+        self.on_leave_session(
+            session_stream=session_stream,
+            device=request.device,
         )
 
-        color_rgb: ColorRGB | None = None
-        depth_img: DepthImg | None = None
-        transform: Transform | None = None
-        k: Intrinsic | None = None
-        point_cloud_pcd: PointCloudPCD | None = None
-        point_cloud_clr: PointCloudCLR | None = None
-        audio_data: Audio | None = None
+        return LeaveSessionResponse()
 
-        # Used for all subsequent logging on the same thread until the next call to `rr.set_time_seconds()` (which
-        # is the next `ProcessFrame()` call).
-        rr.set_time_seconds(
-            "stable_time",
-            request.timestamp.seconds + request.timestamp.nanos / 1e9,
-            recording=client_info.rerun_stream,
-        )
+    def on_leave_session(self, session_stream: SessionStream, device: Device) -> None:
+        """Hook for user-defined procedures when a device leaves a session.
 
-        if client_info.config.camera_color.enabled:
-            try:
-                color_rgb = np.flipud(
-                    decode_rgb_image(
-                        client_info.config.camera_intrinsics.resolution_y,
-                        client_info.config.camera_intrinsics.resolution_x,
-                        client_info.config.camera_color.resize_factor_y,
-                        client_info.config.camera_color.resize_factor_x,
-                        cast(ColorDataType, client_info.config.camera_color.data_type),
-                        request.color,
-                    )
-                )
-            except ValueError as e:
-                raise InvalidArgument(str(e))
-
-            rr.log(
-                f"arflow/{request.uid}/rgb",
-                rr.Image(color_rgb),
-                recording=client_info.rerun_stream,
-            )
-
-        if client_info.config.camera_depth.enabled:
-            try:
-                depth_img = np.flipud(
-                    decode_depth_image(
-                        client_info.config.camera_depth.resolution_y,
-                        client_info.config.camera_depth.resolution_x,
-                        cast(DepthDataType, client_info.config.camera_depth.data_type),
-                        request.depth,
-                    )
-                )
-            except ValueError as e:
-                raise InvalidArgument(str(e))
-            rr.log(
-                f"arflow/{request.uid}/depth",
-                rr.DepthImage(depth_img, meter=1.0),
-                recording=client_info.rerun_stream,
-            )
-
-        if client_info.config.camera_transform.enabled:
-            rr.log(
-                f"arflow/{request.uid}/world/origin",
-                rr.ViewCoordinates.RIGHT_HAND_Y_DOWN,
-                recording=client_info.rerun_stream,
-            )
-            # self.logger.log(
-            #     "world/xyz",
-            #     rr.Arrows3D(
-            #         vectors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-            #         colors=[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
-            #     ),
-            # )
-
-            try:
-                transform = decode_transform(request.transform)
-            except ValueError as e:
-                raise InvalidArgument(str(e))
-            rr.log(
-                f"arflow/{request.uid}/world/camera",
-                rr.Transform3D(mat3x3=transform[:3, :3], translation=transform[:3, 3]),
-                recording=client_info.rerun_stream,
-            )
-
-            # Won't thow any potential exceptions for now.
-            k = decode_intrinsic(
-                client_info.config.camera_color.resize_factor_y,
-                client_info.config.camera_color.resize_factor_x,
-                client_info.config.camera_intrinsics.focal_length_y,
-                client_info.config.camera_intrinsics.focal_length_x,
-                client_info.config.camera_intrinsics.principal_point_y,
-                client_info.config.camera_intrinsics.principal_point_x,
-            )
-
-            rr.log(
-                f"arflow/{request.uid}/world/camera",
-                rr.Pinhole(image_from_camera=k),
-                recording=client_info.rerun_stream,
-            )
-            if color_rgb is not None:
-                rr.log(
-                    f"arflow/{request.uid}/world/camera",
-                    rr.Image(np.flipud(color_rgb)),
-                    recording=client_info.rerun_stream,
-                )
-
-        if client_info.config.camera_point_cloud.enabled:
-            if (
-                k is not None
-                and color_rgb is not None
-                and depth_img is not None
-                and transform is not None
-            ):
-                # Won't thow any potential exceptions for now.
-                point_cloud_pcd, point_cloud_clr = decode_point_cloud(
-                    client_info.config.camera_intrinsics.resolution_y,
-                    client_info.config.camera_intrinsics.resolution_x,
-                    client_info.config.camera_color.resize_factor_y,
-                    client_info.config.camera_color.resize_factor_x,
-                    k,
-                    color_rgb,
-                    depth_img,
-                    transform,
-                )
-                rr.log(
-                    f"arflow/{request.uid}/world/point_cloud",
-                    rr.Points3D(point_cloud_pcd, colors=point_cloud_clr),
-                    recording=client_info.rerun_stream,
-                )
-
-        if client_info.config.camera_plane_detection.enabled:
-            strips: List[PlaneBoundaryPoints3D] = []
-            for plane in request.plane_detection:
-                boundary_points_2d: List[List[float]] = list(
-                    map(lambda pt: [pt.x, pt.y], plane.boundary_points)
-                )
-
-                plane = PlaneInfo(
-                    center=np.array([plane.center.x, plane.center.y, plane.center.z]),
-                    normal=np.array([plane.normal.x, plane.normal.y, plane.normal.z]),
-                    size=np.array([plane.size.x, plane.size.y]),
-                    boundary_points=np.array(boundary_points_2d),
-                )
-
-                try:
-                    boundary_3d = convert_2d_to_3d_boundary_points(
-                        plane.boundary_points, plane.normal, plane.center
-                    )
-                except ValueError as e:
-                    raise InvalidArgument(str(e))
-
-                # Close the boundary by adding the first point to the end.
-                if boundary_3d.shape[0] > 0:
-                    boundary_3d = np.vstack([boundary_3d, boundary_3d[0]])
-                strips.append(boundary_3d)
-            rr.log(
-                f"arflow/{request.uid}/world/detected-planes",
-                rr.LineStrips3D(
-                    strips=strips,
-                    colors=[[255, 0, 0]],
-                    radii=rr.Radius.ui_points(5.0),
-                ),
-                recording=client_info.rerun_stream,
-            )
-
-        if client_info.config.gyroscope.enabled:
-            gyro_data_proto = request.gyroscope
-            gyro_data = GyroscopeInfo(
-                attitude=np.array(
-                    [
-                        gyro_data_proto.attitude.x,
-                        gyro_data_proto.attitude.y,
-                        gyro_data_proto.attitude.z,
-                        gyro_data_proto.attitude.w,
-                    ]
-                ),
-                rotation_rate=np.array(
-                    [
-                        gyro_data_proto.rotation_rate.x,
-                        gyro_data_proto.rotation_rate.y,
-                        gyro_data_proto.rotation_rate.z,
-                    ]
-                ),
-                gravity=np.array(
-                    [
-                        gyro_data_proto.gravity.x,
-                        gyro_data_proto.gravity.y,
-                        gyro_data_proto.gravity.z,
-                    ]
-                ),
-                acceleration=np.array(
-                    [
-                        gyro_data_proto.acceleration.x,
-                        gyro_data_proto.acceleration.y,
-                        gyro_data_proto.acceleration.z,
-                    ]
-                ),
-            )
-            attitude = rr.Quaternion(
-                xyzw=gyro_data.attitude,
-            )
-            rotation_rate = rr.datatypes.Vec3D(gyro_data.rotation_rate)
-            gravity = rr.datatypes.Vec3D(gyro_data.gravity)
-            acceleration = rr.datatypes.Vec3D(gyro_data.acceleration)
-            # Attitute is displayed as a box, and the other acceleration variables are displayed as arrows.
-            rr.log(
-                f"arflow/{request.uid}/world/rotations/gyroscope/attitude",
-                rr.Boxes3D(half_sizes=[0.5, 0.5, 0.5], quaternions=[attitude]),
-                recording=client_info.rerun_stream,
-            )
-            rr.log(
-                f"arflow/{request.uid}/world/rotations/gyroscope/rotation_rate",
-                rr.Arrows3D(vectors=[rotation_rate], colors=[[0, 255, 0]]),
-                recording=client_info.rerun_stream,
-            )
-            rr.log(
-                f"arflow/{request.uid}/world/rotations/gyroscope/gravity",
-                rr.Arrows3D(vectors=[gravity], colors=[[0, 0, 255]]),
-                recording=client_info.rerun_stream,
-            )
-            rr.log(
-                f"arflow/{request.uid}/world/rotations/gyroscope/acceleration",
-                rr.Arrows3D(vectors=[acceleration], colors=[[255, 255, 0]]),
-                recording=client_info.rerun_stream,
-            )
-
-        if client_info.config.audio.enabled:
-            audio_data = np.array(request.audio_data)
-            for i in audio_data:
-                rr.log(
-                    f"arflow/{request.uid}/world/audio",
-                    rr.Scalar(i),
-                    recording=client_info.rerun_stream,
-                )
-
-        if client_info.config.meshing.enabled:
-            logger.debug("Number of meshes: %s", len(request.meshes))
-            # Binary arrays can be empty if no mesh is sent. This could be due to non-supporting devices. We can log this in the future.
-            binary_arrays = request.meshes
-            for index, mesh_data in enumerate(binary_arrays):
-                # We are ignoring type because DracoPy is written with Cython, and Pyright cannot infer types from a native module.
-                dracoMesh = DracoPy.decode(mesh_data.data)  # pyright: ignore [reportUnknownMemberType, reportUnknownVariableType]
-
-                mesh = Mesh(
-                    faces=dracoMesh.faces,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-                    points=dracoMesh.points,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-                    normals=dracoMesh.normals,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-                    tex_coord=dracoMesh.tex_coord,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-                    colors=dracoMesh.colors,  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-                )
-
-                rr.log(
-                    f"arflow/{request.uid}/world/mesh/mesh-{index}",
-                    rr.Mesh3D(
-                        vertex_positions=mesh.points,
-                        triangle_indices=mesh.faces,
-                        vertex_normals=mesh.normals,
-                        vertex_colors=mesh.colors,
-                        vertex_texcoords=mesh.tex_coord,
-                    ),
-                    recording=client_info.rerun_stream,
-                )
-
-        # Call the for user extension code.
-        self.on_frame_received(
-            DecodedDataFrame(
-                color_rgb=color_rgb,
-                depth_img=depth_img,
-                transform=transform,
-                intrinsic=k,
-                point_cloud_pcd=point_cloud_pcd,
-                point_cloud_clr=point_cloud_clr,
-            )
-        )
-
-        return ProcessFrameResponse(message="OK")
-
-    def on_register(self, request: RegisterClientRequest) -> None:
-        """Called when a new device is registered. Override this method to process the data."""
+        Args:
+            session_stream: The session stream.
+            device: The device that left the session.
+        """
         pass
 
-    def on_join_session(self, request: JoinSessionRequest) -> None:
-        """Called when a new device joins a session. Override this method to process the data."""
-        pass
+    def SaveARFrames(
+        self,
+        request: SaveARFramesRequest,
+        context: grpc.ServicerContext | None = None,
+    ) -> SaveARFramesResponse:
+        if len(request.frames) == 0:
+            logger.warning("No frames provided")
+            raise InvalidArgument("No frames provided")
 
-    def on_frame_received(self, decoded_data_frame: DecodedDataFrame) -> None:
-        """Called when a frame is received. Override this method to process the data."""
-        pass  # pragma: no cover
+        try:
+            session_stream = self._client_sessions[request.session_id.value]
+        except KeyError:
+            logger.warning("Session not found")
+            raise NotFound("Session not found")
+
+        if request.device not in session_stream.info.devices:
+            logger.warning("Device not in session")
+            raise InvalidArgument("Device not in session")
+
+        # handle cases where frames are chronologically unordered and have mixed types, so no need this homogenous check
+        # if not all(
+        #     # must match the oneof field name in the proto schema
+        #     frame.WhichOneof("data") == request.frames[0].WhichOneof("data")
+        #     for frame in request.frames
+        # ):
+        #     logger.warning("Frames have mixed data types")
+        #     raise InvalidArgument("Frames have mixed data types")
+
+        decoded_ar_frames: DecodedARFrames = np.array([])
+
+        grouped_frames: DefaultDict[ARFrameType, list[ARFrame]] = defaultdict(list)
+        for frame in request.frames:
+            frame_type: str | None = frame.WhichOneof("data")
+            # Skip bad frames
+            logger.debug("Valid frame types: %s", ARFrameType._value2member_map_.keys())
+            if frame_type is None or frame_type not in ARFrameType._value2member_map_:
+                continue
+            grouped_frames[frame_type].append(frame)
+
+        logger.debug("Frames grouped by data type: %s", grouped_frames)
+
+        for frame_type, frames in grouped_frames.items():
+            if frame_type == ARFrameType.CAMERA_FRAME and frames[0].camera_frame:
+                grouped_camera_frames: DefaultDict[
+                    Tuple[CameraFrame.Format, int, int], list[CameraFrame]
+                ] = defaultdict(list)
+                for frame in frames:
+                    camera_frame_format, width, height = (
+                        frame.camera_frame.format,
+                        frame.camera_frame.intrinsics.resolution.x,
+                        frame.camera_frame.intrinsics.resolution.y,
+                    )
+                    if (
+                        camera_frame_format
+                        not in SupportedCameraFrameFormat._value2member_map_.values()
+                    ):
+                        logger.warning(
+                            "Camera frame format not supported: %s", camera_frame_format
+                        )
+                        continue
+                    grouped_camera_frames[
+                        (
+                            frame.camera_frame.format,
+                            frame.camera_frame.intrinsics.resolution.x,
+                            frame.camera_frame.intrinsics.resolution.y,
+                        )
+                    ].append(frame.camera_frame)
+
+                logger.debug(
+                    "Camera frames grouped by format and resolution: %s",
+                    grouped_camera_frames,
+                )
+
+                for (
+                    camera_frame_format,
+                    width,
+                    height,
+                ), camera_frames in grouped_camera_frames.items():
+                    supported_camera_frame_format = SupportedCameraFrameFormat(
+                        camera_frame_format
+                    )
+                    try:
+                        decoded_ar_frames = decode_camera_frames(
+                            raw_frames=[f.data for f in camera_frames],
+                            format=supported_camera_frame_format,
+                            width=width,
+                            height=height,
+                        )
+                    except ValueError as e:
+                        logger.warning("Error decoding camera frames: %s", e)
+                        continue
+
+                    try:
+                        session_stream.save_camera_frames(
+                            decoded_camera_frames=decoded_ar_frames,
+                            device_timestamps=[
+                                f.device_timestamp.seconds
+                                + f.device_timestamp.nanos / 1e9
+                                for f in camera_frames
+                            ],
+                            image_timestamps=[f.image_timestamp for f in camera_frames],
+                            device=request.device,
+                            format=supported_camera_frame_format,
+                            width=width,
+                            height=height,
+                        )
+                    except ValueError as e:
+                        logger.warning("Error saving camera frames: %s", e)
+                        continue
+
+        logger.info(
+            "Saved AR frames of device %s to session %s",
+            request.device,
+            session_stream.info.id.value,
+        )
+
+        self.on_save_ar_frames(
+            frames=decoded_ar_frames,
+            session_stream=session_stream,
+            device=request.device,
+        )
+
+        return SaveARFramesResponse()
+
+    def on_save_ar_frames(
+        self,
+        frames: DecodedARFrames,
+        session_stream: SessionStream,
+        device: Device,
+    ) -> None:
+        """Hook for user-defined procedures when AR frames are saved to a recording stream.
+
+        Args:
+            frames: The decoded AR frames.
+            session_stream: The session stream.
+            device: The device that sent the AR frames.
+        """
+        pass
 
     def on_program_exit(self) -> None:
         """Closes all TCP connections, servers, and files.
@@ -499,9 +435,9 @@ class ARFlowServicer(service_pb2_grpc.ARFlowServiceServicer):
         logger.debug("Closing all TCP connections, servers, and files...")
         # Disconnects the global recording. Without this, this function will hang indefinitely.
         rr.disconnect()
-        for client_id, client_info in self._client_registry.items():
-            rr.disconnect(client_info.rerun_stream)
-            logger.debug("Disconnected client %s", client_id)
+        for id, session in self._client_sessions.items():
+            rr.disconnect(session.stream)
+            logger.debug("Disconnected session: %s", id)
         logger.debug("All clients disconnected")
 
 
@@ -510,6 +446,7 @@ def run_server(  # pragma: no cover
     service: Type[ARFlowServicer],
     spawn_viewer: bool = True,
     save_dir: Path | None = None,
+    application_id: str = "arflow",
     port: int = 8500,
 ) -> None:
     """Run gRPC server.
@@ -524,19 +461,24 @@ def run_server(  # pragma: no cover
         ValueError: If neither or both operational modes are selected.
     """
     try:
-        servicer = service(spawn_viewer=spawn_viewer, save_dir=save_dir)
+        servicer = service(
+            spawn_viewer=spawn_viewer,
+            save_dir=save_dir,
+            application_id=application_id,
+        )
     except ValueError as e:
         raise e
     interceptors = [ErrorInterceptor()]  # pyright: ignore [reportUnknownVariableType]
     server = grpc.server(  # pyright: ignore [reportUnknownMemberType]
         futures.ThreadPoolExecutor(max_workers=10),
+        compression=grpc.Compression.Gzip,
         interceptors=interceptors,  # pyright: ignore [reportArgumentType]
         options=[
-            ("grpc.max_send_message_length", -1),
+            # ("grpc.max_send_message_length", -1),
             ("grpc.max_receive_message_length", -1),
         ],
     )
-    service_pb2_grpc.add_ARFlowServiceServicer_to_server(servicer, server)  # pyright: ignore [reportUnknownMemberType]
+    arflow_service_pb2_grpc.add_ARFlowServiceServicer_to_server(servicer, server)  # pyright: ignore [reportUnknownMemberType]
     server.add_insecure_port("[::]:%s" % port)
     server.start()
     logger.info("Server started, listening on %s", port)

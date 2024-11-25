@@ -5,9 +5,10 @@
 
 from unittest.mock import MagicMock, patch
 
+from arflow_grpc.service_pb2 import JoinSessionRequest, ProcessFrameRequest
+
 from arflow import RegisterClientRequest
 from arflow._types import HashableClientIdentifier
-from arflow_grpc.service_pb2 import JoinSessionRequest, ProcessFrameRequest
 from tests.conftest import UserExtendedService
 
 
@@ -42,11 +43,11 @@ def test_on_program_exit(user_service_fixture: UserExtendedService):
     with patch("rerun.disconnect") as mock_disconnect:
         mock_stream1 = MagicMock()
         mock_stream2 = MagicMock()
-        user_service_fixture._client_registry = {
+        user_service_fixture._client_sessions = {
             HashableClientIdentifier("client1"): MagicMock(rerun_stream=mock_stream1),
             HashableClientIdentifier("client2"): MagicMock(rerun_stream=mock_stream2),
         }
-        user_service_fixture.on_program_exit()
+        user_service_fixture._on_program_exit()
 
         # Verify global disconnect was called
         mock_disconnect.assert_any_call()

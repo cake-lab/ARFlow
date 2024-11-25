@@ -1,0 +1,103 @@
+[tools]
+python = "3.12"
+poetry = "1.8"
+node = "20"
+buf = "1.47.2"
+
+[tasks."protos:lint"]
+description = "Lint proto schemas with buf"
+run = "buf lint"
+hide = true
+
+[tasks."protos:format"]
+description = "Format proto schemas with buf"
+run = "buf format --write"
+
+[tasks."protos:gen"]
+description = "Generate proto bindings with buf"
+run = "buf generate"
+
+[tasks."server:install"]
+description = "Install python dependencies"
+dir = "python"
+run = ["poetry install", "poetry run pre-commit install"]
+
+[tasks."server:venv"]
+description = "Activate virtual environment"
+dir = "python"
+run = "poetry shell"
+
+[tasks."server:lint"]
+description = "Lint with ruff"
+dir = "python"
+run = "poetry run ruff check"
+hide = true
+
+[tasks."server:typecheck"]
+description = "Type check with pyright"
+dir = "python"
+run = "poetry run pyright arflow"
+hide = true
+
+[tasks."server:pre-commit"]
+description = "Run pre-commit on all files"
+dir = "python"
+run = "poetry run pre-commit run --all-files"
+hide = true
+
+[tasks."server:type-completeness"]
+description = "Check type completeness with pyright"
+dir = "python"
+run = "poetry run pyright --ignoreexternal --verifytypes arflow"
+hide = true
+
+[tasks."server:test"]
+description = "Test with pytest"
+dir = "python"
+run = "poetry run pytest"
+
+[tasks."server:build"]
+description = "Build with poetry"
+dir = "python"
+run = "poetry build"
+
+[tasks."server:ci"]
+description = "Run CI tasks"
+depends = ["lint-server", "typecheck-server", "test-server"]
+
+[tasks."server:docs:serve"]
+description = "Serve server documentation with pdoc"
+dir = "python"
+run = "poetry run pdoc arflow examples"
+
+[tasks."server:docs:build"]
+description = "Build server documentation with pdoc"
+dir = "python"
+run = "poetry run python tools/make_docs_cli.py"
+hide = true
+
+# [tasks.test-server with args blabla] # https://mise.jdx.dev/tasks/toml-tasks.html#positional-arguments
+#
+# [tasks.example-server with args is example"s name]
+
+[tasks."client:docs:install"]
+description = "Install docfx for client documentation"
+run = "dotnet tool update -g docfx"
+hide = true
+
+[tasks."client:docs:serve"]
+description = "Serve client documentation with docfx"
+dir = "unity/Documentation"
+run = "docfx docfx.json --serve"
+
+[tasks."client:docs:build-unix"]
+description = "Build client documentation on Unix-like systems with docfx"
+dir = "unity/Documentation"
+run = "scripts/build.sh"
+hide = true
+
+[tasks."client:docs:build-windows"]
+description = "Build client documentation on Windows with docfx"
+dir = "unity/Documentation"
+file = "scripts/build.cmd"                                       # I haven't tested this yet so may not work, could replace with run = "scripts/build.cmd"
+hide = true

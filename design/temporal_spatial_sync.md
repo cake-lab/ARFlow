@@ -194,4 +194,7 @@ This approach keeps the system simple and efficient by relying solely on
 NTP-synced client-side timestamps, achieving reliable alignment with minimal
 additional development effort.
 
+<!-- TODO(felixngfender): Write-up comparing simple iterator-based coroutine, .NET
+Task, .NET ValueTask, and Unity Awaitable -->
+
 ### Spatial synchronization

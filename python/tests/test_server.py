@@ -9,9 +9,6 @@ from typing import Any, Generator
 import grpc
 import numpy as np
 import pytest
-
-from arflow import ARFlowServicer
-from arflow._error_interceptor import ErrorInterceptor
 from arflow_grpc import service_pb2, service_pb2_grpc
 from arflow_grpc.service_pb2 import (
     JoinSessionRequest,
@@ -20,6 +17,9 @@ from arflow_grpc.service_pb2 import (
     RegisterClientResponse,
 )
 from arflow_grpc.service_pb2_grpc import ARFlowServiceStub
+
+from arflow import ARFlowServicer
+from arflow._error_interceptor import ErrorInterceptor
 
 
 @pytest.fixture(scope="function")

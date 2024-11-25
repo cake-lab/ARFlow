@@ -3,13 +3,20 @@
 # Imported symbols are private by default. By aliasing them here, we make it clear that they are part of the public API.
 from arflow._core import ARFlowServicer as ARFlowServicer
 from arflow._core import run_server as run_server
-from arflow._types import DecodedDataFrame as DecodedDataFrame
-from arflow_grpc.service_pb2 import (
-    JoinSessionRequest as JoinSessionRequest,
+from arflow._session_stream import (
+    SessionStream as SessionStream,
 )
-from arflow_grpc.service_pb2 import (
-    RegisterClientRequest as RegisterClientRequest,
+from arflow._types import (
+    DecodedARFrames as DecodedARFrames,
 )
+from arflow._types import (
+    DecodedCameraFrames as DecodedCameraFrame,
+)
+from arflow._types import (
+    SupportedCameraFrameFormat as SupportedCameraFrameFormat,
+)
+from cakelab.arflow_grpc.v1.device_pb2 import Device as Device
+from cakelab.arflow_grpc.v1.session_pb2 import Session as Session
 
 __docformat__ = "google"  # Should match Ruff docstring format in ../pyproject.toml
 
@@ -17,7 +24,10 @@ __docformat__ = "google"  # Should match Ruff docstring format in ../pyproject.t
 __all__ = [
     "run_server",
     "ARFlowServicer",
-    "DecodedDataFrame",
-    "RegisterClientRequest",
-    "JoinSessionRequest",
+    "DecodedARFrames",
+    "DecodedCameraFrame",
+    "SupportedCameraFrameFormat",
+    "SessionStream",
+    "Session",
+    "Device",
 ]

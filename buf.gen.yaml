@@ -1,0 +1,22 @@
+version: v2
+managed:
+  enabled: true
+  disable:
+    - file_option: csharp_namespace
+plugins:
+  - remote: buf.build/grpc/python:v1.67.1
+    out: python/
+  # dependencies
+  - remote: buf.build/protocolbuffers/python:v28.3
+    out: python/
+  - remote: buf.build/protocolbuffers/pyi:v28.3
+    out: python/
+  - remote: buf.build/grpc/csharp:v1.67.1
+    out: unity/Packages/edu.wpi.cake.arflow/Runtime/Grpc/V1 # version should match package version in schema
+  # dependencies
+  - remote: buf.build/protocolbuffers/csharp:v28.3
+    out: unity/Packages/edu.wpi.cake.arflow/Runtime/Grpc/V1 # version should match package version in schema
+  - remote: buf.build/community/pseudomuto-doc:v1.5.1
+    out: website/docs/protos/
+inputs:
+  - directory: protos

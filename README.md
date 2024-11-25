@@ -39,7 +39,7 @@ arflow view # This will start the server on port 8500
 ```
 
 Besides from the `view` mode, ARFlow also has other powerful options. You can
-check out some examples [here](python/README.md#server-cli).
+check out some examples [here](./python/README.md#server-cli).
 
 ### Client Setup
 
@@ -59,9 +59,10 @@ Watch our demo video:
 
 ## Contribution
 
-Please read the [CONTRIBUTING](./CONTRIBUTING.md) guideline first, and refer to
-the individual [server](./python/README.md) and [client](./unity/README.md)
-installation guides.
+Please read the
+[CONTRIBUTING](https://github.com/cake-lab/ARFlow/blob/main/CONTRIBUTING.md)
+guideline first, and refer to the individual [server](./python/README.md) and
+[client](./unity/Packages/edu.wpi.cake.arflow/README.md) installation guides.
 
 ### Contributors
 

@@ -1,0 +1,42 @@
+### YamlMime:ManagedReference
+# https://dotnet.github.io/docfx/docs/dotnet-api-docs.html#filter-apis
+apiRules:
+- include: # The namespaces to generate
+    uidRegex: ^CakeLab\.ARFlow
+    type: Namespace
+- include:
+    uidRegex: ^Global
+    type: Namespace
+- exclude:
+    uidRegex: .* # Every other namespaces are ignored
+    type: Namespace
+
+#Use something more specific like this if we want to include documentation for monobehavior classes
+# apiRules:
+# - exclude:
+#     uidRegex: ^System\.Object
+#     type: Type
+# - exclude:
+#     uidRegex: ^System\.ValueType
+#     type: Type
+# - exclude:
+#     uidRegex: ^System\.Attribute
+#     type: Type
+# - exclude:
+#     uidRegex: ^UnityEngine\.MonoBehaviour
+#     type: Type
+# - exclude:
+#     uidRegex: ^UnityEngine\.Behaviour
+#     type: Type
+# - exclude:
+#     uidRegex: ^UnityEngine\.Component
+#     type: Type
+# - exclude:
+#     uidRegex: ^UnityEngine\.Object
+#     type: Type
+# - exclude:
+#     uidRegex: ^UnityEngine\.ScriptableObject
+#     type: Type
+# - exclude:
+#     uidRegex: ^UnityEditor\.Editor
+#     type: Type

@@ -10,32 +10,53 @@ permissions:
   id-token: write
 
 jobs:
-  build-client-docs-as-artifact:
+  build-protos-docs:
+    name: Build protos docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Buf CLI
+        uses: bufbuild/buf-setup-action@v1.47.2 # must match mise.toml
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install protoc
+        uses: arduino/setup-protoc@v1
+
+      - name: Build protos docs
+        run: buf generate
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: protos-docs
+          path: ./website/docs/protos
+
+  build-client-docs:
     name: Build client docs
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install docfx
-        run: dotnet tool install -g docfx
+      - name: Dotnet Setup
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.x
+
+      - name: Update docfx
+        run: dotnet tool update -g docfx
 
       - name: Run script to build the documentation
         working-directory: ./unity/Documentation
         run: ./scripts/build.cmd
 
-      # - name: Move docs to website directory
-      #   run: |
-      #     mkdir -p ./website/docs/client/
-      #     cp -r ./unity/Documentation/clientHTMLOutput/* ./website/docs/client/
-      # Upload the website directory as an artifact
       - uses: actions/upload-artifact@v4
         with:
           name: client-docs
-          path: ./unity/Documentation/clientHTMLOutput
+          path: ./website/docs/client
 
   build-server-docs:
     name: Build server docs
-    needs: build-client-docs-as-artifact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,35 +94,36 @@ jobs:
           echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
           echo "VIRTUAL_ENV=$(poetry env info --path)/bin" >> $GITHUB_ENV
 
-      # - name: Saved cached virtualenv
-      #   uses: actions/cache/save@v4
-      #   with:
-      #     path: ./python/.venv
-      #     key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
-
       - name: Build the documentation
         working-directory: ./python
         run: python tools/make_docs_cli.py
 
-      - name: Move docs to website directory
-        run: |
-          mkdir -p ./website/docs/server/
-          cp -r ./python/docs/* ./website/docs/server/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server-docs
+          path: ./website/docs/server
 
-      # Get client docs to use as part of pages artifact
+  upload-website:
+    name: Upload website
+    needs: [build-protos-docs, build-client-docs, build-server-docs]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: protos-docs
+          path: ./website/docs/protos
+
       - uses: actions/download-artifact@v4
         with:
           name: client-docs
           path: ./website/docs/client
 
-      # # cleanup client docs artifacts
-      # - name: Delete client docs artifact
-      #   run: |
-      #     github.rest.actions.deleteArtifact({
-      #       owner: context.repo.owner,
-      #       repo: context.repo.repo,
-      #       artifact_id: ${{ steps.artifact-download.outputs.artifact-id }}
-      #     });
+      - uses: actions/download-artifact@v4
+        with:
+          name: server-docs
+          path: ./website/docs/server
 
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -110,7 +132,7 @@ jobs:
   # Single deploy job since we're just deploying
   deploy-website:
     name: Deploy website
-    needs: build-server-docs
+    needs: upload-website
     runs-on: ubuntu-latest
     permissions:
       pages: write

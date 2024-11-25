@@ -4,7 +4,7 @@ version = "0.3.0"
 description = "ARFlow is a data-sharing layer that enables developer-friendly data streaming, storage, and visualization for augmented reality (AR) device data."
 authors = ["Yiqin Zhao <yiqinzhao@outlook.com>"]
 readme = "README.md"
-packages = [{ include = "arflow" }, { include = "arflow_grpc" }]
+packages = [{ include = "arflow" }, { include = "cakelab/arflow_grpc/v1" }]
 license = "GPL-3.0"
 homepage = "https://cake.wpi.edu/ARFlow/"
 repository = "https://github.com/cake-lab/ARFlow"
@@ -42,7 +42,11 @@ arflow = "arflow._cli:main"
 
 [tool.ruff]
 # gRPC generated files
-extend-exclude = ["examples", "arflow_grpc/**.py", "arflow_grpc/**.pyi"]
+extend-exclude = [
+  "examples",
+  "cakelab/arflow_grpc/**.py",
+  "cakelab/arflow_grpc/**.pyi",
+]
 
 [tool.ruff.lint]
 # https://github.com/astral-sh/ruff-vscode/blob/main/README.md#configuring-vs-code
@@ -60,7 +64,11 @@ convention = "google"
 
 [tool.pyright]
 typeCheckingMode = "strict"
-exclude = ["examples", "arflow_grpc/**.py", "arflow_grpc/**.pyi"]
+exclude = [
+  "examples",
+  "cakelab/arflow_grpc/**.py",
+  "cakelab/arflow_grpc/**.pyi",
+]
 
 [tool.pytest.ini_options]
 # coverage report for only `arflow` package with missing lines with 5 slowest tests
