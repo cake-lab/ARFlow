@@ -45,7 +45,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
   }
   #region Messages
   /// <summary>
-  /// https://docs.unity3d.com/ScriptReference/SystemInfo.html
+  ///&#x2F; https://docs.unity3d.com/ScriptReference/SystemInfo.html
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class Device : pb::IMessage<Device>
@@ -135,7 +135,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
     public const int UidFieldNumber = 4;
     private string uid_ = "";
     /// <summary>
-    /// Unique identifier. Guanranteed to be unique across all devices.
+    ///&#x2F; Unique identifier. Guanranteed to be unique across all devices.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]

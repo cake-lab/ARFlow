@@ -4,7 +4,7 @@ package cakelab.arflow_grpc.v1;
 
 option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
 
-// https://docs.unity3d.com/ScriptReference/SystemInfo.html
+/// https://docs.unity3d.com/ScriptReference/SystemInfo.html
 message Device {
   enum Type {
     TYPE_UNSPECIFIED = 0;
@@ -16,6 +16,6 @@ message Device {
   string model = 1;
   string name = 2;
   Type type = 3;
-  // Unique identifier. Guanranteed to be unique across all devices.
+  /// Unique identifier. Guanranteed to be unique across all devices.
   string uid = 4;
 }

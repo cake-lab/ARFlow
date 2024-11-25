@@ -8,6 +8,10 @@
 using grpc = global::Grpc.Core;
 
 namespace CakeLab.ARFlow.Grpc.V1 {
+  /// <summary>
+  ///*
+  /// ARFlowService provides a set of RPCs to manage AR sessions and save AR frames.
+  /// </summary>
   public static partial class ARFlowService
   {
     static readonly string __ServiceName = "cakelab.arflow_grpc.v1.ARFlowService";
@@ -141,7 +145,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
     public abstract partial class ARFlowServiceBase
     {
       /// <summary>
-      /// Create a new session and bind it to a new recording stream.
+      ///&#x2F; Create a new session and bind it to a new recording stream.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
@@ -153,7 +157,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
 
       /// <summary>
-      /// Delete a session and disconnect from its associated recording stream.
+      ///&#x2F; Delete a session and disconnect from its associated recording stream.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
@@ -165,7 +169,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
 
       /// <summary>
-      /// Retrieve a session information.
+      ///&#x2F; Retrieve a session information.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
@@ -177,7 +181,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
 
       /// <summary>
-      /// List all current sessions.
+      ///&#x2F; List all current sessions.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
@@ -189,7 +193,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
 
       /// <summary>
-      /// Join a session.
+      ///&#x2F; Join a session.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
@@ -201,7 +205,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
 
       /// <summary>
-      /// Leave a session.
+      ///&#x2F; Leave a session.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
@@ -213,7 +217,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
 
       /// <summary>
-      /// Save AR frames from a device to its session's recording stream.
+      ///&#x2F; Save AR frames from a device to its session's recording stream.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
@@ -254,7 +258,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
 
       /// <summary>
-      /// Create a new session and bind it to a new recording stream.
+      ///&#x2F; Create a new session and bind it to a new recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -267,7 +271,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CreateSession(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Create a new session and bind it to a new recording stream.
+      ///&#x2F; Create a new session and bind it to a new recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -278,7 +282,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.BlockingUnaryCall(__Method_CreateSession, null, options, request);
       }
       /// <summary>
-      /// Create a new session and bind it to a new recording stream.
+      ///&#x2F; Create a new session and bind it to a new recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -291,7 +295,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CreateSessionAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Create a new session and bind it to a new recording stream.
+      ///&#x2F; Create a new session and bind it to a new recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -302,7 +306,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_CreateSession, null, options, request);
       }
       /// <summary>
-      /// Delete a session and disconnect from its associated recording stream.
+      ///&#x2F; Delete a session and disconnect from its associated recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -315,7 +319,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return DeleteSession(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Delete a session and disconnect from its associated recording stream.
+      ///&#x2F; Delete a session and disconnect from its associated recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -326,7 +330,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.BlockingUnaryCall(__Method_DeleteSession, null, options, request);
       }
       /// <summary>
-      /// Delete a session and disconnect from its associated recording stream.
+      ///&#x2F; Delete a session and disconnect from its associated recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -339,7 +343,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return DeleteSessionAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Delete a session and disconnect from its associated recording stream.
+      ///&#x2F; Delete a session and disconnect from its associated recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -350,7 +354,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_DeleteSession, null, options, request);
       }
       /// <summary>
-      /// Retrieve a session information.
+      ///&#x2F; Retrieve a session information.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -363,7 +367,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return GetSession(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Retrieve a session information.
+      ///&#x2F; Retrieve a session information.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -374,7 +378,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.BlockingUnaryCall(__Method_GetSession, null, options, request);
       }
       /// <summary>
-      /// Retrieve a session information.
+      ///&#x2F; Retrieve a session information.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -387,7 +391,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return GetSessionAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Retrieve a session information.
+      ///&#x2F; Retrieve a session information.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -398,7 +402,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_GetSession, null, options, request);
       }
       /// <summary>
-      /// List all current sessions.
+      ///&#x2F; List all current sessions.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -411,7 +415,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return ListSessions(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// List all current sessions.
+      ///&#x2F; List all current sessions.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -422,7 +426,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.BlockingUnaryCall(__Method_ListSessions, null, options, request);
       }
       /// <summary>
-      /// List all current sessions.
+      ///&#x2F; List all current sessions.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -435,7 +439,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return ListSessionsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// List all current sessions.
+      ///&#x2F; List all current sessions.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -446,7 +450,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_ListSessions, null, options, request);
       }
       /// <summary>
-      /// Join a session.
+      ///&#x2F; Join a session.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -459,7 +463,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return JoinSession(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Join a session.
+      ///&#x2F; Join a session.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -470,7 +474,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.BlockingUnaryCall(__Method_JoinSession, null, options, request);
       }
       /// <summary>
-      /// Join a session.
+      ///&#x2F; Join a session.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -483,7 +487,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return JoinSessionAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Join a session.
+      ///&#x2F; Join a session.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -494,7 +498,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_JoinSession, null, options, request);
       }
       /// <summary>
-      /// Leave a session.
+      ///&#x2F; Leave a session.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -507,7 +511,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return LeaveSession(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Leave a session.
+      ///&#x2F; Leave a session.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -518,7 +522,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.BlockingUnaryCall(__Method_LeaveSession, null, options, request);
       }
       /// <summary>
-      /// Leave a session.
+      ///&#x2F; Leave a session.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -531,7 +535,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return LeaveSessionAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Leave a session.
+      ///&#x2F; Leave a session.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -542,7 +546,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_LeaveSession, null, options, request);
       }
       /// <summary>
-      /// Save AR frames from a device to its session's recording stream.
+      ///&#x2F; Save AR frames from a device to its session's recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -555,7 +559,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return SaveARFrames(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Save AR frames from a device to its session's recording stream.
+      ///&#x2F; Save AR frames from a device to its session's recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
@@ -566,7 +570,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return CallInvoker.BlockingUnaryCall(__Method_SaveARFrames, null, options, request);
       }
       /// <summary>
-      /// Save AR frames from a device to its session's recording stream.
+      ///&#x2F; Save AR frames from a device to its session's recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
@@ -579,7 +583,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return SaveARFramesAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Save AR frames from a device to its session's recording stream.
+      ///&#x2F; Save AR frames from a device to its session's recording stream.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>

@@ -150,7 +150,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
     public const int IntrinsicsFieldNumber = 4;
     private global::CakeLab.ARFlow.Grpc.V1.CameraFrame.Types.Intrinsics intrinsics_;
     /// <summary>
-    /// repeated Plane planes = 5;
+    /// @exclude repeated Plane planes = 5;
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -432,7 +432,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
       /// <summary>
-      /// https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARSubsystems.XRCpuImage.Format.html
+      ///&#x2F; https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARSubsystems.XRCpuImage.Format.html
       /// </summary>
       public enum Format {
         [pbr::OriginalName("FORMAT_UNSPECIFIED")] Unspecified = 0,
@@ -449,7 +449,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
 
       /// <summary>
-      /// https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARSubsystems.XRCameraIntrinsics.html
+      ///&#x2F; https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARSubsystems.XRCameraIntrinsics.html
       /// </summary>
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class Intrinsics : pb::IMessage<Intrinsics>

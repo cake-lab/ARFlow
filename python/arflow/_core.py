@@ -136,7 +136,6 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         try:
             session_stream = self._client_sessions.pop(request.session_id.value)
         except KeyError:
-            logger.warning("Session not found")
             raise NotFound("Session not found")
 
         rr.disconnect(session_stream.stream)
@@ -163,7 +162,6 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         try:
             session_stream = self._client_sessions[request.session_id.value]
         except KeyError:
-            logger.warning("Session not found")
             raise NotFound("Session not found")
 
         logger.info("Retrieved session: %s", session_stream.info)
@@ -214,11 +212,9 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         try:
             session_stream = self._client_sessions[request.session_id.value]
         except KeyError:
-            logger.warning("Session not found")
             raise NotFound("Session not found")
 
         if request.device in session_stream.info.devices:
-            logger.warning("Device already in session")
             raise InvalidArgument("Device already in session")
 
         session_stream.info.devices.append(request.device)
@@ -261,13 +257,11 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         try:
             session_stream = self._client_sessions[request.session_id.value]
         except KeyError:
-            logger.warning("Session not found")
             raise NotFound("Session not found")
 
         try:
             session_stream.info.devices.remove(request.device)
         except ValueError:
-            logger.warning("Device not in session")
             raise InvalidArgument("Device not in session")
 
         logger.info("Client %s left session %s", request.device, request.session_id)
@@ -294,17 +288,14 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         context: grpc.ServicerContext | None = None,
     ) -> SaveARFramesResponse:
         if len(request.frames) == 0:
-            logger.warning("No frames provided")
             raise InvalidArgument("No frames provided")
 
         try:
             session_stream = self._client_sessions[request.session_id.value]
         except KeyError:
-            logger.warning("Session not found")
             raise NotFound("Session not found")
 
         if request.device not in session_stream.info.devices:
-            logger.warning("Device not in session")
             raise InvalidArgument("Device not in session")
 
         # handle cases where frames are chronologically unordered and have mixed types, so no need this homogenous check
@@ -313,7 +304,6 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         #     frame.WhichOneof("data") == request.frames[0].WhichOneof("data")
         #     for frame in request.frames
         # ):
-        #     logger.warning("Frames have mixed data types")
         #     raise InvalidArgument("Frames have mixed data types")
 
         decoded_ar_frames: DecodedARFrames = np.array([])

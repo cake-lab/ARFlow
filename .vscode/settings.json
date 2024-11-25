@@ -57,6 +57,7 @@
     "Xihe"
   ],
   "conventionalCommits.scopes": [
+    "protos",
     "server",
     "cli",
     "client",

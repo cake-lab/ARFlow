@@ -19,19 +19,22 @@ import "cakelab/arflow_grpc/v1/save_ar_frames_response.proto";
 
 option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
 
+/**
+ * ARFlowService provides a set of RPCs to manage AR sessions and save AR frames.
+ */
 service ARFlowService {
-  // Create a new session and bind it to a new recording stream.
+  /// Create a new session and bind it to a new recording stream.
   rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse);
-  // Delete a session and disconnect from its associated recording stream.
+  /// Delete a session and disconnect from its associated recording stream.
   rpc DeleteSession(DeleteSessionRequest) returns (DeleteSessionResponse);
-  // Retrieve a session information.
+  /// Retrieve a session information.
   rpc GetSession(GetSessionRequest) returns (GetSessionResponse);
-  // List all current sessions.
+  /// List all current sessions.
   rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse);
-  // Join a session.
+  /// Join a session.
   rpc JoinSession(JoinSessionRequest) returns (JoinSessionResponse);
-  // Leave a session.
+  /// Leave a session.
   rpc LeaveSession(LeaveSessionRequest) returns (LeaveSessionResponse);
-  // Save AR frames from a device to its session's recording stream.
+  /// Save AR frames from a device to its session's recording stream.
   rpc SaveARFrames(SaveARFramesRequest) returns (SaveARFramesResponse);
 }

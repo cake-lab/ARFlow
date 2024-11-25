@@ -19,7 +19,9 @@ from cakelab.arflow_grpc.v1 import save_ar_frames_response_pb2 as cakelab_dot_ar
 
 
 class ARFlowServiceStub(object):
-    """Missing associated documentation comment in .proto file."""
+    """*
+    ARFlowService provides a set of RPCs to manage AR sessions and save AR frames.
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -65,52 +67,54 @@ class ARFlowServiceStub(object):
 
 
 class ARFlowServiceServicer(object):
-    """Missing associated documentation comment in .proto file."""
+    """*
+    ARFlowService provides a set of RPCs to manage AR sessions and save AR frames.
+    """
 
     def CreateSession(self, request, context):
-        """Create a new session and bind it to a new recording stream.
+        """/ Create a new session and bind it to a new recording stream.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def DeleteSession(self, request, context):
-        """Delete a session and disconnect from its associated recording stream.
+        """/ Delete a session and disconnect from its associated recording stream.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetSession(self, request, context):
-        """Retrieve a session information.
+        """/ Retrieve a session information.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def ListSessions(self, request, context):
-        """List all current sessions.
+        """/ List all current sessions.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def JoinSession(self, request, context):
-        """Join a session.
+        """/ Join a session.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def LeaveSession(self, request, context):
-        """Leave a session.
+        """/ Leave a session.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def SaveARFrames(self, request, context):
-        """Save AR frames from a device to its session's recording stream.
+        """/ Save AR frames from a device to its session's recording stream.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -163,7 +167,9 @@ def add_ARFlowServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class ARFlowService(object):
-    """Missing associated documentation comment in .proto file."""
+    """*
+    ARFlowService provides a set of RPCs to manage AR sessions and save AR frames.
+    """
 
     @staticmethod
     def CreateSession(request,

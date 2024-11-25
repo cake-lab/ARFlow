@@ -124,6 +124,8 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         = pb::FieldCodec.ForMessage(26, global::CakeLab.ARFlow.Grpc.V1.ARFrame.Parser);
     private readonly pbc::RepeatedField<global::CakeLab.ARFlow.Grpc.V1.ARFrame> frames_ = new pbc::RepeatedField<global::CakeLab.ARFlow.Grpc.V1.ARFrame>();
     /// <summary>
+    ///*
+    /// @exclude
     /// See https://github.com/protocolbuffers/protobuf/issues/2592
     /// to see why we cannot use oneof of repeated fields here. The
     /// workaround here is to use a repeated field of oneof types
