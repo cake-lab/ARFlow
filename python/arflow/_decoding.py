@@ -2,36 +2,37 @@ import numpy as np
 
 from arflow._types import (
     DecodedCameraFrames,
-    SupportedCameraFrameFormat,
 )
+from cakelab.arflow_grpc.v1.camera_frame_pb2 import CameraFrame
 
 
 def decode_camera_frames(
     raw_frames: list[bytes],
-    format: SupportedCameraFrameFormat,
+    format: CameraFrame.Format,
     width: int,
     height: int,
 ) -> DecodedCameraFrames:
     """Decode the camera frames from the raw frames. Assumes that format, width, and height are the same across all frames.
 
     Raises:
-        ValueError: If the frames are not in the expected format.
+        ValueError: If the frames are not in a supported format or is in bad shape.
     """
-    if format == SupportedCameraFrameFormat.RGB24:
-        decoded_frames = np.array(
+    if format == CameraFrame.FORMAT_RGB24:
+        return np.array(
             [
                 np.frombuffer(frame, dtype=np.uint8).reshape(height, width, 3)
                 for frame in raw_frames
             ]
         )
-    elif format == SupportedCameraFrameFormat.RGBA32:
-        decoded_frames = np.array(
+    elif format == CameraFrame.FORMAT_RGBA32:
+        return np.array(
             [
                 np.frombuffer(frame, dtype=np.uint8).reshape(height, width, 4)
                 for frame in raw_frames
             ]
         )
-    return decoded_frames
+    else:
+        raise ValueError(f"Unsupported frame format: {format}")
 
 
 # def decode_depth_image(

@@ -4,8 +4,8 @@ import rerun as rr
 
 from arflow._types import (
     DecodedCameraFrames,
-    SupportedCameraFrameFormat,
 )
+from cakelab.arflow_grpc.v1.camera_frame_pb2 import CameraFrame
 from cakelab.arflow_grpc.v1.device_pb2 import Device
 from cakelab.arflow_grpc.v1.session_pb2 import Session
 from cakelab.arflow_grpc.v1.timeline_pb2 import Timeline
@@ -26,11 +26,14 @@ class SessionStream:
         device_timestamps: list[float],
         image_timestamps: list[float],
         device: Device,
-        format: SupportedCameraFrameFormat,
+        format: CameraFrame.Format,
         width: int,
         height: int,
     ):
         """Save camera frames to the stream. Assumes that the device is in the session and the data is "nice" (e.g., all frames have the same format, width, height, and originating device).
+
+        Raises:
+            ValueError: If the decoded camera frames, device timestamps, and image timestamps do not have the same length or if the frame format is not supported.
 
         @private
         """
@@ -52,20 +55,22 @@ class SessionStream:
             ]
         )
 
-        if format == SupportedCameraFrameFormat.RGB24:
+        if format == CameraFrame.FORMAT_RGB24:
             format_static = rr.components.ImageFormat(
                 width=width,
                 height=height,
                 color_model=rr.ColorModel.RGB,
                 channel_datatype=rr.ChannelDatatype.U8,
             )
-        elif format == SupportedCameraFrameFormat.RGBA32:
+        elif format == CameraFrame.FORMAT_RGBA32:
             format_static = rr.components.ImageFormat(
                 width=width,
                 height=height,
                 color_model=rr.ColorModel.RGBA,
                 channel_datatype=rr.ChannelDatatype.U8,
             )
+        else:
+            raise ValueError(f"Unsupported frame format: {format}")
 
         rr.log(
             entity_path,

@@ -19,7 +19,6 @@ from arflow._session_stream import SessionStream
 from arflow._types import (
     ARFrameType,
     DecodedARFrames,
-    SupportedCameraFrameFormat,
 )
 from cakelab.arflow_grpc.v1 import arflow_service_pb2_grpc
 from cakelab.arflow_grpc.v1.arframe_pb2 import ARFrame
@@ -330,10 +329,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                         frame.camera_frame.intrinsics.resolution.x,
                         frame.camera_frame.intrinsics.resolution.y,
                     )
-                    if (
-                        camera_frame_format
-                        not in SupportedCameraFrameFormat._value2member_map_.values()
-                    ):
+                    if camera_frame_format == CameraFrame.FORMAT_UNSPECIFIED:
                         logger.warning(
                             "Camera frame format not supported: %s", camera_frame_format
                         )
@@ -356,13 +352,10 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                     width,
                     height,
                 ), camera_frames in grouped_camera_frames.items():
-                    supported_camera_frame_format = SupportedCameraFrameFormat(
-                        camera_frame_format
-                    )
                     try:
                         decoded_ar_frames = decode_camera_frames(
                             raw_frames=[f.data for f in camera_frames],
-                            format=supported_camera_frame_format,
+                            format=camera_frame_format,
                             width=width,
                             height=height,
                         )
@@ -380,7 +373,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                             ],
                             image_timestamps=[f.image_timestamp for f in camera_frames],
                             device=request.device,
-                            format=supported_camera_frame_format,
+                            format=camera_frame_format,
                             width=width,
                             height=height,
                         )
