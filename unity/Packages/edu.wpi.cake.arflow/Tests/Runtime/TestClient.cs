@@ -8,7 +8,7 @@ public class TestClient
     [Test]
     public void TestInitializeCient()
     {
-        var testAddress = "https://127.0.0.1:8500";
+        // var testAddress = "https://127.0.0.1:8500";
     }
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use

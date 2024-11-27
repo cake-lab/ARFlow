@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using static ARFlow.OtherUtils;
+using CakeLab.ARFlow.Utilities;
 
 public static class Misc
 {
@@ -14,6 +14,6 @@ public static class Misc
             //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
             log += string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
         }
-        PrintDebug(log);
+        InternalDebug.Log(log);
     }
 }

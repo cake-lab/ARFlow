@@ -9,9 +9,8 @@ using ZXing.Client.Result;
 
 using System;
 
-using ARFlow;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
+using CakeLab.ARFlow.Utilities;
+
 
 public static class QRManager
 {

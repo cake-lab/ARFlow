@@ -4,7 +4,7 @@ using Draco.Encode;
 using Unity.Collections;
 using UnityEngine;
 
-namespace CakeLab.ARFlow.Utilties
+namespace CakeLab.ARFlow.Utilities
 {
     public class MeshEncoder
     {
