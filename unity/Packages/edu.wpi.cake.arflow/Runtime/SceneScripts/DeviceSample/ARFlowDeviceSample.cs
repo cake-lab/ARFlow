@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using CakeLab.ARFlow.Grpc;
 using CakeLab.ARFlow.Grpc.V1;
 using CakeLab.ARFlow.Utilities;
+using System.Threading;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
@@ -44,24 +45,6 @@ public class ARFlowDeviceSample : MonoBehaviour
     public ARMeshManager meshManager;
 
     public IGrpcClient grpcClient;
-
-    public Button startPauseButton;
-
-    private bool _enabled = false;
-
-    // private ARFlowClientManager _clientManager;
-
-    public GameObject OptionsContainer;
-
-    private readonly Dictionary<string, GameObject> _optionObjects = new();
-
-    private readonly string _defaultConnection = "http://192.168.1.219:8500";
-
-    private bool _isConnected = false;
-    private Task connectTask = null;
-
-    public Camera camera;
-
 
     [Serializable]
     public class ButtonOptionHandler
@@ -98,10 +81,12 @@ public class ARFlowDeviceSample : MonoBehaviour
     [Serializable]
     public class FindServerWindow
     {
+        public GameObject windowGameObject;
         public TMP_InputField ipField;
         public TMP_InputField portField;
         public Button findServerButton;
         public Button connectButton;
+
 
         private const string _defaultIp = "127.0.0.1";
         private const string _defaultPort = "8500";
@@ -138,38 +123,142 @@ public class ARFlowDeviceSample : MonoBehaviour
         string serverUrl = $"http://{ip}:{port}";
 
         grpcClient = new GrpcClient(serverUrl);
+
+        // Search for session also
+        SearchForSession();
+        // findServerWindow.windowGameObject.SetActive(false);
+        sessionsWindow.windowGameObject.SetActive(true);
+    }
+
+    [Serializable]
+    public class CreateSessionWindow
+    {
+        public GameObject windowGameObject;
+        public TMP_InputField sessionNameInput;
+        public TMP_InputField sessionSavePathInput;
+        public Button createSessionButton;
+        public Button cancelSessionButton;
+
+        private CancellationTokenSource m_cts = new CancellationTokenSource();
+        public CancellationTokenSource cts { get { return m_cts; } }
+
+    }
+
+    void OnCancelCreateSession()
+    {
+        sessionsWindow.createSessionWindow.windowGameObject.SetActive(false);
+        sessionsWindow.windowGameObject.SetActive(true);
+        sessionsWindow.createSessionWindow.cts.Cancel();
+    }
+
+    async void OnCreateSession()
+    {
+        string sessionName = sessionsWindow.createSessionWindow.sessionNameInput.text;
+        string sessionSavePath = sessionsWindow.createSessionWindow.sessionSavePathInput.text;
+
+        if (grpcClient == null)
+        {
+            InternalDebug.Log("GrpcClient is null");
+            return;
+        }
+
+        // if gRPC client is not null, we can create a session
+        if (sessionName.Length == 0)
+        {
+            await Awaitable.MainThreadAsync();
+            InternalDebug.Log("Session name cannot be empty");
+            Toast.Show("Session name cannot be empty", ToastColor.Red);
+            return;
+        }
+        var res = new SessionMetadata
+        {
+            Name = sessionName,
+            SavePath = string.IsNullOrEmpty(sessionSavePath) ? null : sessionSavePath
+        };
+
+        // TODO: Do we need to move to background thread?
+        await Awaitable.BackgroundThreadAsync();
+        var createSessionRes = await grpcClient.CreateSessionAsync(
+            res,
+            GetDeviceInfo.GetDevice(),
+            sessionSavePath,
+            sessionsWindow.createSessionWindow.cts.Token
+            );
+
+        await Awaitable.MainThreadAsync();
+        if (createSessionRes is not null)
+        {
+            InternalDebug.Log("Session created successfully");
+            Toast.Show("Session created successfully", ToastColor.Green);
+            sessionsWindow.createSessionWindow.windowGameObject.SetActive(false);
+            SearchForSession();
+        }
+        else
+        {
+            InternalDebug.Log("Session creation failed");
+            Toast.Show("Session creation failed", ToastColor.Red);
+        }
     }
 
     [Serializable]
     public class SessionsWindow
     {
+        public GameObject windowGameObject;
+        public GameObject anotherGameObject;
         public GameObject loadingIndicator;
 
         public GameObject sessionElementPrefab;
         public GameObject sessionListContent;
         public Button refreshButton;
         public Button createSessionButton;
-        public Button chooseSessionButton;
+        public Button deleteSessionButton;
+        public Button joinSessionButton;
 
-        private List<SessionElement> _sessionElements = new();
+        public CreateSessionWindow createSessionWindow;
+
+        private List<SessionElement> m_sessionElements = new();
+
+        private CancellationTokenSource m_cts = new CancellationTokenSource();
+        public CancellationTokenSource cts { get { return m_cts; } }
+
+        // Do not serialize this to avoid Unity reflection
+        private SessionElement m_selectedSessionElement;
+        public SessionElement selectedSessionElement
+        {
+            get
+            {
+                return m_selectedSessionElement;
+            }
+            set
+            {
+                m_selectedSessionElement = value;
+            }
+        }
+
+        private void OnSelectSession(SessionElement sessionElement)
+        {
+            m_selectedSessionElement = sessionElement;
+        }
 
         public void AddSession(Session session)
         {
-            GameObject sessionElement = Instantiate(sessionElementPrefab, sessionListContent.transform);
-            SessionElement sessionElementScript = sessionElement.GetComponent<SessionElement>();
-            sessionElementScript.SetSession(session);
-            _sessionElements.Add(sessionElementScript);
+            GameObject sessionElementObject = Instantiate(sessionElementPrefab, sessionListContent.transform);
+            SessionElement sessionElement = sessionElementObject.GetComponent<SessionElement>();
+            sessionElement.session = session;
+            m_sessionElements.Add(sessionElement);
 
-            //TODO: what do we do when we choose a session?
+            // When select session, set the selected session element
+            sessionElement.selectButton.onClick.AddListener(() => OnSelectSession(sessionElement));
         }
 
         public void ClearSessions()
         {
-            foreach (var sessionElement in _sessionElements)
+            foreach (var sessionElement in m_sessionElements)
             {
                 Destroy(sessionElement.gameObject);
             }
-            _sessionElements.Clear();
+            m_sessionElements.Clear();
+            m_selectedSessionElement = null;
         }
 
         public void setLoading(bool loading)
@@ -179,16 +268,103 @@ public class ARFlowDeviceSample : MonoBehaviour
     }
     public SessionsWindow sessionsWindow;
 
+    /// <summary>
+    /// Search for available sessions and display them in the UI asynchronously
+    /// </summary>
+    async void SearchForSession()
+    {
+
+        if (grpcClient != null)
+        {
+            await Awaitable.MainThreadAsync();
+
+            // TODO: Could race condition happen here?
+            sessionsWindow.selectedSessionElement = null;
+            sessionsWindow.setLoading(true);
+
+            // Do we need to move to background thread?
+            await Awaitable.BackgroundThreadAsync();
+            var res = await grpcClient.ListSessionsAsync();
+
+            await Awaitable.MainThreadAsync();
+            sessionsWindow.setLoading(false);
+
+            sessionsWindow.ClearSessions();
+            foreach (var session in res.Sessions)
+            {
+                sessionsWindow.AddSession(session);
+            }
+        }
+        else
+        {
+            InternalDebug.Log("GrpcClient is null");
+        }
+    }
+
+    void OnPressCreateSession()
+    {
+        sessionsWindow.createSessionWindow.windowGameObject.SetActive(true);
+        sessionsWindow.windowGameObject.SetActive(false);
+    }
+
+    async void OnDeleteSession()
+    {
+        if (sessionsWindow.selectedSessionElement != null)
+        {
+            var session = sessionsWindow.selectedSessionElement.session;
+            sessionsWindow.cts.Cancel();
+            await grpcClient.DeleteSessionAsync(session.Id, sessionsWindow.cts.Token);
+            SearchForSession();
+        }
+        else
+        {
+            Toast.Show("No session selected", ToastColor.Red);
+        }
+    }
+
+    async void OnJoinSession()
+    {
+        if (sessionsWindow.selectedSessionElement != null)
+        {
+            var session = sessionsWindow.selectedSessionElement.session;
+            sessionsWindow.cts.Cancel();
+            await grpcClient.JoinSessionAsync(session.Id, GetDeviceInfo.GetDevice(), sessionsWindow.cts.Token);
+
+            //joining completeted --> switch to the next window
+            await Awaitable.MainThreadAsync();
+
+            //TODO: switch to the next window
+        }
+        else
+        {
+            Toast.Show("No session selected", ToastColor.Red);
+        }
+    }
+
+    [Serializable]
+    public class ARViewWindow
+    {
+        public GameObject windowGameObject;
+        public GameObject ConfigurationsContainer;
+        public Button startPauseButton;
+
+    }
+
 
 
     void Start()
     {
         findServerWindow.connectButton.onClick.AddListener(OnConnectToServer);
 
-        sessionsWindow.refreshButton.onClick.AddListener(searchForSession);
-        searchForSession();
-        sessionsWindow.createSessionButton.onClick.AddListener(() => { });
+        sessionsWindow.refreshButton.onClick.AddListener(SearchForSession);
+        sessionsWindow.createSessionButton.onClick.AddListener(OnPressCreateSession);
 
+        //Init create sessions window
+
+        sessionsWindow.createSessionWindow.cancelSessionButton.onClick.AddListener(OnCancelCreateSession);
+        sessionsWindow.createSessionWindow.createSessionButton.onClick.AddListener(OnCreateSession);
+        sessionsWindow.deleteSessionButton.onClick.AddListener(OnDeleteSession);
+        sessionsWindow.joinSessionButton.onClick.AddListener(OnJoinSession);
 
         // startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
 
@@ -212,39 +388,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         //     buttonOptionHandler.toggleOption);
     }
 
-    /// <summary>
-    /// Search for available sessions and display them in the UI asynchronously
-    /// </summary>
-    async void searchForSession()
-    {
-        if (grpcClient != null)
-        {
-            await Awaitable.MainThreadAsync();
-            sessionsWindow.setLoading(true);
-
-            // Do we ned to move to background thread?
-            await Awaitable.BackgroundThreadAsync();
-            var res = await grpcClient.ListSessionsAsync();
-
-            await Awaitable.MainThreadAsync();
-            sessionsWindow.setLoading(false);
-
-            sessionsWindow.ClearSessions();
-            foreach (var session in res.Sessions)
-            {
-                sessionsWindow.AddSession(session);
-            }
-        }
-        else
-        {
-            InternalDebug.Log("GrpcClient is null");
-        }
-    }
-
-    async void createSessionButton()
-    {
-
-    }
 
     // void AddModalityOptionsToConfig()
     // {

@@ -18,7 +18,7 @@ namespace CakeLab.ARFlow.Grpc
             SessionMetadata sessionMetadata,
             Device device,
             string savePath = "",
-        CancellationToken cancellationToken = default
+            CancellationToken cancellationToken = default
         );
         Awaitable<DeleteSessionResponse> DeleteSessionAsync(
             SessionUuid sessionId,
