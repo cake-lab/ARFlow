@@ -2,15 +2,11 @@
 
 from __future__ import annotations
 
-from enum import Enum, StrEnum
-from typing import Union
+from enum import StrEnum
 
 import numpy as np
 import numpy.typing as npt
 
-from cakelab.arflow_grpc.v1.camera_frame_pb2 import CameraFrame
-
-#
 # from arflow_grpc.service_pb2 import RegisterClientRequest
 #
 # ColorDataType = Literal["RGB24", "YCbCr420"]
@@ -107,19 +103,15 @@ from cakelab.arflow_grpc.v1.camera_frame_pb2 import CameraFrame
 #     """The point cloud colors in RGB format."""
 
 
-DecodedCameraFrames = npt.NDArray[np.uint8]
-"""Decoded camera frames either in RGB24 or RGBA32 format."""
+DecodedColorFrames = npt.NDArray[np.uint8]
+DecodedDepthFrames = npt.NDArray[np.float32 | np.uint16]
 
-DecodedARFrames = Union[DecodedCameraFrames]
+DecodedARFrames = DecodedColorFrames | DecodedDepthFrames
 """Encapsulating type for all AR frames that have been decoded."""
 
 
 class ARFrameType(StrEnum):
     """This must always match with the names in the `oneof` field defined in `ARFrame` proto schema."""
 
-    CAMERA_FRAME = "camera_frame"
-
-
-class SupportedCameraFrameFormat(Enum):
-    RGB24 = CameraFrame.FORMAT_RGB24
-    RGBA32 = CameraFrame.FORMAT_RGBA32
+    COLOR_FRAME = "color_frame"
+    DEPTH_FRAME = "depth_frame"

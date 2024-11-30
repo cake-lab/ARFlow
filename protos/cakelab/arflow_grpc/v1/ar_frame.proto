@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+import "cakelab/arflow_grpc/v1/audio_frame.proto";
+import "cakelab/arflow_grpc/v1/color_frame.proto";
+import "cakelab/arflow_grpc/v1/depth_frame.proto";
+import "cakelab/arflow_grpc/v1/gyroscope_frame.proto";
+import "cakelab/arflow_grpc/v1/mesh_detection_frame.proto";
+import "cakelab/arflow_grpc/v1/plane_detection_frame.proto";
+import "cakelab/arflow_grpc/v1/point_cloud_detection_frame.proto";
+import "cakelab/arflow_grpc/v1/transform_frame.proto";
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+message ARFrame {
+  oneof data {
+    TransformFrame transform_frame = 1;
+    ColorFrame color_frame = 2;
+    DepthFrame depth_frame = 3;
+    GyroscopeFrame gyroscope_frame = 4;
+    AudioFrame audio_frame = 5;
+    PlaneDetectionFrame plane_detection_frame = 6;
+    PointCloudDetectionFrame point_cloud_detection_frame = 7;
+    MeshDetectionFrame mesh_detection_frame = 8;
+  }
+}

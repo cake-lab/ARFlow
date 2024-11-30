@@ -12,5 +12,9 @@ namespace CakeLab.ARFlow.DataBuffers
         void StartCapture();
         void StopCapture();
         void ClearBuffer();
+        /// <summary>
+        /// Tries to acquire the latest frame from the buffer. If the buffer is empty, returns the default.
+        /// </summary>
+        T TryAcquireLatestFrame();
     }
 }

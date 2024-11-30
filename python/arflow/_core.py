@@ -13,20 +13,23 @@ import numpy as np
 import rerun as rr
 from grpc_interceptor.exceptions import InvalidArgument, NotFound
 
-from arflow._decoding import decode_camera_frames
+from arflow._decoding import decode_color_frames, decode_depth_frames
 from arflow._error_interceptor import ErrorInterceptor
 from arflow._session_stream import SessionStream
 from arflow._types import (
     ARFrameType,
     DecodedARFrames,
+    DecodedColorFrames,
+    DecodedDepthFrames,
 )
 from cakelab.arflow_grpc.v1 import arflow_service_pb2_grpc
-from cakelab.arflow_grpc.v1.arframe_pb2 import ARFrame
-from cakelab.arflow_grpc.v1.camera_frame_pb2 import CameraFrame
+from cakelab.arflow_grpc.v1.ar_frame_pb2 import ARFrame
+from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
 from cakelab.arflow_grpc.v1.create_session_request_pb2 import CreateSessionRequest
 from cakelab.arflow_grpc.v1.create_session_response_pb2 import CreateSessionResponse
 from cakelab.arflow_grpc.v1.delete_session_request_pb2 import DeleteSessionRequest
 from cakelab.arflow_grpc.v1.delete_session_response_pb2 import DeleteSessionResponse
+from cakelab.arflow_grpc.v1.depth_frame_pb2 import DepthFrame
 from cakelab.arflow_grpc.v1.device_pb2 import Device
 from cakelab.arflow_grpc.v1.get_session_request_pb2 import GetSessionRequest
 from cakelab.arflow_grpc.v1.get_session_response_pb2 import GetSessionResponse
@@ -43,6 +46,7 @@ from cakelab.arflow_grpc.v1.save_ar_frames_response_pb2 import (
     SaveARFramesResponse,
 )
 from cakelab.arflow_grpc.v1.session_pb2 import Session, SessionUuid
+from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
 
 logger = logging.getLogger(__name__)
 
@@ -158,10 +162,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
     def GetSession(
         self, request: GetSessionRequest, context: grpc.ServicerContext | None = None
     ) -> GetSessionResponse:
-        try:
-            session_stream = self._client_sessions[request.session_id.value]
-        except KeyError:
-            raise NotFound("Session not found")
+        session_stream = self._get_session_stream(request.session_id.value)
 
         logger.info("Retrieved session: %s", session_stream.info)
 
@@ -208,10 +209,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
         @private
         """
-        try:
-            session_stream = self._client_sessions[request.session_id.value]
-        except KeyError:
-            raise NotFound("Session not found")
+        session_stream = self._get_session_stream(request.session_id.value)
 
         if request.device in session_stream.info.devices:
             raise InvalidArgument("Device already in session")
@@ -253,10 +251,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
         @private
         """
-        try:
-            session_stream = self._client_sessions[request.session_id.value]
-        except KeyError:
-            raise NotFound("Session not found")
+        session_stream = self._get_session_stream(request.session_id.value)
 
         try:
             session_stream.info.devices.remove(request.device)
@@ -286,100 +281,21 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         request: SaveARFramesRequest,
         context: grpc.ServicerContext | None = None,
     ) -> SaveARFramesResponse:
+        """Save AR frames to a session. Frames can be of different types and chronologically unordered."""
         if len(request.frames) == 0:
             raise InvalidArgument("No frames provided")
 
-        try:
-            session_stream = self._client_sessions[request.session_id.value]
-        except KeyError:
-            raise NotFound("Session not found")
+        session_stream = self._get_session_stream(request.session_id.value)
 
         if request.device not in session_stream.info.devices:
             raise InvalidArgument("Device not in session")
 
-        # handle cases where frames are chronologically unordered and have mixed types, so no need this homogenous check
-        # if not all(
-        #     # must match the oneof field name in the proto schema
-        #     frame.WhichOneof("data") == request.frames[0].WhichOneof("data")
-        #     for frame in request.frames
-        # ):
-        #     raise InvalidArgument("Frames have mixed data types")
-
-        decoded_ar_frames: DecodedARFrames = np.array([])
-
-        grouped_frames: DefaultDict[ARFrameType, list[ARFrame]] = defaultdict(list)
-        for frame in request.frames:
-            frame_type: str | None = frame.WhichOneof("data")
-            # Skip bad frames
-            logger.debug("Valid frame types: %s", ARFrameType._value2member_map_.keys())
-            if frame_type is None or frame_type not in ARFrameType._value2member_map_:
-                continue
-            grouped_frames[frame_type].append(frame)
-
-        logger.debug("Frames grouped by data type: %s", grouped_frames)
-
-        for frame_type, frames in grouped_frames.items():
-            if frame_type == ARFrameType.CAMERA_FRAME and frames[0].camera_frame:
-                grouped_camera_frames: DefaultDict[
-                    Tuple[CameraFrame.Format, int, int], list[CameraFrame]
-                ] = defaultdict(list)
-                for frame in frames:
-                    camera_frame_format, width, height = (
-                        frame.camera_frame.format,
-                        frame.camera_frame.intrinsics.resolution.x,
-                        frame.camera_frame.intrinsics.resolution.y,
-                    )
-                    if camera_frame_format == CameraFrame.FORMAT_UNSPECIFIED:
-                        logger.warning(
-                            "Camera frame format not supported: %s", camera_frame_format
-                        )
-                        continue
-                    grouped_camera_frames[
-                        (
-                            frame.camera_frame.format,
-                            frame.camera_frame.intrinsics.resolution.x,
-                            frame.camera_frame.intrinsics.resolution.y,
-                        )
-                    ].append(frame.camera_frame)
-
-                logger.debug(
-                    "Camera frames grouped by format and resolution: %s",
-                    grouped_camera_frames,
-                )
-
-                for (
-                    camera_frame_format,
-                    width,
-                    height,
-                ), camera_frames in grouped_camera_frames.items():
-                    try:
-                        decoded_ar_frames = decode_camera_frames(
-                            raw_frames=[f.data for f in camera_frames],
-                            format=camera_frame_format,
-                            width=width,
-                            height=height,
-                        )
-                    except ValueError as e:
-                        logger.warning("Error decoding camera frames: %s", e)
-                        continue
-
-                    try:
-                        session_stream.save_camera_frames(
-                            decoded_camera_frames=decoded_ar_frames,
-                            device_timestamps=[
-                                f.device_timestamp.seconds
-                                + f.device_timestamp.nanos / 1e9
-                                for f in camera_frames
-                            ],
-                            image_timestamps=[f.image_timestamp for f in camera_frames],
-                            device=request.device,
-                            format=camera_frame_format,
-                            width=width,
-                            height=height,
-                        )
-                    except ValueError as e:
-                        logger.warning("Error saving camera frames: %s", e)
-                        continue
+        frames_grouped_by_type = self._group_frames_by_type(frames=request.frames)
+        decoded_ar_frames = self._process_frames(
+            frames_grouped_by_type=frames_grouped_by_type,
+            session_stream=session_stream,
+            device=request.device,
+        )
 
         logger.info(
             "Saved AR frames of device %s to session %s",
@@ -410,6 +326,42 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         """
         pass
 
+    def on_save_color_frames(
+        self,
+        frames: DecodedColorFrames,
+        format: XRCpuImage.Format,
+        width: int,
+        height: int,
+        session_stream: SessionStream,
+        device: Device,
+    ) -> None:
+        """Hook for user-defined procedures when color frames are saved to a recording stream. These frames are homogenous in format and resolution.
+
+        Args:
+            frames: The decoded color frames.
+            session_stream: The session stream.
+            device: The device that sent the AR frames.
+        """
+        pass
+
+    def on_save_depth_frames(
+        self,
+        frames: DecodedDepthFrames,
+        format: XRCpuImage.Format,
+        width: int,
+        height: int,
+        session_stream: SessionStream,
+        device: Device,
+    ) -> None:
+        """Hook for user-defined procedures when color frames are saved to a recording stream. These frames are homogenous in format and resolution.
+
+        Args:
+            frames: The decoded color frames.
+            session_stream: The session stream.
+            device: The device that sent the AR frames.
+        """
+        pass
+
     def on_program_exit(self) -> None:
         """Closes all TCP connections, servers, and files.
 
@@ -422,6 +374,170 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             rr.disconnect(session.stream)
             logger.debug("Disconnected session: %s", id)
         logger.debug("All clients disconnected")
+
+    def _get_session_stream(self, session_id: str) -> SessionStream:
+        try:
+            return self._client_sessions[session_id]
+        except KeyError:
+            raise NotFound("Session not found")
+
+    def _group_frames_by_type(
+        self, frames: Iterable[ARFrame]
+    ) -> DefaultDict[ARFrameType, list[ARFrame]]:
+        frames_grouped_by_type: DefaultDict[ARFrameType, list[ARFrame]] = defaultdict(
+            list
+        )
+        for frame in frames:
+            frame_type: str | None = frame.WhichOneof("data")
+            logger.debug("Valid frame types: %s", ARFrameType._value2member_map_)
+            if frame_type is not None and frame_type in ARFrameType._value2member_map_:
+                frames_grouped_by_type[ARFrameType(frame_type)].append(frame)
+        logger.debug("Frames grouped by data type: %s", frames_grouped_by_type)
+        return frames_grouped_by_type
+
+    def _process_frames(
+        self,
+        frames_grouped_by_type: DefaultDict[ARFrameType, list[ARFrame]],
+        session_stream: SessionStream,
+        device: Device,
+    ) -> DecodedARFrames:
+        decoded_ar_frames = np.array([])
+        for frame_type, frames in frames_grouped_by_type.items():
+            if frame_type == ARFrameType.COLOR_FRAME and frames[0].color_frame:
+                decoded_ar_frames = self._process_color_frames(
+                    frames=frames, session_stream=session_stream, device=device
+                )
+            elif frame_type == ARFrameType.DEPTH_FRAME and frames[0].depth_frame:
+                decoded_ar_frames = self._process_depth_frames(
+                    frames=frames, session_stream=session_stream, device=device
+                )
+        return decoded_ar_frames
+
+    def _process_color_frames(
+        self,
+        frames: list[ARFrame],
+        session_stream: SessionStream,
+        device: Device,
+    ) -> DecodedARFrames:
+        color_frames_grouped_by_format_and_dims: DefaultDict[
+            Tuple[XRCpuImage.Format, int, int], list[ColorFrame]
+        ] = defaultdict(list)
+        for frame in frames:
+            color_frames_grouped_by_format_and_dims[
+                (
+                    frame.color_frame.image.format,
+                    frame.color_frame.image.dimensions.x,
+                    frame.color_frame.image.dimensions.y,
+                )
+            ].append(frame.color_frame)
+        decoded_color_frames = np.array([])
+        for (
+            color_frame_format,
+            width,
+            height,
+        ), homogenous_color_frames in color_frames_grouped_by_format_and_dims.items():
+            try:
+                decoded_color_frames = decode_color_frames(
+                    raw_planes=[f.image.planes for f in homogenous_color_frames],
+                    format=color_frame_format,
+                )
+            except ValueError as e:
+                logger.warning("Error decoding color frames: %s", e)
+                continue
+
+            try:
+                session_stream.save_color_frames(
+                    frames=decoded_color_frames,
+                    device_timestamps=[
+                        f.device_timestamp.seconds + f.device_timestamp.nanos / 1e9
+                        for f in homogenous_color_frames
+                    ],
+                    image_timestamps=[
+                        f.image.timestamp for f in homogenous_color_frames
+                    ],
+                    device=device,
+                    format=color_frame_format,
+                    width=width,
+                    height=height,
+                )
+            except ValueError as e:
+                logger.warning("Error saving color frames: %s", e)
+                continue
+
+            self.on_save_color_frames(
+                frames=decoded_color_frames,
+                format=color_frame_format,
+                width=width,
+                height=height,
+                session_stream=session_stream,
+                device=device,
+            )
+
+        return decoded_color_frames
+
+    def _process_depth_frames(
+        self,
+        frames: list[ARFrame],
+        session_stream: SessionStream,
+        device: Device,
+    ) -> DecodedARFrames:
+        depth_frames_grouped_by_format_and_dims: DefaultDict[
+            Tuple[XRCpuImage.Format, int, int], list[DepthFrame]
+        ] = defaultdict(list)
+        for frame in frames:
+            depth_frames_grouped_by_format_and_dims[
+                (
+                    frame.depth_frame.image.format,
+                    frame.depth_frame.image.dimensions.x,
+                    frame.depth_frame.image.dimensions.y,
+                )
+            ].append(frame.depth_frame)
+        decoded_depth_frames = np.array([])
+        for (
+            depth_frame_format,
+            width,
+            height,
+        ), homogenous_depth_frames in depth_frames_grouped_by_format_and_dims.items():
+            try:
+                decoded_depth_frames = decode_depth_frames(
+                    raw_planes=[f.image.planes for f in homogenous_depth_frames],
+                    format=depth_frame_format,
+                    width=width,
+                    height=height,
+                )
+            except ValueError as e:
+                logger.warning("Error decoding depth frames: %s", e)
+                continue
+
+            try:
+                session_stream.save_depth_frames(
+                    frames=decoded_depth_frames,
+                    device_timestamps=[
+                        f.device_timestamp.seconds + f.device_timestamp.nanos / 1e9
+                        for f in homogenous_depth_frames
+                    ],
+                    image_timestamps=[
+                        f.image.timestamp for f in homogenous_depth_frames
+                    ],
+                    device=device,
+                    format=depth_frame_format,
+                    width=width,
+                    height=height,
+                )
+            except ValueError as e:
+                logger.warning("Error saving depth frames: %s", e)
+                continue
+
+            self.on_save_depth_frames(
+                frames=decoded_depth_frames,
+                format=depth_frame_format,
+                width=width,
+                height=height,
+                session_stream=session_stream,
+                device=device,
+            )
+
+        return decoded_depth_frames
 
 
 # TODO: Integration tests once more infrastructure work has been done (e.g., Docker). Remove pragma once implemented.

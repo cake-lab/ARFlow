@@ -16,6 +16,8 @@ from cakelab.arflow_grpc.v1 import list_sessions_request_pb2 as cakelab_dot_arfl
 from cakelab.arflow_grpc.v1 import list_sessions_response_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_list__sessions__response__pb2
 from cakelab.arflow_grpc.v1 import save_ar_frames_request_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__request__pb2
 from cakelab.arflow_grpc.v1 import save_ar_frames_response_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__response__pb2
+from cakelab.arflow_grpc.v1 import save_synchronized_ar_frame_request_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__request__pb2
+from cakelab.arflow_grpc.v1 import save_synchronized_ar_frame_response_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__response__pb2
 
 
 class ARFlowServiceStub(object):
@@ -63,6 +65,11 @@ class ARFlowServiceStub(object):
                 '/cakelab.arflow_grpc.v1.ARFlowService/SaveARFrames',
                 request_serializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__request__pb2.SaveARFramesRequest.SerializeToString,
                 response_deserializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__response__pb2.SaveARFramesResponse.FromString,
+                _registered_method=True)
+        self.SaveSynchronizedARFrame = channel.unary_unary(
+                '/cakelab.arflow_grpc.v1.ARFlowService/SaveSynchronizedARFrame',
+                request_serializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__request__pb2.SaveSynchronizedARFrameRequest.SerializeToString,
+                response_deserializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__response__pb2.SaveSynchronizedARFrameResponse.FromString,
                 _registered_method=True)
 
 
@@ -120,6 +127,14 @@ class ARFlowServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SaveSynchronizedARFrame(self, request, context):
+        """/ Save an synchronized AR frame from a device to its session's recording stream.
+        / This is our old approach and we're keeping this for benchmarking purposes.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ARFlowServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -157,6 +172,11 @@ def add_ARFlowServiceServicer_to_server(servicer, server):
                     servicer.SaveARFrames,
                     request_deserializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__request__pb2.SaveARFramesRequest.FromString,
                     response_serializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__response__pb2.SaveARFramesResponse.SerializeToString,
+            ),
+            'SaveSynchronizedARFrame': grpc.unary_unary_rpc_method_handler(
+                    servicer.SaveSynchronizedARFrame,
+                    request_deserializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__request__pb2.SaveSynchronizedARFrameRequest.FromString,
+                    response_serializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__response__pb2.SaveSynchronizedARFrameResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -350,6 +370,33 @@ class ARFlowService(object):
             '/cakelab.arflow_grpc.v1.ARFlowService/SaveARFrames',
             cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__request__pb2.SaveARFramesRequest.SerializeToString,
             cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__response__pb2.SaveARFramesResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SaveSynchronizedARFrame(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/cakelab.arflow_grpc.v1.ARFlowService/SaveSynchronizedARFrame',
+            cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__request__pb2.SaveSynchronizedARFrameRequest.SerializeToString,
+            cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__response__pb2.SaveSynchronizedARFrameResponse.FromString,
             options,
             channel_credentials,
             insecure,

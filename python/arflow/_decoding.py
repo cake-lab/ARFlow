@@ -1,77 +1,61 @@
+from typing import Iterable
+
 import numpy as np
 
 from arflow._types import (
-    DecodedCameraFrames,
+    DecodedColorFrames,
+    DecodedDepthFrames,
 )
-from cakelab.arflow_grpc.v1.camera_frame_pb2 import CameraFrame
+from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
 
 
-def decode_camera_frames(
-    raw_frames: list[bytes],
-    format: CameraFrame.Format,
-    width: int,
-    height: int,
-) -> DecodedCameraFrames:
-    """Decode the camera frames from the raw frames. Assumes that format, width, and height are the same across all frames.
+def decode_color_frames(
+    raw_planes: list[Iterable[XRCpuImage.Plane]],
+    format: XRCpuImage.Format,
+) -> DecodedColorFrames:
+    """Decode the color frames from the raw frames. Assumes that format, width, and height are the same across all frames.
 
     Raises:
         ValueError: If the frames are not in a supported format or is in bad shape.
     """
-    if format == CameraFrame.FORMAT_RGB24:
-        return np.array(
-            [
-                np.frombuffer(frame, dtype=np.uint8).reshape(height, width, 3)
-                for frame in raw_frames
-            ]
-        )
-    elif format == CameraFrame.FORMAT_RGBA32:
-        return np.array(
-            [
-                np.frombuffer(frame, dtype=np.uint8).reshape(height, width, 4)
-                for frame in raw_frames
-            ]
-        )
+    if (
+        format != XRCpuImage.FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE
+        or format != XRCpuImage.FORMAT_ANDROID_YUV_420_888
+    ):
+        raise ValueError(f"Unsupported frame format: {format}")
+    decoded_frames = np.array(
+        [np.concatenate([plane.data for plane in planes]) for planes in raw_planes]
+    )
+    return decoded_frames
+
+
+def decode_depth_frames(
+    raw_planes: list[Iterable[XRCpuImage.Plane]],
+    format: XRCpuImage.Format,
+    width: int,
+    height: int,
+) -> DecodedDepthFrames:
+    """Decode the depth image from the buffer.
+
+    Raises:
+        ValueError: If the data type is not recognized.
+    """
+    if format == XRCpuImage.FORMAT_DEPTHFLOAT32:
+        dtype = np.float32
+    elif format == XRCpuImage.FORMAT_DEPTHUINT16:
+        dtype = np.uint16
     else:
         raise ValueError(f"Unsupported frame format: {format}")
 
+    decoded_frames = np.array(
+        [
+            np.frombuffer(np.concatenate([plane.data for plane in planes]), dtype=dtype)
+            for planes in raw_planes
+        ]
+    ).reshape(-1, height, width)
+    return decoded_frames
 
-# def decode_depth_image(
-#     resolution_y: int,
-#     resolution_x: int,
-#     data_type: DepthDataType,
-#     buffer: bytes,
-# ) -> DepthImg:
-#     """Decode the depth image from the buffer.
-#
-#     Args:
-#         data_type: `f32` for iOS, `u16` for Android.
-#
-#     Raises:
-#         ValueError: If the data type is not recognized.
-#     """
-#     # The `Any` means that the array can have any shape. We cannot
-#     # determine the shape of the array from the buffer.
-#     if data_type == "f32":
-#         dtype = np.float32
-#     elif data_type == "u16":
-#         dtype = np.uint16
-#     else:
-#         raise ValueError(f"Unknown data type: {data_type}")
-#
-#     depth_img = np.frombuffer(buffer, dtype=dtype).reshape(
-#         (
-#             resolution_y,
-#             resolution_x,
-#         )
-#     )
-#
-#     # If it's a 16-bit unsigned integer, convert to float32 and scale to meters.
-#     if dtype == np.uint16:
-#         depth_img = (depth_img.astype(np.float32) / 1000.0).astype(np.float32)
-#
-#     return depth_img.astype(np.float32)
-#
-#
+
 # def decode_transform(buffer: bytes) -> Transform:
 #     y_down_to_y_up = np.array(
 #         [

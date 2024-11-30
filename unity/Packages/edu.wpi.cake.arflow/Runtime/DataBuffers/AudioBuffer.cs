@@ -1,21 +1,45 @@
 using System;
 using System.Collections.Generic;
+using Google.Protobuf.WellKnownTypes;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
+    using System.Linq;
     using Utilities;
 
-    public class AudioBuffer : IDataBuffer<float>
+    public struct RawAudioFrame
     {
-        private readonly List<float> m_Buffer;
-        private int m_SampleRate;
-        private int m_FrameLength;
+        public DateTime DeviceTimestamp;
+        public float[] Data;
 
-        public IReadOnlyList<float> Buffer => m_Buffer;
+        public static explicit operator Grpc.V1.AudioFrame(RawAudioFrame rawFrame)
+        {
+            var audioFrameGrpc = new Grpc.V1.AudioFrame
+            {
+                DeviceTimestamp = Timestamp.FromDateTime(rawFrame.DeviceTimestamp),
+            };
+            audioFrameGrpc.Data.AddRange(rawFrame.Data);
+            return audioFrameGrpc;
+        }
+
+        public static explicit operator Grpc.V1.ARFrame(RawAudioFrame rawFrame)
+        {
+            var arFrame = new Grpc.V1.ARFrame { AudioFrame = (Grpc.V1.AudioFrame)rawFrame };
+            return arFrame;
+        }
+    }
+
+    public class AudioBuffer : IDataBuffer<RawAudioFrame>
+    {
+        private readonly List<RawAudioFrame> m_Buffer;
+        private readonly int m_SampleRate;
+        private readonly int m_FrameLength;
+
+        public IReadOnlyList<RawAudioFrame> Buffer => m_Buffer;
 
         public AudioBuffer(int initialBufferSize, int sampleRate = 16000, int frameLength = 512)
         {
-            m_Buffer = new List<float>(initialBufferSize);
+            m_Buffer = new List<RawAudioFrame>(initialBufferSize);
             m_SampleRate = sampleRate;
             m_FrameLength = frameLength;
         }
@@ -36,7 +60,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
         private void OnFrameCaptured(float[] frame)
         {
-            m_Buffer.AddRange(frame);
+            m_Buffer.Add(new RawAudioFrame { DeviceTimestamp = DateTime.UtcNow, Data = frame });
         }
 
         public void ClearBuffer()
@@ -44,10 +68,16 @@ namespace CakeLab.ARFlow.DataBuffers
             m_Buffer.Clear();
         }
 
+        public RawAudioFrame TryAcquireLatestFrame()
+        {
+            return m_Buffer.LastOrDefault();
+        }
+
         public void Dispose()
         {
             StopCapture();
             ClearBuffer();
         }
+
     }
 }

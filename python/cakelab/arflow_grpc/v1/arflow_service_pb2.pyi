@@ -12,6 +12,8 @@ from cakelab.arflow_grpc.v1 import list_sessions_request_pb2 as _list_sessions_r
 from cakelab.arflow_grpc.v1 import list_sessions_response_pb2 as _list_sessions_response_pb2
 from cakelab.arflow_grpc.v1 import save_ar_frames_request_pb2 as _save_ar_frames_request_pb2
 from cakelab.arflow_grpc.v1 import save_ar_frames_response_pb2 as _save_ar_frames_response_pb2
+from cakelab.arflow_grpc.v1 import save_synchronized_ar_frame_request_pb2 as _save_synchronized_ar_frame_request_pb2
+from cakelab.arflow_grpc.v1 import save_synchronized_ar_frame_response_pb2 as _save_synchronized_ar_frame_response_pb2
 from google.protobuf import descriptor as _descriptor
 from typing import ClassVar as _ClassVar
 

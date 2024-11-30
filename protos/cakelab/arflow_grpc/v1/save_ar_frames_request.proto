@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package cakelab.arflow_grpc.v1;
 
-import "cakelab/arflow_grpc/v1/arframe.proto";
+import "cakelab/arflow_grpc/v1/ar_frame.proto";
 import "cakelab/arflow_grpc/v1/device.proto";
 import "cakelab/arflow_grpc/v1/session.proto";
 
@@ -16,11 +16,7 @@ message SaveARFramesRequest {
    * See https://github.com/protocolbuffers/protobuf/issues/2592
    * to see why we cannot use oneof of repeated fields here. The
    * workaround here is to use a repeated field of oneof types
-   * and determine the type of each element at runtime. A more
-   * performant approach similar to the assumption/contract
-   * we're making in ARFlow is that the client would only send
-   * frames of one type at a time and the server would reject
-   * requests with mixed frame types.
+   * and determine the type of each element at runtime.
    */
   repeated ARFrame frames = 3;
 }

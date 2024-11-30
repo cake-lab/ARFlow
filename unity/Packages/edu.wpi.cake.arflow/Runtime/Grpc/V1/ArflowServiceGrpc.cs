@@ -77,6 +77,10 @@ namespace CakeLab.ARFlow.Grpc.V1 {
     static readonly grpc::Marshaller<global::CakeLab.ARFlow.Grpc.V1.SaveARFramesRequest> __Marshaller_cakelab_arflow_grpc_v1_SaveARFramesRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::CakeLab.ARFlow.Grpc.V1.SaveARFramesRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::CakeLab.ARFlow.Grpc.V1.SaveARFramesResponse> __Marshaller_cakelab_arflow_grpc_v1_SaveARFramesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::CakeLab.ARFlow.Grpc.V1.SaveARFramesResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest> __Marshaller_cakelab_arflow_grpc_v1_SaveSynchronizedARFrameRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse> __Marshaller_cakelab_arflow_grpc_v1_SaveSynchronizedARFrameResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::CakeLab.ARFlow.Grpc.V1.CreateSessionRequest, global::CakeLab.ARFlow.Grpc.V1.CreateSessionResponse> __Method_CreateSession = new grpc::Method<global::CakeLab.ARFlow.Grpc.V1.CreateSessionRequest, global::CakeLab.ARFlow.Grpc.V1.CreateSessionResponse>(
@@ -133,6 +137,14 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         "SaveARFrames",
         __Marshaller_cakelab_arflow_grpc_v1_SaveARFramesRequest,
         __Marshaller_cakelab_arflow_grpc_v1_SaveARFramesResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest, global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse> __Method_SaveSynchronizedARFrame = new grpc::Method<global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest, global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "SaveSynchronizedARFrame",
+        __Marshaller_cakelab_arflow_grpc_v1_SaveSynchronizedARFrameRequest,
+        __Marshaller_cakelab_arflow_grpc_v1_SaveSynchronizedARFrameResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -224,6 +236,19 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::CakeLab.ARFlow.Grpc.V1.SaveARFramesResponse> SaveARFrames(global::CakeLab.ARFlow.Grpc.V1.SaveARFramesRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///&#x2F; Save an synchronized AR frame from a device to its session's recording stream.
+      ///&#x2F; This is our old approach and we're keeping this for benchmarking purposes.
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse> SaveSynchronizedARFrame(global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -593,6 +618,58 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       {
         return CallInvoker.AsyncUnaryCall(__Method_SaveARFrames, null, options, request);
       }
+      /// <summary>
+      ///&#x2F; Save an synchronized AR frame from a device to its session's recording stream.
+      ///&#x2F; This is our old approach and we're keeping this for benchmarking purposes.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse SaveSynchronizedARFrame(global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SaveSynchronizedARFrame(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///&#x2F; Save an synchronized AR frame from a device to its session's recording stream.
+      ///&#x2F; This is our old approach and we're keeping this for benchmarking purposes.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse SaveSynchronizedARFrame(global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_SaveSynchronizedARFrame, null, options, request);
+      }
+      /// <summary>
+      ///&#x2F; Save an synchronized AR frame from a device to its session's recording stream.
+      ///&#x2F; This is our old approach and we're keeping this for benchmarking purposes.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse> SaveSynchronizedARFrameAsync(global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SaveSynchronizedARFrameAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///&#x2F; Save an synchronized AR frame from a device to its session's recording stream.
+      ///&#x2F; This is our old approach and we're keeping this for benchmarking purposes.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse> SaveSynchronizedARFrameAsync(global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_SaveSynchronizedARFrame, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override ARFlowServiceClient NewInstance(ClientBaseConfiguration configuration)
@@ -613,7 +690,8 @@ namespace CakeLab.ARFlow.Grpc.V1 {
           .AddMethod(__Method_ListSessions, serviceImpl.ListSessions)
           .AddMethod(__Method_JoinSession, serviceImpl.JoinSession)
           .AddMethod(__Method_LeaveSession, serviceImpl.LeaveSession)
-          .AddMethod(__Method_SaveARFrames, serviceImpl.SaveARFrames).Build();
+          .AddMethod(__Method_SaveARFrames, serviceImpl.SaveARFrames)
+          .AddMethod(__Method_SaveSynchronizedARFrame, serviceImpl.SaveSynchronizedARFrame).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
@@ -630,6 +708,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       serviceBinder.AddMethod(__Method_JoinSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::CakeLab.ARFlow.Grpc.V1.JoinSessionRequest, global::CakeLab.ARFlow.Grpc.V1.JoinSessionResponse>(serviceImpl.JoinSession));
       serviceBinder.AddMethod(__Method_LeaveSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::CakeLab.ARFlow.Grpc.V1.LeaveSessionRequest, global::CakeLab.ARFlow.Grpc.V1.LeaveSessionResponse>(serviceImpl.LeaveSession));
       serviceBinder.AddMethod(__Method_SaveARFrames, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::CakeLab.ARFlow.Grpc.V1.SaveARFramesRequest, global::CakeLab.ARFlow.Grpc.V1.SaveARFramesResponse>(serviceImpl.SaveARFrames));
+      serviceBinder.AddMethod(__Method_SaveSynchronizedARFrame, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameRequest, global::CakeLab.ARFlow.Grpc.V1.SaveSynchronizedARFrameResponse>(serviceImpl.SaveSynchronizedARFrame));
     }
 
   }

@@ -10,7 +10,7 @@ import pytest
 
 from arflow._decoding import (
     convert_2d_to_3d_boundary_points,
-    decode_camera_frames,
+    decode_color_frames,
     decode_depth_image,
     decode_intrinsic,
     decode_point_cloud,
@@ -43,7 +43,7 @@ def test_decode_rgb_image(
 ):
     buffer = np.random.randint(0, 255, buffer_length, dtype=np.uint8).tobytes()  # pyright: ignore [reportUnknownMemberType]
     if should_pass:
-        assert decode_camera_frames(
+        assert decode_color_frames(
             resolution_y,
             resolution_x,
             resize_factor_y,
@@ -56,7 +56,7 @@ def test_decode_rgb_image(
             3,
         )
         assert (
-            decode_camera_frames(
+            decode_color_frames(
                 resolution_y,
                 resolution_x,
                 resize_factor_y,
@@ -68,7 +68,7 @@ def test_decode_rgb_image(
         )
     else:
         with pytest.raises(ValueError):
-            decode_camera_frames(
+            decode_color_frames(
                 resolution_y,
                 resolution_x,
                 resize_factor_y,

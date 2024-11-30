@@ -25,20 +25,20 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CjNjYWtlbGFiL2FyZmxvd19ncnBjL3YxL3NhdmVfYXJfZnJhbWVzX3JlcXVl",
-            "c3QucHJvdG8SFmNha2VsYWIuYXJmbG93X2dycGMudjEaJGNha2VsYWIvYXJm",
-            "bG93X2dycGMvdjEvYXJmcmFtZS5wcm90bxojY2FrZWxhYi9hcmZsb3dfZ3Jw",
-            "Yy92MS9kZXZpY2UucHJvdG8aJGNha2VsYWIvYXJmbG93X2dycGMvdjEvc2Vz",
-            "c2lvbi5wcm90byLKAQoTU2F2ZUFSRnJhbWVzUmVxdWVzdBJCCgpzZXNzaW9u",
-            "X2lkGAEgASgLMiMuY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5TZXNzaW9uVXVp",
-            "ZFIJc2Vzc2lvbklkEjYKBmRldmljZRgCIAEoCzIeLmNha2VsYWIuYXJmbG93",
-            "X2dycGMudjEuRGV2aWNlUgZkZXZpY2USNwoGZnJhbWVzGAMgAygLMh8uY2Fr",
-            "ZWxhYi5hcmZsb3dfZ3JwYy52MS5BUkZyYW1lUgZmcmFtZXNCrQEKGmNvbS5j",
-            "YWtlbGFiLmFyZmxvd19ncnBjLnYxQhhTYXZlQXJGcmFtZXNSZXF1ZXN0UHJv",
-            "dG9QAaICA0NBWKoCFkNha2VMYWIuQVJGbG93LkdycGMuVjHKAhVDYWtlbGFi",
-            "XEFyZmxvd0dycGNcVjHiAiFDYWtlbGFiXEFyZmxvd0dycGNcVjFcR1BCTWV0",
-            "YWRhdGHqAhdDYWtlbGFiOjpBcmZsb3dHcnBjOjpWMWIGcHJvdG8z"));
+            "c3QucHJvdG8SFmNha2VsYWIuYXJmbG93X2dycGMudjEaJWNha2VsYWIvYXJm",
+            "bG93X2dycGMvdjEvYXJfZnJhbWUucHJvdG8aI2Nha2VsYWIvYXJmbG93X2dy",
+            "cGMvdjEvZGV2aWNlLnByb3RvGiRjYWtlbGFiL2FyZmxvd19ncnBjL3YxL3Nl",
+            "c3Npb24ucHJvdG8iygEKE1NhdmVBUkZyYW1lc1JlcXVlc3QSQgoKc2Vzc2lv",
+            "bl9pZBgBIAEoCzIjLmNha2VsYWIuYXJmbG93X2dycGMudjEuU2Vzc2lvblV1",
+            "aWRSCXNlc3Npb25JZBI2CgZkZXZpY2UYAiABKAsyHi5jYWtlbGFiLmFyZmxv",
+            "d19ncnBjLnYxLkRldmljZVIGZGV2aWNlEjcKBmZyYW1lcxgDIAMoCzIfLmNh",
+            "a2VsYWIuYXJmbG93X2dycGMudjEuQVJGcmFtZVIGZnJhbWVzQq0BChpjb20u",
+            "Y2FrZWxhYi5hcmZsb3dfZ3JwYy52MUIYU2F2ZUFyRnJhbWVzUmVxdWVzdFBy",
+            "b3RvUAGiAgNDQViqAhZDYWtlTGFiLkFSRmxvdy5HcnBjLlYxygIVQ2FrZWxh",
+            "YlxBcmZsb3dHcnBjXFYx4gIhQ2FrZWxhYlxBcmZsb3dHcnBjXFYxXEdQQk1l",
+            "dGFkYXRh6gIXQ2FrZWxhYjo6QXJmbG93R3JwYzo6VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.ArframeReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.DeviceReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.SessionReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.ArFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.DeviceReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.SessionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::CakeLab.ARFlow.Grpc.V1.SaveARFramesRequest), global::CakeLab.ARFlow.Grpc.V1.SaveARFramesRequest.Parser, new[]{ "SessionId", "Device", "Frames" }, null, null, null, null)
           }));
@@ -129,11 +129,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
     /// See https://github.com/protocolbuffers/protobuf/issues/2592
     /// to see why we cannot use oneof of repeated fields here. The
     /// workaround here is to use a repeated field of oneof types
-    /// and determine the type of each element at runtime. A more
-    /// performant approach similar to the assumption/contract
-    /// we're making in ARFlow is that the client would only send
-    /// frames of one type at a time and the server would reject
-    /// requests with mixed frame types.
+    /// and determine the type of each element at runtime.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]

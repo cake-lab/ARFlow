@@ -16,6 +16,8 @@ import "cakelab/arflow_grpc/v1/list_sessions_request.proto";
 import "cakelab/arflow_grpc/v1/list_sessions_response.proto";
 import "cakelab/arflow_grpc/v1/save_ar_frames_request.proto";
 import "cakelab/arflow_grpc/v1/save_ar_frames_response.proto";
+import "cakelab/arflow_grpc/v1/save_synchronized_ar_frame_request.proto";
+import "cakelab/arflow_grpc/v1/save_synchronized_ar_frame_response.proto";
 
 option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
 
@@ -37,4 +39,7 @@ service ARFlowService {
   rpc LeaveSession(LeaveSessionRequest) returns (LeaveSessionResponse);
   /// Save AR frames from a device to its session's recording stream.
   rpc SaveARFrames(SaveARFramesRequest) returns (SaveARFramesResponse);
+  /// Save an synchronized AR frame from a device to its session's recording stream.
+  /// This is our old approach and we're keeping this for benchmarking purposes.
+  rpc SaveSynchronizedARFrame(SaveSynchronizedARFrameRequest) returns (SaveSynchronizedARFrameResponse);
 }

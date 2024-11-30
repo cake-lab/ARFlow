@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+import "cakelab/arflow_grpc/v1/xr_cpu_image.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+message DepthFrame {
+  google.protobuf.Timestamp device_timestamp = 1;
+  /// https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARFoundation.AROcclusionManager.html#UnityEngine_XR_ARFoundation_AROcclusionManager_environmentDepthTemporalSmoothingEnabled
+  bool environment_depth_temporal_smoothing_enabled = 2;
+  XRCpuImage image = 3;
+}
