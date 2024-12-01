@@ -1,36 +1,24 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR.ARFoundation;
-using System.Collections.Generic;
-
-using System.Linq;
-
-using EasyUI.Toast;
 using System;
-using System.Threading.Tasks;
-using System.Net;
-using System.Security.Cryptography;
-
-// using static ARFlow.OtherUtils;
-using UnityEngine.XR.ARSubsystems;
-using Unity.Collections;
-using System.Net.Http;
-
-using TMPro;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
-
-using CakeLab.ARFlow.Grpc;
-using CakeLab.ARFlow.Grpc.V1;
-using CakeLab.ARFlow.Utilities;
 using System.Threading;
 using CakeLab.ARFlow.DataBuffers;
 using CakeLab.ARFlow.DataBuffers.DataBuffersUIConfig;
-using UnityEditor.PackageManager.UI;
+using CakeLab.ARFlow.Grpc;
+using CakeLab.ARFlow.Grpc.V1;
+using CakeLab.ARFlow.Utilities;
+using EasyUI.Toast;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.XR.ARFoundation;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
     [Tooltip("Camera image data's manager from the device camera")]
     public ARCameraManager cameraManager;
+
     [Tooltip("Depth data's manager from the device camera")]
     public AROcclusionManager occlusionManager;
 
@@ -49,9 +37,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     private Session m_ActiveSession;
     private Device m_Device;
 
-
     private bool m_isSending = false;
-
 
     [Serializable]
     [Tooltip("UI Window for finding server")]
@@ -62,7 +48,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         public TMP_InputField portField;
         public Button findServerButton;
         public Button connectButton;
-
 
         private const string _defaultIp = "127.0.0.1";
         private const string _defaultPort = "8500";
@@ -91,6 +76,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     }
 
     public FindServerWindow findServerWindow;
+
     public void OnConnectToServer()
     {
         string ip = findServerWindow.ipText;
@@ -116,8 +102,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         public Button cancelSessionButton;
 
         private CancellationTokenSource m_cts = new CancellationTokenSource();
-        public CancellationTokenSource cts { get { return m_cts; } }
-
+        public CancellationTokenSource cts
+        {
+            get { return m_cts; }
+        }
     }
 
     void OnCancelCreateSession()
@@ -150,7 +138,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         var res = new SessionMetadata
         {
             Name = sessionName,
-            SavePath = string.IsNullOrEmpty(sessionSavePath) ? "" : sessionSavePath
+            SavePath = string.IsNullOrEmpty(sessionSavePath) ? "" : sessionSavePath,
         };
 
         // TODO: Do we need to move to background thread?
@@ -159,7 +147,7 @@ public class ARFlowDeviceSample : MonoBehaviour
             GetDeviceInfo.GetDevice(),
             sessionSavePath,
             sessionsWindow.createSessionWindow.cts.Token
-            );
+        );
 
         if (createSessionRes is not null)
         {
@@ -196,21 +184,19 @@ public class ARFlowDeviceSample : MonoBehaviour
         private List<SessionElement> m_sessionElements = new();
 
         private CancellationTokenSource m_cts = new CancellationTokenSource();
-        public CancellationTokenSource cts { get { return m_cts; } }
+        public CancellationTokenSource cts
+        {
+            get { return m_cts; }
+        }
 
         // Do not serialize this to avoid Unity reflection
         private SessionElement m_selectedSessionElement;
+
         [Tooltip("UI Window for creating a new session")]
         public SessionElement selectedSessionElement
         {
-            get
-            {
-                return m_selectedSessionElement;
-            }
-            set
-            {
-                m_selectedSessionElement = value;
-            }
+            get { return m_selectedSessionElement; }
+            set { m_selectedSessionElement = value; }
         }
 
         private void OnSelectSession(SessionElement sessionElement)
@@ -221,7 +207,10 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         public void AddSession(Session session)
         {
-            GameObject sessionElementObject = Instantiate(sessionElementPrefab, sessionListContent.transform);
+            GameObject sessionElementObject = Instantiate(
+                sessionElementPrefab,
+                sessionListContent.transform
+            );
             SessionElement sessionElement = sessionElementObject.GetComponent<SessionElement>();
             sessionElement.session = session;
             m_sessionElements.Add(sessionElement);
@@ -251,6 +240,7 @@ public class ARFlowDeviceSample : MonoBehaviour
             loadingIndicator.SetActive(loading);
         }
     }
+
     [Tooltip("UI Window for managing sessions")]
     public SessionsWindow sessionsWindow;
 
@@ -259,7 +249,6 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     async void SearchForSession()
     {
-
         if (grpcClient != null)
         {
             await Awaitable.MainThreadAsync();
@@ -318,7 +307,11 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             var session = sessionsWindow.selectedSessionElement.session;
             InternalDebug.Log($"Joining session: {session.Metadata.Name}");
-            await grpcClient.JoinSessionAsync(session.Id, GetDeviceInfo.GetDevice(), sessionsWindow.cts.Token);
+            await grpcClient.JoinSessionAsync(
+                session.Id,
+                GetDeviceInfo.GetDevice(),
+                sessionsWindow.cts.Token
+            );
 
             //joining completeted --> switch to the next window
             await Awaitable.MainThreadAsync();
@@ -414,7 +407,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
-
     void Start()
     {
         // Initialize data buffers and sending-related vaiables
@@ -427,10 +419,16 @@ public class ARFlowDeviceSample : MonoBehaviour
             // new MeshBuffer(meshManager)
         };
 
-        m_ColorBufferUIConfig = new ColorBufferUIConfig(arViewWindow.ConfigurationsContainer, arViewWindow.textPrefab, arViewWindow.textInputPrefab, arViewWindow.dropdownPrefab, arViewWindow.togglePrefab);
+        m_ColorBufferUIConfig = new ColorBufferUIConfig(
+            arViewWindow.ConfigurationsContainer,
+            arViewWindow.textPrefab,
+            arViewWindow.textInputPrefab,
+            arViewWindow.dropdownPrefab,
+            arViewWindow.togglePrefab
+        );
         m_dataBufferUIConfigs = new List<IDataBufferUIConfig>()
         {
-            m_ColorBufferUIConfig
+            m_ColorBufferUIConfig,
             // new DepthBuffer(occlusionManager),
             // new PlaneBuffer(planeManager),
             // new MeshBuffer(meshManager)
@@ -446,13 +444,12 @@ public class ARFlowDeviceSample : MonoBehaviour
         sessionsWindow.joinSessionButton.onClick.AddListener(OnJoinSession);
 
         //Inititalize create sessions window
-        sessionsWindow.createSessionWindow.cancelSessionButton.onClick.AddListener(OnCancelCreateSession);
+        sessionsWindow.createSessionWindow.cancelSessionButton.onClick.AddListener(
+            OnCancelCreateSession
+        );
         sessionsWindow.createSessionWindow.createSessionButton.onClick.AddListener(OnCreateSession);
-
 
         // Initialize AR view window
         arViewWindow.startPauseButton.onClick.AddListener(onStartPauseButton);
-
     }
-
 }

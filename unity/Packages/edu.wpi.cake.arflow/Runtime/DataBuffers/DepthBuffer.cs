@@ -118,7 +118,12 @@ namespace CakeLab.ARFlow.DataBuffers
                 ImageTimestamp = image.timestamp,
                 Planes = Enumerable
                     .Range(0, image.planeCount)
-                    .Select(i => image.GetPlane(i))
+                    .Select(i =>
+                    {
+                        // Make a deep copy to decouple lifetime of the image from the buffer
+                        var plane = image.GetPlane(i);
+                        return new UnityXRCpuImage.Plane(plane.rowStride, plane.pixelStride, plane.data);
+                    })
                     .ToArray(),
             };
             m_Buffer.Add(newFrame);

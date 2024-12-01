@@ -115,9 +115,6 @@ namespace CakeLab.ARFlow.DataBuffers
             image.Dispose();
         }
 
-        /// <remarks>
-        /// Convert is reportedly <a href="https://github.com/Unity-Technologies/arfoundation-samples/issues/1113#issuecomment-1876327727">more performant</a> than ConvertAsync so we're using that here.
-        /// </remarks>
         private void AddToBuffer(UnityXRCpuImage image, DateTime deviceTimestampAtCapture)
         {
             using (image)
@@ -130,7 +127,12 @@ namespace CakeLab.ARFlow.DataBuffers
                     ImageTimestamp = image.timestamp,
                     Planes = Enumerable
                         .Range(0, image.planeCount)
-                        .Select(i => image.GetPlane(i))
+                        .Select(i =>
+                        {
+                            // Make a deep copy to decouple lifetime of the image from the buffer
+                            var plane = image.GetPlane(i);
+                            return new UnityXRCpuImage.Plane(plane.rowStride, plane.pixelStride, plane.data);
+                        })
                         .ToArray(),
                 };
                 m_Buffer.Add(newFrame);
@@ -158,6 +160,9 @@ namespace CakeLab.ARFlow.DataBuffers
         }
 
 
+        /// <remarks>
+        /// Convert is reportedly <a href="https://github.com/Unity-Technologies/arfoundation-samples/issues/1113#issuecomment-1876327727">more performant</a> than ConvertAsync so we're using that here.
+        /// </remarks>
         // private async void AddToBufferAsync(XRCpuImage image, XRCameraIntrinsics intrinsics, DateTime deviceTimestampAtCapture)
         // {
         //     var format = m_DesiredFormat switch

@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 4755b35b590504809a7525fd2109c2e2
-  - enabled: 1
+  - enabled: 0
     path: Packages/edu.wpi.cake.arflow/Assets/Scenes/Benchmark.unity
     guid: bdcd0e80d78f7f2e88122b86a5eb5335
+  - enabled: 1
+    path: Packages/edu.wpi.cake.arflow/Assets/Scenes/DeviceData.unity
+    guid: 2783c277e09c5e54faaece8eab4e9ebd
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ee72d15cf39dd748a13eac57397b9af,
       type: 2}
