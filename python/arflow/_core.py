@@ -93,7 +93,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             spawn=self._spawn_viewer,
         )
         new_session = Session(
-            id=SessionUuid(new_session_id),
+            id=SessionUuid(value=new_session_id),
             metadata=request.session_metadata,
             devices=[request.device],
         )

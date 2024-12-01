@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using System.Collections.Generic;
-using System.Collections;
+
+using System.Linq;
 
 using EasyUI.Toast;
 using System;
@@ -22,63 +23,38 @@ using CakeLab.ARFlow.Grpc;
 using CakeLab.ARFlow.Grpc.V1;
 using CakeLab.ARFlow.Utilities;
 using System.Threading;
+using CakeLab.ARFlow.DataBuffers;
+using CakeLab.ARFlow.DataBuffers.DataBuffersUIConfig;
+using UnityEditor.PackageManager.UI;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
-    /// <summary>
-    /// Camera image data's manager from the device camera
-    /// </summary>
+    [Tooltip("Camera image data's manager from the device camera")]
     public ARCameraManager cameraManager;
-    /// <summary>
-    /// Depth data's manager from the device camera
-    /// </summary>
+    [Tooltip("Depth data's manager from the device camera")]
     public AROcclusionManager occlusionManager;
 
-    /// <summary>
-    /// Plane detection
-    /// </summary>
     public ARPlaneManager planeManager;
 
-    /// <summary>
-    /// Plane detection
-    /// </summary>
     public ARMeshManager meshManager;
 
     public IGrpcClient grpcClient;
 
-    [Serializable]
-    public class ButtonOptionHandler
-    {
-        public List<GameObject> options;
-        public Button toggleButton;
+    private ColorBuffer m_ColorBuffer;
+    private List<IDataBuffer> m_dataBuffers;
 
-        private int currentOption = 0;
+    private ColorBufferUIConfig m_ColorBufferUIConfig;
+    private List<IDataBufferUIConfig> m_dataBufferUIConfigs;
 
-        public void toggleOption()
-        {
-            options[currentOption].SetActive(false);
-            currentOption = (currentOption + 1) % options.Count;
-            options[currentOption].SetActive(true);
-        }
+    private Session m_ActiveSession;
+    private Device m_Device;
 
-        public void disable()
-        {
-            options[currentOption].SetActive(false);
-            options[0].SetActive(true);
-            currentOption = 0;
 
-            toggleButton.interactable = false;
-        }
-
-        public void enable()
-        {
-            toggleButton.interactable = true;
-        }
-    }
-    public ButtonOptionHandler buttonOptionHandler;
+    private bool m_isSending = false;
 
 
     [Serializable]
+    [Tooltip("UI Window for finding server")]
     public class FindServerWindow
     {
         public GameObject windowGameObject;
@@ -126,7 +102,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         // Search for session also
         SearchForSession();
-        // findServerWindow.windowGameObject.SetActive(false);
+        findServerWindow.windowGameObject.SetActive(false);
         sessionsWindow.windowGameObject.SetActive(true);
     }
 
@@ -153,6 +129,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     async void OnCreateSession()
     {
+        InternalDebug.Log("Create session button pressed");
         string sessionName = sessionsWindow.createSessionWindow.sessionNameInput.text;
         string sessionSavePath = sessionsWindow.createSessionWindow.sessionSavePathInput.text;
 
@@ -173,11 +150,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         var res = new SessionMetadata
         {
             Name = sessionName,
-            SavePath = string.IsNullOrEmpty(sessionSavePath) ? null : sessionSavePath
+            SavePath = string.IsNullOrEmpty(sessionSavePath) ? "" : sessionSavePath
         };
 
         // TODO: Do we need to move to background thread?
-        await Awaitable.BackgroundThreadAsync();
         var createSessionRes = await grpcClient.CreateSessionAsync(
             res,
             GetDeviceInfo.GetDevice(),
@@ -185,13 +161,14 @@ public class ARFlowDeviceSample : MonoBehaviour
             sessionsWindow.createSessionWindow.cts.Token
             );
 
-        await Awaitable.MainThreadAsync();
         if (createSessionRes is not null)
         {
             InternalDebug.Log("Session created successfully");
             Toast.Show("Session created successfully", ToastColor.Green);
             sessionsWindow.createSessionWindow.windowGameObject.SetActive(false);
-            SearchForSession();
+
+            // Go to ARView window
+            arViewWindow.windowGameObject.SetActive(true);
         }
         else
         {
@@ -204,8 +181,8 @@ public class ARFlowDeviceSample : MonoBehaviour
     public class SessionsWindow
     {
         public GameObject windowGameObject;
-        public GameObject anotherGameObject;
         public GameObject loadingIndicator;
+        public GameObject noSessionFoundText;
 
         public GameObject sessionElementPrefab;
         public GameObject sessionListContent;
@@ -223,6 +200,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         // Do not serialize this to avoid Unity reflection
         private SessionElement m_selectedSessionElement;
+        [Tooltip("UI Window for creating a new session")]
         public SessionElement selectedSessionElement
         {
             get
@@ -238,6 +216,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         private void OnSelectSession(SessionElement sessionElement)
         {
             m_selectedSessionElement = sessionElement;
+            InternalDebug.Log($"Session selected: {sessionElement.session.Metadata.Name}");
         }
 
         public void AddSession(Session session)
@@ -263,9 +242,16 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         public void setLoading(bool loading)
         {
+            if (loading)
+            {
+                noSessionFoundText.SetActive(false);
+                ClearSessions();
+            }
+
             loadingIndicator.SetActive(loading);
         }
     }
+    [Tooltip("UI Window for managing sessions")]
     public SessionsWindow sessionsWindow;
 
     /// <summary>
@@ -289,7 +275,12 @@ public class ARFlowDeviceSample : MonoBehaviour
             await Awaitable.MainThreadAsync();
             sessionsWindow.setLoading(false);
 
-            sessionsWindow.ClearSessions();
+            if (res.Sessions.Count == 0)
+            {
+                InternalDebug.Log("No sessions found");
+                sessionsWindow.noSessionFoundText.SetActive(true);
+                return;
+            }
             foreach (var session in res.Sessions)
             {
                 sessionsWindow.AddSession(session);
@@ -312,7 +303,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         if (sessionsWindow.selectedSessionElement != null)
         {
             var session = sessionsWindow.selectedSessionElement.session;
-            sessionsWindow.cts.Cancel();
             await grpcClient.DeleteSessionAsync(session.Id, sessionsWindow.cts.Token);
             SearchForSession();
         }
@@ -327,7 +317,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         if (sessionsWindow.selectedSessionElement != null)
         {
             var session = sessionsWindow.selectedSessionElement.session;
-            sessionsWindow.cts.Cancel();
+            InternalDebug.Log($"Joining session: {session.Metadata.Name}");
             await grpcClient.JoinSessionAsync(session.Id, GetDeviceInfo.GetDevice(), sessionsWindow.cts.Token);
 
             //joining completeted --> switch to the next window
@@ -347,297 +337,122 @@ public class ARFlowDeviceSample : MonoBehaviour
         public GameObject windowGameObject;
         public GameObject ConfigurationsContainer;
         public Button startPauseButton;
+        public Button goBackButton;
 
+        public GameObject textPrefab;
+        public GameObject textInputPrefab;
+        public GameObject dropdownPrefab;
+        public GameObject togglePrefab;
+
+        private CancellationTokenSource m_Cts = new CancellationTokenSource();
+        public CancellationTokenSource Cts
+        {
+            get => m_Cts;
+            set => m_Cts = value;
+        }
     }
 
+    [Tooltip("UI Window sending AR data")]
+    public ARViewWindow arViewWindow;
+
+    private void onStartPauseButton()
+    {
+        if (m_isSending)
+        {
+            m_isSending = false;
+            arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Start";
+            m_dataBuffers.ForEach(buffer => buffer.StopCapture());
+            m_dataBufferUIConfigs.ForEach(config => config.turnOnConfig());
+            arViewWindow.Cts.Cancel();
+        }
+        else
+        {
+            m_isSending = true;
+            arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Pause";
+            arViewWindow.Cts = new CancellationTokenSource();
+            m_dataBuffers.ForEach(buffer => buffer.StartCapture());
+            m_dataBufferUIConfigs.ForEach(config => config.turnOffConfig());
+
+            //start individual buffer sending
+            SendCameraFrames();
+        }
+    }
+
+    private async void SendCameraFrames()
+    {
+        while (!arViewWindow.Cts.IsCancellationRequested)
+        {
+            // Get delay from the UI. Data is validated through TMP's content type settings
+            float currentDelay = float.Parse(m_ColorBufferUIConfig.getDelayField().text);
+            if (currentDelay <= 0)
+            {
+                currentDelay = 0.5f;
+            }
+            // OperationCanceledException is thrown when the token is cancelled, this is expected
+            // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
+            await Awaitable.WaitForSecondsAsync(currentDelay, arViewWindow.Cts.Token);
+
+            ARFrame[] arFrames = m_ColorBuffer
+                .Buffer
+                // This works because we have an explicit conversion operator defined for RawCameraFrame
+                .Select(frame => (ARFrame)frame)
+                .ToArray();
+
+            if (arFrames.Length == 0)
+            {
+                InternalDebug.Log("No frames to send.");
+                continue;
+            }
+
+            var _ = await grpcClient.SaveARFramesAsync(
+                m_ActiveSession.Id,
+                arFrames,
+                m_Device,
+                arViewWindow.Cts.Token
+            );
+            m_ColorBuffer.ClearBuffer();
+        }
+    }
 
 
     void Start()
     {
+        // Initialize data buffers and sending-related vaiables
+        m_ColorBuffer = new ColorBuffer(64, cameraManager);
+        m_dataBuffers = new List<IDataBuffer>()
+        {
+            m_ColorBuffer,
+            // new DepthBuffer(occlusionManager),
+            // new PlaneBuffer(planeManager),
+            // new MeshBuffer(meshManager)
+        };
+
+        m_ColorBufferUIConfig = new ColorBufferUIConfig(arViewWindow.ConfigurationsContainer, arViewWindow.textPrefab, arViewWindow.textInputPrefab, arViewWindow.dropdownPrefab, arViewWindow.togglePrefab);
+        m_dataBufferUIConfigs = new List<IDataBufferUIConfig>()
+        {
+            m_ColorBufferUIConfig
+            // new DepthBuffer(occlusionManager),
+            // new PlaneBuffer(planeManager),
+            // new MeshBuffer(meshManager)
+        };
+
+        // Initialize find server window
         findServerWindow.connectButton.onClick.AddListener(OnConnectToServer);
 
+        // Initialize sessions window
         sessionsWindow.refreshButton.onClick.AddListener(SearchForSession);
         sessionsWindow.createSessionButton.onClick.AddListener(OnPressCreateSession);
-
-        //Init create sessions window
-
-        sessionsWindow.createSessionWindow.cancelSessionButton.onClick.AddListener(OnCancelCreateSession);
-        sessionsWindow.createSessionWindow.createSessionButton.onClick.AddListener(OnCreateSession);
         sessionsWindow.deleteSessionButton.onClick.AddListener(OnDeleteSession);
         sessionsWindow.joinSessionButton.onClick.AddListener(OnJoinSession);
 
-        // startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
-
-        // // _clientManager = new ARFlowClientManager(
-        // //     cameraManager: cameraManager,
-        // //     occlusionManager: occlusionManager,
-        // //     planeManager: planeManager,
-        // //     meshManager: meshManager
-        // //  );
-
-        // AddModalityOptionsToConfig();
+        //Inititalize create sessions window
+        sessionsWindow.createSessionWindow.cancelSessionButton.onClick.AddListener(OnCancelCreateSession);
+        sessionsWindow.createSessionWindow.createSessionButton.onClick.AddListener(OnCreateSession);
 
 
-        // // OnConnectButtonClick();
+        // Initialize AR view window
+        arViewWindow.startPauseButton.onClick.AddListener(onStartPauseButton);
 
-        // // The following suppose to limit the fps to 30, but it doesn't work.
-        // // QualitySettings.vSyncCount = 0;
-        // // Application.targetFrameRate = 30;
-
-        // buttonOptionHandler.toggleButton.onClick.AddListener(
-        //     buttonOptionHandler.toggleOption);
     }
-
-
-    // void AddModalityOptionsToConfig()
-    // {
-    //     // Get first child, WITH THE ASSUMPTION that it's a checkbox
-    //     GameObject firstChild = OptionsContainer.transform.GetChild(0).gameObject;
-
-    //     foreach (string modality in ARFlowClientManager.MODALITIES)
-    //     {
-    //         GameObject newOption = Instantiate(
-    //             firstChild,
-    //             parent: OptionsContainer.transform
-    //         );
-    //         newOption.GetComponent<Text>().text = SplitByCapital(modality);
-
-    //         _optionObjects.Add(modality, newOption);
-    //     }
-    // }
-
-    // string SplitByCapital(string s)
-    // {
-    //     return Regex.Replace(s, "([a-z])([A-Z])", "$1 $2");
-    // }
-
-    // Dictionary<string, bool> GetModalityOptions()
-    // {
-    //     Dictionary<string, bool> res = new();
-    //     foreach (var option in _optionObjects)
-    //     {
-    //         var optionName = option.Key;
-    //         var optionObject = option.Value;
-
-    //         var slider = optionObject.transform.Find("Slider");
-    //         if (slider != null)
-    //         {
-    //             var sliderVal = slider.GetComponent<Slider>().value;
-    //             res.Add(optionName, sliderVal != 0);
-    //         }
-    //     }
-
-    //     return res;
-    // }
-
-    // bool IsIpValid(string ipField)
-    // {
-    //     return Regex.IsMatch(ipField, @"(\d){1,3}\.(\d){1,3}\.(\d){1,3}\.(\d){1,3}");
-    // }
-
-    // bool IsPortValid(string portField)
-    // {
-    //     return Regex.IsMatch(portField, @"(\d){1,5}");
-    // }
-
-    // /// <summary>
-    // /// Get register request data from camera and send to server.
-    // /// Image and depth info is acquired once to get information for the request, and is disposed afterwards.
-    // /// </summary>
-    // private void OnConnectButtonClick()
-    // {
-
-    //     var serverURL = _defaultConnection;
-    //     if (IsIpValid(ipField.text) && IsPortValid(portField.text))
-    //     {
-    //         serverURL = "http://" + ipField.text + ":" + portField.text;
-    //     }
-
-    //     // To update status of task to user
-    //     Toast.Show($"Connecting to {serverURL}", 3f, ToastColor.Yellow);
-
-    //     // Since toast can only be called from main thread (we cannot use the hook to display toast)
-    //     // these flags are updated and signals connection result to display to user.
-    //     connectTask = _clientManager.ConnectTask(
-    //         serverURL,
-    //         GetModalityOptions(),
-    //         t =>
-    //         {
-    //         });
-    //     _isConnected = false;
-    // }
-
-    // private void UpdateConnectionStatus()
-    // {
-    //     if (connectTask is not null && connectTask.IsCompleted)
-    //     {
-    //         if (connectTask.IsFaulted)
-    //         {
-    //             PrintDebug(connectTask.Exception);
-    //             connectTask = null;
-    //             Toast.Show("Connection failed.", ToastColor.Red);
-    //         }
-    //         else if (connectTask.IsCompletedSuccessfully)
-    //         {
-    //             _isConnected = true;
-    //             Toast.Show("Connected successfully.", ToastColor.Green);
-    //         }
-    //     }
-    // }
-
-
-
-    // /// <summary>
-    // /// On pause, pressing the button changes the _eabled flag to true  (and text display) and data starts sending in Update()
-    // /// On start, pressing the button changes the _enabled flag to false and data stops sending
-    // /// </summary>
-    // private void OnStartPauseButtonClick()
-    // {
-    //     PrintDebug($"Current framerate: {Application.targetFrameRate}");
-    //     if (enabled)
-    //     {
-    //         if (!_isConnected)
-    //         {
-    //             Toast.Show("Connnection not established. Cannot send dataframe.");
-    //             _enabled = false;
-    //             return;
-    //         }
-
-    //         _clientManager.StartDataStreaming();
-    //     }
-    //     else
-    //     {
-    //         _clientManager.StopDataStreaming();
-    //     }
-
-    //     _enabled = !_enabled;
-    //     startPauseButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";
-    // }
-
-    // // Button event handlers
-    // public void ShowQR()
-    // {
-    //     var uid = _clientManager.getSessionId();
-    //     if (string.IsNullOrWhiteSpace(uid))
-    //     {
-    //         Toast.Show("To share Uid, first conenct to a session", ToastColor.Red);
-    //         return;
-    //     }
-    //     Texture2D tex = QRManager.encode(_clientManager.getSessionId());
-
-    //     QR.rawQR.texture = tex;
-    //     QR.window.SetActive(true);
-    // }
-
-    // public void CopyUID()
-    // {
-    //     var uid = _clientManager.getSessionId();
-    //     if (string.IsNullOrWhiteSpace(uid))
-    //     {
-    //         Toast.Show("To share Uid, first conenct to a session", ToastColor.Red);
-    //         return;
-    //     }
-    //     GUIUtility.systemCopyBuffer = uid;
-    //     Toast.Show("Copied to clipboard", ToastColor.Green);
-    // }
-
-    // /// <summary>
-    // /// Get texture from camera in RGBA32 format
-    // /// </summary>
-    // /// <returns></returns>
-    // //private Texture2D getCameraTexture()
-    // //{
-    // //    int width = camera.pixelWidth;
-    // //    int height = camera.pixelHeight;
-
-
-    // //    RenderTexture lastRT = RenderTexture.active;
-
-    // //    RenderTexture.active = camera.targetTexture;
-
-    // //    camera.Render();
-
-    // //    Texture2D capture = new Texture2D(width, height, TextureFormat.RGBA32, false);
-    // //    capture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-    // //    capture.Apply();
-
-    // //    RenderTexture.active = lastRT;
-
-    // //    return capture;
-    // //}
-
-
-    // private byte[] GetCpuImage(out int width, out int height)
-    // {
-    //     try
-    //     {
-    //         cameraManager.TryAcquireLatestCpuImage(out var cpuImg);
-    //         width = cpuImg.width; height = cpuImg.height;
-
-    //         var conversionParams = new XRCpuImage.ConversionParams(
-    //             cpuImg,
-    //             TextureFormat.RGBA32
-    //         );
-
-    //         int conversionSize = cpuImg.GetConvertedDataSize(conversionParams);
-    //         var nativeBytes = new NativeArray<byte>(new byte[conversionSize], Allocator.Temp);
-    //         var nativeSlice = new NativeSlice<byte>(nativeBytes);
-
-    //         cpuImg.Convert(conversionParams, nativeSlice);
-    //         var byteArr = nativeSlice.ToArray();
-    //         return byteArr;
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         PrintDebug(e);
-    //     }
-    //     width = 0;
-    //     height = 0;
-    //     return null;
-    // }
-
-    // public void ConnectByQr()
-    // {
-    //     var img = GetCpuImage(out var width, out var height);
-    //     //var img = getCameraTexture().GetPixels32();
-    //     var uid = QRManager.readQRCode(img, width, height);
-
-    //     if (!string.IsNullOrEmpty(uid))
-    //     {
-    //         connectTask = _clientManager.JoinSessionTask(uid);
-    //         _isConnected = false;
-    //         Toast.Show($"Joining session with UID {uid}", ToastColor.Green);
-    //     }
-    //     else
-    //     {
-    //         Toast.Show("No QR Code found", ToastColor.Red);
-    //     }
-    // }
-
-    // public void ConnectFromClipboard()
-    // {
-    //     string uid = GUIUtility.systemCopyBuffer;
-    //     if (!string.IsNullOrEmpty(uid))
-    //     {
-    //         connectTask = _clientManager.JoinSessionTask(uid);
-    //         _isConnected = false;
-    //         Toast.Show($"Joining session with UID {uid}", ToastColor.Green);
-    //     }
-    //     else
-    //     {
-    //         Toast.Show("No QR Code found", ToastColor.Red);
-    //     }
-    // }
-
-    // // Update is called once per frame
-    // void FixedUpdate()
-    // {
-    //     if (!_isConnected)
-    //     {
-    //         UpdateConnectionStatus();
-    //     }
-    //     if (!_enabled) return;
-    //     _clientManager.GetAndSendFrameTask();
-    // }
 
 }
