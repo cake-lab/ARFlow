@@ -822,8 +822,8 @@ RectTransform:
   m_Children:
   - {fileID: 2096355325}
   - {fileID: 58503357}
-  - {fileID: 836708997}
   - {fileID: 327826759}
+  - {fileID: 836708997}
   m_Father: {fileID: 646569499}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -1475,7 +1475,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 428.23752, y: -30.6}
+  m_AnchoredPosition: {x: 304.5125, y: -30.6}
   m_SizeDelta: {x: 47, y: 20.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &327826760
@@ -3855,7 +3855,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 302.4125, y: -30.6}
+  m_AnchoredPosition: {x: 430.33752, y: -30.6}
   m_SizeDelta: {x: 42.8, y: 20.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &836708998
@@ -7111,10 +7111,12 @@ MonoBehaviour:
       cancelSessionButton: {fileID: 1235087292}
   arViewWindow:
     windowGameObject: {fileID: 517392582}
-    ConfigurationsContainer: {fileID: 6234637625898487392}
+    configurationsContainer: {fileID: 6234637625898487392}
     startPauseButton: {fileID: 390914750}
     goBackButton: {fileID: 1256259671}
-    textPrefab: {fileID: 8313156605401156321, guid: dc0ce012092a2cb4b9dd6e57f254fd15,
+    headerTextPrefab: {fileID: 8313156605401156321, guid: dc0ce012092a2cb4b9dd6e57f254fd15,
+      type: 3}
+    bodyTextPrefab: {fileID: 8313156605401156321, guid: 291a978245ab85345a9dfff7be9960de,
       type: 3}
     textInputPrefab: {fileID: 3975463553462595920, guid: a804d8f6c7506ff49a8c534b79f0c1b6,
       type: 3}

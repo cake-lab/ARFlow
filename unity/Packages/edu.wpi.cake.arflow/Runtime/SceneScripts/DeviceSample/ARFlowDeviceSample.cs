@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using CakeLab.ARFlow.DataBuffers;
-using CakeLab.ARFlow.DataBuffers.DataBuffersUIConfig;
+using CakeLab.ARFlow.DataBuffers.DataModalityUIConfig;
+using CakeLab.ARFlow.DataModalityUIConfig;
 using CakeLab.ARFlow.Grpc;
 using CakeLab.ARFlow.Grpc.V1;
 using CakeLab.ARFlow.Utilities;
 using EasyUI.Toast;
 using TMPro;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
@@ -28,11 +30,17 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public IGrpcClient grpcClient;
 
+
     private ColorBuffer m_ColorBuffer;
+    private ColorUIConfig m_ColorUIConfig;
+    private CancellationTokenSource m_colorCts;
+
+
+
     private List<IDataBuffer> m_dataBuffers;
 
-    private ColorBufferUIConfig m_ColorBufferUIConfig;
-    private List<IDataBufferUIConfig> m_dataBufferUIConfigs;
+    private List<IDataModalityUIConfig> m_dataModalityUIConfigs;
+    private List<CancellationTokenSource> m_ctsList = new List<CancellationTokenSource>();
 
     private Session m_ActiveSession;
     private Device m_Device;
@@ -328,21 +336,22 @@ public class ARFlowDeviceSample : MonoBehaviour
     public class ARViewWindow
     {
         public GameObject windowGameObject;
-        public GameObject ConfigurationsContainer;
+        public GameObject configurationsContainer;
         public Button startPauseButton;
         public Button goBackButton;
 
-        public GameObject textPrefab;
+        public GameObject headerTextPrefab;
+        public GameObject bodyTextPrefab;
         public GameObject textInputPrefab;
         public GameObject dropdownPrefab;
         public GameObject togglePrefab;
-
-        private CancellationTokenSource m_Cts = new CancellationTokenSource();
-        public CancellationTokenSource Cts
-        {
-            get => m_Cts;
-            set => m_Cts = value;
-        }
+        public DataBufferUIConfigPrefabs ConfigPrefabs => new(
+                headerTextPrefab,
+                bodyTextPrefab,
+                textInputPrefab,
+                dropdownPrefab,
+                togglePrefab
+            );
     }
 
     [Tooltip("UI Window sending AR data")]
@@ -355,16 +364,24 @@ public class ARFlowDeviceSample : MonoBehaviour
             m_isSending = false;
             arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Start";
             m_dataBuffers.ForEach(buffer => buffer.StopCapture());
-            m_dataBufferUIConfigs.ForEach(config => config.turnOnConfig());
-            arViewWindow.Cts.Cancel();
+            m_dataModalityUIConfigs.ForEach(config => config.TurnOnConfig());
+            m_ctsList.ForEach(cts =>
+            {
+                cts.Cancel();
+                cts.Dispose();
+                cts = new CancellationTokenSource();
+            });
         }
         else
         {
             m_isSending = true;
             arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Pause";
-            arViewWindow.Cts = new CancellationTokenSource();
+            m_ctsList.ForEach(cts =>
+            {
+                cts = new CancellationTokenSource();
+            });
             m_dataBuffers.ForEach(buffer => buffer.StartCapture());
-            m_dataBufferUIConfigs.ForEach(config => config.turnOffConfig());
+            m_dataModalityUIConfigs.ForEach(config => config.TurnOffConfig());
 
             //start individual buffer sending
             SendCameraFrames();
@@ -373,17 +390,17 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     private async void SendCameraFrames()
     {
-        while (!arViewWindow.Cts.IsCancellationRequested)
+        while (!m_colorCts.Token.IsCancellationRequested)
         {
             // Get delay from the UI. Data is validated through TMP's content type settings
-            float currentDelay = float.Parse(m_ColorBufferUIConfig.getDelayField().text);
+            float currentDelay = float.Parse(m_ColorUIConfig.GetDelayField().text);
             if (currentDelay <= 0)
             {
                 currentDelay = 0.5f;
             }
             // OperationCanceledException is thrown when the token is cancelled, this is expected
             // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
-            await Awaitable.WaitForSecondsAsync(currentDelay, arViewWindow.Cts.Token);
+            await Awaitable.WaitForSecondsAsync(currentDelay, m_colorCts.Token);
 
             ARFrame[] arFrames = m_ColorBuffer
                 .Buffer
@@ -401,7 +418,7 @@ public class ARFlowDeviceSample : MonoBehaviour
                 m_ActiveSession.Id,
                 arFrames,
                 m_Device,
-                arViewWindow.Cts.Token
+                m_colorCts.Token
             );
             m_ColorBuffer.ClearBuffer();
         }
@@ -419,16 +436,29 @@ public class ARFlowDeviceSample : MonoBehaviour
             // new MeshBuffer(meshManager)
         };
 
-        m_ColorBufferUIConfig = new ColorBufferUIConfig(
-            arViewWindow.ConfigurationsContainer,
-            arViewWindow.textPrefab,
-            arViewWindow.textInputPrefab,
-            arViewWindow.dropdownPrefab,
-            arViewWindow.togglePrefab
+        m_colorCts = new CancellationTokenSource();
+        m_ctsList.Add(m_colorCts);
+
+        m_ColorUIConfig = new ColorUIConfig(
+            arViewWindow.configurationsContainer,
+            arViewWindow.ConfigPrefabs,
+            (bool isOn) =>
+            {
+                if (isOn)
+                {
+                    cameraManager.enabled = false;
+                    InternalDebug.Log("Enable camera manager");
+                }
+                else
+                {
+                    InternalDebug.Log("Disable camera manager");
+                    m_ColorBuffer.StopCapture();
+                }
+            }
         );
-        m_dataBufferUIConfigs = new List<IDataBufferUIConfig>()
+        m_dataModalityUIConfigs = new List<IDataModalityUIConfig>()
         {
-            m_ColorBufferUIConfig,
+            m_ColorUIConfig,
             // new DepthBuffer(occlusionManager),
             // new PlaneBuffer(planeManager),
             // new MeshBuffer(meshManager)
