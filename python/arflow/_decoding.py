@@ -5,7 +5,9 @@ import numpy as np
 from arflow._types import (
     DecodedColorFrames,
     DecodedDepthFrames,
+    DecodedTransformFrames,
 )
+from cakelab.arflow_grpc.v1.transform_frame_pb2 import TransformFrame
 from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
 
 
@@ -56,6 +58,23 @@ def decode_depth_frames(
     return decoded_frames
 
 
+def decode_transform_frames(frames: Iterable[TransformFrame]) -> DecodedTransformFrames:
+    y_down_to_y_up = np.array(
+        [
+            [1.0, -0.0, 0.0, 0.0],
+            [0.0, -1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+        ],
+    )
+    buffers = [np.frombuffer(frame.data) for frame in frames]
+    decoded_frames = np.array([buf.reshape(3, 4) for buf in buffers])
+    padded_frames = np.pad(decoded_frames, ((0, 0), (0, 1), (0, 0)), constant_values=0)
+    padded_frames[:, 3, 3] = 1.0
+    transformed_frames = y_down_to_y_up @ padded_frames
+    return transformed_frames
+
+
 # def decode_transform(buffer: bytes) -> Transform:
 #     y_down_to_y_up = np.array(
 #         [
@@ -74,8 +93,8 @@ def decode_depth_frames(
 #     transform = y_down_to_y_up @ transform
 #
 #     return transform.astype(np.float32)
-#
-#
+
+
 # def decode_intrinsic(
 #     resize_factor_y: float,
 #     resize_factor_x: float,

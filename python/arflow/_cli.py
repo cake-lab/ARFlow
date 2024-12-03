@@ -45,6 +45,7 @@ def view(args: Any):
         ARFlowServicer,
         spawn_viewer=True,
         save_dir=None,
+        application_id=args.application_id,
         port=args.port,
     )
 
@@ -55,6 +56,7 @@ def save(args: Any):
         ARFlowServicer,
         spawn_viewer=False,
         save_dir=Path(args.save_dir),
+        application_id=args.application_id,
         port=args.port,
     )
 
@@ -100,6 +102,13 @@ def parse_args(
         default=8500,
         help=f"Port to run the server on (default: %(default)s).",
     )
+    view_parser.add_argument(
+        "-a",
+        "--application-id",
+        type=str,
+        default="arflow",
+        help=f"Application ID to use for the Rerun recording (default: %(default)s).",
+    )
     view_parser.set_defaults(func=view)
 
     # Save subcommand
@@ -119,6 +128,13 @@ def parse_args(
         type=int,
         default=8500,
         help=f"Port to run the server on (default: %(default)s).",
+    )
+    save_parser.add_argument(
+        "-a",
+        "--application-id",
+        type=str,
+        default="arflow",
+        help=f"Application ID to use for the Rerun recording (default: %(default)s).",
     )
     save_parser.set_defaults(func=save)
 

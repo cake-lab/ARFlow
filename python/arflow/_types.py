@@ -7,14 +7,19 @@ from enum import StrEnum
 import numpy as np
 import numpy.typing as npt
 
+from cakelab.arflow_grpc.v1.audio_frame_pb2 import AudioFrame
+from cakelab.arflow_grpc.v1.gyroscope_frame_pb2 import GyroscopeFrame
+from cakelab.arflow_grpc.v1.mesh_detection_frame_pb2 import MeshDetectionFrame
+from cakelab.arflow_grpc.v1.plane_detection_frame_pb2 import PlaneDetectionFrame
+from cakelab.arflow_grpc.v1.point_cloud_detection_frame_pb2 import (
+    PointCloudDetectionFrame,
+)
+
 # from arflow_grpc.service_pb2 import RegisterClientRequest
 #
 # ColorDataType = Literal["RGB24", "YCbCr420"]
 # DepthDataType = Literal["f32", "u16"]
 # """The depth data type. `f32` for iOS, `u16` for Android."""
-#
-
-
 # DepthImg = npt.NDArray[np.float32]
 # Transform = npt.NDArray[np.float32]
 # Intrinsic = npt.NDArray[np.float32]
@@ -102,16 +107,32 @@ import numpy.typing as npt
 #     point_cloud_clr: PointCloudCLR | None = None
 #     """The point cloud colors in RGB format."""
 
-
+DecodedTransformFrames = npt.NDArray[np.float32]
 DecodedColorFrames = npt.NDArray[np.uint8]
-DecodedDepthFrames = npt.NDArray[np.float32 | np.uint16]
+DecodedDepthFrames = npt.NDArray[np.float32] | npt.NDArray[np.uint16]
 
-DecodedARFrames = DecodedColorFrames | DecodedDepthFrames
+DecodedARFrames = (
+    DecodedTransformFrames
+    | DecodedColorFrames
+    | DecodedDepthFrames
+    # For types that don't need decoding, we re-export the underlying gRPC types
+    | list[GyroscopeFrame]
+    | list[AudioFrame]
+    | list[PlaneDetectionFrame]
+    | list[PointCloudDetectionFrame]
+    | list[MeshDetectionFrame]
+)
 """Encapsulating type for all AR frames that have been decoded."""
 
 
 class ARFrameType(StrEnum):
     """This must always match with the names in the `oneof` field defined in `ARFrame` proto schema."""
 
+    TRANSFORM_FRAME = "transform_frame"
     COLOR_FRAME = "color_frame"
     DEPTH_FRAME = "depth_frame"
+    GYROSCOPE_FRAME = "gyroscope_frame"
+    AUDIO_FRAME = "audio_frame"
+    PLANE_DETECTION_FRAME = "plane_detection_frame"
+    POINT_CLOUD_DETECTION_FRAME = "point_cloud_detection_frame"
+    MESH_DETECTION_FRAME = "mesh_detection_frame"
