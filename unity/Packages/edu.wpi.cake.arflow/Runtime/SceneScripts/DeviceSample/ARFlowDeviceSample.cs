@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using CakeLab.ARFlow.DataBuffers;
-using CakeLab.ARFlow.DataBuffers.DataModalityUIConfig;
 using CakeLab.ARFlow.DataModalityUIConfig;
 using CakeLab.ARFlow.Grpc;
 using CakeLab.ARFlow.Grpc.V1;
@@ -34,6 +33,10 @@ public class ARFlowDeviceSample : MonoBehaviour
     private ColorBuffer m_colorBuffer;
     private ColorUIConfig m_ColorUIConfig;
     private CancellationTokenSource m_colorCts;
+
+    private DepthBuffer m_depthBuffer;
+    private DepthUIConfig m_depthUIConfig;
+    private CancellationTokenSource m_depthCts;
 
 
 
@@ -420,12 +423,12 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         while (!m_depthCts.Token.IsCancellationRequested)
         {
-            float currentDelay = m_DepthUIConfig.GetDelay();
+            float currentDelay = m_depthUIConfig.GetDelay();
             // OperationCanceledException is thrown when the token is cancelled, this is expected
             // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
             await Awaitable.WaitForSecondsAsync(currentDelay, m_depthCts.Token);
 
-            ARFrame[] arFrames = m_DepthBuffer
+            ARFrame[] arFrames = m_depthBuffer
                 .Buffer
                 // This works because we have an explicit conversion operator defined for RawCameraFrame
                 .Select(frame => (ARFrame)frame)
@@ -443,7 +446,7 @@ public class ARFlowDeviceSample : MonoBehaviour
                 m_Device,
                 m_depthCts.Token
             );
-            m_DepthBuffer.ClearBuffer();
+            m_depthBuffer.ClearBuffer();
         }
     }
 
