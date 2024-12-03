@@ -15,7 +15,7 @@ using CakeLab.ARFlow.DataModalityUIConfig;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    public class ColorUIConfig : IDataModalityUIConfig
+    public class AudioUIConfig : IDataModalityUIConfig
     {
         // toggle for buffer is a special case - toggling turns config off and on
         private GameObject toggle;
@@ -23,11 +23,20 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         private List<GameObject> uiConfigElements = new();
 
         // Configs
-        private const string MODALITY_NAME = "Camera Color";
+        private const string MODALITY_NAME = "Audio";
         private TMP_InputField bufferSizeField;
+
+        private const string SAMPLE_RATE_NAME = "Sample Rate";
+        private TMP_InputField sampleRateField;
+        private const string DEFAULT_SAMPLE_RATE = "16000";
+
+        private const string FRAME_LENGTH_NAME = "Frame Length";
+        private TMP_InputField frameLengthField;
+        private const string DEFAULT_FRAME_LENGTH = "512";
+
         private TMP_InputField delayField;
 
-        public ColorUIConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality, bool isBufferAvailable = false)
+        public AudioUIConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality, bool isBufferAvailable = false)
         {
             //Name
             InstantiateGameObject.InstantiateHeaderText(parent, prefabs.headerTextPrefab, MODALITY_NAME, out var bufferNameObject);
@@ -46,6 +55,16 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, BUFFER_SIZE_NAME, DEFAULT_BUFFER_SIZE, out var bufferSizeObject, out bufferSizeField);
             bufferSizeField.contentType = TMP_InputField.ContentType.IntegerNumber;
             uiConfigElements.Add(bufferSizeObject);
+
+            //Sample Rate
+            InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, SAMPLE_RATE_NAME, DEFAULT_SAMPLE_RATE, out var sampleRateObject, out sampleRateField);
+            sampleRateField.contentType = TMP_InputField.ContentType.IntegerNumber;
+            uiConfigElements.Add(sampleRateObject);
+
+            //Frame length
+            InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, FRAME_LENGTH_NAME, DEFAULT_FRAME_LENGTH, out var frameLengthObj, out frameLengthField);
+            frameLengthField.contentType = TMP_InputField.ContentType.IntegerNumber;
+            uiConfigElements.Add(frameLengthObj);
 
             //Delay
             InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, DELAY_NAME, DELAY_DEFAULT, out var delayObject, out delayField);
@@ -81,10 +100,9 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         {
             return float.Parse(delayField.text);
         }
-        public ColorBuffer getBufferFromConfig(ARCameraManager cameraManager)
+        public AudioBuffer getBufferFromConfig()
         {
-            //TODO: validate
-            return new ColorBuffer(int.Parse(bufferSizeField.text), cameraManager);
+            return new AudioBuffer(int.Parse(bufferSizeField.text), int.Parse(sampleRateField.text), int.Parse(frameLengthField.text));
         }
 
         public void Dispose()

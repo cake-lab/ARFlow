@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using CakeLab.ARFlow.DataBuffers;
 
@@ -15,7 +16,7 @@ using CakeLab.ARFlow.DataModalityUIConfig;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    public class ColorUIConfig : IDataModalityUIConfig
+    public class TransformUIConfig : IDataModalityUIConfig
     {
         // toggle for buffer is a special case - toggling turns config off and on
         private GameObject toggle;
@@ -23,11 +24,16 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         private List<GameObject> uiConfigElements = new();
 
         // Configs
-        private const string MODALITY_NAME = "Camera Color";
+        private const string MODALITY_NAME = "Gyroscope";
         private TMP_InputField bufferSizeField;
+
+        private const string SAMPLING_INTERVAL_NAME = "Sampling Interval (ms)";
+        private TMP_InputField samplingIntervalField;
+        private const string DEFAULT_SAMPLING_INTERVAL = "50";
+
         private TMP_InputField delayField;
 
-        public ColorUIConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality, bool isBufferAvailable = false)
+        public TransformUIConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality, bool isBufferAvailable = false)
         {
             //Name
             InstantiateGameObject.InstantiateHeaderText(parent, prefabs.headerTextPrefab, MODALITY_NAME, out var bufferNameObject);
@@ -46,6 +52,11 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, BUFFER_SIZE_NAME, DEFAULT_BUFFER_SIZE, out var bufferSizeObject, out bufferSizeField);
             bufferSizeField.contentType = TMP_InputField.ContentType.IntegerNumber;
             uiConfigElements.Add(bufferSizeObject);
+
+            //Sampling Interval
+            InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, SAMPLING_INTERVAL_NAME, DEFAULT_SAMPLING_INTERVAL, out var samplingIntervalObj, out samplingIntervalField);
+            samplingIntervalField.contentType = TMP_InputField.ContentType.IntegerNumber;
+            uiConfigElements.Add(samplingIntervalObj);
 
             //Delay
             InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, DELAY_NAME, DELAY_DEFAULT, out var delayObject, out delayField);
@@ -81,10 +92,9 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         {
             return float.Parse(delayField.text);
         }
-        public ColorBuffer getBufferFromConfig(ARCameraManager cameraManager)
+        public TransformBuffer getBufferFromConfig(Camera mainCamera)
         {
-            //TODO: validate
-            return new ColorBuffer(int.Parse(bufferSizeField.text), cameraManager);
+            return new TransformBuffer(int.Parse(bufferSizeField.text), mainCamera, int.Parse(samplingIntervalField.text));
         }
 
         public void Dispose()

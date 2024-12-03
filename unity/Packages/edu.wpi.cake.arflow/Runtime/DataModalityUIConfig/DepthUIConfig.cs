@@ -15,7 +15,7 @@ using CakeLab.ARFlow.DataModalityUIConfig;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    public class ColorUIConfig : IDataModalityUIConfig
+    public class DepthUIConfig : IDataModalityUIConfig
     {
         // toggle for buffer is a special case - toggling turns config off and on
         private GameObject toggle;
@@ -23,11 +23,11 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         private List<GameObject> uiConfigElements = new();
 
         // Configs
-        private const string MODALITY_NAME = "Camera Color";
+        private const string MODALITY_NAME = "Camera Depth";
         private TMP_InputField bufferSizeField;
         private TMP_InputField delayField;
 
-        public ColorUIConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality, bool isBufferAvailable = false)
+        public DepthUIConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality, bool isBufferAvailable = false)
         {
             //Name
             InstantiateGameObject.InstantiateHeaderText(parent, prefabs.headerTextPrefab, MODALITY_NAME, out var bufferNameObject);
@@ -81,10 +81,9 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         {
             return float.Parse(delayField.text);
         }
-        public ColorBuffer getBufferFromConfig(ARCameraManager cameraManager)
+        public DepthBuffer getBufferFromConfig(AROcclusionManager manager)
         {
-            //TODO: validate
-            return new ColorBuffer(int.Parse(bufferSizeField.text), cameraManager);
+            return new DepthBuffer(int.Parse(bufferSizeField.text), manager);
         }
 
         public void Dispose()

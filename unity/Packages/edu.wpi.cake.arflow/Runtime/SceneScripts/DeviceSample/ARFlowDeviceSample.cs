@@ -31,7 +31,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     public IGrpcClient grpcClient;
 
 
-    private ColorBuffer m_ColorBuffer;
+    private ColorBuffer m_colorBuffer;
     private ColorUIConfig m_ColorUIConfig;
     private CancellationTokenSource m_colorCts;
 
@@ -138,7 +138,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         // if gRPC client is not null, we can create a session
         if (sessionName.Length == 0)
         {
-            await Awaitable.MainThreadAsync();
             InternalDebug.Log("Session name cannot be empty");
             Toast.Show("Session name cannot be empty", ToastColor.Red);
             return;
@@ -149,7 +148,6 @@ public class ARFlowDeviceSample : MonoBehaviour
             SavePath = string.IsNullOrEmpty(sessionSavePath) ? "" : sessionSavePath,
         };
 
-        // TODO: Do we need to move to background thread?
         var createSessionRes = await grpcClient.CreateSessionAsync(
             res,
             GetDeviceInfo.GetDevice(),
@@ -161,9 +159,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             InternalDebug.Log("Session created successfully");
             Toast.Show("Session created successfully", ToastColor.Green);
-            sessionsWindow.createSessionWindow.windowGameObject.SetActive(false);
+            m_ActiveSession = createSessionRes.Session;
 
             // Go to ARView window
+            sessionsWindow.createSessionWindow.windowGameObject.SetActive(false);
             arViewWindow.windowGameObject.SetActive(true);
         }
         else
@@ -259,17 +258,13 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         if (grpcClient != null)
         {
-            await Awaitable.MainThreadAsync();
-
             // TODO: Could race condition happen here?
             sessionsWindow.selectedSessionElement = null;
             sessionsWindow.setLoading(true);
 
             // Do we need to move to background thread?
-            await Awaitable.BackgroundThreadAsync();
             var res = await grpcClient.ListSessionsAsync();
 
-            await Awaitable.MainThreadAsync();
             sessionsWindow.setLoading(false);
 
             if (res.Sessions.Count == 0)
@@ -315,16 +310,18 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             var session = sessionsWindow.selectedSessionElement.session;
             InternalDebug.Log($"Joining session: {session.Metadata.Name}");
-            await grpcClient.JoinSessionAsync(
+            var res = await grpcClient.JoinSessionAsync(
                 session.Id,
                 GetDeviceInfo.GetDevice(),
                 sessionsWindow.cts.Token
             );
 
-            //joining completeted --> switch to the next window
-            await Awaitable.MainThreadAsync();
+            m_ActiveSession = res.Session;
 
-            //TODO: switch to the next window
+            //joining completeted --> switch to the next window
+            sessionsWindow.windowGameObject.SetActive(false);
+            arViewWindow.windowGameObject.SetActive(true);
+
         }
         else
         {
@@ -345,7 +342,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         public GameObject textInputPrefab;
         public GameObject dropdownPrefab;
         public GameObject togglePrefab;
-        public DataBufferUIConfigPrefabs ConfigPrefabs => new(
+        public DataModalityUIConfigPrefabs ConfigPrefabs => new(
                 headerTextPrefab,
                 bodyTextPrefab,
                 textInputPrefab,
@@ -384,25 +381,20 @@ public class ARFlowDeviceSample : MonoBehaviour
             m_dataModalityUIConfigs.ForEach(config => config.TurnOffConfig());
 
             //start individual buffer sending
-            SendCameraFrames();
+            SendColorFrames();
         }
     }
 
-    private async void SendCameraFrames()
+    private async void SendColorFrames()
     {
         while (!m_colorCts.Token.IsCancellationRequested)
         {
-            // Get delay from the UI. Data is validated through TMP's content type settings
-            float currentDelay = float.Parse(m_ColorUIConfig.GetDelayField().text);
-            if (currentDelay <= 0)
-            {
-                currentDelay = 0.5f;
-            }
+            float currentDelay = m_ColorUIConfig.GetDelay();
             // OperationCanceledException is thrown when the token is cancelled, this is expected
             // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
             await Awaitable.WaitForSecondsAsync(currentDelay, m_colorCts.Token);
 
-            ARFrame[] arFrames = m_ColorBuffer
+            ARFrame[] arFrames = m_colorBuffer
                 .Buffer
                 // This works because we have an explicit conversion operator defined for RawCameraFrame
                 .Select(frame => (ARFrame)frame)
@@ -420,17 +412,48 @@ public class ARFlowDeviceSample : MonoBehaviour
                 m_Device,
                 m_colorCts.Token
             );
-            m_ColorBuffer.ClearBuffer();
+            m_colorBuffer.ClearBuffer();
+        }
+    }
+
+    private async void sendDepthFrames()
+    {
+        while (!m_depthCts.Token.IsCancellationRequested)
+        {
+            float currentDelay = m_DepthUIConfig.GetDelay();
+            // OperationCanceledException is thrown when the token is cancelled, this is expected
+            // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
+            await Awaitable.WaitForSecondsAsync(currentDelay, m_depthCts.Token);
+
+            ARFrame[] arFrames = m_DepthBuffer
+                .Buffer
+                // This works because we have an explicit conversion operator defined for RawCameraFrame
+                .Select(frame => (ARFrame)frame)
+                .ToArray();
+
+            if (arFrames.Length == 0)
+            {
+                InternalDebug.Log("No frames to send.");
+                continue;
+            }
+
+            var _ = await grpcClient.SaveARFramesAsync(
+                m_ActiveSession.Id,
+                arFrames,
+                m_Device,
+                m_depthCts.Token
+            );
+            m_DepthBuffer.ClearBuffer();
         }
     }
 
     void Start()
     {
         // Initialize data buffers and sending-related vaiables
-        m_ColorBuffer = new ColorBuffer(64, cameraManager);
+        m_colorBuffer = new ColorBuffer(64, cameraManager);
         m_dataBuffers = new List<IDataBuffer>()
         {
-            m_ColorBuffer,
+            m_colorBuffer,
             // new DepthBuffer(occlusionManager),
             // new PlaneBuffer(planeManager),
             // new MeshBuffer(meshManager)
@@ -448,11 +471,14 @@ public class ARFlowDeviceSample : MonoBehaviour
                 {
                     cameraManager.enabled = false;
                     InternalDebug.Log("Enable camera manager");
+                    m_colorBuffer = m_ColorUIConfig.getBufferFromConfig(cameraManager);
+                    if (m_isSending) m_colorBuffer.StartCapture();
                 }
                 else
                 {
                     InternalDebug.Log("Disable camera manager");
-                    m_ColorBuffer.StopCapture();
+                    m_colorBuffer.StopCapture();
+                    m_colorBuffer.Dispose();
                 }
             }
         );
