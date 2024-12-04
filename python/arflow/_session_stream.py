@@ -158,6 +158,7 @@ class SessionStream:
         format: XRCpuImage.Format,
         width: int,
         height: int,
+        environment_depth_temporal_smoothing_enabled: bool,
         device_timestamps: list[float],
         image_timestamps: list[float],
     ):
@@ -183,6 +184,7 @@ class SessionStream:
                 device.uid,
                 ARFrameType.DEPTH_FRAME,
                 f"{width}x{height}",
+                "smoothed" if environment_depth_temporal_smoothing_enabled else "raw",
             ]
         )
 

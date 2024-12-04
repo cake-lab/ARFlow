@@ -492,23 +492,28 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         session_stream: SessionStream,
         device: Device,
     ) -> DecodedARFrames:
-        depth_frames_grouped_by_format_and_dims: DefaultDict[
-            Tuple[XRCpuImage.Format, int, int], list[DepthFrame]
+        depth_frames_grouped_by_format_dims_and_smoothness: DefaultDict[
+            Tuple[XRCpuImage.Format, int, int, bool], list[DepthFrame]
         ] = defaultdict(list)
         for frame in frames:
-            depth_frames_grouped_by_format_and_dims[
+            depth_frames_grouped_by_format_dims_and_smoothness[
                 (
                     frame.image.format,
                     frame.image.dimensions.x,
                     frame.image.dimensions.y,
+                    frame.environment_depth_temporal_smoothing_enabled,
                 )
             ].append(frame)
         decoded_depth_frames = np.array([])
         for (
-            depth_frame_format,
-            width,
-            height,
-        ), homogenous_depth_frames in depth_frames_grouped_by_format_and_dims.items():
+            (
+                depth_frame_format,
+                width,
+                height,
+                is_smoothed,
+            ),
+            homogenous_depth_frames,
+        ) in depth_frames_grouped_by_format_dims_and_smoothness.items():
             try:
                 decoded_depth_frames = decode_depth_frames(
                     raw_planes=[f.image.planes for f in homogenous_depth_frames],
@@ -534,6 +539,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                     format=depth_frame_format,
                     width=width,
                     height=height,
+                    environment_depth_temporal_smoothing_enabled=is_smoothed,
                 )
             except ValueError as e:
                 logger.warning("Error saving depth frames: %s", e)
@@ -544,6 +550,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 format=depth_frame_format,
                 width=width,
                 height=height,
+                environment_depth_temporal_smoothing_enabled=is_smoothed,
                 session_stream=session_stream,
                 device=device,
             )
@@ -689,6 +696,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         format: XRCpuImage.Format,
         width: int,
         height: int,
+        environment_depth_temporal_smoothing_enabled: bool,
         session_stream: SessionStream,
         device: Device,
     ) -> None:
