@@ -56,7 +56,14 @@ from cakelab.arflow_grpc.v1.save_ar_frames_request_pb2 import (
 from cakelab.arflow_grpc.v1.save_ar_frames_response_pb2 import (
     SaveARFramesResponse,
 )
+from cakelab.arflow_grpc.v1.save_synchronized_ar_frame_request_pb2 import (
+    SaveSynchronizedARFrameRequest,
+)
+from cakelab.arflow_grpc.v1.save_synchronized_ar_frame_response_pb2 import (
+    SaveSynchronizedARFrameResponse,
+)
 from cakelab.arflow_grpc.v1.session_pb2 import Session, SessionUuid
+from cakelab.arflow_grpc.v1.synchronized_ar_frame_pb2 import SynchronizedARFrame
 from cakelab.arflow_grpc.v1.transform_frame_pb2 import TransformFrame
 from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
 
@@ -783,6 +790,76 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             device: The device that sent the AR frames.
         """
         pass
+
+    def SaveSynchronizedARFrame(
+        self,
+        request: SaveSynchronizedARFrameRequest,
+        context: grpc.ServicerContext | None = None,
+    ) -> SaveSynchronizedARFrameResponse:
+        session_stream = self._get_session_stream(request.session_id.value)
+
+        if request.device not in session_stream.info.devices:
+            raise InvalidArgument("Device not in session")
+
+        try:
+            decoded_transform_frame = self._process_transform_frames(
+                frames=[request.frame.transform_frame],
+                session_stream=session_stream,
+                device=request.device,
+            )[0]
+            decoded_depth_frame = self._process_depth_frames(
+                frames=[request.frame.depth_frame],
+                session_stream=session_stream,
+                device=request.device,
+            )[0]
+            decoded_color_frame = self._process_color_frames(
+                frames=[request.frame.color_frame],
+                session_stream=session_stream,
+                device=request.device,
+            )[0]
+            decoded_gyroscope_frame = self._process_gyroscope_frames(
+                frames=[request.frame.gyroscope_frame],
+                session_stream=session_stream,
+                device=request.device,
+            )[0]
+            decoded_audio_frame = self._process_audio_frames(
+                frames=[request.frame.audio_frame],
+                session_stream=session_stream,
+                device=request.device,
+            )[0]
+            decoded_plane_detection_frame = self._process_plane_detection_frames(
+                frames=[request.frame.plane_detection_frame],
+                session_stream=session_stream,
+                device=request.device,
+            )[0]
+            decoded_point_cloud_detection_frame = (
+                self._process_point_cloud_detection_frames(
+                    frames=[request.frame.point_cloud_detection_frame],
+                    session_stream=session_stream,
+                    device=request.device,
+                )[0]
+            )
+            decoded_mesh_detection_frame = self._process_mesh_detection_frames(
+                frames=[request.frame.mesh_detection_frame],
+                session_stream=session_stream,
+                device=request.device,
+            )[0]
+        except IndexError as e:
+            raise InvalidArgument(f"Error processing synchronized AR frame: {e}")
+
+        logger.info(
+            "Saved synchronized AR frame of device %s to session %s",
+            request.device,
+            session_stream.info.id.value,
+        )
+
+        # self.on_save_ar_frames(
+        #     frames=decoded_ar_frames,
+        #     session_stream=session_stream,
+        #     device=request.device,
+        # )
+
+        return SaveSynchronizedARFrameResponse()
 
     def on_program_exit(self) -> None:
         """Closes all TCP connections, servers, and files.
