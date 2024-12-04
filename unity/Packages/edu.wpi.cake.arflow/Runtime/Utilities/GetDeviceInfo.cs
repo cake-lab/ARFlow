@@ -1,11 +1,9 @@
 using UnityEngine;
 
-using CakeLab.ARFlow.Grpc;
-using CakeLab.ARFlow.Grpc.V1;
-using CakeLab.ARFlow.Utilities;
-
 namespace CakeLab.ARFlow.Utilities
 {
+    using Grpc.V1;
+
     public static class GetDeviceInfo
     {
         public static Device GetDevice()
