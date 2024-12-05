@@ -7,6 +7,7 @@ namespace CakeLab.ARFlow.DataBuffers
 {
     using Clock;
     using Utilities;
+    using Grpc.V1;
 
     public struct RawAudioFrame
     {
@@ -30,7 +31,7 @@ namespace CakeLab.ARFlow.DataBuffers
         }
     }
 
-    public class AudioBuffer : IDataBuffer<RawAudioFrame>
+    public class AudioBuffer : IARFrameBuffer<RawAudioFrame>
     {
         private readonly List<RawAudioFrame> m_Buffer;
         private readonly int m_SampleRate;
@@ -87,6 +88,12 @@ namespace CakeLab.ARFlow.DataBuffers
         {
             return m_Buffer.LastOrDefault();
         }
+
+        public ARFrame[] GetARFramesFromBuffer()
+        {
+            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
+        }
+
 
         public void Dispose()
         {

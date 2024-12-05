@@ -62,7 +62,7 @@ namespace CakeLab.ARFlow.DataBuffers
         }
     }
 
-    public class ColorBuffer : IDataBuffer<RawColorFrame>
+    public class ColorBuffer : IARFrameBuffer<RawColorFrame>
     {
         ARCameraManager m_CameraManager;
 
@@ -163,6 +163,12 @@ namespace CakeLab.ARFlow.DataBuffers
         {
             return m_Buffer.LastOrDefault();
         }
+
+        public ARFrame[] GetARFramesFromBuffer()
+        {
+            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
+        }
+
 
         public void Dispose()
         {

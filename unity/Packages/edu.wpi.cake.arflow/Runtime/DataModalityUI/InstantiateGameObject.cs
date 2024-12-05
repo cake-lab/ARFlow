@@ -26,12 +26,15 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             inputField.text = defaultText;
         }
 
-        public static void InstantiateToggle(GameObject parent, GameObject prefab, string labelText, Action<bool> onToggleModality, out GameObject toggleObject, out DebugSlider debugSlider)
+        public static void InstantiateToggle(GameObject parent, GameObject prefab, string labelText, Action<bool>[] onToggleModality, out GameObject toggleObject, out DebugSlider debugSlider)
         {
             toggleObject = GameObject.Instantiate(prefab, parent.transform);
             toggleObject.GetComponent<Text>().text = labelText;
             debugSlider = toggleObject.GetComponentInChildren<DebugSlider>();
-            debugSlider.onValueChanged.AddListener((float arg) => onToggleModality(arg == 1));
+            foreach (var action in onToggleModality)
+            {
+                debugSlider.onValueChanged.AddListener((float arg) => action(arg == 1));
+            }
         }
 
         public static void InstantiateHeaderText(GameObject parent, GameObject prefab, string text, out GameObject headerTextObject)

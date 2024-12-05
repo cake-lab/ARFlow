@@ -8,6 +8,7 @@ using UnityEngine;
 namespace CakeLab.ARFlow.DataBuffers
 {
     using Clock;
+    using Grpc.V1;
 
     public struct RawTransformFrame
     {
@@ -31,7 +32,7 @@ namespace CakeLab.ARFlow.DataBuffers
         }
     }
 
-    public class TransformBuffer : IDataBuffer<RawTransformFrame>
+    public class TransformBuffer : IARFrameBuffer<RawTransformFrame>
     {
         Camera m_MainCamera;
 
@@ -140,6 +141,11 @@ namespace CakeLab.ARFlow.DataBuffers
         public RawTransformFrame TryAcquireLatestFrame()
         {
             return m_Buffer.LastOrDefault();
+        }
+
+        public ARFrame[] GetARFramesFromBuffer()
+        {
+            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
         }
 
         public void Dispose()

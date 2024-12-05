@@ -65,7 +65,7 @@ namespace CakeLab.ARFlow.DataBuffers
         }
     }
 
-    public class MeshDetectionBuffer : IDataBuffer<RawMeshDetectionFrame>
+    public class MeshDetectionBuffer : IARFrameBuffer<RawMeshDetectionFrame>
     {
         ARMeshManager m_MeshManager;
 
@@ -197,6 +197,11 @@ namespace CakeLab.ARFlow.DataBuffers
         public RawMeshDetectionFrame TryAcquireLatestFrame()
         {
             return m_Buffer.LastOrDefault();
+        }
+
+        public ARFrame[] GetARFramesFromBuffer()
+        {
+            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
         }
 
         public void Dispose()

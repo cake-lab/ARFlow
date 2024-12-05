@@ -118,7 +118,7 @@ namespace CakeLab.ARFlow.DataBuffers
         }
     }
 
-    public class PointCloudDetectionBuffer : IDataBuffer<RawPointCloudDetectionFrame>
+    public class PointCloudDetectionBuffer : IARFrameBuffer<RawPointCloudDetectionFrame>
     {
         ARPointCloudManager m_PointCloudManager;
 
@@ -221,6 +221,11 @@ namespace CakeLab.ARFlow.DataBuffers
         public RawPointCloudDetectionFrame TryAcquireLatestFrame()
         {
             return m_Buffer.LastOrDefault();
+        }
+
+        public ARFrame[] GetARFramesFromBuffer()
+        {
+            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
         }
 
         public void Dispose()

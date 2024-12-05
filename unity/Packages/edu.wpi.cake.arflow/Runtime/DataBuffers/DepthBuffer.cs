@@ -60,7 +60,7 @@ namespace CakeLab.ARFlow.DataBuffers
         }
     }
 
-    public class DepthBuffer : IDataBuffer<RawDepthFrame>
+    public class DepthBuffer : IARFrameBuffer<RawDepthFrame>
     {
         AROcclusionManager m_OcclusionManager;
 
@@ -154,6 +154,12 @@ namespace CakeLab.ARFlow.DataBuffers
         {
             return m_Buffer.LastOrDefault();
         }
+
+        public ARFrame[] GetARFramesFromBuffer()
+        {
+            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
+        }
+
 
         public void Dispose()
         {

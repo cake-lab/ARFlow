@@ -17,6 +17,7 @@ using UnityEngine.XR.ARFoundation;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
+    // AR Managers for AR data collection
     [Tooltip("Camera image data's manager from the device camera")]
     public ARCameraManager cameraManager;
 
@@ -27,27 +28,131 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public ARMeshManager meshManager;
 
+    public ARPointCloudManager pointCloudManager;
+
+    // Variables for state of the ARFlow device sample
     public IGrpcClient grpcClient;
 
     public IClock clock;
 
-    private ColorBuffer m_ColorBuffer;
-    private ColorUIConfig m_ColorUIConfig;
-    private CancellationTokenSource m_ColorCts;
-
-    private DepthBuffer m_depthBuffer;
-    private DepthUIConfig m_depthUIConfig;
-    private CancellationTokenSource m_depthCts;
-
-    private List<IDataBuffer> m_DataBuffers;
-
-    private List<IDataModalityUIConfig> m_DataModalityUIConfigs;
+    private List<BaseDataModalityUIConfig> m_DataModalityUIConfigs;
     private List<CancellationTokenSource> m_CtsList = new List<CancellationTokenSource>();
 
     private Session m_ActiveSession;
     private Device m_Device;
 
     private bool m_isSending = false;
+
+    // Data buffers and UI configs
+
+    /// <summary>
+    /// Handles the lifecycle and sending of frames for all data modalities that support conversion to ARFrame.
+    /// The manager's enabled state is also managed by the UIConfig class.
+    /// </summary>
+    public class BufferControl
+    {
+        public BaseDataModalityUIConfig config;
+        public IARFrameBuffer buffer;
+        public CancellationTokenSource cts = new CancellationTokenSource();
+
+        public BufferControl(BaseDataModalityUIConfig config)
+        {
+            this.config = config;
+        }
+
+        public Action<bool> OnToggle(Action<BufferControl> sendFrame)
+        {
+            return (bool isOn) =>
+            {
+                if (isOn)
+                {
+                    buffer = config.GetGenericBuffer();
+                    InternalDebug.Log($"Enable Manager {buffer.GetType().Name}");
+                    buffer.StartCapture();
+                    sendFrame(this);
+                }
+                else
+                {
+                    InternalDebug.Log("Disable Manager");
+                    buffer?.StopCapture();
+                    buffer?.Dispose();
+                    cts.Cancel();
+                    cts = new CancellationTokenSource();
+                }
+            };
+        }
+    }
+    public async void SendFrame(BufferControl control)
+    {
+        try
+        {
+            while (!control.cts.Token.IsCancellationRequested && m_isSending)
+            {
+                float currentDelay = control.config.GetDelay();
+                // OperationCanceledException is thrown when the token is cancelled, this is expected
+                // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
+                await Awaitable.WaitForSecondsAsync(currentDelay, control.cts.Token);
+
+                ARFrame[] arFrames = control.buffer.GetARFramesFromBuffer();
+
+                if (arFrames.Length == 0)
+                {
+                    InternalDebug.Log("No frames to send.");
+                    continue;
+                }
+
+                var _ = await grpcClient.SaveARFramesAsync(
+                    m_ActiveSession.Id,
+                    arFrames,
+                    m_Device,
+                    control.cts.Token
+                );
+                control.buffer.ClearBuffer();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            InternalDebug.Log("Operation cancelled");
+        }
+
+    }
+
+
+
+    private AudioUIConfig m_AudioUIConfig;
+    BufferControl audioBufferControl;
+
+    private ColorUIConfig m_ColorUIConfig;
+    BufferControl colorBufferControl;
+
+    private DepthUIConfig m_depthUIConfig;
+
+    BufferControl depthBufferControl;
+
+    private GyroscopeUIConfig m_GyroscopeUIConfig;
+    BufferControl gyroscopeBufferControl;
+
+
+    private MeshDetectionUIConfig m_MeshDetectionUIConfig;
+    BufferControl meshDetectionControl;
+
+    private PlaneDetectionUIConfig m_PlaneDetectionUIConfig;
+    BufferControl planeDetectionControl;
+
+    private PointCloudDetectionUIConfig m_PointCloudDetectionUIConfig;
+    BufferControl pointCloudDetectionControl;
+
+    private TransformUIConfig m_TransformUIConfig;
+    BufferControl transformBufferControl;
+
+
+    private List<IARFrameBuffer> m_DataBuffers;
+    private List<BufferControl> m_BufferControls;
+
+    private List<BaseDataModalityUIConfig> m_dataModalityUIConfigs;
+    private List<CancellationTokenSource> m_ctsList = new List<CancellationTokenSource>();
+
+    // UI Windows
 
     [Serializable]
     [Tooltip("UI Window for finding server")]
@@ -352,140 +457,83 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     private void OnStartPauseButton()
     {
+        m_isSending = !m_isSending;
         if (m_isSending)
         {
-            m_isSending = false;
-            arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Start";
-            m_DataBuffers.ForEach(buffer => buffer.StopCapture());
-            m_DataModalityUIConfigs.ForEach(config => config.TurnOnConfig());
-            m_CtsList.ForEach(cts =>
+            arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Pause";
+            foreach (var control in m_BufferControls)
             {
-                cts.Cancel();
-                cts.Dispose();
-                cts = new CancellationTokenSource();
-            });
+                bool isModalityActive = control.config.isModalityActive;
+                control.OnToggle(SendFrame)(isModalityActive);
+            }
         }
         else
         {
-            m_isSending = true;
-            arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Pause";
-            m_CtsList.ForEach(cts =>
+            arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Start";
+            foreach (var control in m_BufferControls)
             {
-                cts = new CancellationTokenSource();
-            });
-            m_DataBuffers.ForEach(buffer => buffer.StartCapture());
-            m_DataModalityUIConfigs.ForEach(config => config.TurnOffConfig());
-
-            //start individual buffer sending
-            SendColorFramesAsync();
-        }
-    }
-
-    private async void SendColorFramesAsync()
-    {
-        while (!m_ColorCts.Token.IsCancellationRequested)
-        {
-            float currentDelay = m_ColorUIConfig.GetDelay();
-            // OperationCanceledException is thrown when the token is cancelled, this is expected
-            // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
-            await Awaitable.WaitForSecondsAsync(currentDelay, m_ColorCts.Token);
-
-            ARFrame[] arFrames = m_ColorBuffer
-                .Buffer
-                // This works because we have an explicit conversion operator defined for RawCameraFrame
-                .Select(frame => (ARFrame)frame)
-                .ToArray();
-
-            if (arFrames.Length == 0)
-            {
-                InternalDebug.Log("No frames to send.");
-                continue;
+                control.OnToggle(SendFrame)(false);
             }
-
-            var _ = await grpcClient.SaveARFramesAsync(
-                m_ActiveSession.Id,
-                arFrames,
-                m_Device,
-                m_ColorCts.Token
-            );
-            m_ColorBuffer.ClearBuffer();
-        }
-    }
-
-    private async void SendDepthFramesAsync()
-    {
-        while (!m_depthCts.Token.IsCancellationRequested)
-        {
-            float currentDelay = m_depthUIConfig.GetDelay();
-            // OperationCanceledException is thrown when the token is cancelled, this is expected
-            // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
-            await Awaitable.WaitForSecondsAsync(currentDelay, m_depthCts.Token);
-
-            ARFrame[] arFrames = m_depthBuffer
-                .Buffer
-                // This works because we have an explicit conversion operator defined for RawCameraFrame
-                .Select(frame => (ARFrame)frame)
-                .ToArray();
-
-            if (arFrames.Length == 0)
-            {
-                InternalDebug.Log("No frames to send.");
-                continue;
-            }
-
-            var _ = await grpcClient.SaveARFramesAsync(
-                m_ActiveSession.Id,
-                arFrames,
-                m_Device,
-                m_depthCts.Token
-            );
-            m_depthBuffer.ClearBuffer();
         }
     }
 
     void Start()
     {
-        // Initialize data buffers and sending-related vaiables
-        m_ColorBuffer = new ColorBuffer(64, cameraManager, clock);
-        m_DataBuffers = new List<IDataBuffer>()
-        {
-            m_ColorBuffer,
-            // new DepthBuffer(occlusionManager),
-            // new PlaneBuffer(planeManager),
-            // new MeshBuffer(meshManager)
-        };
+        m_Device = GetDeviceInfo.GetDevice();
 
-        m_ColorCts = new CancellationTokenSource();
-        m_CtsList.Add(m_ColorCts);
+        //TODO: placeholder
+        clock = new NtpClock("pool.ntp.org", 3);
 
-        m_ColorUIConfig = new ColorUIConfig(
-            arViewWindow.configurationsContainer,
-            arViewWindow.ConfigPrefabs,
-            (bool isOn) =>
-            {
-                if (isOn)
-                {
-                    cameraManager.enabled = false;
-                    InternalDebug.Log("Enable camera manager");
-                    m_ColorBuffer = m_ColorUIConfig.getBufferFromConfig(cameraManager, clock);
-                    if (m_isSending)
-                        m_ColorBuffer.StartCapture();
-                }
-                else
-                {
-                    InternalDebug.Log("Disable camera manager");
-                    m_ColorBuffer.StopCapture();
-                    m_ColorBuffer.Dispose();
-                }
-            }
-        );
-        m_DataModalityUIConfigs = new List<IDataModalityUIConfig>()
+        m_AudioUIConfig = new AudioUIConfig(clock, Microphone.devices.Count() > 0);
+        m_ColorUIConfig = new ColorUIConfig(cameraManager, clock);
+        m_depthUIConfig = new DepthUIConfig(occlusionManager, clock);
+        m_GyroscopeUIConfig = new GyroscopeUIConfig(clock, SystemInfo.supportsGyroscope);
+        m_MeshDetectionUIConfig = new MeshDetectionUIConfig(meshManager, clock);
+        m_PlaneDetectionUIConfig = new PlaneDetectionUIConfig(planeManager, clock);
+        m_PointCloudDetectionUIConfig = new PointCloudDetectionUIConfig(pointCloudManager, clock);
+        m_TransformUIConfig = new TransformUIConfig(Camera.main, clock);
+
+        audioBufferControl = new BufferControl(m_AudioUIConfig);
+        colorBufferControl = new BufferControl(m_ColorUIConfig);
+        depthBufferControl = new BufferControl(m_depthUIConfig);
+        gyroscopeBufferControl = new BufferControl(m_GyroscopeUIConfig);
+        meshDetectionControl = new BufferControl(m_MeshDetectionUIConfig);
+        planeDetectionControl = new BufferControl(m_PlaneDetectionUIConfig);
+        pointCloudDetectionControl = new BufferControl(m_PointCloudDetectionUIConfig);
+        transformBufferControl = new BufferControl(m_TransformUIConfig);
+
+        m_dataModalityUIConfigs = new List<BaseDataModalityUIConfig>()
         {
             m_ColorUIConfig,
-            // new DepthBuffer(occlusionManager),
-            // new PlaneBuffer(planeManager),
-            // new MeshBuffer(meshManager)
+            m_depthUIConfig,
+            m_GyroscopeUIConfig,
+            m_MeshDetectionUIConfig,
+            m_PlaneDetectionUIConfig,
+            m_PointCloudDetectionUIConfig,
+            m_TransformUIConfig,
         };
+
+        m_BufferControls = new List<BufferControl>()
+        {
+            audioBufferControl,
+            colorBufferControl,
+            depthBufferControl,
+            gyroscopeBufferControl,
+            meshDetectionControl,
+            planeDetectionControl,
+            pointCloudDetectionControl,
+            transformBufferControl,
+        };
+
+        foreach (var control in m_BufferControls)
+        {
+            control.config.InitializeConfig(
+                arViewWindow.configurationsContainer,
+                arViewWindow.ConfigPrefabs,
+                control.OnToggle(SendFrame)
+            );
+        }
+
 
         // Initialize find server window
         findServerWindow.connectButton.onClick.AddListener(OnConnectToServer);
