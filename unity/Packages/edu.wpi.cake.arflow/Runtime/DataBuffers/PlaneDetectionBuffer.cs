@@ -8,16 +8,17 @@ using UnityEngine.XR.ARFoundation;
 namespace CakeLab.ARFlow.DataBuffers
 {
     using Grpc.V1;
-    using GrpcARTrackable = Grpc.V1.ARTrackable;
+    using Utilities;
     using GrpcARPlane = Grpc.V1.ARPlane;
+    using GrpcARTrackable = Grpc.V1.ARTrackable;
     using GrpcPose = Grpc.V1.Pose;
+    using GrpcQuaternion = Grpc.V1.Quaternion;
     using GrpcVector2 = Grpc.V1.Vector2;
     using GrpcVector3 = Grpc.V1.Vector3;
-    using GrpcQuaternion = Grpc.V1.Quaternion;
-    using UnityPose = UnityEngine.Pose;
+    using UnityARPlane = UnityEngine.XR.ARFoundation.ARPlane;
     using UnityARTrackableId = UnityEngine.XR.ARSubsystems.TrackableId;
     using UnityARTrackingState = UnityEngine.XR.ARSubsystems.TrackingState;
-    using UnityARPlane = UnityEngine.XR.ARFoundation.ARPlane;
+    using UnityPose = UnityEngine.Pose;
     using UnityVector2 = UnityEngine.Vector2;
     using UnityVector3 = UnityEngine.Vector3;
 
@@ -57,10 +58,30 @@ namespace CakeLab.ARFlow.DataBuffers
                 {
                     Pose = new GrpcPose
                     {
-                        Forward = new GrpcVector3 { X = rawFrame.Pose.forward.x, Y = rawFrame.Pose.forward.y, Z = rawFrame.Pose.forward.z },
-                        Right = new GrpcVector3 { X = rawFrame.Pose.right.x, Y = rawFrame.Pose.right.y, Z = rawFrame.Pose.right.z },
-                        Rotation = new GrpcQuaternion { X = rawFrame.Pose.rotation.x, Y = rawFrame.Pose.rotation.y, Z = rawFrame.Pose.rotation.z },
-                        Up = new GrpcVector3 { X = rawFrame.Pose.up.x, Y = rawFrame.Pose.up.y, Z = rawFrame.Pose.up.z },
+                        Forward = new GrpcVector3
+                        {
+                            X = rawFrame.Pose.forward.x,
+                            Y = rawFrame.Pose.forward.y,
+                            Z = rawFrame.Pose.forward.z,
+                        },
+                        Right = new GrpcVector3
+                        {
+                            X = rawFrame.Pose.right.x,
+                            Y = rawFrame.Pose.right.y,
+                            Z = rawFrame.Pose.right.z,
+                        },
+                        Rotation = new GrpcQuaternion
+                        {
+                            X = rawFrame.Pose.rotation.x,
+                            Y = rawFrame.Pose.rotation.y,
+                            Z = rawFrame.Pose.rotation.z,
+                        },
+                        Up = new GrpcVector3
+                        {
+                            X = rawFrame.Pose.up.x,
+                            Y = rawFrame.Pose.up.y,
+                            Z = rawFrame.Pose.up.z,
+                        },
                     },
                     TrackableId = new GrpcARTrackable.Types.TrackableId
                     {
@@ -70,24 +91,36 @@ namespace CakeLab.ARFlow.DataBuffers
                     TrackingState = trackingState,
                 },
                 // We null check here because in Added and Update states, Boundary, Center, Normal, and Size are not null. In Removed state, they are, but SubsumedById can have a value (still can be null though).
-                Center = rawFrame.Center == null ? null : new GrpcVector3
-                {
-                    X = rawFrame.Center.x,
-                    Y = rawFrame.Center.y,
-                    Z = rawFrame.Center.z,
-                },
-                Normal = rawFrame.Normal == null ? null : new GrpcVector3
-                {
-                    X = rawFrame.Normal.x,
-                    Y = rawFrame.Normal.y,
-                    Z = rawFrame.Normal.z,
-                },
-                Size = rawFrame.Size == null ? null : new GrpcVector2 { X = rawFrame.Size.x, Y = rawFrame.Size.y },
-                SubsumedById = rawFrame.SubsumedById == null ? null : new GrpcARTrackable.Types.TrackableId
-                {
-                    SubId1 = rawFrame.SubsumedById.subId1,
-                    SubId2 = rawFrame.SubsumedById.subId2,
-                },
+                Center =
+                    rawFrame.Center == null
+                        ? null
+                        : new GrpcVector3
+                        {
+                            X = rawFrame.Center.x,
+                            Y = rawFrame.Center.y,
+                            Z = rawFrame.Center.z,
+                        },
+                Normal =
+                    rawFrame.Normal == null
+                        ? null
+                        : new GrpcVector3
+                        {
+                            X = rawFrame.Normal.x,
+                            Y = rawFrame.Normal.y,
+                            Z = rawFrame.Normal.z,
+                        },
+                Size =
+                    rawFrame.Size == null
+                        ? null
+                        : new GrpcVector2 { X = rawFrame.Size.x, Y = rawFrame.Size.y },
+                SubsumedById =
+                    rawFrame.SubsumedById == null
+                        ? null
+                        : new GrpcARTrackable.Types.TrackableId
+                        {
+                            SubId1 = rawFrame.SubsumedById.subId1,
+                            SubId2 = rawFrame.SubsumedById.subId2,
+                        },
             };
             if (rawFrame.Boundary != null)
             {
@@ -106,7 +139,10 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public static explicit operator Grpc.V1.ARFrame(RawPlaneDetectionFrame rawFrame)
         {
-            var arFrame = new Grpc.V1.ARFrame { PlaneDetectionFrame = (Grpc.V1.PlaneDetectionFrame)rawFrame };
+            var arFrame = new Grpc.V1.ARFrame
+            {
+                PlaneDetectionFrame = (Grpc.V1.PlaneDetectionFrame)rawFrame,
+            };
             return arFrame;
         }
     }
@@ -121,14 +157,27 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_PlaneManager = value;
         }
 
+        NtpDateTimeManager m_NtpManager;
+
+        public NtpDateTimeManager NtpManager
+        {
+            get => m_NtpManager;
+            set => m_NtpManager = value;
+        }
+
         private readonly List<RawPlaneDetectionFrame> m_Buffer;
 
         public IReadOnlyList<RawPlaneDetectionFrame> Buffer => m_Buffer;
 
-        public PlaneDetectionBuffer(int initialBufferSize, ARPlaneManager planeManager)
+        public PlaneDetectionBuffer(
+            int initialBufferSize,
+            ARPlaneManager planeManager,
+            NtpDateTimeManager ntpManager
+        )
         {
             m_Buffer = new List<RawPlaneDetectionFrame>(initialBufferSize);
             m_PlaneManager = planeManager;
+            m_NtpManager = ntpManager;
         }
 
         public void StartCapture()
@@ -143,39 +192,50 @@ namespace CakeLab.ARFlow.DataBuffers
 
         private void OnPlaneDetectionChanged(ARTrackablesChangedEventArgs<UnityARPlane> changes)
         {
-            var deviceTime = DateTime.UtcNow;
+            var deviceTime = m_NtpManager.UtcNow;
             AddToBuffer(changes.added, deviceTime, PlaneDetectionState.Added);
             AddToBuffer(changes.updated, deviceTime, PlaneDetectionState.Updated);
             AddToBuffer(changes.removed, deviceTime);
         }
 
-        private void AddToBuffer(ReadOnlyList<UnityARPlane> planes, DateTime deviceTimestampAtCapture, PlaneDetectionState state)
+        private void AddToBuffer(
+            ReadOnlyList<UnityARPlane> planes,
+            DateTime deviceTimestampAtCapture,
+            PlaneDetectionState state
+        )
         {
-            m_Buffer.AddRange(planes.Select(plane => new RawPlaneDetectionFrame
-            {
-                State = state,
-                Pose = plane.pose,
-                TrackableId = plane.trackableId,
-                TrackingState = plane.trackingState,
-                DeviceTimestamp = deviceTimestampAtCapture,
-                Boundary = plane.boundary.ToArray(),
-                Center = plane.center,
-                Normal = plane.normal,
-                Size = plane.size,
-            }));
+            m_Buffer.AddRange(
+                planes.Select(plane => new RawPlaneDetectionFrame
+                {
+                    State = state,
+                    Pose = plane.pose,
+                    TrackableId = plane.trackableId,
+                    TrackingState = plane.trackingState,
+                    DeviceTimestamp = deviceTimestampAtCapture,
+                    Boundary = plane.boundary.ToArray(),
+                    Center = plane.center,
+                    Normal = plane.normal,
+                    Size = plane.size,
+                })
+            );
         }
 
-        private void AddToBuffer(ReadOnlyList<KeyValuePair<UnityARTrackableId, UnityARPlane>> planes, DateTime deviceTimestampAtCapture)
+        private void AddToBuffer(
+            ReadOnlyList<KeyValuePair<UnityARTrackableId, UnityARPlane>> planes,
+            DateTime deviceTimestampAtCapture
+        )
         {
-            m_Buffer.AddRange(planes.Select(plane => new RawPlaneDetectionFrame
-            {
-                State = PlaneDetectionState.Removed,
-                Pose = plane.Value.pose,
-                TrackableId = plane.Key,
-                TrackingState = plane.Value.trackingState,
-                DeviceTimestamp = deviceTimestampAtCapture,
-                SubsumedById = plane.Value.subsumedBy.trackableId,
-            }));
+            m_Buffer.AddRange(
+                planes.Select(plane => new RawPlaneDetectionFrame
+                {
+                    State = PlaneDetectionState.Removed,
+                    Pose = plane.Value.pose,
+                    TrackableId = plane.Key,
+                    TrackingState = plane.Value.trackingState,
+                    DeviceTimestamp = deviceTimestampAtCapture,
+                    SubsumedById = plane.Value.subsumedBy.trackableId,
+                })
+            );
         }
 
         public void ClearBuffer()

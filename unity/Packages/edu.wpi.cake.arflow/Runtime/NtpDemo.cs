@@ -1,5 +1,3 @@
-using System;
-using TMPro;
 using UnityEngine;
 
 namespace CakeLab.ARFlow
@@ -8,38 +6,28 @@ namespace CakeLab.ARFlow
 
     public class NtpDemo : MonoBehaviour
     {
-        public TMP_Text LocalValue;
-        public TMP_Text NtpValue;
-        public TMP_Text NtpUtcValue;
+        private NtpDateTimeManager ntpManager;
+
+        private void Start()
+        {
+            ntpManager = FindFirstObjectByType<NtpDateTimeManager>();
+
+            if (ntpManager == null)
+            {
+                InternalDebug.LogError("NtpDateTimeManager not found in the scene.");
+            }
+        }
 
         private void Update()
         {
-            var dateTimeNow = DateTime.Now;
-            LocalValue.text = string.Format(
-                "Local value: {0} {1}",
-                dateTimeNow.ToShortDateString(),
-                dateTimeNow.ToLongTimeString()
-            );
-
-            if (NtpDateTime.Instance.DateSynchronized)
+            if (ntpManager != null && ntpManager.IsSynchronized)
             {
-                var ntpDateTimeNow = NtpDateTime.Instance.Now;
-                NtpValue.text = string.Format(
-                    "NTP value: {0} {1}",
-                    ntpDateTimeNow.ToShortDateString(),
-                    ntpDateTimeNow.ToLongTimeString()
-                );
-                var ntpUtcDateTimeNow = NtpDateTime.Instance.UtcNow;
-                NtpUtcValue.text = string.Format(
-                    "NTP UTC value: {0} {1}",
-                    ntpUtcDateTimeNow.ToShortDateString(),
-                    ntpUtcDateTimeNow.ToLongTimeString()
-                );
+                InternalDebug.Log($"Synchronized Time: {ntpManager.Now}");
+                InternalDebug.Log($"Synchronized UtcTime: {ntpManager.UtcNow}");
             }
             else
             {
-                NtpValue.text = "Synchronization in progress...";
-                NtpUtcValue.text = "Synchronization in progress...";
+                InternalDebug.Log("Time not yet synchronized.");
             }
         }
     }

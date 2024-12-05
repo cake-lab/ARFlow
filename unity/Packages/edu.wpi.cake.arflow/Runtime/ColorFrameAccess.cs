@@ -1,17 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
-using System.Threading;
-using System.Collections.Generic;
 
 namespace CakeLab.ARFlow.Samples
 {
-    using Grpc.V1;
     using DataBuffers;
     using Grpc;
+    using Grpc.V1;
     using Utilities;
 
     public class ColorFrameAccess : MonoBehaviour
@@ -41,6 +41,10 @@ namespace CakeLab.ARFlow.Samples
         [Tooltip("The AR camera manager that is used to produce frame events")]
         ARCameraManager m_CameraManager;
 
+        [SerializeField]
+        [Tooltip("The NTP manager that is used to synchronize time with the server")]
+        NtpDateTimeManager m_NtpManager;
+
         public ARCameraManager CameraManager
         {
             // Proxy to underlying ARCameraManager
@@ -53,7 +57,7 @@ namespace CakeLab.ARFlow.Samples
         /// </summary>
         void Awake()
         {
-            m_CameraBuffer = new ColorBuffer(64, m_CameraManager);
+            m_CameraBuffer = new ColorBuffer(64, m_CameraManager, m_NtpManager);
 
             // Initialize default values (if they aren't dynamic or coming from other scripts)
             m_Address = new("http://192.168.1.50:8500");
@@ -102,7 +106,7 @@ namespace CakeLab.ARFlow.Samples
             m_GrpcClient = new GrpcClient(m_Address.ToString());
             m_CameraBuffer.StartCapture();
             m_Cts = new CancellationTokenSource();
-            SendFrames();
+            SendFramesAsync();
 
             StartButton.interactable = false;
             StopButton.interactable = true;
@@ -128,7 +132,7 @@ namespace CakeLab.ARFlow.Samples
             StatusText.text = "Disconnected";
         }
 
-        private async void SendFrames()
+        private async void SendFramesAsync()
         {
             while (!m_Cts.IsCancellationRequested)
             {

@@ -35,11 +35,25 @@ namespace CakeLab.ARFlow.DataBuffers
         private readonly int m_SampleRate;
         private readonly int m_FrameLength;
 
+        NtpDateTimeManager m_NtpManager;
+
+        public NtpDateTimeManager NtpManager
+        {
+            get => m_NtpManager;
+            set => m_NtpManager = value;
+        }
+
         public IReadOnlyList<RawAudioFrame> Buffer => m_Buffer;
 
-        public AudioBuffer(int initialBufferSize, int sampleRate = 16000, int frameLength = 512)
+        public AudioBuffer(
+            int initialBufferSize,
+            NtpDateTimeManager ntpManager,
+            int sampleRate = 16000,
+            int frameLength = 512
+        )
         {
             m_Buffer = new List<RawAudioFrame>(initialBufferSize);
+            m_NtpManager = ntpManager;
             m_SampleRate = sampleRate;
             m_FrameLength = frameLength;
         }
@@ -60,7 +74,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
         private void OnFrameCaptured(float[] frame)
         {
-            m_Buffer.Add(new RawAudioFrame { DeviceTimestamp = DateTime.UtcNow, Data = frame });
+            m_Buffer.Add(new RawAudioFrame { DeviceTimestamp = m_NtpManager.UtcNow, Data = frame });
         }
 
         public void ClearBuffer()
@@ -78,6 +92,5 @@ namespace CakeLab.ARFlow.DataBuffers
             StopCapture();
             ClearBuffer();
         }
-
     }
 }

@@ -1,192 +1,144 @@
 // Vendored from https://github.com/disas69/Unity-NTPTimeSync-Asset/blob/master/Assets/Scripts/NtpDateTime.cs
 using System;
-using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace CakeLab.ARFlow.Utilities
 {
-    public class NtpDateTime : MonoSingleton<NtpDateTime>
+    public class NtpDateTime : IDisposable
     {
-        private DateTime _ntpDate;
-        private float _responseReceivedTime;
-        private byte[] _receivedNtpData;
-        private Socket _socket;
-        private Thread _syncThread;
-        private Coroutine _responseRoutine;
-        private bool _responseReceived;
-
-        [SerializeField]
-        private string _ntpServer = "pool.ntp.org";
-
-        [SerializeField]
-        [Range(1, 10)]
-        private int _requestTimeout = 3;
+        private DateTime m_NtpTime;
+        private float m_ResponseReceivedTime;
+        private string m_NtpServerUrl;
+        private int m_RequestTimeoutInS;
+        private CancellationTokenSource m_Cts;
 
         public bool DateSynchronized { get; private set; }
 
-        public DateTime Now
-        {
-            get
-            {
-                if (DateSynchronized)
-                {
-                    return _ntpDate.AddSeconds(Time.realtimeSinceStartup - _responseReceivedTime);
-                }
+        public DateTime Now =>
+            DateSynchronized
+                ? m_NtpTime.AddSeconds(Time.realtimeSinceStartup - m_ResponseReceivedTime)
+                : DateTime.Now;
 
-                return DateTime.Now;
-            }
-        }
+        public DateTime UtcNow =>
+            DateSynchronized
+                ? m_NtpTime
+                    .ToUniversalTime()
+                    .AddSeconds(Time.realtimeSinceStartup - m_ResponseReceivedTime)
+                : DateTime.UtcNow;
 
-        public DateTime UtcNow
+        public NtpDateTime(string ntpServerUrl, int requestTimeoutInS = 3)
         {
-            get
-            {
-                if (DateSynchronized)
-                {
-                    return _ntpDate
-                        .ToUniversalTime()
-                        .AddSeconds(Time.realtimeSinceStartup - _responseReceivedTime);
-                }
-                return DateTime.UtcNow;
-            }
-        }
-
-        public void Synchronize()
-        {
+            m_NtpServerUrl = ntpServerUrl;
+            m_RequestTimeoutInS = requestTimeoutInS;
             DateSynchronized = false;
-            StartCoroutine(SynchronizeDateAsync());
         }
 
-        private void Start()
+        public void Dispose()
         {
-            Synchronize();
+            m_Cts?.Cancel();
+            m_Cts?.Dispose();
         }
 
-        private void OnApplicationQuit()
+        public async Task SynchronizeAsync(CancellationToken cancellationToken = default)
         {
-            if (_syncThread != null)
-            {
-                _syncThread.Abort();
-            }
-
-            if (_socket != null)
-            {
-                _socket.Close();
-            }
-        }
-
-        private IEnumerator SynchronizeDateAsync()
-        {
-            var wait = new WaitForSeconds(_requestTimeout);
-
-            while (true)
-            {
-                if (!DateSynchronized)
-                {
-                    if (ConnectionEnabled())
-                    {
-                        SynchronizeDate();
-                    }
-
-                    yield return wait;
-                }
-                else
-                {
-                    yield break;
-                }
-            }
-        }
-
-        private void SynchronizeDate()
-        {
-            if (_syncThread != null)
-            {
-                _syncThread.Abort();
-            }
-
-            if (_socket != null)
-            {
-                _socket.Close();
-            }
-
-            if (_responseRoutine != null)
-            {
-                StopCoroutine(_responseRoutine);
-            }
-
-            _responseReceived = false;
-            _syncThread = new Thread(Request);
-            _syncThread.Start();
-
-            _responseRoutine = StartCoroutine(WaitForResponse());
-
-            InternalDebug.Log("NTP request started.");
-        }
-
-        private void Request()
-        {
-            var ntpData = new byte[48];
-            ntpData[0] = 0x1B;
-
-            var addresses = Dns.GetHostEntry(_ntpServer).AddressList;
-            var ipEndPoint = new IPEndPoint(addresses[0], 123);
-
-            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            m_Cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
             try
             {
-                _socket.Connect(ipEndPoint);
-                _socket.ReceiveTimeout = _requestTimeout * 1000;
-                _socket.Send(ntpData);
-                _socket.Receive(ntpData);
+                while (!cancellationToken.IsCancellationRequested && !DateSynchronized)
+                {
+                    if (ConnectionEnabled())
+                    {
+                        await SynchronizeDateAsync(m_Cts.Token);
+                    }
+                    // await Awaitable.WaitForSecondsAsync(m_RequestTimeoutInS, cancellationToken);
+                    await Task.Delay(TimeSpan.FromSeconds(m_RequestTimeoutInS), m_Cts.Token);
+                }
             }
-            catch (SocketException e)
+            catch (TaskCanceledException)
             {
-                InternalDebug.LogError("NTP sync failed : " + e.Message);
-                return;
+                InternalDebug.Log("NTP synchronization cancelled.");
             }
-            finally
-            {
-                _socket.Close();
-                _socket = null;
-            }
-
-            _receivedNtpData = ntpData;
-            _responseReceived = true;
-
-            InternalDebug.Log("NTP response received.");
         }
 
-        private IEnumerator WaitForResponse()
+        private async Task SynchronizeDateAsync(CancellationToken cancellationToken)
         {
-            while (!_responseReceived)
+            try
             {
-                yield return 0;
-            }
+                var ntpData = new byte[48];
+                ntpData[0] = 0x1B; // NTP request header
 
-            _responseReceivedTime = Time.realtimeSinceStartup;
+                var addresses = await Dns.GetHostAddressesAsync(m_NtpServerUrl);
+                var ipEndPoint = new IPEndPoint(addresses[0], 123);
+
+                using (
+                    var socket = new Socket(
+                        AddressFamily.InterNetwork,
+                        SocketType.Dgram,
+                        ProtocolType.Udp
+                    )
+                )
+                {
+                    var timeoutTask = Task.Delay(m_RequestTimeoutInS * 1000, cancellationToken);
+
+                    socket.Connect(ipEndPoint);
+
+                    // Send request
+                    var sendTask = socket.SendAsync(
+                        new ArraySegment<byte>(ntpData),
+                        SocketFlags.None
+                    );
+                    if (await Task.WhenAny(sendTask, timeoutTask) == timeoutTask)
+                    {
+                        throw new TimeoutException("NTP request timed out.");
+                    }
+
+                    // Receive response
+                    var receiveTask = socket.ReceiveAsync(
+                        new ArraySegment<byte>(ntpData),
+                        SocketFlags.None
+                    );
+                    if (await Task.WhenAny(receiveTask, timeoutTask) == timeoutTask)
+                    {
+                        throw new TimeoutException("NTP response timed out.");
+                    }
+
+                    ParseNtpResponse(ntpData);
+                }
+            }
+            catch (Exception e)
+            {
+                InternalDebug.LogError($"NTP synchronization failed: {e.Message}");
+                DateSynchronized = false;
+            }
+        }
+
+        private void ParseNtpResponse(byte[] m_ReceivedNtpData)
+        {
+            m_ResponseReceivedTime = Time.realtimeSinceStartup;
 
             var intPart =
-                ((ulong)_receivedNtpData[40] << 24)
-                | ((ulong)_receivedNtpData[41] << 16)
-                | ((ulong)_receivedNtpData[42] << 8)
-                | _receivedNtpData[43];
+                ((ulong)m_ReceivedNtpData[40] << 24)
+                | ((ulong)m_ReceivedNtpData[41] << 16)
+                | ((ulong)m_ReceivedNtpData[42] << 8)
+                | m_ReceivedNtpData[43];
             var fractPart =
-                ((ulong)_receivedNtpData[44] << 24)
-                | ((ulong)_receivedNtpData[45] << 16)
-                | ((ulong)_receivedNtpData[46] << 8)
-                | _receivedNtpData[47];
+                ((ulong)m_ReceivedNtpData[44] << 24)
+                | ((ulong)m_ReceivedNtpData[45] << 16)
+                | ((ulong)m_ReceivedNtpData[46] << 8)
+                | m_ReceivedNtpData[47];
 
             var milliseconds = intPart * 1000 + fractPart * 1000 / 0x100000000L;
-            _ntpDate = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+            m_NtpTime = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddMilliseconds((long)milliseconds)
                 .ToLocalTime();
 
             DateSynchronized = true;
-            InternalDebug.Log("Date is synchronized : " + Now);
+            InternalDebug.Log($"Date synchronized: {Now}");
         }
 
         private static bool ConnectionEnabled()

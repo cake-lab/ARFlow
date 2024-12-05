@@ -4,6 +4,8 @@ using Google.Protobuf.WellKnownTypes;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
+    using Utilities;
+
     public struct RawSynchronizedBufferFrame
     {
         public DateTime DeviceTimestamp;
@@ -16,7 +18,9 @@ namespace CakeLab.ARFlow.DataBuffers
         public RawPointCloudDetectionFrame PointCloudDetectionFrame;
         public RawMeshDetectionFrame MeshDetectionFrame;
 
-        public static explicit operator Grpc.V1.SynchronizedARFrame(RawSynchronizedBufferFrame rawFrame)
+        public static explicit operator Grpc.V1.SynchronizedARFrame(
+            RawSynchronizedBufferFrame rawFrame
+        )
         {
             var synchronizedFrameGrpc = new Grpc.V1.SynchronizedARFrame
             {
@@ -27,7 +31,8 @@ namespace CakeLab.ARFlow.DataBuffers
                 GyroscopeFrame = (Grpc.V1.GyroscopeFrame)rawFrame.GyroscopeFrame,
                 AudioFrame = (Grpc.V1.AudioFrame)rawFrame.AudioFrame,
                 PlaneDetectionFrame = (Grpc.V1.PlaneDetectionFrame)rawFrame.PlaneDetectionFrame,
-                PointCloudDetectionFrame = (Grpc.V1.PointCloudDetectionFrame)rawFrame.PointCloudDetectionFrame,
+                PointCloudDetectionFrame = (Grpc.V1.PointCloudDetectionFrame)
+                    rawFrame.PointCloudDetectionFrame,
                 MeshDetectionFrame = (Grpc.V1.MeshDetectionFrame)rawFrame.MeshDetectionFrame,
             };
             return synchronizedFrameGrpc;
@@ -44,12 +49,30 @@ namespace CakeLab.ARFlow.DataBuffers
         private readonly PlaneDetectionBuffer m_PlaneDetectionBuffer;
         private readonly PointCloudDetectionBuffer m_PointCloudDetectionBuffer;
         private readonly MeshDetectionBuffer m_MeshDetectionBuffer;
+        NtpDateTimeManager m_NtpManager;
+
+        public NtpDateTimeManager NtpManager
+        {
+            get => m_NtpManager;
+            set => m_NtpManager = value;
+        }
 
         private readonly List<RawSynchronizedBufferFrame> m_Buffer;
 
         public IReadOnlyList<RawSynchronizedBufferFrame> Buffer => m_Buffer;
 
-        public SynchronizedBuffer(int initialBufferSize, TransformBuffer transformBuffer, ColorBuffer colorBuffer, DepthBuffer depthBuffer, GyroscopeBuffer gyroscopeBuffer, AudioBuffer audioBuffer, PlaneDetectionBuffer planeDetectionBuffer, PointCloudDetectionBuffer pointCloudDetectionBuffer, MeshDetectionBuffer meshDetectionBuffer)
+        public SynchronizedBuffer(
+            int initialBufferSize,
+            TransformBuffer transformBuffer,
+            ColorBuffer colorBuffer,
+            DepthBuffer depthBuffer,
+            GyroscopeBuffer gyroscopeBuffer,
+            AudioBuffer audioBuffer,
+            PlaneDetectionBuffer planeDetectionBuffer,
+            PointCloudDetectionBuffer pointCloudDetectionBuffer,
+            MeshDetectionBuffer meshDetectionBuffer,
+            NtpDateTimeManager ntpManager
+        )
         {
             m_Buffer = new List<RawSynchronizedBufferFrame>(initialBufferSize);
             m_TransformBuffer = transformBuffer;
@@ -60,6 +83,7 @@ namespace CakeLab.ARFlow.DataBuffers
             m_PlaneDetectionBuffer = planeDetectionBuffer;
             m_PointCloudDetectionBuffer = pointCloudDetectionBuffer;
             m_MeshDetectionBuffer = meshDetectionBuffer;
+            m_NtpManager = ntpManager;
         }
 
         public void StartCapture()
@@ -103,7 +127,7 @@ namespace CakeLab.ARFlow.DataBuffers
             var meshDetectionFrame = m_MeshDetectionBuffer.TryAcquireLatestFrame();
             return new RawSynchronizedBufferFrame
             {
-                DeviceTimestamp = DateTime.UtcNow,
+                DeviceTimestamp = m_NtpManager.UtcNow,
                 TransformFrame = transformFrame,
                 ColorFrame = colorFrame,
                 DepthFrame = depthFrame,

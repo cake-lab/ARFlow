@@ -8,10 +8,10 @@ namespace CakeLab.ARFlow.DataBuffers
 {
     using Grpc.V1;
     using Utilities;
-    using UnityXRCpuImage = UnityEngine.XR.ARSubsystems.XRCpuImage;
-    using UnityVector2Int = UnityEngine.Vector2Int;
-    using GrpcXRCpuImage = Grpc.V1.XRCpuImage;
     using GrpcVector2Int = Grpc.V1.Vector2Int;
+    using GrpcXRCpuImage = Grpc.V1.XRCpuImage;
+    using UnityVector2Int = UnityEngine.Vector2Int;
+    using UnityXRCpuImage = UnityEngine.XR.ARSubsystems.XRCpuImage;
 
     /// <remarks>
     /// We don't keep a buffer of XRCpuImage here because these are native resources that need to be disposed.
@@ -37,12 +37,14 @@ namespace CakeLab.ARFlow.DataBuffers
                 Timestamp = rawFrame.ImageTimestamp,
             };
             xrCpuImageGrpc.Planes.AddRange(
-                (rawFrame.Planes ?? Array.Empty<UnityXRCpuImage.Plane>()).Select(plane => new Grpc.V1.XRCpuImage.Types.Plane
-                {
-                    RowStride = plane.rowStride,
-                    PixelStride = plane.pixelStride,
-                    Data = Google.Protobuf.ByteString.CopyFrom(plane.data.ToArray()),
-                })
+                (rawFrame.Planes ?? Array.Empty<UnityXRCpuImage.Plane>()).Select(
+                    plane => new Grpc.V1.XRCpuImage.Types.Plane
+                    {
+                        RowStride = plane.rowStride,
+                        PixelStride = plane.pixelStride,
+                        Data = Google.Protobuf.ByteString.CopyFrom(plane.data.ToArray()),
+                    }
+                )
             );
             var colorFrameGrpc = new Grpc.V1.ColorFrame
             {
@@ -54,10 +56,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public static explicit operator Grpc.V1.ARFrame(RawColorFrame rawFrame)
         {
-            var arFrame = new Grpc.V1.ARFrame
-            {
-                ColorFrame = (Grpc.V1.ColorFrame)rawFrame,
-            };
+            var arFrame = new Grpc.V1.ARFrame { ColorFrame = (Grpc.V1.ColorFrame)rawFrame };
             return arFrame;
         }
     }
@@ -75,6 +74,14 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_CameraManager = value;
         }
 
+        NtpDateTimeManager m_NtpManager;
+
+        public NtpDateTimeManager NtpManager
+        {
+            get => m_NtpManager;
+            set => m_NtpManager = value;
+        }
+
         private readonly List<RawColorFrame> m_Buffer;
 
         public IReadOnlyList<RawColorFrame> Buffer => m_Buffer;
@@ -85,10 +92,15 @@ namespace CakeLab.ARFlow.DataBuffers
         /// <remarks>
         /// See <a href="https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scenes/FaceTracking/ToggleCameraFacingDirectionOnAction.cs">ToggleCameraFacingDirectionOnAction.cs</a> for an example of how to use this class.
         /// </remarks>
-        public ColorBuffer(int initialBufferSize, ARCameraManager cameraManager)
+        public ColorBuffer(
+            int initialBufferSize,
+            ARCameraManager cameraManager,
+            NtpDateTimeManager ntpManager
+        )
         {
             m_Buffer = new List<RawColorFrame>(initialBufferSize);
             m_CameraManager = cameraManager;
+            m_NtpManager = ntpManager;
         }
 
         public void StartCapture()
@@ -103,15 +115,13 @@ namespace CakeLab.ARFlow.DataBuffers
 
         private void OnCameraFrameReceived(ARCameraFrameEventArgs _)
         {
-            if (
-                !m_CameraManager.TryAcquireLatestCpuImage(out UnityXRCpuImage image)
-            )
+            if (!m_CameraManager.TryAcquireLatestCpuImage(out UnityXRCpuImage image))
             {
                 InternalDebug.Log("Failed to acquire latest CPU image or camera intrinsics.");
                 return;
             }
 
-            AddToBuffer(image, DateTime.UtcNow);
+            AddToBuffer(image, m_NtpManager.UtcNow);
             image.Dispose();
         }
 
@@ -131,7 +141,11 @@ namespace CakeLab.ARFlow.DataBuffers
                         {
                             // Make a deep copy to decouple lifetime of the image from the buffer
                             var plane = image.GetPlane(i);
-                            return new UnityXRCpuImage.Plane(plane.rowStride, plane.pixelStride, plane.data);
+                            return new UnityXRCpuImage.Plane(
+                                plane.rowStride,
+                                plane.pixelStride,
+                                plane.data
+                            );
                         })
                         .ToArray(),
                 };
@@ -158,7 +172,6 @@ namespace CakeLab.ARFlow.DataBuffers
             StopCapture();
             ClearBuffer();
         }
-
 
         /// <remarks>
         /// Convert is reportedly <a href="https://github.com/Unity-Technologies/arfoundation-samples/issues/1113#issuecomment-1876327727">more performant</a> than ConvertAsync so we're using that here.
@@ -199,6 +212,5 @@ namespace CakeLab.ARFlow.DataBuffers
         //     );
         //     conversion.Dispose();
         // }
-
     }
 }

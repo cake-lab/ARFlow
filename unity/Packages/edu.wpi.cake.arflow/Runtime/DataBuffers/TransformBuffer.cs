@@ -7,6 +7,8 @@ using UnityEngine;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
+    using Utilities;
+
     public struct RawTransformFrame
     {
         public DateTime DeviceTimestamp;
@@ -17,7 +19,7 @@ namespace CakeLab.ARFlow.DataBuffers
             var transformFrameGrpc = new Grpc.V1.TransformFrame
             {
                 DeviceTimestamp = Timestamp.FromDateTime(rawFrame.DeviceTimestamp),
-                Data = Google.Protobuf.ByteString.CopyFrom(rawFrame.Data)
+                Data = Google.Protobuf.ByteString.CopyFrom(rawFrame.Data),
             };
             return transformFrameGrpc;
         }
@@ -39,6 +41,14 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_MainCamera = value;
         }
 
+        NtpDateTimeManager m_NtpManager;
+
+        public NtpDateTimeManager NtpManager
+        {
+            get => m_NtpManager;
+            set => m_NtpManager = value;
+        }
+
         private readonly Timer m_SamplingTimer;
         private bool m_IsCapturing;
         private const int m_TransformDataSize = 3 * 4 * sizeof(float);
@@ -46,10 +56,16 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public IReadOnlyList<RawTransformFrame> Buffer => m_Buffer;
 
-        public TransformBuffer(int initialBufferSize, Camera mainCamera, double samplingIntervalMs = 50)
+        public TransformBuffer(
+            int initialBufferSize,
+            Camera mainCamera,
+            NtpDateTimeManager ntpManager,
+            double samplingIntervalMs = 50
+        )
         {
             m_Buffer = new List<RawTransformFrame>(initialBufferSize);
             m_MainCamera = mainCamera;
+            m_NtpManager = ntpManager;
             m_SamplingTimer = new Timer(samplingIntervalMs);
             m_SamplingTimer.Elapsed += OnSamplingTimerElapsed;
         }
@@ -80,7 +96,7 @@ namespace CakeLab.ARFlow.DataBuffers
             {
                 return;
             }
-            AddToBuffer(DateTime.UtcNow);
+            AddToBuffer(m_NtpManager.UtcNow);
         }
 
         private void AddToBuffer(DateTime deviceTimestampAtCapture)
@@ -90,18 +106,18 @@ namespace CakeLab.ARFlow.DataBuffers
             System.Buffer.BlockCopy(
                 new[]
                 {
-                        m.m00,
-                        m.m01,
-                        m.m02,
-                        m.m03,
-                        m.m10,
-                        m.m11,
-                        m.m12,
-                        m.m13,
-                        m.m20,
-                        m.m21,
-                        m.m22,
-                        m.m23,
+                    m.m00,
+                    m.m01,
+                    m.m02,
+                    m.m03,
+                    m.m10,
+                    m.m11,
+                    m.m12,
+                    m.m13,
+                    m.m20,
+                    m.m21,
+                    m.m22,
+                    m.m23,
                 },
                 0,
                 cameraTransformBytes,
@@ -111,7 +127,7 @@ namespace CakeLab.ARFlow.DataBuffers
             var newFrame = new RawTransformFrame
             {
                 DeviceTimestamp = deviceTimestampAtCapture,
-                Data = cameraTransformBytes
+                Data = cameraTransformBytes,
             };
             m_Buffer.Add(newFrame);
         }

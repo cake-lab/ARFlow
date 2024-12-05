@@ -1,12 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
-using System.Collections.Generic;
 using Google.Protobuf.WellKnownTypes;
 using UnityEngine.InputSystem;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
+    using Utilities;
 
     public struct RawGyroscopeFrame
     {
@@ -52,10 +53,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public static explicit operator Grpc.V1.ARFrame(RawGyroscopeFrame rawFrame)
         {
-            var arFrame = new Grpc.V1.ARFrame
-            {
-                GyroscopeFrame = (Grpc.V1.GyroscopeFrame)rawFrame,
-            };
+            var arFrame = new Grpc.V1.ARFrame { GyroscopeFrame = (Grpc.V1.GyroscopeFrame)rawFrame };
             return arFrame;
         }
     }
@@ -66,11 +64,24 @@ namespace CakeLab.ARFlow.DataBuffers
         private readonly Timer m_SamplingTimer;
         private bool m_IsCapturing;
 
+        NtpDateTimeManager m_NtpManager;
+
+        public NtpDateTimeManager NtpManager
+        {
+            get => m_NtpManager;
+            set => m_NtpManager = value;
+        }
+
         public IReadOnlyList<RawGyroscopeFrame> Buffer => m_Buffer;
 
-        public GyroscopeBuffer(int initialBufferSize, double samplingIntervalMs = 50)
+        public GyroscopeBuffer(
+            int initialBufferSize,
+            NtpDateTimeManager ntpManager,
+            double samplingIntervalMs = 50
+        )
         {
             m_Buffer = new List<RawGyroscopeFrame>(initialBufferSize);
+            m_NtpManager = ntpManager;
             m_SamplingTimer = new Timer(samplingIntervalMs);
             m_SamplingTimer.Elapsed += OnSamplingTimerElapsed;
         }
@@ -101,7 +112,7 @@ namespace CakeLab.ARFlow.DataBuffers
             {
                 return;
             }
-            AddToBuffer(DateTime.UtcNow);
+            AddToBuffer(m_NtpManager.UtcNow);
         }
 
         private void AddToBuffer(DateTime deviceTimestampAtCapture)
@@ -110,7 +121,8 @@ namespace CakeLab.ARFlow.DataBuffers
             {
                 DeviceTimestamp = deviceTimestampAtCapture,
                 Attitude = AttitudeSensor.current.attitude.ReadValue(),
-                RotationRate = UnityEngine.InputSystem.Gyroscope.current.angularVelocity.ReadValue(),
+                RotationRate =
+                    UnityEngine.InputSystem.Gyroscope.current.angularVelocity.ReadValue(),
                 Gravity = GravitySensor.current.gravity.ReadValue(),
                 Acceleration = Accelerometer.current.acceleration.ReadValue(),
             };

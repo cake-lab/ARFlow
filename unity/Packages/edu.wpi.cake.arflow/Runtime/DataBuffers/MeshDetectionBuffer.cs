@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Unity.Collections;
 using System.Linq;
 using System.Threading.Tasks;
-using Google.Protobuf.WellKnownTypes;
-using UnityEngine;
 using Draco.Encode;
+using Google.Protobuf.WellKnownTypes;
+using Unity.Collections;
+using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataBuffers
@@ -32,10 +32,12 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public static explicit operator Grpc.V1.MeshDetectionFrame(RawMeshDetectionFrame rawFrame)
         {
-            var subMeshes = rawFrame.EncodedSubMeshes.Select(encodedMesh => new Grpc.V1.MeshFilter.Types.EncodedMesh.Types.EncodedSubMesh
-            {
-                Data = Google.Protobuf.ByteString.CopyFrom(encodedMesh),
-            });
+            var subMeshes = rawFrame.EncodedSubMeshes.Select(
+                encodedMesh => new Grpc.V1.MeshFilter.Types.EncodedMesh.Types.EncodedSubMesh
+                {
+                    Data = Google.Protobuf.ByteString.CopyFrom(encodedMesh),
+                }
+            );
             var encodedMesh = new Grpc.V1.MeshFilter.Types.EncodedMesh();
             encodedMesh.SubMeshes.AddRange(subMeshes);
             var meshFilterGrpc = new GrpcMeshFilter
@@ -54,7 +56,10 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public static explicit operator Grpc.V1.ARFrame(RawMeshDetectionFrame rawFrame)
         {
-            var arFrame = new Grpc.V1.ARFrame { MeshDetectionFrame = (Grpc.V1.MeshDetectionFrame)rawFrame };
+            var arFrame = new Grpc.V1.ARFrame
+            {
+                MeshDetectionFrame = (Grpc.V1.MeshDetectionFrame)rawFrame,
+            };
             return arFrame;
         }
     }
@@ -69,14 +74,27 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_MeshManager = value;
         }
 
+        NtpDateTimeManager m_NtpManager;
+
+        public NtpDateTimeManager NtpManager
+        {
+            get => m_NtpManager;
+            set => m_NtpManager = value;
+        }
+
         private readonly List<RawMeshDetectionFrame> m_Buffer;
 
         public IReadOnlyList<RawMeshDetectionFrame> Buffer => m_Buffer;
 
-        public MeshDetectionBuffer(int initialBufferSize, ARMeshManager meshManager)
+        public MeshDetectionBuffer(
+            int initialBufferSize,
+            ARMeshManager meshManager,
+            NtpDateTimeManager ntpManager
+        )
         {
             m_Buffer = new List<RawMeshDetectionFrame>(initialBufferSize);
             m_MeshManager = meshManager;
+            m_NtpManager = ntpManager;
         }
 
         public void StartCapture()
@@ -91,26 +109,35 @@ namespace CakeLab.ARFlow.DataBuffers
 
         private async void OnMeshesChanged(ARMeshesChangedEventArgs changes)
         {
-            var deviceTime = DateTime.UtcNow;
+            var deviceTime = m_NtpManager.UtcNow;
             var tasks = new List<Task>
             {
                 AddToBuffer(changes.added, deviceTime, MeshDetectionState.Added),
-                AddToBuffer(changes.updated, deviceTime, MeshDetectionState.Updated)
+                AddToBuffer(changes.updated, deviceTime, MeshDetectionState.Updated),
             };
             await Task.WhenAll(tasks);
             AddToBuffer(changes.removed, deviceTime);
         }
 
-        private async Task AddToBuffer(List<UnityMeshFilter> meshFilters, DateTime deviceTimestampAtCapture, MeshDetectionState state)
+        private async Task AddToBuffer(
+            List<UnityMeshFilter> meshFilters,
+            DateTime deviceTimestampAtCapture,
+            MeshDetectionState state
+        )
         {
             // https://docs.unity3d.com/Packages/com.unity.cloud.draco@5.1/manual/use-case-encoding.html#encode-using-the-advanced-mesh-api
-            using var meshDataArray = Mesh.AcquireReadOnlyMeshData(meshFilters.Select(mf => mf.sharedMesh).ToArray());
+            using var meshDataArray = Mesh.AcquireReadOnlyMeshData(
+                meshFilters.Select(mf => mf.sharedMesh).ToArray()
+            );
             var encodeTasks = new List<Task<EncodeResult[]>>();
             for (int i = 0; i < meshFilters.Count; i++)
             {
                 var encodeTask = Task.Run(async () =>
                 {
-                    return await DracoEncoder.EncodeMesh(meshFilters[i].sharedMesh, meshDataArray[i]);
+                    return await DracoEncoder.EncodeMesh(
+                        meshFilters[i].sharedMesh,
+                        meshDataArray[i]
+                    );
                 });
                 encodeTasks.Add(encodeTask);
             }
@@ -121,18 +148,22 @@ namespace CakeLab.ARFlow.DataBuffers
                 var results = encodeResults[i];
                 if (results == null)
                 {
-                    InternalDebug.LogWarning($"Encoding failed for mesh filter with ID {meshFilters[i].GetInstanceID()}");
+                    InternalDebug.LogWarning(
+                        $"Encoding failed for mesh filter with ID {meshFilters[i].GetInstanceID()}"
+                    );
                     continue;
                 }
-                m_Buffer.AddRange(results.Select(result => new RawMeshDetectionFrame
-                {
-                    State = state,
-                    // TODO: How does the transform/pose for MeshFilter look like?
-                    // Pose = meshFilters[i].transform,
-                    MeshFilterId = meshFilters[i].GetInstanceID(),
-                    DeviceTimestamp = deviceTimestampAtCapture,
-                    EncodedSubMeshes = results.Select(r => r.data).ToList(),
-                }));
+                m_Buffer.AddRange(
+                    results.Select(result => new RawMeshDetectionFrame
+                    {
+                        State = state,
+                        // TODO: How does the transform/pose for MeshFilter look like?
+                        // Pose = meshFilters[i].transform,
+                        MeshFilterId = meshFilters[i].GetInstanceID(),
+                        DeviceTimestamp = deviceTimestampAtCapture,
+                        EncodedSubMeshes = results.Select(r => r.data).ToList(),
+                    })
+                );
                 foreach (var result in results)
                 {
                     result.Dispose();
@@ -140,16 +171,21 @@ namespace CakeLab.ARFlow.DataBuffers
             }
         }
 
-        private void AddToBuffer(List<UnityMeshFilter> meshFilters, DateTime deviceTimestampAtCapture)
+        private void AddToBuffer(
+            List<UnityMeshFilter> meshFilters,
+            DateTime deviceTimestampAtCapture
+        )
         {
-            m_Buffer.AddRange(meshFilters.Select(meshFilter => new RawMeshDetectionFrame
-            {
-                State = MeshDetectionState.Removed,
-                // TODO: How does the transform/pose for MeshFilter look like?
-                // Pose = meshFilter.Value.pose,
-                MeshFilterId = meshFilter.GetInstanceID(),
-                DeviceTimestamp = deviceTimestampAtCapture,
-            }));
+            m_Buffer.AddRange(
+                meshFilters.Select(meshFilter => new RawMeshDetectionFrame
+                {
+                    State = MeshDetectionState.Removed,
+                    // TODO: How does the transform/pose for MeshFilter look like?
+                    // Pose = meshFilter.Value.pose,
+                    MeshFilterId = meshFilter.GetInstanceID(),
+                    DeviceTimestamp = deviceTimestampAtCapture,
+                })
+            );
         }
 
         public void ClearBuffer()

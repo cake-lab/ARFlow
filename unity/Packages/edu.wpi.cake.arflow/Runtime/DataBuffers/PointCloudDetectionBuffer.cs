@@ -8,15 +8,16 @@ using UnityEngine.XR.ARFoundation;
 namespace CakeLab.ARFlow.DataBuffers
 {
     using Grpc.V1;
-    using GrpcARTrackable = Grpc.V1.ARTrackable;
+    using Utilities;
     using GrpcARPointCloud = Grpc.V1.ARPointCloud;
+    using GrpcARTrackable = Grpc.V1.ARTrackable;
     using GrpcPose = Grpc.V1.Pose;
-    using GrpcVector3 = Grpc.V1.Vector3;
     using GrpcQuaternion = Grpc.V1.Quaternion;
-    using UnityPose = UnityEngine.Pose;
+    using GrpcVector3 = Grpc.V1.Vector3;
+    using UnityARPointCloud = UnityEngine.XR.ARFoundation.ARPointCloud;
     using UnityARTrackableId = UnityEngine.XR.ARSubsystems.TrackableId;
     using UnityARTrackingState = UnityEngine.XR.ARSubsystems.TrackingState;
-    using UnityARPointCloud = UnityEngine.XR.ARFoundation.ARPointCloud;
+    using UnityPose = UnityEngine.Pose;
     using UnityVector3 = UnityEngine.Vector3;
 
     public enum PointCloudDetectionState
@@ -38,7 +39,9 @@ namespace CakeLab.ARFlow.DataBuffers
         public ulong[] Identifiers;
         public UnityVector3[] Positions;
 
-        public static explicit operator Grpc.V1.PointCloudDetectionFrame(RawPointCloudDetectionFrame rawFrame)
+        public static explicit operator Grpc.V1.PointCloudDetectionFrame(
+            RawPointCloudDetectionFrame rawFrame
+        )
         {
             var trackingState = rawFrame.TrackingState switch
             {
@@ -53,10 +56,30 @@ namespace CakeLab.ARFlow.DataBuffers
                 {
                     Pose = new GrpcPose
                     {
-                        Forward = new GrpcVector3 { X = rawFrame.Pose.forward.x, Y = rawFrame.Pose.forward.y, Z = rawFrame.Pose.forward.z },
-                        Right = new GrpcVector3 { X = rawFrame.Pose.right.x, Y = rawFrame.Pose.right.y, Z = rawFrame.Pose.right.z },
-                        Rotation = new GrpcQuaternion { X = rawFrame.Pose.rotation.x, Y = rawFrame.Pose.rotation.y, Z = rawFrame.Pose.rotation.z },
-                        Up = new GrpcVector3 { X = rawFrame.Pose.up.x, Y = rawFrame.Pose.up.y, Z = rawFrame.Pose.up.z },
+                        Forward = new GrpcVector3
+                        {
+                            X = rawFrame.Pose.forward.x,
+                            Y = rawFrame.Pose.forward.y,
+                            Z = rawFrame.Pose.forward.z,
+                        },
+                        Right = new GrpcVector3
+                        {
+                            X = rawFrame.Pose.right.x,
+                            Y = rawFrame.Pose.right.y,
+                            Z = rawFrame.Pose.right.z,
+                        },
+                        Rotation = new GrpcQuaternion
+                        {
+                            X = rawFrame.Pose.rotation.x,
+                            Y = rawFrame.Pose.rotation.y,
+                            Z = rawFrame.Pose.rotation.z,
+                        },
+                        Up = new GrpcVector3
+                        {
+                            X = rawFrame.Pose.up.x,
+                            Y = rawFrame.Pose.up.y,
+                            Z = rawFrame.Pose.up.z,
+                        },
                     },
                     TrackableId = new GrpcARTrackable.Types.TrackableId
                     {
@@ -69,7 +92,12 @@ namespace CakeLab.ARFlow.DataBuffers
             pointCloudGrpc.ConfidenceValues.AddRange(rawFrame.ConfidenceValues);
             pointCloudGrpc.Identifiers.AddRange(rawFrame.Identifiers);
             pointCloudGrpc.Positions.AddRange(
-                rawFrame.Positions.Select(v => new GrpcVector3 { X = v.x, Y = v.y, Z = v.z })
+                rawFrame.Positions.Select(v => new GrpcVector3
+                {
+                    X = v.x,
+                    Y = v.y,
+                    Z = v.z,
+                })
             );
             var pointCloudDetectionFrameGrpc = new Grpc.V1.PointCloudDetectionFrame
             {
@@ -82,7 +110,10 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public static explicit operator Grpc.V1.ARFrame(RawPointCloudDetectionFrame rawFrame)
         {
-            var arFrame = new Grpc.V1.ARFrame { PointCloudDetectionFrame = (Grpc.V1.PointCloudDetectionFrame)rawFrame };
+            var arFrame = new Grpc.V1.ARFrame
+            {
+                PointCloudDetectionFrame = (Grpc.V1.PointCloudDetectionFrame)rawFrame,
+            };
             return arFrame;
         }
     }
@@ -97,14 +128,27 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_PointCloudManager = value;
         }
 
+        NtpDateTimeManager m_NtpManager;
+
+        public NtpDateTimeManager NtpManager
+        {
+            get => m_NtpManager;
+            set => m_NtpManager = value;
+        }
+
         private readonly List<RawPointCloudDetectionFrame> m_Buffer;
 
         public IReadOnlyList<RawPointCloudDetectionFrame> Buffer => m_Buffer;
 
-        public PointCloudDetectionBuffer(int initialBufferSize, ARPointCloudManager pointCloudManager)
+        public PointCloudDetectionBuffer(
+            int initialBufferSize,
+            ARPointCloudManager pointCloudManager,
+            NtpDateTimeManager ntpManager
+        )
         {
             m_Buffer = new List<RawPointCloudDetectionFrame>(initialBufferSize);
             m_PointCloudManager = pointCloudManager;
+            m_NtpManager = ntpManager;
         }
 
         public void StartCapture()
@@ -117,42 +161,56 @@ namespace CakeLab.ARFlow.DataBuffers
             m_PointCloudManager.trackablesChanged.RemoveListener(OnPointCloudDetectionChanged);
         }
 
-        private void OnPointCloudDetectionChanged(ARTrackablesChangedEventArgs<UnityARPointCloud> changes)
+        private void OnPointCloudDetectionChanged(
+            ARTrackablesChangedEventArgs<UnityARPointCloud> changes
+        )
         {
-            var deviceTime = DateTime.UtcNow;
+            var deviceTime = m_NtpManager.UtcNow;
             AddToBuffer(changes.added, deviceTime, PointCloudDetectionState.Added);
             AddToBuffer(changes.updated, deviceTime, PointCloudDetectionState.Updated);
             AddToBuffer(changes.removed, deviceTime);
         }
 
-        private void AddToBuffer(ReadOnlyList<UnityARPointCloud> pointClouds, DateTime deviceTimestampAtCapture, PointCloudDetectionState state)
+        private void AddToBuffer(
+            ReadOnlyList<UnityARPointCloud> pointClouds,
+            DateTime deviceTimestampAtCapture,
+            PointCloudDetectionState state
+        )
         {
-            m_Buffer.AddRange(pointClouds.Select(pointCloud => new RawPointCloudDetectionFrame
-            {
-                State = state,
-                Pose = pointCloud.pose,
-                TrackableId = pointCloud.trackableId,
-                TrackingState = pointCloud.trackingState,
-                DeviceTimestamp = deviceTimestampAtCapture,
-                ConfidenceValues = pointCloud.confidenceValues?.ToArray() ?? Array.Empty<float>(),
-                Identifiers = pointCloud.identifiers?.ToArray() ?? Array.Empty<ulong>(),
-                Positions = pointCloud.positions?.ToArray() ?? Array.Empty<UnityVector3>(),
-            }));
+            m_Buffer.AddRange(
+                pointClouds.Select(pointCloud => new RawPointCloudDetectionFrame
+                {
+                    State = state,
+                    Pose = pointCloud.pose,
+                    TrackableId = pointCloud.trackableId,
+                    TrackingState = pointCloud.trackingState,
+                    DeviceTimestamp = deviceTimestampAtCapture,
+                    ConfidenceValues =
+                        pointCloud.confidenceValues?.ToArray() ?? Array.Empty<float>(),
+                    Identifiers = pointCloud.identifiers?.ToArray() ?? Array.Empty<ulong>(),
+                    Positions = pointCloud.positions?.ToArray() ?? Array.Empty<UnityVector3>(),
+                })
+            );
         }
 
-        private void AddToBuffer(ReadOnlyList<KeyValuePair<UnityARTrackableId, UnityARPointCloud>> pointClouds, DateTime deviceTimestampAtCapture)
+        private void AddToBuffer(
+            ReadOnlyList<KeyValuePair<UnityARTrackableId, UnityARPointCloud>> pointClouds,
+            DateTime deviceTimestampAtCapture
+        )
         {
-            m_Buffer.AddRange(pointClouds.Select(pointCloud => new RawPointCloudDetectionFrame
-            {
-                State = PointCloudDetectionState.Removed,
-                Pose = pointCloud.Value.pose,
-                TrackableId = pointCloud.Key,
-                TrackingState = pointCloud.Value.trackingState,
-                DeviceTimestamp = deviceTimestampAtCapture,
-                ConfidenceValues = Array.Empty<float>(),
-                Identifiers = Array.Empty<ulong>(),
-                Positions = Array.Empty<UnityVector3>(),
-            }));
+            m_Buffer.AddRange(
+                pointClouds.Select(pointCloud => new RawPointCloudDetectionFrame
+                {
+                    State = PointCloudDetectionState.Removed,
+                    Pose = pointCloud.Value.pose,
+                    TrackableId = pointCloud.Key,
+                    TrackingState = pointCloud.Value.trackingState,
+                    DeviceTimestamp = deviceTimestampAtCapture,
+                    ConfidenceValues = Array.Empty<float>(),
+                    Identifiers = Array.Empty<ulong>(),
+                    Positions = Array.Empty<UnityVector3>(),
+                })
+            );
         }
 
         public void ClearBuffer()

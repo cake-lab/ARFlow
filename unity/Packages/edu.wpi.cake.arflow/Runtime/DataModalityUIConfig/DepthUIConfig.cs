@@ -1,20 +1,16 @@
-using UnityEngine;
-using CakeLab.ARFlow.DataBuffers;
-
-using TMPro;
-using UnityEngine.UI;
-
-using System.Collections.Generic;
 using System;
-using UnityEditor;
-
+using System.Collections.Generic;
+using CakeLab.ARFlow.DataBuffers;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
-
-using static CakeLab.ARFlow.DataModalityUIConfig.DefaultValues;
-using CakeLab.ARFlow.DataModalityUIConfig;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
+    using Utilities;
+    using static DefaultValues;
+
     public class DepthUIConfig : IDataModalityUIConfig
     {
         // toggle for buffer is a special case - toggling turns config off and on
@@ -27,36 +23,68 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         private TMP_InputField bufferSizeField;
         private TMP_InputField delayField;
 
-        public DepthUIConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality, bool isBufferAvailable = false)
+        public DepthUIConfig(
+            GameObject parent,
+            DataModalityUIConfigPrefabs prefabs,
+            Action<bool> onToggleModality,
+            bool isBufferAvailable = false
+        )
         {
             //Name
-            InstantiateGameObject.InstantiateHeaderText(parent, prefabs.headerTextPrefab, MODALITY_NAME, out var bufferNameObject);
+            InstantiateGameObject.InstantiateHeaderText(
+                parent,
+                prefabs.headerTextPrefab,
+                MODALITY_NAME,
+                out var bufferNameObject
+            );
             if (!isBufferAvailable)
             {
                 //If buffer is not available, don't show the rest of the UI
-                GameObject bufferNotAvailableText = GameObject.Instantiate(prefabs.bodyTextPrefab, parent.transform);
+                GameObject bufferNotAvailableText = GameObject.Instantiate(
+                    prefabs.bodyTextPrefab,
+                    parent.transform
+                );
                 bufferNotAvailableText.GetComponent<Text>().text = UNAVAILABLE_MESSAGE;
                 return;
             }
 
             //Buffer toggle (on or off)
-            InstantiateGameObject.InstantiateToggle(parent, prefabs.togglePrefab, ENABLE_NAME, onToggleModality, out toggle, out _);
+            InstantiateGameObject.InstantiateToggle(
+                parent,
+                prefabs.togglePrefab,
+                ENABLE_NAME,
+                onToggleModality,
+                out toggle,
+                out _
+            );
 
             //Buffer Size
-            InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, BUFFER_SIZE_NAME, DEFAULT_BUFFER_SIZE, out var bufferSizeObject, out bufferSizeField);
+            InstantiateGameObject.InstantiateInputField(
+                parent,
+                prefabs.textFieldPrefab,
+                BUFFER_SIZE_NAME,
+                DEFAULT_BUFFER_SIZE,
+                out var bufferSizeObject,
+                out bufferSizeField
+            );
             bufferSizeField.contentType = TMP_InputField.ContentType.IntegerNumber;
             uiConfigElements.Add(bufferSizeObject);
 
             //Delay
-            InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, DELAY_NAME, DELAY_DEFAULT, out var delayObject, out delayField);
+            InstantiateGameObject.InstantiateInputField(
+                parent,
+                prefabs.textFieldPrefab,
+                DELAY_NAME,
+                DELAY_DEFAULT,
+                out var delayObject,
+                out delayField
+            );
             delayField.contentType = TMP_InputField.ContentType.DecimalNumber;
             uiConfigElements.Add(delayObject);
         }
 
-
         public void TurnOffConfig()
         {
-
             foreach (GameObject element in uiConfigElements)
             {
                 element.SetActive(false);
@@ -81,9 +109,13 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         {
             return float.Parse(delayField.text);
         }
-        public DepthBuffer getBufferFromConfig(AROcclusionManager manager)
+
+        public DepthBuffer getBufferFromConfig(
+            AROcclusionManager manager,
+            NtpDateTimeManager ntpManager
+        )
         {
-            return new DepthBuffer(int.Parse(bufferSizeField.text), manager);
+            return new DepthBuffer(int.Parse(bufferSizeField.text), manager, ntpManager);
         }
 
         public void Dispose()
@@ -95,3 +127,4 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
     }
 }
+

@@ -10,7 +10,6 @@ using CakeLab.ARFlow.Grpc.V1;
 using CakeLab.ARFlow.Utilities;
 using EasyUI.Toast;
 using TMPro;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
@@ -29,6 +28,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public IGrpcClient grpcClient;
 
+    public NtpDateTimeManager ntpManager;
 
     private ColorBuffer m_colorBuffer;
     private ColorUIConfig m_ColorUIConfig;
@@ -37,8 +37,6 @@ public class ARFlowDeviceSample : MonoBehaviour
     private DepthBuffer m_depthBuffer;
     private DepthUIConfig m_depthUIConfig;
     private CancellationTokenSource m_depthCts;
-
-
 
     private List<IDataBuffer> m_dataBuffers;
 
@@ -324,7 +322,6 @@ public class ARFlowDeviceSample : MonoBehaviour
             //joining completeted --> switch to the next window
             sessionsWindow.windowGameObject.SetActive(false);
             arViewWindow.windowGameObject.SetActive(true);
-
         }
         else
         {
@@ -345,19 +342,14 @@ public class ARFlowDeviceSample : MonoBehaviour
         public GameObject textInputPrefab;
         public GameObject dropdownPrefab;
         public GameObject togglePrefab;
-        public DataModalityUIConfigPrefabs ConfigPrefabs => new(
-                headerTextPrefab,
-                bodyTextPrefab,
-                textInputPrefab,
-                dropdownPrefab,
-                togglePrefab
-            );
+        public DataModalityUIConfigPrefabs ConfigPrefabs =>
+            new(headerTextPrefab, bodyTextPrefab, textInputPrefab, dropdownPrefab, togglePrefab);
     }
 
     [Tooltip("UI Window sending AR data")]
     public ARViewWindow arViewWindow;
 
-    private void onStartPauseButton()
+    private void OnStartPauseButton()
     {
         if (m_isSending)
         {
@@ -384,11 +376,11 @@ public class ARFlowDeviceSample : MonoBehaviour
             m_dataModalityUIConfigs.ForEach(config => config.TurnOffConfig());
 
             //start individual buffer sending
-            SendColorFrames();
+            SendColorFramesAsync();
         }
     }
 
-    private async void SendColorFrames()
+    private async void SendColorFramesAsync()
     {
         while (!m_colorCts.Token.IsCancellationRequested)
         {
@@ -419,7 +411,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
-    private async void sendDepthFrames()
+    private async void SendDepthFramesAsync()
     {
         while (!m_depthCts.Token.IsCancellationRequested)
         {
@@ -453,7 +445,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     void Start()
     {
         // Initialize data buffers and sending-related vaiables
-        m_colorBuffer = new ColorBuffer(64, cameraManager);
+        m_colorBuffer = new ColorBuffer(64, cameraManager, ntpManager);
         m_dataBuffers = new List<IDataBuffer>()
         {
             m_colorBuffer,
@@ -474,8 +466,9 @@ public class ARFlowDeviceSample : MonoBehaviour
                 {
                     cameraManager.enabled = false;
                     InternalDebug.Log("Enable camera manager");
-                    m_colorBuffer = m_ColorUIConfig.getBufferFromConfig(cameraManager);
-                    if (m_isSending) m_colorBuffer.StartCapture();
+                    m_colorBuffer = m_ColorUIConfig.getBufferFromConfig(cameraManager, ntpManager);
+                    if (m_isSending)
+                        m_colorBuffer.StartCapture();
                 }
                 else
                 {
@@ -509,6 +502,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         sessionsWindow.createSessionWindow.createSessionButton.onClick.AddListener(OnCreateSession);
 
         // Initialize AR view window
-        arViewWindow.startPauseButton.onClick.AddListener(onStartPauseButton);
+        arViewWindow.startPauseButton.onClick.AddListener(OnStartPauseButton);
     }
 }
