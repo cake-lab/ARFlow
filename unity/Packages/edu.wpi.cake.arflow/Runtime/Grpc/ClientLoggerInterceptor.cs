@@ -198,7 +198,7 @@ namespace CakeLab.ARFlow.Grpc
 
         private void LogException(Exception ex)
         {
-            InternalDebug.LogException(ex);
+            InternalDebug.Log(ex);
         }
     }
 }

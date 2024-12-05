@@ -110,9 +110,9 @@ public class ARFlowDeviceSample : MonoBehaviour
                 control.buffer.ClearBuffer();
             }
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException e)
         {
-            InternalDebug.Log("Operation cancelled");
+            InternalDebug.Log($"Operation cancelled {e}");
         }
 
     }
