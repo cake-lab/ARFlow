@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    using Utilities;
+    using Clock;
     using static DefaultValues;
 
     public class AudioUIConfig : IDataModalityUIConfig
@@ -142,11 +142,11 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             return float.Parse(delayField.text);
         }
 
-        public AudioBuffer getBufferFromConfig(NtpDateTimeManager ntpManager)
+        public AudioBuffer getBufferFromConfig(IClock clock)
         {
             return new AudioBuffer(
                 int.Parse(bufferSizeField.text),
-                ntpManager,
+                clock,
                 int.Parse(sampleRateField.text),
                 int.Parse(frameLengthField.text)
             );
@@ -161,4 +161,3 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
     }
 }
-

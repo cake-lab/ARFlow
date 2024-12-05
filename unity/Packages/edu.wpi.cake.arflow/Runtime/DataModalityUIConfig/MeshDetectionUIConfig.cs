@@ -8,7 +8,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    using Utilities;
+    using Clock;
     using static DefaultValues;
 
     public class MeshDetectionUIConfig : IDataModalityUIConfig
@@ -111,15 +111,12 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             return float.Parse(delayField.text);
         }
 
-        public MeshDetectionBuffer getBufferFromConfig(
-            ARMeshManager meshManager,
-            NtpDateTimeManager ntpManager
-        )
+        public MeshDetectionBuffer getBufferFromConfig(ARMeshManager meshManager, IClock clock)
         {
             return new MeshDetectionBuffer(
                 int.Parse(bufferSizeField.text),
                 meshManager,
-                ntpManager
+                clock
             );
         }
 
@@ -132,4 +129,3 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
     }
 }
-

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    using Utilities;
+    using Clock;
     using static DefaultValues;
 
     public class TransformUIConfig : IDataModalityUIConfig
@@ -126,12 +126,12 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             return float.Parse(delayField.text);
         }
 
-        public TransformBuffer getBufferFromConfig(Camera mainCamera, NtpDateTimeManager ntpManager)
+        public TransformBuffer getBufferFromConfig(Camera mainCamera, IClock clock)
         {
             return new TransformBuffer(
                 int.Parse(bufferSizeField.text),
                 mainCamera,
-                ntpManager,
+                clock,
                 int.Parse(samplingIntervalField.text)
             );
         }
@@ -145,4 +145,3 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
     }
 }
-

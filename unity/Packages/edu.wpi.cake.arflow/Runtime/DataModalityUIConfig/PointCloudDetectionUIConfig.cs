@@ -8,7 +8,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    using Utilities;
+    using Clock;
     using static DefaultValues;
 
     public class PointCloudDetectionUIConfig : IDataModalityUIConfig
@@ -112,14 +112,14 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
 
         public PointCloudDetectionBuffer getBufferFromConfig(
             ARPointCloudManager manager,
-            NtpDateTimeManager ntpManager
+            IClock clock
         )
         {
             //TODO: validate
             return new PointCloudDetectionBuffer(
                 int.Parse(bufferSizeField.text),
                 manager,
-                ntpManager
+                clock
             );
         }
 
@@ -132,4 +132,3 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
     }
 }
-

@@ -4,7 +4,7 @@ using Google.Protobuf.WellKnownTypes;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
-    using Utilities;
+    using Clock;
 
     public struct RawSynchronizedBufferFrame
     {
@@ -49,12 +49,12 @@ namespace CakeLab.ARFlow.DataBuffers
         private readonly PlaneDetectionBuffer m_PlaneDetectionBuffer;
         private readonly PointCloudDetectionBuffer m_PointCloudDetectionBuffer;
         private readonly MeshDetectionBuffer m_MeshDetectionBuffer;
-        NtpDateTimeManager m_NtpManager;
+        IClock m_Clock;
 
-        public NtpDateTimeManager NtpManager
+        public IClock Clock
         {
-            get => m_NtpManager;
-            set => m_NtpManager = value;
+            get => m_Clock;
+            set => m_Clock = value;
         }
 
         private readonly List<RawSynchronizedBufferFrame> m_Buffer;
@@ -71,7 +71,7 @@ namespace CakeLab.ARFlow.DataBuffers
             PlaneDetectionBuffer planeDetectionBuffer,
             PointCloudDetectionBuffer pointCloudDetectionBuffer,
             MeshDetectionBuffer meshDetectionBuffer,
-            NtpDateTimeManager ntpManager
+            IClock clock
         )
         {
             m_Buffer = new List<RawSynchronizedBufferFrame>(initialBufferSize);
@@ -83,7 +83,7 @@ namespace CakeLab.ARFlow.DataBuffers
             m_PlaneDetectionBuffer = planeDetectionBuffer;
             m_PointCloudDetectionBuffer = pointCloudDetectionBuffer;
             m_MeshDetectionBuffer = meshDetectionBuffer;
-            m_NtpManager = ntpManager;
+            m_Clock = clock;
         }
 
         public void StartCapture()
@@ -127,7 +127,7 @@ namespace CakeLab.ARFlow.DataBuffers
             var meshDetectionFrame = m_MeshDetectionBuffer.TryAcquireLatestFrame();
             return new RawSynchronizedBufferFrame
             {
-                DeviceTimestamp = m_NtpManager.UtcNow,
+                DeviceTimestamp = m_Clock.UtcNow,
                 TransformFrame = transformFrame,
                 ColorFrame = colorFrame,
                 DepthFrame = depthFrame,

@@ -8,7 +8,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    using Utilities;
+    using Clock;
     using static DefaultValues;
 
     public class PlaneDetectionUIConfig : IDataModalityUIConfig
@@ -111,12 +111,9 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             return float.Parse(delayField.text);
         }
 
-        public PlaneDetectionBuffer getBufferFromConfig(
-            ARPlaneManager manager,
-            NtpDateTimeManager ntpManager
-        )
+        public PlaneDetectionBuffer getBufferFromConfig(ARPlaneManager manager, IClock clock)
         {
-            return new PlaneDetectionBuffer(int.Parse(bufferSizeField.text), manager, ntpManager);
+            return new PlaneDetectionBuffer(int.Parse(bufferSizeField.text), manager, clock);
         }
 
         public void Dispose()

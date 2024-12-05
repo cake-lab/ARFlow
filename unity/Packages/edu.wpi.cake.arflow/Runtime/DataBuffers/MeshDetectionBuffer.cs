@@ -10,6 +10,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
+    using Clock;
     using Grpc.V1;
     using Utilities;
     using GrpcMeshFilter = Grpc.V1.MeshFilter;
@@ -74,12 +75,12 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_MeshManager = value;
         }
 
-        NtpDateTimeManager m_NtpManager;
+        IClock m_Clock;
 
-        public NtpDateTimeManager NtpManager
+        public IClock Clock
         {
-            get => m_NtpManager;
-            set => m_NtpManager = value;
+            get => m_Clock;
+            set => m_Clock = value;
         }
 
         private readonly List<RawMeshDetectionFrame> m_Buffer;
@@ -89,12 +90,12 @@ namespace CakeLab.ARFlow.DataBuffers
         public MeshDetectionBuffer(
             int initialBufferSize,
             ARMeshManager meshManager,
-            NtpDateTimeManager ntpManager
+            IClock clock
         )
         {
             m_Buffer = new List<RawMeshDetectionFrame>(initialBufferSize);
             m_MeshManager = meshManager;
-            m_NtpManager = ntpManager;
+            m_Clock = clock;
         }
 
         public void StartCapture()
@@ -109,7 +110,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
         private async void OnMeshesChanged(ARMeshesChangedEventArgs changes)
         {
-            var deviceTime = m_NtpManager.UtcNow;
+            var deviceTime = m_Clock.UtcNow;
             var tasks = new List<Task>
             {
                 AddToBuffer(changes.added, deviceTime, MeshDetectionState.Added),

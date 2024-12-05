@@ -7,8 +7,8 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
+    using Clock;
     using Grpc.V1;
-    using Utilities;
     using GrpcARPointCloud = Grpc.V1.ARPointCloud;
     using GrpcARTrackable = Grpc.V1.ARTrackable;
     using GrpcPose = Grpc.V1.Pose;
@@ -128,12 +128,12 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_PointCloudManager = value;
         }
 
-        NtpDateTimeManager m_NtpManager;
+        IClock m_Clock;
 
-        public NtpDateTimeManager NtpManager
+        public IClock Clock
         {
-            get => m_NtpManager;
-            set => m_NtpManager = value;
+            get => m_Clock;
+            set => m_Clock = value;
         }
 
         private readonly List<RawPointCloudDetectionFrame> m_Buffer;
@@ -143,12 +143,12 @@ namespace CakeLab.ARFlow.DataBuffers
         public PointCloudDetectionBuffer(
             int initialBufferSize,
             ARPointCloudManager pointCloudManager,
-            NtpDateTimeManager ntpManager
+            IClock clock
         )
         {
             m_Buffer = new List<RawPointCloudDetectionFrame>(initialBufferSize);
             m_PointCloudManager = pointCloudManager;
-            m_NtpManager = ntpManager;
+            m_Clock = clock;
         }
 
         public void StartCapture()
@@ -165,7 +165,7 @@ namespace CakeLab.ARFlow.DataBuffers
             ARTrackablesChangedEventArgs<UnityARPointCloud> changes
         )
         {
-            var deviceTime = m_NtpManager.UtcNow;
+            var deviceTime = m_Clock.UtcNow;
             AddToBuffer(changes.added, deviceTime, PointCloudDetectionState.Added);
             AddToBuffer(changes.updated, deviceTime, PointCloudDetectionState.Updated);
             AddToBuffer(changes.removed, deviceTime);

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    using Utilities;
+    using Clock;
     using static DefaultValues;
 
     public class GyroscopeUIConfig : IDataModalityUIConfig
@@ -126,11 +126,11 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             return float.Parse(delayField.text);
         }
 
-        public GyroscopeBuffer getBufferFromConfig(NtpDateTimeManager ntpManager)
+        public GyroscopeBuffer getBufferFromConfig(IClock clock)
         {
             return new GyroscopeBuffer(
                 int.Parse(bufferSizeField.text),
-                ntpManager,
+                clock,
                 int.Parse(samplingIntervalField.text)
             );
         }
@@ -144,4 +144,3 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
     }
 }
-

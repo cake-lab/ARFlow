@@ -8,7 +8,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    using Utilities;
+    using Clock;
     using static DefaultValues;
 
     public class ColorUIConfig : IDataModalityUIConfig
@@ -110,13 +110,10 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             return float.Parse(delayField.text);
         }
 
-        public ColorBuffer getBufferFromConfig(
-            ARCameraManager cameraManager,
-            NtpDateTimeManager ntpManager
-        )
+        public ColorBuffer getBufferFromConfig(ARCameraManager cameraManager, IClock clock)
         {
             //TODO: validate
-            return new ColorBuffer(int.Parse(bufferSizeField.text), cameraManager, ntpManager);
+            return new ColorBuffer(int.Parse(bufferSizeField.text), cameraManager, clock);
         }
 
         public void Dispose()
@@ -128,4 +125,3 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
     }
 }
-

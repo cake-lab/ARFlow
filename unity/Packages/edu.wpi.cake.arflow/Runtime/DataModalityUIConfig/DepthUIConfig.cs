@@ -8,7 +8,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
-    using Utilities;
+    using Clock;
     using static DefaultValues;
 
     public class DepthUIConfig : IDataModalityUIConfig
@@ -110,12 +110,9 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             return float.Parse(delayField.text);
         }
 
-        public DepthBuffer getBufferFromConfig(
-            AROcclusionManager manager,
-            NtpDateTimeManager ntpManager
-        )
+        public DepthBuffer getBufferFromConfig(AROcclusionManager manager, IClock clock)
         {
-            return new DepthBuffer(int.Parse(bufferSizeField.text), manager, ntpManager);
+            return new DepthBuffer(int.Parse(bufferSizeField.text), manager, clock);
         }
 
         public void Dispose()
@@ -127,4 +124,3 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
     }
 }
-

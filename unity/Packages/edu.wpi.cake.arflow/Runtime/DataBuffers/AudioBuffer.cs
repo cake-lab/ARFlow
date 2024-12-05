@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Google.Protobuf.WellKnownTypes;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
-    using System.Linq;
+    using Clock;
     using Utilities;
 
     public struct RawAudioFrame
@@ -35,25 +36,25 @@ namespace CakeLab.ARFlow.DataBuffers
         private readonly int m_SampleRate;
         private readonly int m_FrameLength;
 
-        NtpDateTimeManager m_NtpManager;
+        IClock m_Clock;
 
-        public NtpDateTimeManager NtpManager
+        public IClock Clock
         {
-            get => m_NtpManager;
-            set => m_NtpManager = value;
+            get => m_Clock;
+            set => m_Clock = value;
         }
 
         public IReadOnlyList<RawAudioFrame> Buffer => m_Buffer;
 
         public AudioBuffer(
             int initialBufferSize,
-            NtpDateTimeManager ntpManager,
+            IClock clock,
             int sampleRate = 16000,
             int frameLength = 512
         )
         {
             m_Buffer = new List<RawAudioFrame>(initialBufferSize);
-            m_NtpManager = ntpManager;
+            m_Clock = clock;
             m_SampleRate = sampleRate;
             m_FrameLength = frameLength;
         }
@@ -74,7 +75,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
         private void OnFrameCaptured(float[] frame)
         {
-            m_Buffer.Add(new RawAudioFrame { DeviceTimestamp = m_NtpManager.UtcNow, Data = frame });
+            m_Buffer.Add(new RawAudioFrame { DeviceTimestamp = m_Clock.UtcNow, Data = frame });
         }
 
         public void ClearBuffer()

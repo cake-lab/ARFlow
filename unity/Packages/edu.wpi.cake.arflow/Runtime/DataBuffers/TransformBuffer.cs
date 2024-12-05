@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
-    using Utilities;
+    using Clock;
 
     public struct RawTransformFrame
     {
@@ -41,12 +41,12 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_MainCamera = value;
         }
 
-        NtpDateTimeManager m_NtpManager;
+        IClock m_Clock;
 
-        public NtpDateTimeManager NtpManager
+        public IClock Clock
         {
-            get => m_NtpManager;
-            set => m_NtpManager = value;
+            get => m_Clock;
+            set => m_Clock = value;
         }
 
         private readonly Timer m_SamplingTimer;
@@ -59,13 +59,13 @@ namespace CakeLab.ARFlow.DataBuffers
         public TransformBuffer(
             int initialBufferSize,
             Camera mainCamera,
-            NtpDateTimeManager ntpManager,
+            IClock clock,
             double samplingIntervalMs = 50
         )
         {
             m_Buffer = new List<RawTransformFrame>(initialBufferSize);
             m_MainCamera = mainCamera;
-            m_NtpManager = ntpManager;
+            m_Clock = clock;
             m_SamplingTimer = new Timer(samplingIntervalMs);
             m_SamplingTimer.Elapsed += OnSamplingTimerElapsed;
         }
@@ -96,7 +96,7 @@ namespace CakeLab.ARFlow.DataBuffers
             {
                 return;
             }
-            AddToBuffer(m_NtpManager.UtcNow);
+            AddToBuffer(m_Clock.UtcNow);
         }
 
         private void AddToBuffer(DateTime deviceTimestampAtCapture)

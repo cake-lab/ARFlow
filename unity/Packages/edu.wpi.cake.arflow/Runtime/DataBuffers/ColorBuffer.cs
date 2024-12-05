@@ -6,6 +6,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
+    using Clock;
     using Grpc.V1;
     using Utilities;
     using GrpcVector2Int = Grpc.V1.Vector2Int;
@@ -74,12 +75,12 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_CameraManager = value;
         }
 
-        NtpDateTimeManager m_NtpManager;
+        IClock m_Clock;
 
-        public NtpDateTimeManager NtpManager
+        public IClock Clock
         {
-            get => m_NtpManager;
-            set => m_NtpManager = value;
+            get => m_Clock;
+            set => m_Clock = value;
         }
 
         private readonly List<RawColorFrame> m_Buffer;
@@ -92,15 +93,11 @@ namespace CakeLab.ARFlow.DataBuffers
         /// <remarks>
         /// See <a href="https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scenes/FaceTracking/ToggleCameraFacingDirectionOnAction.cs">ToggleCameraFacingDirectionOnAction.cs</a> for an example of how to use this class.
         /// </remarks>
-        public ColorBuffer(
-            int initialBufferSize,
-            ARCameraManager cameraManager,
-            NtpDateTimeManager ntpManager
-        )
+        public ColorBuffer(int initialBufferSize, ARCameraManager cameraManager, IClock clock)
         {
             m_Buffer = new List<RawColorFrame>(initialBufferSize);
             m_CameraManager = cameraManager;
-            m_NtpManager = ntpManager;
+            m_Clock = clock;
         }
 
         public void StartCapture()
@@ -121,7 +118,7 @@ namespace CakeLab.ARFlow.DataBuffers
                 return;
             }
 
-            AddToBuffer(image, m_NtpManager.UtcNow);
+            AddToBuffer(image, m_Clock.UtcNow);
             image.Dispose();
         }
 

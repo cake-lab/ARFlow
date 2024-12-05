@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using CakeLab.ARFlow.Clock;
 using CakeLab.ARFlow.DataBuffers;
 using CakeLab.ARFlow.DataModalityUIConfig;
 using CakeLab.ARFlow.Grpc;
@@ -28,20 +29,20 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public IGrpcClient grpcClient;
 
-    public NtpDateTimeManager ntpManager;
+    public IClock clock;
 
-    private ColorBuffer m_colorBuffer;
+    private ColorBuffer m_ColorBuffer;
     private ColorUIConfig m_ColorUIConfig;
-    private CancellationTokenSource m_colorCts;
+    private CancellationTokenSource m_ColorCts;
 
     private DepthBuffer m_depthBuffer;
     private DepthUIConfig m_depthUIConfig;
     private CancellationTokenSource m_depthCts;
 
-    private List<IDataBuffer> m_dataBuffers;
+    private List<IDataBuffer> m_DataBuffers;
 
-    private List<IDataModalityUIConfig> m_dataModalityUIConfigs;
-    private List<CancellationTokenSource> m_ctsList = new List<CancellationTokenSource>();
+    private List<IDataModalityUIConfig> m_DataModalityUIConfigs;
+    private List<CancellationTokenSource> m_CtsList = new List<CancellationTokenSource>();
 
     private Session m_ActiveSession;
     private Device m_Device;
@@ -355,9 +356,9 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             m_isSending = false;
             arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Start";
-            m_dataBuffers.ForEach(buffer => buffer.StopCapture());
-            m_dataModalityUIConfigs.ForEach(config => config.TurnOnConfig());
-            m_ctsList.ForEach(cts =>
+            m_DataBuffers.ForEach(buffer => buffer.StopCapture());
+            m_DataModalityUIConfigs.ForEach(config => config.TurnOnConfig());
+            m_CtsList.ForEach(cts =>
             {
                 cts.Cancel();
                 cts.Dispose();
@@ -368,12 +369,12 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             m_isSending = true;
             arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Pause";
-            m_ctsList.ForEach(cts =>
+            m_CtsList.ForEach(cts =>
             {
                 cts = new CancellationTokenSource();
             });
-            m_dataBuffers.ForEach(buffer => buffer.StartCapture());
-            m_dataModalityUIConfigs.ForEach(config => config.TurnOffConfig());
+            m_DataBuffers.ForEach(buffer => buffer.StartCapture());
+            m_DataModalityUIConfigs.ForEach(config => config.TurnOffConfig());
 
             //start individual buffer sending
             SendColorFramesAsync();
@@ -382,14 +383,14 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     private async void SendColorFramesAsync()
     {
-        while (!m_colorCts.Token.IsCancellationRequested)
+        while (!m_ColorCts.Token.IsCancellationRequested)
         {
             float currentDelay = m_ColorUIConfig.GetDelay();
             // OperationCanceledException is thrown when the token is cancelled, this is expected
             // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
-            await Awaitable.WaitForSecondsAsync(currentDelay, m_colorCts.Token);
+            await Awaitable.WaitForSecondsAsync(currentDelay, m_ColorCts.Token);
 
-            ARFrame[] arFrames = m_colorBuffer
+            ARFrame[] arFrames = m_ColorBuffer
                 .Buffer
                 // This works because we have an explicit conversion operator defined for RawCameraFrame
                 .Select(frame => (ARFrame)frame)
@@ -405,9 +406,9 @@ public class ARFlowDeviceSample : MonoBehaviour
                 m_ActiveSession.Id,
                 arFrames,
                 m_Device,
-                m_colorCts.Token
+                m_ColorCts.Token
             );
-            m_colorBuffer.ClearBuffer();
+            m_ColorBuffer.ClearBuffer();
         }
     }
 
@@ -445,17 +446,17 @@ public class ARFlowDeviceSample : MonoBehaviour
     void Start()
     {
         // Initialize data buffers and sending-related vaiables
-        m_colorBuffer = new ColorBuffer(64, cameraManager, ntpManager);
-        m_dataBuffers = new List<IDataBuffer>()
+        m_ColorBuffer = new ColorBuffer(64, cameraManager, clock);
+        m_DataBuffers = new List<IDataBuffer>()
         {
-            m_colorBuffer,
+            m_ColorBuffer,
             // new DepthBuffer(occlusionManager),
             // new PlaneBuffer(planeManager),
             // new MeshBuffer(meshManager)
         };
 
-        m_colorCts = new CancellationTokenSource();
-        m_ctsList.Add(m_colorCts);
+        m_ColorCts = new CancellationTokenSource();
+        m_CtsList.Add(m_ColorCts);
 
         m_ColorUIConfig = new ColorUIConfig(
             arViewWindow.configurationsContainer,
@@ -466,19 +467,19 @@ public class ARFlowDeviceSample : MonoBehaviour
                 {
                     cameraManager.enabled = false;
                     InternalDebug.Log("Enable camera manager");
-                    m_colorBuffer = m_ColorUIConfig.getBufferFromConfig(cameraManager, ntpManager);
+                    m_ColorBuffer = m_ColorUIConfig.getBufferFromConfig(cameraManager, clock);
                     if (m_isSending)
-                        m_colorBuffer.StartCapture();
+                        m_ColorBuffer.StartCapture();
                 }
                 else
                 {
                     InternalDebug.Log("Disable camera manager");
-                    m_colorBuffer.StopCapture();
-                    m_colorBuffer.Dispose();
+                    m_ColorBuffer.StopCapture();
+                    m_ColorBuffer.Dispose();
                 }
             }
         );
-        m_dataModalityUIConfigs = new List<IDataModalityUIConfig>()
+        m_DataModalityUIConfigs = new List<IDataModalityUIConfig>()
         {
             m_ColorUIConfig,
             // new DepthBuffer(occlusionManager),

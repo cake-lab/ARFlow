@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
-    using Utilities;
+    using Clock;
 
     public struct RawGyroscopeFrame
     {
@@ -64,24 +64,20 @@ namespace CakeLab.ARFlow.DataBuffers
         private readonly Timer m_SamplingTimer;
         private bool m_IsCapturing;
 
-        NtpDateTimeManager m_NtpManager;
+        IClock m_Clock;
 
-        public NtpDateTimeManager NtpManager
+        public IClock Clock
         {
-            get => m_NtpManager;
-            set => m_NtpManager = value;
+            get => m_Clock;
+            set => m_Clock = value;
         }
 
         public IReadOnlyList<RawGyroscopeFrame> Buffer => m_Buffer;
 
-        public GyroscopeBuffer(
-            int initialBufferSize,
-            NtpDateTimeManager ntpManager,
-            double samplingIntervalMs = 50
-        )
+        public GyroscopeBuffer(int initialBufferSize, IClock clock, double samplingIntervalMs = 50)
         {
             m_Buffer = new List<RawGyroscopeFrame>(initialBufferSize);
-            m_NtpManager = ntpManager;
+            m_Clock = clock;
             m_SamplingTimer = new Timer(samplingIntervalMs);
             m_SamplingTimer.Elapsed += OnSamplingTimerElapsed;
         }
@@ -112,7 +108,7 @@ namespace CakeLab.ARFlow.DataBuffers
             {
                 return;
             }
-            AddToBuffer(m_NtpManager.UtcNow);
+            AddToBuffer(m_Clock.UtcNow);
         }
 
         private void AddToBuffer(DateTime deviceTimestampAtCapture)

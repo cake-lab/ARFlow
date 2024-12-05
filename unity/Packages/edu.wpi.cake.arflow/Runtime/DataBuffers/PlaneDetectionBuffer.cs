@@ -7,8 +7,8 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
+    using Clock;
     using Grpc.V1;
-    using Utilities;
     using GrpcARPlane = Grpc.V1.ARPlane;
     using GrpcARTrackable = Grpc.V1.ARTrackable;
     using GrpcPose = Grpc.V1.Pose;
@@ -157,12 +157,12 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_PlaneManager = value;
         }
 
-        NtpDateTimeManager m_NtpManager;
+        IClock m_Clock;
 
-        public NtpDateTimeManager NtpManager
+        public IClock Clock
         {
-            get => m_NtpManager;
-            set => m_NtpManager = value;
+            get => m_Clock;
+            set => m_Clock = value;
         }
 
         private readonly List<RawPlaneDetectionFrame> m_Buffer;
@@ -172,12 +172,12 @@ namespace CakeLab.ARFlow.DataBuffers
         public PlaneDetectionBuffer(
             int initialBufferSize,
             ARPlaneManager planeManager,
-            NtpDateTimeManager ntpManager
+            IClock clock
         )
         {
             m_Buffer = new List<RawPlaneDetectionFrame>(initialBufferSize);
             m_PlaneManager = planeManager;
-            m_NtpManager = ntpManager;
+            m_Clock = clock;
         }
 
         public void StartCapture()
@@ -192,7 +192,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
         private void OnPlaneDetectionChanged(ARTrackablesChangedEventArgs<UnityARPlane> changes)
         {
-            var deviceTime = m_NtpManager.UtcNow;
+            var deviceTime = m_Clock.UtcNow;
             AddToBuffer(changes.added, deviceTime, PlaneDetectionState.Added);
             AddToBuffer(changes.updated, deviceTime, PlaneDetectionState.Updated);
             AddToBuffer(changes.removed, deviceTime);

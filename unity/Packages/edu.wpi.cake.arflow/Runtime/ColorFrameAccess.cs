@@ -9,6 +9,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.Samples
 {
+    using Clock;
     using DataBuffers;
     using Grpc;
     using Grpc.V1;
@@ -42,8 +43,7 @@ namespace CakeLab.ARFlow.Samples
         ARCameraManager m_CameraManager;
 
         [SerializeField]
-        [Tooltip("The NTP manager that is used to synchronize time with the server")]
-        NtpDateTimeManager m_NtpManager;
+        IClock m_Clock;
 
         public ARCameraManager CameraManager
         {
@@ -57,7 +57,7 @@ namespace CakeLab.ARFlow.Samples
         /// </summary>
         void Awake()
         {
-            m_CameraBuffer = new ColorBuffer(64, m_CameraManager, m_NtpManager);
+            m_CameraBuffer = new ColorBuffer(64, m_CameraManager, m_Clock);
 
             // Initialize default values (if they aren't dynamic or coming from other scripts)
             m_Address = new("http://192.168.1.50:8500");

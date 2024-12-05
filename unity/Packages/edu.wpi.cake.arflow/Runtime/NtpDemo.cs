@@ -1,34 +1,33 @@
+using System.Threading;
 using UnityEngine;
 
 namespace CakeLab.ARFlow
 {
+    using Clock;
     using Utilities;
 
     public class NtpDemo : MonoBehaviour
     {
-        private NtpDateTimeManager ntpManager;
+        public NtpClock clock;
+        public string ntpServerUrl = "pool.ntp.org";
+        public int requestTimeoutInS = 3;
+        private CancellationTokenSource m_Cts;
 
-        private void Start()
+        async void Start()
         {
-            ntpManager = FindFirstObjectByType<NtpDateTimeManager>();
-
-            if (ntpManager == null)
-            {
-                InternalDebug.LogError("NtpDateTimeManager not found in the scene.");
-            }
+            clock = new NtpClock(ntpServerUrl, requestTimeoutInS);
+            m_Cts = new CancellationTokenSource();
+            await clock.SynchronizeAsync(m_Cts.Token);
         }
 
-        private void Update()
+        void Update()
         {
-            if (ntpManager != null && ntpManager.IsSynchronized)
-            {
-                InternalDebug.Log($"Synchronized Time: {ntpManager.Now}");
-                InternalDebug.Log($"Synchronized UtcTime: {ntpManager.UtcNow}");
-            }
-            else
+            if (!clock.TimeSynchronized)
             {
                 InternalDebug.Log("Time not yet synchronized.");
             }
+            InternalDebug.Log($"Synchronized Time: {clock.Now}");
+            InternalDebug.Log($"Synchronized UtcTime: {clock.UtcNow}");
         }
     }
 }

@@ -6,35 +6,40 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CakeLab.ARFlow.Utilities
+namespace CakeLab.ARFlow.Clock
 {
-    public class NtpDateTime : IDisposable
+    using Utilities;
+
+    /// <summary>
+    /// Clock that syncs with an NTP server. Need to call SynchronizeAsync to start the synchronization, else the clock will fallback to the system clock. Check if time is synchronized with TimeSynchronized property.
+    /// </summary>
+    public class NtpClock : IClock, IDisposable
     {
-        private DateTime m_NtpTime;
-        private float m_ResponseReceivedTime;
         private string m_NtpServerUrl;
         private int m_RequestTimeoutInS;
         private CancellationTokenSource m_Cts;
+        private DateTime m_NtpTime;
+        private float m_ResponseReceivedTime;
 
-        public bool DateSynchronized { get; private set; }
+        public bool TimeSynchronized { get; private set; }
 
         public DateTime Now =>
-            DateSynchronized
+            TimeSynchronized
                 ? m_NtpTime.AddSeconds(Time.realtimeSinceStartup - m_ResponseReceivedTime)
                 : DateTime.Now;
 
         public DateTime UtcNow =>
-            DateSynchronized
+            TimeSynchronized
                 ? m_NtpTime
                     .ToUniversalTime()
                     .AddSeconds(Time.realtimeSinceStartup - m_ResponseReceivedTime)
                 : DateTime.UtcNow;
 
-        public NtpDateTime(string ntpServerUrl, int requestTimeoutInS = 3)
+        public NtpClock(string ntpServerUrl, int requestTimeoutInS = 3)
         {
             m_NtpServerUrl = ntpServerUrl;
             m_RequestTimeoutInS = requestTimeoutInS;
-            DateSynchronized = false;
+            TimeSynchronized = false;
         }
 
         public void Dispose()
@@ -49,13 +54,12 @@ namespace CakeLab.ARFlow.Utilities
 
             try
             {
-                while (!cancellationToken.IsCancellationRequested && !DateSynchronized)
+                while (!cancellationToken.IsCancellationRequested && !TimeSynchronized)
                 {
                     if (ConnectionEnabled())
                     {
                         await SynchronizeDateAsync(m_Cts.Token);
                     }
-                    // await Awaitable.WaitForSecondsAsync(m_RequestTimeoutInS, cancellationToken);
                     await Task.Delay(TimeSpan.FromSeconds(m_RequestTimeoutInS), m_Cts.Token);
                 }
             }
@@ -113,7 +117,7 @@ namespace CakeLab.ARFlow.Utilities
             catch (Exception e)
             {
                 InternalDebug.LogError($"NTP synchronization failed: {e.Message}");
-                DateSynchronized = false;
+                TimeSynchronized = false;
             }
         }
 
@@ -137,7 +141,7 @@ namespace CakeLab.ARFlow.Utilities
                 .AddMilliseconds((long)milliseconds)
                 .ToLocalTime();
 
-            DateSynchronized = true;
+            TimeSynchronized = true;
             InternalDebug.Log($"Date synchronized: {Now}");
         }
 
