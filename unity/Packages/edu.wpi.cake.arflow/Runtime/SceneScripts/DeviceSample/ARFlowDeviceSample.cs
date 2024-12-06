@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -298,6 +299,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     public class SessionsWindow
     {
         public GameObject windowGameObject;
+        public Button goBackButton;
         public GameObject loadingIndicator;
         public GameObject noSessionFoundText;
 
@@ -370,8 +372,11 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
+
     [Tooltip("UI Window for managing sessions")]
     public SessionsWindow sessionsWindow;
+
+
 
     /// <summary>
     /// Search for available sessions and display them in the UI asynchronously
@@ -492,6 +497,27 @@ public class ARFlowDeviceSample : MonoBehaviour
             }
         }
     }
+    async private void GoBackFromARView()
+    {
+        m_isSending = false;
+        foreach (var control in m_BufferControls)
+        {
+            control.OnToggle(SendFrame)(false);
+        }
+
+        await grpcClient.LeaveSessionAsync(m_ActiveSession.Id, m_Device);
+        m_ActiveSession = null;
+        arViewWindow.windowGameObject.SetActive(false);
+        sessionsWindow.windowGameObject.SetActive(true);
+    }
+
+    void OnApplicationQuit()
+    {
+        if (m_ActiveSession != null)
+        {
+            grpcClient.LeaveSessionAsync(m_ActiveSession.Id, m_Device);
+        }
+    }
 
     void Start()
     {
@@ -566,7 +592,9 @@ public class ARFlowDeviceSample : MonoBehaviour
         );
         sessionsWindow.createSessionWindow.createSessionButton.onClick.AddListener(OnCreateSession);
 
+
         // Initialize AR view window
         arViewWindow.startPauseButton.onClick.AddListener(OnStartPauseButton);
+        arViewWindow.goBackButton.onClick.AddListener(GoBackFromARView);
     }
 }
