@@ -376,6 +376,15 @@ public class ARFlowDeviceSample : MonoBehaviour
     [Tooltip("UI Window for managing sessions")]
     public SessionsWindow sessionsWindow;
 
+    private void OnGoBackFromSessionsWindow()
+    {
+        sessionsWindow.ClearSessions();
+
+        grpcClient = null;
+
+        sessionsWindow.windowGameObject.SetActive(false);
+        findServerWindow.windowGameObject.SetActive(true);
+    }
 
 
     /// <summary>
@@ -497,7 +506,7 @@ public class ARFlowDeviceSample : MonoBehaviour
             }
         }
     }
-    async private void GoBackFromARView()
+    async private void OnGoBackFromARView()
     {
         m_isSending = false;
         foreach (var control in m_BufferControls)
@@ -585,6 +594,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         sessionsWindow.createSessionButton.onClick.AddListener(OnPressCreateSession);
         sessionsWindow.deleteSessionButton.onClick.AddListener(OnDeleteSession);
         sessionsWindow.joinSessionButton.onClick.AddListener(OnJoinSession);
+        sessionsWindow.goBackButton.onClick.AddListener(OnGoBackFromSessionsWindow);
 
         //Inititalize create sessions window
         sessionsWindow.createSessionWindow.cancelSessionButton.onClick.AddListener(
@@ -595,6 +605,6 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         // Initialize AR view window
         arViewWindow.startPauseButton.onClick.AddListener(OnStartPauseButton);
-        arViewWindow.goBackButton.onClick.AddListener(GoBackFromARView);
+        arViewWindow.goBackButton.onClick.AddListener(OnGoBackFromARView);
     }
 }
