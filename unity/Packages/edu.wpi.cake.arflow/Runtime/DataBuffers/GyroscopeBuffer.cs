@@ -73,7 +73,27 @@ namespace CakeLab.ARFlow.DataBuffers
             get => m_Clock;
             set => m_Clock = value;
         }
+        /*
+               m_Device = GetDeviceInfo.GetDevice();
 
+                if (UnityEngine.InputSystem.Gyroscope.current != null)
+                {
+                    InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
+                }
+                if (AttitudeSensor.current != null)
+                {
+                    InputSystem.EnableDevice(AttitudeSensor.current);
+                }
+                if (Accelerometer.current != null)
+                {
+                    InputSystem.EnableDevice(Accelerometer.current);
+                }
+                if (GravitySensor.current != null)
+                {
+                    InputSystem.EnableDevice(GravitySensor.current);
+                }
+
+        */
         public IReadOnlyList<RawGyroscopeFrame> Buffer => m_Buffer;
 
         public GyroscopeBuffer(int initialBufferSize, IClock clock, float samplingIntervalMs = 50)

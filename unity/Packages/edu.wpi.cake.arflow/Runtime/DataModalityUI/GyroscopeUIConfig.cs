@@ -23,8 +23,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         // toggle for buffer is a special case - toggling turns config off and on
         private GameObject toggle;
 
-        private List<GameObject> m_UiConfigElements = new();
-
+        private List<GameObject> m_UIConfigElements = new();
         // Configs
         private const string MODALITY_NAME = "Gyroscope";
         private TMP_InputField bufferSizeField;
@@ -63,17 +62,17 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             //Buffer Size
             InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, BUFFER_SIZE_NAME, DEFAULT_BUFFER_SIZE, out var bufferSizeObject, out bufferSizeField);
             bufferSizeField.contentType = TMP_InputField.ContentType.IntegerNumber;
-            m_UiConfigElements.Add(bufferSizeObject);
+            m_UIConfigElements.Add(bufferSizeObject);
 
             //Sampling Interval
             InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, SAMPLING_INTERVAL_NAME, DEFAULT_SAMPLING_INTERVAL, out var samplingIntervalObj, out samplingIntervalField);
             samplingIntervalField.contentType = TMP_InputField.ContentType.IntegerNumber;
-            m_UiConfigElements.Add(samplingIntervalObj);
+            m_UIConfigElements.Add(samplingIntervalObj);
 
             //Delay
             InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, DELAY_NAME, DELAY_DEFAULT, out var delayObject, out delayField);
             delayField.contentType = TMP_InputField.ContentType.DecimalNumber;
-            m_UiConfigElements.Add(delayObject);
+            m_UIConfigElements.Add(delayObject);
 
             ToggleConfig(m_IsModalityActive);
         }
@@ -82,7 +81,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         public override void TurnOffConfig()
         {
 
-            foreach (GameObject element in m_UiConfigElements)
+            foreach (GameObject element in m_UIConfigElements)
             {
                 element.SetActive(false);
             }
@@ -93,7 +92,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
 
         public override void TurnOnConfig()
         {
-            foreach (GameObject element in m_UiConfigElements)
+            foreach (GameObject element in m_UIConfigElements)
             {
                 element.SetActive(true);
             }
@@ -121,7 +120,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
 
         public override void Dispose()
         {
-            foreach (GameObject element in m_UiConfigElements)
+            foreach (GameObject element in m_UIConfigElements)
             {
                 GameObject.Destroy(element);
             }

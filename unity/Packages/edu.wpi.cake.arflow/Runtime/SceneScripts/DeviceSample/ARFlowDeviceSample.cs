@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -15,6 +17,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
@@ -52,7 +55,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     ///
     /// This is a proposal for a way to manage the lifecycle of the buffer and sending of frames through UIConfig.
     /// </summary>
-    public class BufferControl
+    public class BufferControl : IDisposable
     {
         public BaseDataModalityUIConfig config;
         public IARFrameBuffer buffer;
@@ -82,6 +85,13 @@ public class ARFlowDeviceSample : MonoBehaviour
                     cts = new CancellationTokenSource();
                 }
             };
+        }
+
+        public void Dispose()
+        {
+            config.Dispose();
+            buffer?.Dispose();
+            cts?.Dispose();
         }
     }
 
@@ -152,9 +162,9 @@ public class ARFlowDeviceSample : MonoBehaviour
     BufferControl transformBufferControl;
 
     private List<IARFrameBuffer> m_DataBuffers;
-    private List<BufferControl> m_BufferControls;
+    private List<BufferControl> m_BufferControls = new();
 
-    private List<BaseDataModalityUIConfig> m_dataModalityUIConfigs;
+    private List<BaseDataModalityUIConfig> m_dataModalityUIConfigs = new();
     private List<CancellationTokenSource> m_ctsList = new List<CancellationTokenSource>();
 
     // UI Windows
@@ -164,34 +174,48 @@ public class ARFlowDeviceSample : MonoBehaviour
     public class FindServerWindow
     {
         public GameObject windowGameObject;
-        public TMP_InputField ipField;
-        public TMP_InputField portField;
+        public TMP_InputField ipServerField;
+        public TMP_InputField portServerField;
+
+        public Toggle NTPSameServerToggle;
+        public TMP_InputField ipNTPField;
+        public TMP_InputField portNTPField;
         public Button findServerButton;
         public Button connectButton;
 
         private const string _defaultIp = "127.0.0.1";
         private const string _defaultPort = "8500";
+        public string defaultAddress => $"http://{_defaultIp}:{_defaultPort}";
 
-        public string ipText
-        {
-            set { }
-            get { return IsIpValid(ipField.text) ? ipField.text : _defaultIp; }
-        }
+        public string serverIP => ipServerField.text;
 
-        public string portText
-        {
-            set { }
-            get { return IsPortValid(portField.text) ? portField.text : _defaultPort; }
-        }
+        public string serverHost => portServerField.text;
+        public string serverAddress => $"http://{serverIP}:{serverHost}";
 
-        public bool IsIpValid(string ipField)
+
+        public bool isToggleOn => NTPSameServerToggle.isOn;
+
+        public string ipNTPText => isToggleOn ? serverIP : ipNTPField.text;
+        public string portNTPText => portNTPField.text;
+        public string ntpAddress => $"http://{ipNTPText}:{portNTPText}";
+        public string defaultNTP => "pool.ntp.org";
+
+        public bool IsIpValid(string ipField, string portField)
         {
             return Regex.IsMatch(ipField, @"(\d){1,3}\.(\d){1,3}\.(\d){1,3}\.(\d){1,3}");
         }
 
-        public bool IsPortValid(string portField)
+        /// <summary>
+        /// To be called outside because this runs before the variables get filled in by Unity
+        /// </summary>
+        public void initFindServerWindow()
         {
-            return Regex.IsMatch(portField, @"(\d){1,5}");
+            ipServerField.text = _defaultIp;
+            portServerField.text = _defaultPort;
+            NTPSameServerToggle.onValueChanged.AddListener((bool value) =>
+            {
+                ipNTPField.interactable = !value;
+            });
         }
     }
 
@@ -201,19 +225,30 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         try
         {
-            string ip = findServerWindow.ipText;
-            string port = findServerWindow.portText;
+            string serverURL = Uri.IsWellFormedUriString(findServerWindow.serverAddress, UriKind.RelativeOrAbsolute) ?
+                findServerWindow.serverAddress : findServerWindow.defaultAddress;
 
-            string serverUrl = $"http://{ip}:{port}";
+            string ntpURL = Uri.IsWellFormedUriString(findServerWindow.ntpAddress, UriKind.RelativeOrAbsolute) ?
+    findServerWindow.ntpAddress : findServerWindow.defaultAddress;
 
-            grpcClient = new GrpcClient(serverUrl);
+            grpcClient = new GrpcClient(serverURL);
+
 
             Toast.Show("Connection in progress.", 1f, ToastColor.Yellow);
 
             // Search for session also
             await SearchForSession();
+
+            InternalDebug.Log("connecting to NTP server");
+
+            NtpClock ntpClock = new NtpClock(ntpURL);
+            clock = ntpClock;
+            ntpClock.SynchronizeAsync();
+
+            InitUIConfig();
             findServerWindow.windowGameObject.SetActive(false);
             sessionsWindow.windowGameObject.SetActive(true);
+
         }
         catch (Exception e)
         {
@@ -385,6 +420,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         sessionsWindow.windowGameObject.SetActive(false);
         findServerWindow.windowGameObject.SetActive(true);
+        DisposeUIConfig();
     }
 
     /// <summary>
@@ -531,30 +567,34 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
-    void Start()
+    bool CheckSubsystemAvailability<T>() where T : class, ISubsystem
     {
-        m_Device = GetDeviceInfo.GetDevice();
+        return LoaderUtility
+            .GetActiveLoader()?
+            .GetLoadedSubsystem<T>() != null;
+    }
 
-        if (UnityEngine.InputSystem.Gyroscope.current != null)
+    private void DisposeUIConfig()
+    {
+        foreach (var control in m_BufferControls)
         {
-            InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
-        }
-        if (AttitudeSensor.current != null)
-        {
-            InputSystem.EnableDevice(AttitudeSensor.current);
-        }
-        if (Accelerometer.current != null)
-        {
-            InputSystem.EnableDevice(Accelerometer.current);
-        }
-        if (GravitySensor.current != null)
-        {
-            InputSystem.EnableDevice(GravitySensor.current);
+            control.Dispose();
         }
 
-        //TODO: placeholder
-        clock = new NtpClock("pool.ntp.org", 3);
+        //TODO: replace this (placeholder workaround)
+        foreach (Transform children in arViewWindow.configurationsContainer.transform)
+        {
+            Destroy(children.gameObject);
+        }
+        // if (m_BufferControls != null) m_BufferControls.Clear();
+        // if (m_DataBuffers != null) m_DataBuffers.Clear();
+    }
 
+    /// <summary>
+    /// To be called after clock has been initialized
+    /// </summary>
+    private void InitUIConfig()
+    {
         m_AudioUIConfig = new AudioUIConfig(clock, Microphone.devices.Count() > 0);
         m_ColorUIConfig = new ColorUIConfig(cameraManager, clock);
         m_depthUIConfig = new DepthUIConfig(occlusionManager, clock);
@@ -575,6 +615,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         m_dataModalityUIConfigs = new List<BaseDataModalityUIConfig>()
         {
+            m_AudioUIConfig,
             m_ColorUIConfig,
             m_depthUIConfig,
             m_GyroscopeUIConfig,
@@ -604,9 +645,33 @@ public class ARFlowDeviceSample : MonoBehaviour
                 control.OnToggle(SendFrame)
             );
         }
+    }
+    void Start()
+    {
+
+        if (UnityEngine.InputSystem.Gyroscope.current != null)
+        {
+            InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
+        }
+        if (AttitudeSensor.current != null)
+        {
+            InputSystem.EnableDevice(AttitudeSensor.current);
+        }
+        if (Accelerometer.current != null)
+        {
+            InputSystem.EnableDevice(Accelerometer.current);
+        }
+        if (GravitySensor.current != null)
+        {
+            InputSystem.EnableDevice(GravitySensor.current);
+        }
+
+        m_Device = GetDeviceInfo.GetDevice();
 
         // Initialize find server window
+        findServerWindow.initFindServerWindow();
         findServerWindow.connectButton.onClick.AddListener(OnConnectToServer);
+
 
         // Initialize sessions window
         sessionsWindow.refreshButton.onClick.AddListener(async () => await SearchForSession());
