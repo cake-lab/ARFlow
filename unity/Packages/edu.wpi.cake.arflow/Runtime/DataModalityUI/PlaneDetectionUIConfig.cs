@@ -31,7 +31,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
 
         private TMP_InputField delayField;
 
-        private ARPlaneManager m_manager;
+        private ARPlaneManager m_Manager;
         private bool m_IsBufferAvailable = true;
         private bool m_IsModalityActive = false;
         public override bool isModalityActive => m_IsModalityActive;
@@ -39,7 +39,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         public PlaneDetectionUIConfig(ARPlaneManager manager, IClock clock, bool isBufferAvailable = true)
         {
             m_IsBufferAvailable = isBufferAvailable;
-            m_Clock = clock; m_manager = manager;
+            m_Clock = clock; m_Manager = manager;
         }
 
         public override void InitializeConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality)
@@ -81,7 +81,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             // Keep toggle and name active
 
             m_IsModalityActive = false;
-            m_manager.enabled = false;
+            if (m_Manager) m_Manager.enabled = false;
 
         }
 
@@ -92,16 +92,8 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
                 element.SetActive(true);
             }
             m_IsModalityActive = true;
-            m_manager.enabled = true;
+            if (m_Manager) m_Manager.enabled = true;
         }
-
-        public override void ToggleConfig(bool isOn)
-        {
-            base.ToggleConfig(isOn);
-            m_manager.enabled = isOn;
-        }
-
-
 
         /// <summary>
         /// Get the current delay value, set by the user
@@ -113,7 +105,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
         public PlaneDetectionBuffer GetBufferFromConfig()
         {
-            return new PlaneDetectionBuffer(int.Parse(bufferSizeField.text), m_manager, m_Clock);
+            return new PlaneDetectionBuffer(int.Parse(bufferSizeField.text), m_Manager, m_Clock);
         }
 
         public override IARFrameBuffer GetGenericBuffer()

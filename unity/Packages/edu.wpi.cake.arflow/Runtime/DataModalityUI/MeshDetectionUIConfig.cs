@@ -31,7 +31,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
 
         private TMP_InputField delayField;
 
-        ARMeshManager m_manager;
+        ARMeshManager m_Manager;
 
         private bool m_IsBufferAvailable;
         private bool m_IsModalityActive = false;
@@ -40,7 +40,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         public MeshDetectionUIConfig(ARMeshManager manager, IClock clock, bool isBufferAvailable = true)
         {
             m_IsBufferAvailable = isBufferAvailable;
-            m_Clock = clock; m_manager = manager;
+            m_Clock = clock; m_Manager = manager;
         }
 
         public override void InitializeConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality)
@@ -82,7 +82,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             // Keep toggle and name active
 
             m_IsModalityActive = false;
-            m_manager.enabled = false;
+            if (m_Manager) m_Manager.enabled = false;
 
         }
 
@@ -93,7 +93,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
                 element.SetActive(true);
             }
             m_IsModalityActive = true;
-            m_manager.enabled = true;
+            if (m_Manager) m_Manager.enabled = true;
         }
 
 
@@ -107,7 +107,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
         public MeshDetectionBuffer GetBufferFromConfig()
         {
-            return new MeshDetectionBuffer(int.Parse(bufferSizeField.text), m_manager, m_Clock);
+            return new MeshDetectionBuffer(int.Parse(bufferSizeField.text), m_Manager, m_Clock);
         }
 
         public override IARFrameBuffer GetGenericBuffer()
