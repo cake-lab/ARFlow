@@ -181,7 +181,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         public string portText
         {
             set { }
-            get { return IsIpValid(portField.text) ? portField.text : _defaultPort; }
+            get { return IsPortValid(portField.text) ? portField.text : _defaultPort; }
         }
 
         public bool IsIpValid(string ipField)
@@ -394,6 +394,8 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         if (grpcClient != null)
         {
+            Toast.Dismiss();
+
             // TODO: Could race condition happen here?
             sessionsWindow.selectedSessionElement = null;
             sessionsWindow.setLoading(true);
@@ -518,6 +520,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         m_ActiveSession = null;
         arViewWindow.windowGameObject.SetActive(false);
         sessionsWindow.windowGameObject.SetActive(true);
+        await SearchForSession();
     }
 
     void OnApplicationQuit()
