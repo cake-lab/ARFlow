@@ -7,7 +7,9 @@ using CakeLab.ARFlow.DataBuffers;
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
     /// <summary>
-    /// Data modality's UI configurations. This class spawns UI elements for the modality and controls the modality's life cycle (for the current implementation).
+    /// Data modality's UI configurations. The UI Config class is responsible for spawning UI elements for the modality.
+    /// This class can construct a data buffer from user's config.
+    /// This class also handles the modality's life cycle (for the current implementation).
     /// </summary>
     public abstract class BaseDataModalityUIConfig : IDisposable
     {

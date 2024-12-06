@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using CakeLab.ARFlow.Clock;
 using CakeLab.ARFlow.DataBuffers;
 using CakeLab.ARFlow.DataModalityUIConfig;
@@ -48,6 +50,8 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// <summary>
     /// Handles the lifecycle and sending of frames for all data modalities that support conversion to ARFrame.
     /// The manager's enabled state is also managed by the UIConfig class.
+    /// 
+    /// This is a proposal for a way to manage the lifecycle of the buffer and sending of frames through UIConfig.
     /// </summary>
     public class BufferControl
     {
@@ -192,19 +196,30 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public FindServerWindow findServerWindow;
 
-    public void OnConnectToServer()
+    public async void OnConnectToServer()
     {
-        string ip = findServerWindow.ipText;
-        string port = findServerWindow.portText;
+        try
+        {
+            string ip = findServerWindow.ipText;
+            string port = findServerWindow.portText;
 
-        string serverUrl = $"http://{ip}:{port}";
+            string serverUrl = $"http://{ip}:{port}";
 
-        grpcClient = new GrpcClient(serverUrl);
+            grpcClient = new GrpcClient(serverUrl);
 
-        // Search for session also
-        SearchForSession();
-        findServerWindow.windowGameObject.SetActive(false);
-        sessionsWindow.windowGameObject.SetActive(true);
+            Toast.Show("Connection in progress.", 1f, ToastColor.Yellow);
+
+            // Search for session also
+            await SearchForSession();
+            findServerWindow.windowGameObject.SetActive(false);
+            sessionsWindow.windowGameObject.SetActive(true);
+        }
+        catch (Exception e)
+        {
+            InternalDebug.Log($"Error connecting to server: {e}");
+            Toast.Show("Error connecting to server. Make sure host and port is correct.", ToastColor.Red);
+        }
+
     }
 
     [Serializable]
@@ -361,7 +376,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// <summary>
     /// Search for available sessions and display them in the UI asynchronously
     /// </summary>
-    async void SearchForSession()
+    async Awaitable SearchForSession()
     {
         if (grpcClient != null)
         {
@@ -391,6 +406,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
+
     void OnPressCreateSession()
     {
         sessionsWindow.createSessionWindow.windowGameObject.SetActive(true);
@@ -403,7 +419,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             var session = sessionsWindow.selectedSessionElement.session;
             await grpcClient.DeleteSessionAsync(session.Id, sessionsWindow.cts.Token);
-            SearchForSession();
+            await SearchForSession();
         }
         else
         {
@@ -539,7 +555,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         findServerWindow.connectButton.onClick.AddListener(OnConnectToServer);
 
         // Initialize sessions window
-        sessionsWindow.refreshButton.onClick.AddListener(SearchForSession);
+        sessionsWindow.refreshButton.onClick.AddListener(async () => await SearchForSession());
         sessionsWindow.createSessionButton.onClick.AddListener(OnPressCreateSession);
         sessionsWindow.deleteSessionButton.onClick.AddListener(OnDeleteSession);
         sessionsWindow.joinSessionButton.onClick.AddListener(OnJoinSession);
