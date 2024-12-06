@@ -179,7 +179,6 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         public Toggle NTPSameServerToggle;
         public TMP_InputField ipNTPField;
-        public TMP_InputField portNTPField;
         public Button findServerButton;
         public Button connectButton;
 
@@ -196,8 +195,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         public bool isToggleOn => NTPSameServerToggle.isOn;
 
         public string ipNTPText => isToggleOn ? serverIP : ipNTPField.text;
-        public string portNTPText => portNTPField.text;
-        public string ntpAddress => $"http://{ipNTPText}:{portNTPText}";
+        public string ntpAddress => ipNTPText;
         public string defaultNTP => "pool.ntp.org";
 
         public bool IsIpValid(string ipField, string portField)
@@ -228,8 +226,7 @@ public class ARFlowDeviceSample : MonoBehaviour
             string serverURL = Uri.IsWellFormedUriString(findServerWindow.serverAddress, UriKind.RelativeOrAbsolute) ?
                 findServerWindow.serverAddress : findServerWindow.defaultAddress;
 
-            string ntpURL = Uri.IsWellFormedUriString(findServerWindow.ntpAddress, UriKind.RelativeOrAbsolute) ?
-    findServerWindow.ntpAddress : findServerWindow.defaultAddress;
+            string ntpURL = findServerWindow.ntpAddress;
 
             grpcClient = new GrpcClient(serverURL);
 
