@@ -1,18 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
 using Google.Protobuf.WellKnownTypes;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
-    using System.Diagnostics;
-    using System.Text.RegularExpressions;
     using CakeLab.ARFlow.Utilities;
     using Clock;
     using Grpc.V1;
-    using UnityEngine.Apple;
 
     public struct RawGyroscopeFrame
     {
@@ -66,7 +63,7 @@ namespace CakeLab.ARFlow.DataBuffers
     public class GyroscopeBuffer : IARFrameBuffer<RawGyroscopeFrame>
     {
         private readonly List<RawGyroscopeFrame> m_Buffer;
-        private readonly Timer m_SamplingTimer;
+        private float m_SamplingIntervalMs;
         private bool m_IsCapturing;
 
         IClock m_Clock;
@@ -79,25 +76,21 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public IReadOnlyList<RawGyroscopeFrame> Buffer => m_Buffer;
 
-        public GyroscopeBuffer(int initialBufferSize, IClock clock, double samplingIntervalMs = 50)
+        public GyroscopeBuffer(int initialBufferSize, IClock clock, float samplingIntervalMs = 50)
         {
-            InternalDebug.Log($"Start Gyroscope Buffer with {initialBufferSize} frames");
-
             m_Buffer = new List<RawGyroscopeFrame>(initialBufferSize);
             m_Clock = clock;
-            m_SamplingTimer = new Timer(samplingIntervalMs);
-            m_SamplingTimer.Elapsed += OnSamplingTimerElapsed;
+            m_SamplingIntervalMs = samplingIntervalMs;
         }
 
         public void StartCapture()
         {
-            InternalDebug.Log($"Start Gyroscope Capture {m_IsCapturing}");
             if (m_IsCapturing)
             {
                 return;
             }
             m_IsCapturing = true;
-            m_SamplingTimer.Start();
+            CaptureGyroscopeAsync();
         }
 
         public void StopCapture()
@@ -106,17 +99,16 @@ namespace CakeLab.ARFlow.DataBuffers
             {
                 return;
             }
-            m_SamplingTimer.Stop();
             m_IsCapturing = false;
         }
 
-        private void OnSamplingTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void CaptureGyroscopeAsync()
         {
-            if (!m_IsCapturing)
+            while (m_IsCapturing)
             {
-                return;
+                await Awaitable.WaitForSecondsAsync(m_SamplingIntervalMs / 1000);
+                AddToBuffer(m_Clock.UtcNow);
             }
-            AddToBuffer(m_Clock.UtcNow);
         }
 
         private void AddToBuffer(DateTime deviceTimestampAtCapture)
@@ -145,16 +137,13 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public ARFrame[] GetARFramesFromBuffer()
         {
-            InternalDebug.Log($"Get Gyroscope {m_Buffer.Count} frames from buffer");
             return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
         }
-
 
         public void Dispose()
         {
             StopCapture();
             ClearBuffer();
-            m_SamplingTimer.Dispose();
         }
     }
 }

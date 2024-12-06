@@ -205,7 +205,7 @@ namespace CakeLab.ARFlow.DataBuffers
         )
         {
             m_Buffer.AddRange(
-                planes.Select(plane => new RawPlaneDetectionFrame
+                planes?.Select(plane => new RawPlaneDetectionFrame
                 {
                     State = state,
                     Pose = plane.pose,
@@ -252,7 +252,6 @@ namespace CakeLab.ARFlow.DataBuffers
         {
             return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
         }
-
 
         public void Dispose()
         {

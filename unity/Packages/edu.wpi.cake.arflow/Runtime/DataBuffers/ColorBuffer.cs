@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.WellKnownTypes;
+using Unity.Collections;
 using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataBuffers
@@ -138,10 +139,12 @@ namespace CakeLab.ARFlow.DataBuffers
                         {
                             // Make a deep copy to decouple lifetime of the image from the buffer
                             var plane = image.GetPlane(i);
+                            var dst = new NativeArray<byte>(plane.data.Length, Allocator.Temp);
+                            dst.CopyFrom(plane.data);
                             return new UnityXRCpuImage.Plane(
                                 plane.rowStride,
                                 plane.pixelStride,
-                                plane.data
+                                dst
                             );
                         })
                         .ToArray(),
@@ -168,7 +171,6 @@ namespace CakeLab.ARFlow.DataBuffers
         {
             return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
         }
-
 
         public void Dispose()
         {

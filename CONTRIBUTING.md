@@ -512,3 +512,6 @@ idea: rerun log with rust or c++ to support async workflows
 <https://rerun.io/docs/concepts/app-model>
 
 Server Finder, Session Manager,
+
+add docs for installing and setting up NTP server Linux (chrony) + Windows
+

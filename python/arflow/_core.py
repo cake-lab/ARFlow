@@ -2,32 +2,22 @@
 
 import logging
 import uuid
-from collections import defaultdict
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from typing import Any, DefaultDict, Iterable, Tuple, Type
+from typing import Any, Iterable, Type
 
 import grpc
-import numpy as np
 import rerun as rr
 from grpc_interceptor.exceptions import InvalidArgument, NotFound
 
-from arflow._decoding import (
-    decode_color_frames,
-    decode_depth_frames,
-    decode_transform_frames,
-)
 from arflow._error_interceptor import ErrorInterceptor
 from arflow._session_stream import SessionStream
 from arflow._types import (
     ARFrameType,
-    DecodedARFrames,
-    DecodedColorFrames,
-    DecodedDepthFrames,
-    DecodedTransformFrames,
 )
 from cakelab.arflow_grpc.v1 import arflow_service_pb2_grpc
+from cakelab.arflow_grpc.v1.ar_frame_pb2 import ARFrame
 from cakelab.arflow_grpc.v1.audio_frame_pb2 import AudioFrame
 from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
 from cakelab.arflow_grpc.v1.create_session_request_pb2 import CreateSessionRequest
@@ -63,9 +53,7 @@ from cakelab.arflow_grpc.v1.save_synchronized_ar_frame_response_pb2 import (
     SaveSynchronizedARFrameResponse,
 )
 from cakelab.arflow_grpc.v1.session_pb2 import Session, SessionUuid
-from cakelab.arflow_grpc.v1.synchronized_ar_frame_pb2 import SynchronizedARFrame
 from cakelab.arflow_grpc.v1.transform_frame_pb2 import TransformFrame
-from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
 
 logger = logging.getLogger(__name__)
 
@@ -213,7 +201,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream.info for session_stream in current_session_streams
         ]
 
-        logger.info("Listed current sessions: %s", current_session_streams)
+        logger.info("Listed %s current sessions", len(current_session_streams))
 
         self.on_list_sessions(session_streams=current_session_streams)
 
@@ -242,15 +230,6 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         session_stream.info.devices.append(request.device)
 
         logger.info("Client %s joined session %s", request.device, request.session_id)
-
-        # TODO: Test to see Rerun behavior when rr.save has already been called before
-        # save_path = self._save_dir / Path(
-        #     f"{request.client_config.device_name}_{time.strftime('%Y_%m_%d_%H_%M_%S', time.gmtime())}.rrd"
-        # )
-        # rr.save(
-        #     path=save_path,
-        #     recording=session_info.rerun_stream,
-        # )
 
         self.on_join_session(session_stream=session_stream, device=request.device)
 
@@ -283,7 +262,9 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         except ValueError:
             raise InvalidArgument("Device not in session")
 
-        logger.info("Client %s left session %s", request.device, request.session_id)
+        logger.info(
+            "Client %s left session %s", request.device, request.session_id.value
+        )
 
         self.on_leave_session(
             session_stream=session_stream,
@@ -315,7 +296,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         if request.device not in session_stream.info.devices:
             raise InvalidArgument("Device not in session")
 
-        decoded_ar_frames = np.array([])
+        ar_frames = []
         frames_grouped_by_type = {
             type: [
                 frame for frame in request.frames if frame.WhichOneof("data") == type
@@ -327,19 +308,19 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 continue
 
             if frame_type == ARFrameType.TRANSFORM_FRAME and frames[0].transform_frame:
-                decoded_ar_frames = self._process_transform_frames(
+                ar_frames = self._process_transform_frames(
                     frames=[f.transform_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
                 )
             elif frame_type == ARFrameType.COLOR_FRAME and frames[0].color_frame:
-                decoded_ar_frames = self._process_color_frames(
+                ar_frames = self._process_color_frames(
                     frames=[f.color_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
                 )
             elif frame_type == ARFrameType.DEPTH_FRAME and frames[0].depth_frame:
-                decoded_ar_frames = self._process_depth_frames(
+                ar_frames = self._process_depth_frames(
                     frames=[f.depth_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
@@ -347,13 +328,13 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             elif (
                 frame_type == ARFrameType.GYROSCOPE_FRAME and frames[0].gyroscope_frame
             ):
-                decoded_ar_frames = self._process_gyroscope_frames(
+                ar_frames = self._process_gyroscope_frames(
                     frames=[f.gyroscope_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
                 )
             elif frame_type == ARFrameType.AUDIO_FRAME and frames[0].audio_frame:
-                decoded_ar_frames = self._process_audio_frames(
+                ar_frames = self._process_audio_frames(
                     frames=[f.audio_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
@@ -362,7 +343,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 frame_type == ARFrameType.PLANE_DETECTION_FRAME
                 and frames[0].plane_detection_frame
             ):
-                decoded_ar_frames = self._process_plane_detection_frames(
+                ar_frames = self._process_plane_detection_frames(
                     frames=[f.plane_detection_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
@@ -371,7 +352,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 frame_type == ARFrameType.POINT_CLOUD_DETECTION_FRAME
                 and frames[0].point_cloud_detection_frame
             ):
-                decoded_ar_frames = self._process_point_cloud_detection_frames(
+                ar_frames = self._process_point_cloud_detection_frames(
                     frames=[f.point_cloud_detection_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
@@ -380,20 +361,20 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 frame_type == ARFrameType.MESH_DETECTION_FRAME
                 and frames[0].mesh_detection_frame
             ):
-                decoded_ar_frames = self._process_mesh_detection_frames(
+                ar_frames = self._process_mesh_detection_frames(
                     frames=[f.mesh_detection_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
                 )
 
-        logger.info(
+        logger.debug(
             "Saved AR frames of device %s to session %s",
             request.device,
             session_stream.info.id.value,
         )
 
         self.on_save_ar_frames(
-            frames=decoded_ar_frames,
+            frames=ar_frames,
             session_stream=session_stream,
             device=request.device,
         )
@@ -405,171 +386,58 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         frames: list[TransformFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> DecodedARFrames:
-        try:
-            decoded_transform_frames = decode_transform_frames(frames=frames)
-        except ValueError as e:
-            raise InvalidArgument("Error decoding transform frames: %s" % e)
-
-        try:
-            session_stream.save_transform_frames(
-                frames=decoded_transform_frames,
-                device_timestamps=[
-                    f.device_timestamp.seconds + f.device_timestamp.nanos / 1e9
-                    for f in frames
-                ],
-                device=device,
-            )
-        except ValueError as e:
-            raise InvalidArgument("Error saving transform frames: %s" % e)
-
+    ) -> list[ARFrame]:
+        session_stream.save_transform_frames(
+            frames=frames,
+            device=device,
+        )
         self.on_save_transform_frames(
-            frames=decoded_transform_frames,
+            frames=frames,
             session_stream=session_stream,
             device=device,
         )
-
-        return decoded_transform_frames
+        return [ARFrame(transform_frame=f) for f in frames]
 
     def _process_color_frames(
         self,
         frames: list[ColorFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> DecodedARFrames:
-        color_frames_grouped_by_format_and_dims: DefaultDict[
-            Tuple[XRCpuImage.Format, int, int], list[ColorFrame]
-        ] = defaultdict(list)
-        for frame in frames:
-            color_frames_grouped_by_format_and_dims[
-                (
-                    frame.image.format,
-                    frame.image.dimensions.x,
-                    frame.image.dimensions.y,
-                )
-            ].append(frame)
-        decoded_color_frames = np.array([])
-        for (
-            color_frame_format,
-            width,
-            height,
-        ), homogenous_color_frames in color_frames_grouped_by_format_and_dims.items():
-            try:
-                decoded_color_frames = decode_color_frames(
-                    raw_planes=[f.image.planes for f in homogenous_color_frames],
-                    format=color_frame_format,
-                )
-            except ValueError as e:
-                logger.warning("Error decoding color frames: %s", e)
-                continue
-
-            try:
-                session_stream.save_color_frames(
-                    frames=decoded_color_frames,
-                    device_timestamps=[
-                        f.device_timestamp.seconds + f.device_timestamp.nanos / 1e9
-                        for f in homogenous_color_frames
-                    ],
-                    image_timestamps=[
-                        f.image.timestamp for f in homogenous_color_frames
-                    ],
-                    device=device,
-                    format=color_frame_format,
-                    width=width,
-                    height=height,
-                )
-            except ValueError as e:
-                logger.warning("Error saving color frames: %s", e)
-                continue
-
-            self.on_save_color_frames(
-                frames=decoded_color_frames,
-                format=color_frame_format,
-                width=width,
-                height=height,
-                session_stream=session_stream,
-                device=device,
-            )
-
-        return decoded_color_frames
+    ) -> list[ARFrame]:
+        session_stream.save_color_frames(
+            frames=frames,
+            device=device,
+        )
+        self.on_save_color_frames(
+            frames=frames,
+            session_stream=session_stream,
+            device=device,
+        )
+        return [ARFrame(color_frame=f) for f in frames]
 
     def _process_depth_frames(
         self,
         frames: list[DepthFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> DecodedARFrames:
-        depth_frames_grouped_by_format_dims_and_smoothness: DefaultDict[
-            Tuple[XRCpuImage.Format, int, int, bool], list[DepthFrame]
-        ] = defaultdict(list)
-        for frame in frames:
-            depth_frames_grouped_by_format_dims_and_smoothness[
-                (
-                    frame.image.format,
-                    frame.image.dimensions.x,
-                    frame.image.dimensions.y,
-                    frame.environment_depth_temporal_smoothing_enabled,
-                )
-            ].append(frame)
-        decoded_depth_frames = np.array([])
-        for (
-            (
-                depth_frame_format,
-                width,
-                height,
-                is_smoothed,
-            ),
-            homogenous_depth_frames,
-        ) in depth_frames_grouped_by_format_dims_and_smoothness.items():
-            try:
-                decoded_depth_frames = decode_depth_frames(
-                    raw_planes=[f.image.planes for f in homogenous_depth_frames],
-                    format=depth_frame_format,
-                    width=width,
-                    height=height,
-                )
-            except ValueError as e:
-                logger.warning("Error decoding depth frames: %s", e)
-                continue
-
-            try:
-                session_stream.save_depth_frames(
-                    frames=decoded_depth_frames,
-                    device_timestamps=[
-                        f.device_timestamp.seconds + f.device_timestamp.nanos / 1e9
-                        for f in homogenous_depth_frames
-                    ],
-                    image_timestamps=[
-                        f.image.timestamp for f in homogenous_depth_frames
-                    ],
-                    device=device,
-                    format=depth_frame_format,
-                    width=width,
-                    height=height,
-                    environment_depth_temporal_smoothing_enabled=is_smoothed,
-                )
-            except ValueError as e:
-                logger.warning("Error saving depth frames: %s", e)
-                continue
-
-            self.on_save_depth_frames(
-                frames=decoded_depth_frames,
-                format=depth_frame_format,
-                width=width,
-                height=height,
-                environment_depth_temporal_smoothing_enabled=is_smoothed,
-                session_stream=session_stream,
-                device=device,
-            )
-
-        return decoded_depth_frames
+    ) -> list[ARFrame]:
+        session_stream.save_depth_frames(
+            frames=frames,
+            device=device,
+        )
+        self.on_save_depth_frames(
+            frames=frames,
+            session_stream=session_stream,
+            device=device,
+        )
+        return [ARFrame(depth_frame=f) for f in frames]
 
     def _process_gyroscope_frames(
         self,
         frames: list[GyroscopeFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> DecodedARFrames:
+    ) -> list[ARFrame]:
         session_stream.save_gyroscope_frames(
             frames=frames,
             device=device,
@@ -579,14 +447,14 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return frames
+        return [ARFrame(gyroscope_frame=f) for f in frames]
 
     def _process_audio_frames(
         self,
         frames: list[AudioFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> DecodedARFrames:
+    ) -> list[ARFrame]:
         session_stream.save_audio_frames(
             frames=frames,
             device=device,
@@ -596,14 +464,14 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return frames
+        return [ARFrame(audio_frame=f) for f in frames]
 
     def _process_plane_detection_frames(
         self,
         frames: list[PlaneDetectionFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> DecodedARFrames:
+    ) -> list[ARFrame]:
         session_stream.save_plane_detection_frames(
             frames=frames,
             device=device,
@@ -613,14 +481,14 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return frames
+        return [ARFrame(plane_detection_frame=f) for f in frames]
 
     def _process_point_cloud_detection_frames(
         self,
         frames: list[PointCloudDetectionFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> DecodedARFrames:
+    ) -> list[ARFrame]:
         session_stream.save_point_cloud_detection_frames(
             frames=frames,
             device=device,
@@ -630,14 +498,14 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return frames
+        return [ARFrame(point_cloud_detection_frame=f) for f in frames]
 
     def _process_mesh_detection_frames(
         self,
         frames: list[MeshDetectionFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> DecodedARFrames:
+    ) -> list[ARFrame]:
         session_stream.save_mesh_detection_frames(
             frames=frames,
             device=device,
@@ -647,18 +515,18 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return frames
+        return [ARFrame(mesh_detection_frame=f) for f in frames]
 
     def on_save_ar_frames(
         self,
-        frames: DecodedARFrames,
+        frames: list[ARFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
         """Hook for user-defined procedures when AR frames are saved to a recording stream.
 
         Args:
-            frames: The decoded AR frames.
+            frames: The AR frames.
             session_stream: The session stream.
             device: The device that sent the AR frames.
         """
@@ -666,14 +534,14 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_transform_frames(
         self,
-        frames: DecodedTransformFrames,
+        frames: list[TransformFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
         """Hook for user-defined procedures when transform frames are saved to a recording stream.
 
         Args:
-            frames: The decoded transform frames.
+            frames: The transform frames.
             session_stream: The session stream.
             device: The device that sent the AR frames.
         """
@@ -681,17 +549,14 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_color_frames(
         self,
-        frames: DecodedColorFrames,
-        format: XRCpuImage.Format,
-        width: int,
-        height: int,
+        frames: list[ColorFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
-        """Hook for user-defined procedures when color frames are saved to a recording stream. These frames are homogenous in format and resolution.
+        """Hook for user-defined procedures when color frames are saved to a recording stream. These frames are NOT homogenous in format or resolution.
 
         Args:
-            frames: The decoded color frames.
+            frames: The color frames.
             session_stream: The session stream.
             device: The device that sent the AR frames.
         """
@@ -699,18 +564,14 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_depth_frames(
         self,
-        frames: DecodedDepthFrames,
-        format: XRCpuImage.Format,
-        width: int,
-        height: int,
-        environment_depth_temporal_smoothing_enabled: bool,
+        frames: list[DepthFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
-        """Hook for user-defined procedures when color frames are saved to a recording stream. These frames are homogenous in format and resolution.
+        """Hook for user-defined procedures when color frames are saved to a recording stream. These frames are NOT homogenous in format, resolution or smoothness.
 
         Args:
-            frames: The decoded color frames.
+            frames: The depth frames.
             session_stream: The session stream.
             device: The device that sent the AR frames.
         """

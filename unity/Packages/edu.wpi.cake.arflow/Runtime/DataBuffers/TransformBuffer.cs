@@ -50,9 +50,9 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_Clock = value;
         }
 
-        private readonly Timer m_SamplingTimer;
-        private bool m_IsCapturing;
         private const int m_TransformDataSize = 3 * 4 * sizeof(float);
+        private float m_SamplingIntervalMs;
+        private bool m_IsCapturing;
         private readonly List<RawTransformFrame> m_Buffer;
 
         public IReadOnlyList<RawTransformFrame> Buffer => m_Buffer;
@@ -61,14 +61,13 @@ namespace CakeLab.ARFlow.DataBuffers
             int initialBufferSize,
             Camera mainCamera,
             IClock clock,
-            double samplingIntervalMs = 50
+            float samplingIntervalMs = 50
         )
         {
             m_Buffer = new List<RawTransformFrame>(initialBufferSize);
             m_MainCamera = mainCamera;
             m_Clock = clock;
-            m_SamplingTimer = new Timer(samplingIntervalMs);
-            m_SamplingTimer.Elapsed += OnSamplingTimerElapsed;
+            m_SamplingIntervalMs = samplingIntervalMs;
         }
 
         public void StartCapture()
@@ -78,7 +77,7 @@ namespace CakeLab.ARFlow.DataBuffers
                 return;
             }
             m_IsCapturing = true;
-            m_SamplingTimer.Start();
+            CaptureTransformAsync();
         }
 
         public void StopCapture()
@@ -87,17 +86,16 @@ namespace CakeLab.ARFlow.DataBuffers
             {
                 return;
             }
-            m_SamplingTimer.Stop();
             m_IsCapturing = false;
         }
 
-        private void OnSamplingTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void CaptureTransformAsync()
         {
-            if (!m_IsCapturing)
+            while (m_IsCapturing)
             {
-                return;
+                await Awaitable.WaitForSecondsAsync(m_SamplingIntervalMs / 1000);
+                AddToBuffer(m_Clock.UtcNow);
             }
-            AddToBuffer(m_Clock.UtcNow);
         }
 
         private void AddToBuffer(DateTime deviceTimestampAtCapture)
@@ -152,7 +150,6 @@ namespace CakeLab.ARFlow.DataBuffers
         {
             StopCapture();
             ClearBuffer();
-            m_SamplingTimer.Dispose();
         }
     }
 }

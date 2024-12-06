@@ -178,7 +178,7 @@ namespace CakeLab.ARFlow.DataBuffers
         )
         {
             m_Buffer.AddRange(
-                pointClouds.Select(pointCloud => new RawPointCloudDetectionFrame
+                pointClouds?.Select(pointCloud => new RawPointCloudDetectionFrame
                 {
                     State = state,
                     Pose = pointCloud.pose,
@@ -199,7 +199,7 @@ namespace CakeLab.ARFlow.DataBuffers
         )
         {
             m_Buffer.AddRange(
-                pointClouds.Select(pointCloud => new RawPointCloudDetectionFrame
+                pointClouds?.Select(pointCloud => new RawPointCloudDetectionFrame
                 {
                     State = PointCloudDetectionState.Removed,
                     Pose = pointCloud.Value.pose,

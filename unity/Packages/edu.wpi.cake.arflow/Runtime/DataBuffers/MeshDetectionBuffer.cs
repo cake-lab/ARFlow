@@ -87,11 +87,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public IReadOnlyList<RawMeshDetectionFrame> Buffer => m_Buffer;
 
-        public MeshDetectionBuffer(
-            int initialBufferSize,
-            ARMeshManager meshManager,
-            IClock clock
-        )
+        public MeshDetectionBuffer(int initialBufferSize, ARMeshManager meshManager, IClock clock)
         {
             m_Buffer = new List<RawMeshDetectionFrame>(initialBufferSize);
             m_MeshManager = meshManager;
@@ -126,6 +122,10 @@ namespace CakeLab.ARFlow.DataBuffers
             MeshDetectionState state
         )
         {
+            if (meshFilters == null || meshFilters.Count == 0)
+            {
+                return;
+            }
             // https://docs.unity3d.com/Packages/com.unity.cloud.draco@5.1/manual/use-case-encoding.html#encode-using-the-advanced-mesh-api
             using var meshDataArray = Mesh.AcquireReadOnlyMeshData(
                 meshFilters.Select(mf => mf.sharedMesh).ToArray()
@@ -178,7 +178,7 @@ namespace CakeLab.ARFlow.DataBuffers
         )
         {
             m_Buffer.AddRange(
-                meshFilters.Select(meshFilter => new RawMeshDetectionFrame
+                meshFilters?.Select(meshFilter => new RawMeshDetectionFrame
                 {
                     State = MeshDetectionState.Removed,
                     // TODO: How does the transform/pose for MeshFilter look like?

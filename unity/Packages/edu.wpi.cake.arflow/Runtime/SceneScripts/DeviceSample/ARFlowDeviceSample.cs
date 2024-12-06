@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using CakeLab.ARFlow.Clock;
 using CakeLab.ARFlow.DataBuffers;
 using CakeLab.ARFlow.DataModalityUIConfig;
@@ -15,6 +12,7 @@ using CakeLab.ARFlow.Utilities;
 using EasyUI.Toast;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 
@@ -51,7 +49,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// <summary>
     /// Handles the lifecycle and sending of frames for all data modalities that support conversion to ARFrame.
     /// The manager's enabled state is also managed by the UIConfig class.
-    /// 
+    ///
     /// This is a proposal for a way to manage the lifecycle of the buffer and sending of frames through UIConfig.
     /// </summary>
     public class BufferControl
@@ -73,7 +71,6 @@ public class ARFlowDeviceSample : MonoBehaviour
                 {
                     buffer = config.GetGenericBuffer();
                     InternalDebug.Log($"Enable Manager {buffer.GetType().Name}");
-                    buffer.StartCapture();
                     sendFrame(this);
                 }
                 else
@@ -87,11 +84,18 @@ public class ARFlowDeviceSample : MonoBehaviour
             };
         }
     }
+
     public async void SendFrame(BufferControl control)
     {
+        if (!m_isSending)
+        {
+            return;
+        }
+        control.buffer.StartCapture();
+
         try
         {
-            while (!control.cts.Token.IsCancellationRequested && m_isSending)
+            while (!control.cts.Token.IsCancellationRequested)
             {
                 float currentDelay = control.config.GetDelay();
                 // OperationCanceledException is thrown when the token is cancelled, this is expected
@@ -105,6 +109,7 @@ public class ARFlowDeviceSample : MonoBehaviour
                     InternalDebug.Log("No frames to send.");
                     continue;
                 }
+                InternalDebug.Log($"Sending {arFrames.Length} frames");
 
                 var _ = await grpcClient.SaveARFramesAsync(
                     m_ActiveSession.Id,
@@ -119,10 +124,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             InternalDebug.Log($"Operation cancelled {e}");
         }
-
     }
-
-
 
     private AudioUIConfig m_AudioUIConfig;
     BufferControl audioBufferControl;
@@ -137,7 +139,6 @@ public class ARFlowDeviceSample : MonoBehaviour
     private GyroscopeUIConfig m_GyroscopeUIConfig;
     BufferControl gyroscopeBufferControl;
 
-
     private MeshDetectionUIConfig m_MeshDetectionUIConfig;
     BufferControl meshDetectionControl;
 
@@ -149,7 +150,6 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     private TransformUIConfig m_TransformUIConfig;
     BufferControl transformBufferControl;
-
 
     private List<IARFrameBuffer> m_DataBuffers;
     private List<BufferControl> m_BufferControls;
@@ -218,9 +218,11 @@ public class ARFlowDeviceSample : MonoBehaviour
         catch (Exception e)
         {
             InternalDebug.Log($"Error connecting to server: {e}");
-            Toast.Show("Error connecting to server. Make sure host and port is correct.", ToastColor.Red);
+            Toast.Show(
+                "Error connecting to server. Make sure host and port is correct.",
+                ToastColor.Red
+            );
         }
-
     }
 
     [Serializable]
@@ -372,7 +374,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
-
     [Tooltip("UI Window for managing sessions")]
     public SessionsWindow sessionsWindow;
 
@@ -385,7 +386,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         sessionsWindow.windowGameObject.SetActive(false);
         findServerWindow.windowGameObject.SetActive(true);
     }
-
 
     /// <summary>
     /// Search for available sessions and display them in the UI asynchronously
@@ -421,7 +421,6 @@ public class ARFlowDeviceSample : MonoBehaviour
             InternalDebug.Log("GrpcClient is null");
         }
     }
-
 
     void OnPressCreateSession()
     {
@@ -508,7 +507,8 @@ public class ARFlowDeviceSample : MonoBehaviour
             }
         }
     }
-    async private void OnGoBackFromARView()
+
+    private async void OnGoBackFromARView()
     {
         m_isSending = false;
         foreach (var control in m_BufferControls)
@@ -534,6 +534,23 @@ public class ARFlowDeviceSample : MonoBehaviour
     void Start()
     {
         m_Device = GetDeviceInfo.GetDevice();
+
+        if (UnityEngine.InputSystem.Gyroscope.current != null)
+        {
+            InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
+        }
+        if (AttitudeSensor.current != null)
+        {
+            InputSystem.EnableDevice(AttitudeSensor.current);
+        }
+        if (Accelerometer.current != null)
+        {
+            InputSystem.EnableDevice(Accelerometer.current);
+        }
+        if (GravitySensor.current != null)
+        {
+            InputSystem.EnableDevice(GravitySensor.current);
+        }
 
         //TODO: placeholder
         clock = new NtpClock("pool.ntp.org", 3);
@@ -588,7 +605,6 @@ public class ARFlowDeviceSample : MonoBehaviour
             );
         }
 
-
         // Initialize find server window
         findServerWindow.connectButton.onClick.AddListener(OnConnectToServer);
 
@@ -604,7 +620,6 @@ public class ARFlowDeviceSample : MonoBehaviour
             OnCancelCreateSession
         );
         sessionsWindow.createSessionWindow.createSessionButton.onClick.AddListener(OnCreateSession);
-
 
         // Initialize AR view window
         arViewWindow.startPauseButton.onClick.AddListener(OnStartPauseButton);
