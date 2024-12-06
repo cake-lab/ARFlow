@@ -240,7 +240,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
             NtpClock ntpClock = new NtpClock(ntpURL);
             clock = ntpClock;
-            ntpClock.SynchronizeAsync();
+            await ntpClock.SynchronizeAsync();
 
             InitUIConfig();
             findServerWindow.windowGameObject.SetActive(false);
