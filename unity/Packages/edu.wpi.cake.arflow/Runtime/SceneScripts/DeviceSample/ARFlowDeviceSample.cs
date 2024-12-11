@@ -240,11 +240,11 @@ public class ARFlowDeviceSample : MonoBehaviour
 
             NtpClock ntpClock = new NtpClock(ntpURL);
             clock = ntpClock;
-            await ntpClock.SynchronizeAsync();
 
             InitUIConfig();
             findServerWindow.windowGameObject.SetActive(false);
             sessionsWindow.windowGameObject.SetActive(true);
+            await ntpClock.SynchronizeAsync();
 
         }
         catch (Exception e)
