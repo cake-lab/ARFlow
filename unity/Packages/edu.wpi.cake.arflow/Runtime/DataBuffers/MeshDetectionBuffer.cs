@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Draco.Encode;
 using Google.Protobuf.WellKnownTypes;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
@@ -29,7 +28,7 @@ namespace CakeLab.ARFlow.DataBuffers
         public int MeshFilterId;
         public MeshDetectionState State;
         public DateTime DeviceTimestamp;
-        public List<NativeArray<byte>> EncodedSubMeshes;
+        public List<byte[]> EncodedSubMeshes;
 
         public static explicit operator Grpc.V1.MeshDetectionFrame(RawMeshDetectionFrame rawFrame)
         {
@@ -162,7 +161,7 @@ namespace CakeLab.ARFlow.DataBuffers
                         // Pose = meshFilters[i].transform,
                         MeshFilterId = meshFilters[i].GetInstanceID(),
                         DeviceTimestamp = deviceTimestampAtCapture,
-                        EncodedSubMeshes = results.Select(r => r.data).ToList(),
+                        EncodedSubMeshes = results.Select(r => r.data.ToArray()).ToList(),
                     })
                 );
                 foreach (var result in results)

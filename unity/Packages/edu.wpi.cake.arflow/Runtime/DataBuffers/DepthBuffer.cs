@@ -22,7 +22,7 @@ namespace CakeLab.ARFlow.DataBuffers
         public UnityVector2Int Dimensions;
         public UnityXRCpuImage.Format Format;
         public double ImageTimestamp;
-        public UnityXRCpuImage.Plane[] Planes;
+        public RawARPlane[] Planes;
 
         public static explicit operator Grpc.V1.DepthFrame(RawDepthFrame rawFrame)
         {
@@ -37,14 +37,7 @@ namespace CakeLab.ARFlow.DataBuffers
                 Timestamp = rawFrame.ImageTimestamp,
             };
             xrCpuImageGrpc.Planes.AddRange(
-                (rawFrame.Planes ?? Array.Empty<UnityXRCpuImage.Plane>()).Select(
-                    plane => new Grpc.V1.XRCpuImage.Types.Plane
-                    {
-                        RowStride = plane.rowStride,
-                        PixelStride = plane.pixelStride,
-                        Data = Google.Protobuf.ByteString.CopyFrom(plane.data.ToArray()),
-                    }
-                )
+                rawFrame.Planes.Select(plane => (Grpc.V1.XRCpuImage.Types.Plane)plane)
             );
             var depthFrameGrpc = new Grpc.V1.DepthFrame
             {
@@ -127,14 +120,7 @@ namespace CakeLab.ARFlow.DataBuffers
                 ImageTimestamp = image.timestamp,
                 Planes = Enumerable
                     .Range(0, image.planeCount)
-                    .Select(i =>
-                    {
-                        // Make a deep copy to decouple lifetime of the image from the buffer
-                        var plane = image.GetPlane(i);
-                        var dst = new NativeArray<byte>(plane.data.Length, Allocator.Temp);
-                        dst.CopyFrom(plane.data);
-                        return new UnityXRCpuImage.Plane(plane.rowStride, plane.pixelStride, dst);
-                    })
+                    .Select(i => (RawARPlane)image.GetPlane(i))
                     .ToArray(),
             };
             m_Buffer.Add(newFrame);
