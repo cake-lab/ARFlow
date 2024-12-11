@@ -58,6 +58,7 @@ class SessionStream:
         device: Device,
     ):
         if len(frames) == 0:
+            logger.warning("No transform frames to save.")
             return
 
         entity_path = rr.new_entity_path(
@@ -106,11 +107,12 @@ class SessionStream:
         frames: list[ColorFrame],
         device: Device,
     ):
-        """Save color frames to the stream. Assumes that the device is in the session and the data is "nice" (e.g., all frames have the same format, width, height, and originating device).
+        """Assumes that the device is in the session and all frames have the same format, width, height, and originating device.
 
         @private
         """
         if len(frames) == 0:
+            logger.warning("No color frames to save.")
             return
 
         grouped_frames = group_color_frames_by_format_and_dims(frames)
@@ -141,7 +143,7 @@ class SessionStream:
             #         pixel_format=rr.PixelFormat.NV12,
             #     )
             else:
-                logger.warning(f"Unsupported frame format: {format}")
+                logger.warning(f"Unsupported color frame format: {format}")
                 continue
 
             rr.log(
@@ -179,14 +181,9 @@ class SessionStream:
         frames: list[DepthFrame],
         device: Device,
     ):
-        """Save depth frames to the stream. Assumes that the device is in the session and the data is "nice" (e.g., all frames have the same format, width, height, and originating device).
-
-        Raises:
-            ValueError: If the decoded depth frames, device timestamps, and image timestamps do not have the same length or if the frame format is not supported.
-
-        @private
-        """
+        """Assumes that the device is in the session and all frames have the same format, width, height, smoothness, and and originating device."""
         if len(frames) == 0:
+            logger.warning("No depth frames to save.")
             return
 
         grouped_frames = group_depth_frames_by_format_dims_and_smoothness(frames)
@@ -223,7 +220,8 @@ class SessionStream:
                     channel_datatype=rr.ChannelDatatype.U16,
                 )
             else:
-                raise ValueError(f"Unsupported frame format: {format}")
+                logger.warning(f"Unsupported depth frame format: {format}")
+                continue
 
             rr.log(
                 entity_path,
@@ -401,6 +399,7 @@ class SessionStream:
         device: Device,
     ):
         if len(frames) == 0:
+            logger.warning("No audio frames to save.")
             return
 
         entity_path = rr.new_entity_path(
@@ -441,6 +440,7 @@ class SessionStream:
         device: Device,
     ):
         if len(frames) == 0:
+            logger.warning("No plane detection frames to save.")
             return
 
         entity_path = rr.new_entity_path(
@@ -546,6 +546,7 @@ class SessionStream:
         device: Device,
     ):
         if len(frames) == 0:
+            logger.warning("No point cloud detection frames to save.")
             return
 
         entity_path = rr.new_entity_path(
@@ -695,6 +696,7 @@ class SessionStream:
         device: Device,
     ):
         if len(frames) == 0:
+            logger.warning("No mesh detection frames to save.")
             return
 
         entity_path = rr.new_entity_path(
@@ -765,6 +767,7 @@ class SessionStream:
         )
 
 
+# TODO: Performance opportunity for hot path. Can operate on a batch of images at once instead of one at a time.
 def _to_i420_format(image: XRCpuImage) -> npt.NDArray[np.uint8]:
     if len(image.planes) != 3:
         logger.error(f"Skipping bad image. Expected 3 planes, got {len(image.planes)}.")
@@ -809,6 +812,7 @@ def _to_boundary_points_3d(
     plane: ARPlane,
 ) -> npt.NDArray[np.float32]:
     if len(plane.boundary) == 0:
+        logger.error("Skipping plane with no boundary points.")
         return np.array([], dtype=np.float32)
 
     normal_as_np = np.array([plane.normal.x, plane.normal.y, plane.normal.z])

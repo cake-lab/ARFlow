@@ -40,7 +40,7 @@ def _prompt_until_valid_dir(path_as_str: str) -> str:
 
 
 def view(args: Any):
-    """Run the ARFlow server and view live data from the clients."""
+    """Run the ARFlow server and Rerun Viewer to view live data from the clients."""
     run_server(
         ARFlowServicer,
         spawn_viewer=True,
@@ -51,7 +51,7 @@ def view(args: Any):
 
 
 def save(args: Any):
-    """Run the ARFlow server and save the session data to disk."""
+    """Run the ARFlow server and save the data to disk."""
     run_server(
         ARFlowServicer,
         spawn_viewer=False,
@@ -93,7 +93,8 @@ def parse_args(
 
     # View subcommand
     view_parser = subparsers.add_parser(
-        "view", help="Run the ARFlow server and view live data from the clients."
+        "view",
+        help="Run the ARFlow server and Rerun Viewer to view live data from the clients.",
     )
     view_parser.add_argument(
         "-p",
@@ -113,7 +114,7 @@ def parse_args(
 
     # Save subcommand
     save_parser = subparsers.add_parser(
-        "save", help="Run the ARFlow server and save the session data to disk."
+        "save", help="Run the ARFlow server and save the data to disk."
     )
     save_parser.add_argument(
         "-s",

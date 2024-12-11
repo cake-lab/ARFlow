@@ -118,7 +118,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         logger.info("Created new session: %s", new_session_stream.info)
 
         if self._save_dir is not None:
-            save_path = self._save_dir / Path(f"{new_session_stream.info.id}.rrd")
+            save_path = self._save_dir / Path(f"{new_session_stream.info.id.value}.rrd")
 
             # Overriding the save path if provided in session metadata
             if len(request.session_metadata.save_path) != 0:
