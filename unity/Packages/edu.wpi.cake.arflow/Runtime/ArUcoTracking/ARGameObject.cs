@@ -34,7 +34,6 @@ namespace CakeLab.ARFlow.ArUcoTracking
 
             Vector3 targetPosition = ARUtils.ExtractTranslationFromMatrix(ref localToWorldMatrix);
             Quaternion targetRotation = ARUtils.ExtractRotationFromMatrix(ref localToWorldMatrix);
-            Debug.Log("targetPosition: " + targetPosition.ToString("F6"));
             if (!smoothing)
             {
                 transform.rotation = targetRotation;

@@ -573,13 +573,30 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         public GameObject scanWindow;
         public Button stopScanButton;
+        public Button finishScanButton;
+
+        public TMP_Text positionText;
+        public TMP_Text rotationText;
     }
     public ArucoWindow arucoWindow;
+
+    /// <summary>
+    /// The object that will be synced with the ARuco marker
+    /// This object will be a helper for setting the xrorigin, since setting the position of xrorigin while syncing give undefine behaviors
+    /// </summary>
+    public GameObject arucoSyncObj;
+    void ResetOriginPosition()
+    {
+        XROrigin.transform.position = UnityEngine.Vector3.zero;
+        XROrigin.transform.rotation = UnityEngine.Quaternion.identity;
+    }
     void onStartScan()
     {
+        ResetOriginPosition();
         arucoWindow.cameraArUco.OnStartScanning();
         arucoWindow.configWindow.SetActive(false);
         arucoWindow.scanWindow.SetActive(true);
+        arucoWindow.finishScanButton.interactable = false;
     }
     void onStopScan()
     {
@@ -603,9 +620,17 @@ public class ARFlowDeviceSample : MonoBehaviour
     }
     void OnSpaceSynced()
     {
+        InternalDebug.Log($"Space synced successfully {arucoSyncObj.transform.position}");
+        arucoWindow.finishScanButton.interactable = true;
+        arucoWindow.positionText.text = $"Position: {arucoSyncObj.transform.position}";
+        arucoWindow.rotationText.text = $"Rotation: {arucoSyncObj.transform.rotation.eulerAngles}";
+    }
+    void OnFinishScan()
+    {
+        XROrigin.transform.position = arucoSyncObj.transform.position;
+        XROrigin.transform.rotation = arucoSyncObj.transform.rotation;
+
         onGoBackFromAruco();
-        InternalDebug.Log($"Space synced successfully {XROrigin.transform.position}");
-        Toast.Show($"Space synced. New origin at {XROrigin.transform.position}", 1f, ToastColor.Green);
     }
 
     void OnApplicationQuit()
@@ -745,6 +770,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         arucoWindow.goBackButton.onClick.AddListener(onGoBackFromAruco);
         arucoWindow.stopScanButton.onClick.AddListener(onStopScan);
         arucoWindow.cameraArUco.OnSpaceSynced += OnSpaceSynced;
-
+        arucoWindow.finishScanButton.onClick.AddListener(OnFinishScan);
     }
 }

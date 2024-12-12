@@ -179,7 +179,7 @@ namespace CakeLab.ARFlow.ArUcoTracking
         /// </summary>
         public void OnWebCamTextureToMatHelperInitialized()
         {
-            Debug.Log("OnWebCamTextureToMatHelperInitialized");
+            //Debug.Log("OnWebCamTextureToMatHelperInitialized");
 
             Mat rgbaMat = webCamTextureToMatHelper.GetMat();
 
@@ -190,7 +190,7 @@ namespace CakeLab.ARFlow.ArUcoTracking
             float heightScale = (float)rgbaMat.height() / rgbaMat.width();
             rawCameraImage.rectTransform.sizeDelta = new Vector2(640, 640 * heightScale);
 
-            Debug.Log("Screen.width " + Screen.width + " Screen.height " + Screen.height + " Screen.orientation " + Screen.orientation);
+            //Debug.Log("Screen.width " + Screen.width + " Screen.height " + Screen.height + " Screen.orientation " + Screen.orientation);
 
 
             // set camera parameters.
@@ -251,7 +251,7 @@ namespace CakeLab.ARFlow.ArUcoTracking
 
             distCoeffs = new MatOfDouble(0, 0, 0, 0);
 
-            Debug.Log("Created CameraParameters from the camera intrinsics to be populated if the camera supports intrinsics.");
+            //Debug.Log("Created CameraParameters from the camera intrinsics to be populated if the camera supports intrinsics.");
 
             var focalLength = cameraIntrinsics.focalLength;
             var principalPoint = cameraIntrinsics.principalPoint;
@@ -285,12 +285,12 @@ namespace CakeLab.ARFlow.ArUcoTracking
 
             distCoeffs = new MatOfDouble(0, 0, 0, 0);
 
-            Debug.Log("Created a dummy CameraParameters.");
+            //Debug.Log("Created a dummy CameraParameters.");
 
 #endif // (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR && !DISABLE_ARFOUNDATION_API
 
-            Debug.Log("camMatrix " + camMatrix.dump());
-            Debug.Log("distCoeffs " + distCoeffs.dump());
+            //Debug.Log("camMatrix " + camMatrix.dump());
+            //Debug.Log("distCoeffs " + distCoeffs.dump());
 
 
             rgbMat = new Mat(rgbaMat.rows(), rgbaMat.cols(), CvType.CV_8UC3);
@@ -321,7 +321,7 @@ namespace CakeLab.ARFlow.ArUcoTracking
         /// </summary>
         public void OnWebCamTextureToMatHelperDisposed()
         {
-            Debug.Log("OnWebCamTextureToMatHelperDisposed");
+            //Debug.Log("OnWebCamTextureToMatHelperDisposed");
 
             if (rgbMat != null)
                 rgbMat.Dispose();
@@ -357,7 +357,7 @@ namespace CakeLab.ARFlow.ArUcoTracking
         /// <param name="message">Message.</param>
         public void OnWebCamTextureToMatHelperErrorOccurred(Source2MatHelperErrorCode errorCode, string message)
         {
-            Debug.Log("OnWebCamTextureToMatHelperErrorOccurred " + errorCode + ":" + message);
+            //Debug.Log("OnWebCamTextureToMatHelperErrorOccurred " + errorCode + ":" + message);
 
         }
 
@@ -386,7 +386,6 @@ namespace CakeLab.ARFlow.ArUcoTracking
                 {
                     EstimatePoseCanonicalMarker(rgbMat);
                 }
-                OnStopScanning();
                 m_OnSpaceSynced?.Invoke();
             }
 
@@ -425,7 +424,6 @@ namespace CakeLab.ARFlow.ArUcoTracking
                     {
                         EstimatePoseCanonicalMarker(rgbMat);
                     }
-                    OnStopScanning();
                     m_OnSpaceSynced?.Invoke();
 
                 }
@@ -471,8 +469,9 @@ namespace CakeLab.ARFlow.ArUcoTracking
 
         private void UpdateARObjectTransform(Mat rvec, Mat tvec)
         {
-            Debug.Log(rvec.dump());
-            Debug.Log(tvec.dump());
+
+            //Debug.Log(rvec.dump());
+            //Debug.Log(tvec.dump());
 
             // Convert to unity pose data.
             double[] rvecArr = new double[3];
@@ -483,7 +482,7 @@ namespace CakeLab.ARFlow.ArUcoTracking
 
             // Convert to transform matrix.
             ARM = ARUtils.ConvertPoseDataToMatrix(ref poseData, true);
-            Debug.Log("ARM " + ARM.ToString());
+            //Debug.Log("ARM " + ARM.ToString());
 
             // Apply the effect (flipping factors) of the projection matrix applied to the ARCamera by the ARFoundationBackground component to the ARM.
             ARM = fitARFoundationBackgroundMatrix * ARM;
@@ -496,7 +495,7 @@ namespace CakeLab.ARFlow.ArUcoTracking
 
             if (enableLerpFilter)
             {
-                Debug.Log("ARM " + ARM.ToString());
+                //Debug.Log("ARM " + ARM.ToString());
                 arGameObject.SetMatrix4x4(ARM);
             }
             else
