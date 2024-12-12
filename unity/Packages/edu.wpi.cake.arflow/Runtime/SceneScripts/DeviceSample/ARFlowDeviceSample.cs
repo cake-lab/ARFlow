@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using CakeLab.ARFlow.ArUcoTracking;
 using CakeLab.ARFlow.Clock;
 using CakeLab.ARFlow.DataBuffers;
 using CakeLab.ARFlow.DataModalityUIConfig;
@@ -21,6 +22,9 @@ using UnityEngine.XR.ARSubsystems;
 
 public class ARFlowDeviceSample : MonoBehaviour
 {
+    public GameObject XROrigin;
+    [Space(20)]
+
     // AR Managers for AR data collection
     [Tooltip("Camera image data's manager from the device camera")]
     public ARCameraManager cameraManager;
@@ -507,6 +511,8 @@ public class ARFlowDeviceSample : MonoBehaviour
         public Button startPauseButton;
         public Button goBackButton;
 
+        public Button arucoSyncButton;
+
         public GameObject headerTextPrefab;
         public GameObject bodyTextPrefab;
         public GameObject textInputPrefab;
@@ -554,6 +560,52 @@ public class ARFlowDeviceSample : MonoBehaviour
         arViewWindow.windowGameObject.SetActive(false);
         sessionsWindow.windowGameObject.SetActive(true);
         await SearchForSession();
+    }
+
+    //Aruco windows
+    [Serializable]
+    public class ArucoWindow
+    {
+        public ARFoundationCameraArUco cameraArUco;
+        public GameObject configWindow;
+        public Button startScanButton;
+        public Button goBackButton;
+
+        public GameObject scanWindow;
+        public Button stopScanButton;
+    }
+    public ArucoWindow arucoWindow;
+    void onStartScan()
+    {
+        arucoWindow.cameraArUco.OnStartScanning();
+        arucoWindow.configWindow.SetActive(false);
+        arucoWindow.scanWindow.SetActive(true);
+    }
+    void onStopScan()
+    {
+        arucoWindow.cameraArUco.OnStopScanning();
+        arucoWindow.scanWindow.SetActive(false);
+        arucoWindow.configWindow.SetActive(true);
+    }
+    void onGoBackFromAruco()
+    {
+        arucoWindow.cameraArUco.OnStopScanning();
+        arucoWindow.scanWindow.SetActive(false);
+        arucoWindow.configWindow.SetActive(false);
+
+        arViewWindow.windowGameObject.SetActive(true);
+    }
+    void onGoToArucoWindow()
+    {
+        arViewWindow.windowGameObject.SetActive(false);
+        arucoWindow.configWindow.SetActive(true);
+        arucoWindow.scanWindow.SetActive(false);
+    }
+    void OnSpaceSynced()
+    {
+        onGoBackFromAruco();
+        InternalDebug.Log($"Space synced successfully {XROrigin.transform.position}");
+        Toast.Show($"Space synced. New origin at {XROrigin.transform.position}", 1f, ToastColor.Green);
     }
 
     void OnApplicationQuit()
@@ -686,5 +738,13 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Initialize AR view window
         arViewWindow.startPauseButton.onClick.AddListener(OnStartPauseButton);
         arViewWindow.goBackButton.onClick.AddListener(OnGoBackFromARView);
+        arViewWindow.arucoSyncButton.onClick.AddListener(onGoToArucoWindow);
+
+        // Initialize Aruco window
+        arucoWindow.startScanButton.onClick.AddListener(onStartScan);
+        arucoWindow.goBackButton.onClick.AddListener(onGoBackFromAruco);
+        arucoWindow.stopScanButton.onClick.AddListener(onStopScan);
+        arucoWindow.cameraArUco.OnSpaceSynced += OnSpaceSynced;
+
     }
 }

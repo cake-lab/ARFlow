@@ -52,7 +52,7 @@ namespace CakeLab.ARFlow.Grpc
     /// <summary>
     /// gRPC client that reuses the channel for multiple requests, but will create a new client for each request. This is more performant than creating a new channel for each request or even reusing both the channel and the client for each request.
     /// </summary>
-    internal class GrpcClient : IGrpcClient
+    public class GrpcClient : IGrpcClient
     {
         private readonly GrpcChannel m_Channel;
         private readonly CallInvoker m_Invoker;
