@@ -27,20 +27,21 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             "CiFjYWtlbGFiL2FyZmxvd19ncnBjL3YxL3Bvc2UucHJvdG8SFmNha2VsYWIu",
             "YXJmbG93X2dycGMudjEaJ2Nha2VsYWIvYXJmbG93X2dycGMvdjEvcXVhdGVy",
             "bmlvbi5wcm90bxokY2FrZWxhYi9hcmZsb3dfZ3JwYy92MS92ZWN0b3IzLnBy",
-            "b3RvIukBCgRQb3NlEjkKB2ZvcndhcmQYASABKAsyHy5jYWtlbGFiLmFyZmxv",
-            "d19ncnBjLnYxLlZlY3RvcjNSB2ZvcndhcmQSNQoFcmlnaHQYAiABKAsyHy5j",
-            "YWtlbGFiLmFyZmxvd19ncnBjLnYxLlZlY3RvcjNSBXJpZ2h0Ej4KCHJvdGF0",
-            "aW9uGAQgASgLMiIuY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5RdWF0ZXJuaW9u",
-            "Ughyb3RhdGlvbhIvCgJ1cBgFIAEoCzIfLmNha2VsYWIuYXJmbG93X2dycGMu",
-            "djEuVmVjdG9yM1ICdXBCngEKGmNvbS5jYWtlbGFiLmFyZmxvd19ncnBjLnYx",
-            "QglQb3NlUHJvdG9QAaICA0NBWKoCFkNha2VMYWIuQVJGbG93LkdycGMuVjHK",
-            "AhVDYWtlbGFiXEFyZmxvd0dycGNcVjHiAiFDYWtlbGFiXEFyZmxvd0dycGNc",
-            "VjFcR1BCTWV0YWRhdGHqAhdDYWtlbGFiOjpBcmZsb3dHcnBjOjpWMWIGcHJv",
-            "dG8z"));
+            "b3RvIqYCCgRQb3NlEjkKB2ZvcndhcmQYASABKAsyHy5jYWtlbGFiLmFyZmxv",
+            "d19ncnBjLnYxLlZlY3RvcjNSB2ZvcndhcmQSOwoIcG9zaXRpb24YAiABKAsy",
+            "Hy5jYWtlbGFiLmFyZmxvd19ncnBjLnYxLlZlY3RvcjNSCHBvc2l0aW9uEjUK",
+            "BXJpZ2h0GAMgASgLMh8uY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5WZWN0b3Iz",
+            "UgVyaWdodBI+Cghyb3RhdGlvbhgEIAEoCzIiLmNha2VsYWIuYXJmbG93X2dy",
+            "cGMudjEuUXVhdGVybmlvblIIcm90YXRpb24SLwoCdXAYBSABKAsyHy5jYWtl",
+            "bGFiLmFyZmxvd19ncnBjLnYxLlZlY3RvcjNSAnVwQp4BChpjb20uY2FrZWxh",
+            "Yi5hcmZsb3dfZ3JwYy52MUIJUG9zZVByb3RvUAGiAgNDQViqAhZDYWtlTGFi",
+            "LkFSRmxvdy5HcnBjLlYxygIVQ2FrZWxhYlxBcmZsb3dHcnBjXFYx4gIhQ2Fr",
+            "ZWxhYlxBcmZsb3dHcnBjXFYxXEdQQk1ldGFkYXRh6gIXQ2FrZWxhYjo6QXJm",
+            "bG93R3JwYzo6VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.QuaternionReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.Vector3Reflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::CakeLab.ARFlow.Grpc.V1.Pose), global::CakeLab.ARFlow.Grpc.V1.Pose.Parser, new[]{ "Forward", "Right", "Rotation", "Up" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::CakeLab.ARFlow.Grpc.V1.Pose), global::CakeLab.ARFlow.Grpc.V1.Pose.Parser, new[]{ "Forward", "Position", "Right", "Rotation", "Up" }, null, null, null, null)
           }));
     }
     #endregion
@@ -86,6 +87,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Pose(Pose other) : this() {
       forward_ = other.forward_ != null ? other.forward_.Clone() : null;
+      position_ = other.position_ != null ? other.position_.Clone() : null;
       right_ = other.right_ != null ? other.right_.Clone() : null;
       rotation_ = other.rotation_ != null ? other.rotation_.Clone() : null;
       up_ = other.up_ != null ? other.up_.Clone() : null;
@@ -110,8 +112,20 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
     }
 
+    /// <summary>Field number for the "position" field.</summary>
+    public const int PositionFieldNumber = 2;
+    private global::CakeLab.ARFlow.Grpc.V1.Vector3 position_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::CakeLab.ARFlow.Grpc.V1.Vector3 Position {
+      get { return position_; }
+      set {
+        position_ = value;
+      }
+    }
+
     /// <summary>Field number for the "right" field.</summary>
-    public const int RightFieldNumber = 2;
+    public const int RightFieldNumber = 3;
     private global::CakeLab.ARFlow.Grpc.V1.Vector3 right_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -162,6 +176,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         return true;
       }
       if (!object.Equals(Forward, other.Forward)) return false;
+      if (!object.Equals(Position, other.Position)) return false;
       if (!object.Equals(Right, other.Right)) return false;
       if (!object.Equals(Rotation, other.Rotation)) return false;
       if (!object.Equals(Up, other.Up)) return false;
@@ -173,6 +188,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
     public override int GetHashCode() {
       int hash = 1;
       if (forward_ != null) hash ^= Forward.GetHashCode();
+      if (position_ != null) hash ^= Position.GetHashCode();
       if (right_ != null) hash ^= Right.GetHashCode();
       if (rotation_ != null) hash ^= Rotation.GetHashCode();
       if (up_ != null) hash ^= Up.GetHashCode();
@@ -198,8 +214,12 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         output.WriteRawTag(10);
         output.WriteMessage(Forward);
       }
-      if (right_ != null) {
+      if (position_ != null) {
         output.WriteRawTag(18);
+        output.WriteMessage(Position);
+      }
+      if (right_ != null) {
+        output.WriteRawTag(26);
         output.WriteMessage(Right);
       }
       if (rotation_ != null) {
@@ -224,8 +244,12 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         output.WriteRawTag(10);
         output.WriteMessage(Forward);
       }
-      if (right_ != null) {
+      if (position_ != null) {
         output.WriteRawTag(18);
+        output.WriteMessage(Position);
+      }
+      if (right_ != null) {
+        output.WriteRawTag(26);
         output.WriteMessage(Right);
       }
       if (rotation_ != null) {
@@ -248,6 +272,9 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       int size = 0;
       if (forward_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Forward);
+      }
+      if (position_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Position);
       }
       if (right_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Right);
@@ -275,6 +302,12 @@ namespace CakeLab.ARFlow.Grpc.V1 {
           Forward = new global::CakeLab.ARFlow.Grpc.V1.Vector3();
         }
         Forward.MergeFrom(other.Forward);
+      }
+      if (other.position_ != null) {
+        if (position_ == null) {
+          Position = new global::CakeLab.ARFlow.Grpc.V1.Vector3();
+        }
+        Position.MergeFrom(other.Position);
       }
       if (other.right_ != null) {
         if (right_ == null) {
@@ -321,6 +354,13 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             break;
           }
           case 18: {
+            if (position_ == null) {
+              Position = new global::CakeLab.ARFlow.Grpc.V1.Vector3();
+            }
+            input.ReadMessage(Position);
+            break;
+          }
+          case 26: {
             if (right_ == null) {
               Right = new global::CakeLab.ARFlow.Grpc.V1.Vector3();
             }
@@ -368,6 +408,13 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             break;
           }
           case 18: {
+            if (position_ == null) {
+              Position = new global::CakeLab.ARFlow.Grpc.V1.Vector3();
+            }
+            input.ReadMessage(Position);
+            break;
+          }
+          case 26: {
             if (right_ == null) {
               Right = new global::CakeLab.ARFlow.Grpc.V1.Vector3();
             }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using CakeLab.ARFlow;
 using CakeLab.ARFlow.ArUcoTracking;
 using CakeLab.ARFlow.Clock;
 using CakeLab.ARFlow.DataBuffers;
@@ -25,6 +26,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     public GameObject XROrigin;
     [Space(20)]
 
+    [Header("AR Managers & Data collectors")]
     // AR Managers for AR data collection
     [Tooltip("Camera image data's manager from the device camera")]
     public ARCameraManager cameraManager;
@@ -38,10 +40,15 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public ARPointCloudManager pointCloudManager;
 
+    [Tooltip("Pose will be obtained from this object. This object should contain a TrackedPoseDriver component.")]
+    public Transform poseObjTransform;
+
     // Variables for state of the ARFlow device sample
     public IGrpcClient grpcClient;
 
     public IClock clock;
+
+    public IntrinsicsData intrinsicsData;
 
     private List<BaseDataModalityUIConfig> m_DataModalityUIConfigs;
     private List<CancellationTokenSource> m_CtsList = new List<CancellationTokenSource>();
@@ -50,6 +57,8 @@ public class ARFlowDeviceSample : MonoBehaviour
     private Device m_Device;
 
     private bool m_isSending = false;
+
+
 
     // Data buffers and UI configs
 
@@ -140,6 +149,9 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
+    private PoseUIConfig m_PoseUIConfig;
+    BufferControl poseBufferControl;
+
     private AudioUIConfig m_AudioUIConfig;
     BufferControl audioBufferControl;
 
@@ -174,7 +186,6 @@ public class ARFlowDeviceSample : MonoBehaviour
     // UI Windows
 
     [Serializable]
-    [Tooltip("UI Window for finding server")]
     public class FindServerWindow
     {
         public GameObject windowGameObject;
@@ -220,7 +231,8 @@ public class ARFlowDeviceSample : MonoBehaviour
             });
         }
     }
-
+    [Header("UI Windows")]
+    [Tooltip("UI Window for finding server")]
     public FindServerWindow findServerWindow;
 
     public async void OnConnectToServer()
@@ -525,11 +537,16 @@ public class ARFlowDeviceSample : MonoBehaviour
     [Tooltip("UI Window sending AR data")]
     public ARViewWindow arViewWindow;
 
-    private void OnStartPauseButton()
+    private async void OnStartPauseButton()
     {
         m_isSending = !m_isSending;
         if (m_isSending)
         {
+            // start sending
+            // register intrinsics for pinhole camera on server
+            intrinsicsData.GetIntrinsic(out var intrinsics, out var timestamp);
+            await grpcClient.RegisterIntrinsicsAsync(m_ActiveSession.Id, m_Device, timestamp, intrinsics);
+
             arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Pause";
             foreach (var control in m_BufferControls)
             {
@@ -669,6 +686,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void InitUIConfig()
     {
+        m_PoseUIConfig = new PoseUIConfig(poseObjTransform, clock);
         m_AudioUIConfig = new AudioUIConfig(clock, Microphone.devices.Count() > 0);
         m_ColorUIConfig = new ColorUIConfig(cameraManager, clock);
         m_depthUIConfig = new DepthUIConfig(occlusionManager, clock);
@@ -678,6 +696,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         m_PointCloudDetectionUIConfig = new PointCloudDetectionUIConfig(pointCloudManager, clock);
         m_TransformUIConfig = new TransformUIConfig(Camera.main, clock);
 
+        // Initialize intrinsics data with new clock
+        intrinsicsData = new IntrinsicsData(cameraManager, clock);
+
+        poseBufferControl = new BufferControl(m_PoseUIConfig);
         audioBufferControl = new BufferControl(m_AudioUIConfig);
         colorBufferControl = new BufferControl(m_ColorUIConfig);
         depthBufferControl = new BufferControl(m_depthUIConfig);
@@ -689,6 +711,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         m_dataModalityUIConfigs = new List<BaseDataModalityUIConfig>()
         {
+            m_PoseUIConfig,
             m_AudioUIConfig,
             m_ColorUIConfig,
             m_depthUIConfig,
@@ -701,6 +724,7 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         m_BufferControls = new List<BufferControl>()
         {
+            poseBufferControl,
             audioBufferControl,
             colorBufferControl,
             depthBufferControl,
@@ -741,6 +765,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
 
         m_Device = GetDeviceInfo.GetDevice();
+
 
         // Initialize find server window
         findServerWindow.initFindServerWindow();

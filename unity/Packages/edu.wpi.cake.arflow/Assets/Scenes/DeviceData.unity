@@ -11713,6 +11713,7 @@ MonoBehaviour:
   planeManager: {fileID: 1385474980}
   meshManager: {fileID: 1572649768}
   pointCloudManager: {fileID: 1385474981}
+  poseObjTransform: {fileID: 853469693}
   findServerWindow:
     windowGameObject: {fileID: 566417460}
     ipServerField: {fileID: 2136666873}

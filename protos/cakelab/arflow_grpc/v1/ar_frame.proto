@@ -10,6 +10,7 @@ import "cakelab/arflow_grpc/v1/mesh_detection_frame.proto";
 import "cakelab/arflow_grpc/v1/plane_detection_frame.proto";
 import "cakelab/arflow_grpc/v1/point_cloud_detection_frame.proto";
 import "cakelab/arflow_grpc/v1/transform_frame.proto";
+import "cakelab/arflow_grpc/v1/pose_frame.proto";
 
 option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
 
@@ -23,5 +24,6 @@ message ARFrame {
     PlaneDetectionFrame plane_detection_frame = 6;
     PointCloudDetectionFrame point_cloud_detection_frame = 7;
     MeshDetectionFrame mesh_detection_frame = 8;
+    PoseFrame pose_frame = 9;
   }
 }

@@ -1,8 +1,12 @@
 from collections import defaultdict
 from typing import DefaultDict, Tuple
 
+import numpy as np
+import numpy.typing as npt
+
 from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
 from cakelab.arflow_grpc.v1.depth_frame_pb2 import DepthFrame
+from cakelab.arflow_grpc.v1.intrinsics_pb2 import Intrinsics
 from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
 
 
@@ -41,3 +45,17 @@ def group_depth_frames_by_format_dims_and_smoothness(
             )
         ].append(frame)
     return depth_frames_grouped_by_format_dims_and_smoothness
+
+
+def convert_intrinsics_into_matrix(intrinsics: Intrinsics) -> npt.NDArray[np.float32]:
+    """Convert an XRCpuImage.Intrinsics message into a 3x3 matrix."""
+    return np.array(
+        np.array(
+            [
+                [intrinsics.focal_length.x, 0, intrinsics.principal_point.x],
+                [0, intrinsics.focal_length.y, intrinsics.principal_point.y],
+                [0, 0, 1],
+            ],
+            dtype=np.float32,
+        )
+    )

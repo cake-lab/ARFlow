@@ -12,6 +12,7 @@ from arflow._types import (
     Timeline,
 )
 from arflow._utils import (
+    convert_intrinsics_into_matrix,
     group_color_frames_by_format_and_dims,
     group_depth_frames_by_format_dims_and_smoothness,
 )
@@ -22,6 +23,7 @@ from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
 from cakelab.arflow_grpc.v1.depth_frame_pb2 import DepthFrame
 from cakelab.arflow_grpc.v1.device_pb2 import Device
 from cakelab.arflow_grpc.v1.gyroscope_frame_pb2 import GyroscopeFrame
+from cakelab.arflow_grpc.v1.intrinsics_pb2 import Intrinsics
 from cakelab.arflow_grpc.v1.mesh_detection_frame_pb2 import MeshDetectionFrame
 from cakelab.arflow_grpc.v1.plane_detection_frame_pb2 import PlaneDetectionFrame
 from cakelab.arflow_grpc.v1.point_cloud_detection_frame_pb2 import (
@@ -102,6 +104,43 @@ class SessionStream:
             recording=self.stream.to_native(),  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
         )
 
+    def save_intrinsics(self, intrinsics: Intrinsics, timestamp: float, device: Device):
+        width = intrinsics.resolution.x
+        height = intrinsics.resolution.y
+        entity_path = rr.new_entity_path(
+            [
+                f"{self.info.metadata.name}_{self.info.id.value}",
+                f"{device.model}_{device.name}_{device.uid}",
+                ARFrameType.COLOR_FRAME,
+                f"{width}x{height}",
+            ]
+        )
+        print("is saving intrinsics")
+        print("timestamp", timestamp)
+        print("intrinsics", convert_intrinsics_into_matrix(intrinsics))
+        rr.log(
+            entity_path,
+            [rr.Pinhole.indicator()],
+            static=True,
+            recording=self.stream,
+        )
+        rr.send_columns(
+            entity_path=entity_path,
+            times=[
+                rr.TimeSecondsColumn(
+                    timeline=Timeline.DEVICE,
+                    times=[
+                        timestamp,
+                    ],
+                ),
+            ],
+            components=[
+                rr.components.PinholeProjectionBatch(
+                    data=[convert_intrinsics_into_matrix(intrinsics)]
+                )
+            ],
+        )
+
     def save_color_frames(
         self,
         frames: list[ColorFrame],
@@ -114,7 +153,7 @@ class SessionStream:
         if len(frames) == 0:
             logger.warning("No color frames to save.")
             return
-
+        print(frames[0].image.timestamp)
         grouped_frames = group_color_frames_by_format_and_dims(frames)
         for (format, width, height), homogenous_frames in grouped_frames.items():
             if len(homogenous_frames) == 0:
