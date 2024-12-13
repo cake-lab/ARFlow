@@ -75,13 +75,9 @@ class SessionStream:
         )
         t = np.array([np.frombuffer(frame.data, dtype=np.float32) for frame in frames])
         transforms = np.array([np.eye(4, dtype=np.float32) for _ in range(len(frames))])
-        print("arr1: ", transforms)
         transforms[:, :3, :] = t.reshape((len(frames), 3, 4))
-        print("arr2: ", transforms)
-        transforms[:, :3, 3] = 0
-        print("arr3: ", transforms)
+        # transforms[:, :3, 3] = 0
         transforms = y_down_to_y_up @ transforms
-        print("arr4: ", transforms)
         rr.send_columns(
             entity_path,
             times=[
