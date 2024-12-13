@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package cakelab.arflow_grpc.v1;
 
+import "cakelab/arflow_grpc/v1/intrinsics.proto";
 import "cakelab/arflow_grpc/v1/xr_cpu_image.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -10,4 +11,5 @@ option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
 message ColorFrame {
   google.protobuf.Timestamp device_timestamp = 1;
   XRCpuImage image = 2;
+  Intrinsics intrinsics = 3;
 }

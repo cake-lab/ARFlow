@@ -47,13 +47,6 @@ namespace CakeLab.ARFlow.Grpc
             Device device,
             CancellationToken cancellationToken = default
         );
-        Awaitable<RegisterIntrinsicsResponse> RegisterIntrinsicsAsync(
-            SessionUuid sessionId,
-            Device device,
-            Google.Protobuf.WellKnownTypes.Timestamp timestamp,
-            Intrinsics intrinsics,
-            CancellationToken cancellationToken = default
-        );
     }
 
     /// <summary>
@@ -196,29 +189,6 @@ namespace CakeLab.ARFlow.Grpc
             };
             request.Frames.AddRange(arFrames);
             var response = await client.SaveARFramesAsync(
-                request,
-                cancellationToken: cancellationToken
-            );
-            return response;
-        }
-
-        public async Awaitable<RegisterIntrinsicsResponse> RegisterIntrinsicsAsync(
-            SessionUuid sessionId,
-            Device device,
-            Google.Protobuf.WellKnownTypes.Timestamp timestamp,
-            Intrinsics intrinsics,
-            CancellationToken cancellationToken = default
-        )
-        {
-            var client = new ARFlowService.ARFlowServiceClient(m_Invoker);
-            var request = new RegisterIntrinsicsRequest
-            {
-                SessionId = sessionId,
-                Device = device,
-                DeviceTimestamp = timestamp,
-                Intrinsics = intrinsics,
-            };
-            var response = await client.RegisterIntrinsicsAsync(
                 request,
                 cancellationToken: cancellationToken
             );

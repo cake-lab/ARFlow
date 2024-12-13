@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.WellKnownTypes;
-using Unity.Collections;
 using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataBuffers
@@ -13,6 +12,7 @@ namespace CakeLab.ARFlow.DataBuffers
     using GrpcVector2Int = Grpc.V1.Vector2Int;
     using GrpcXRCpuImage = Grpc.V1.XRCpuImage;
     using UnityVector2Int = UnityEngine.Vector2Int;
+    using UnityXRCameraIntrinsics = UnityEngine.XR.ARSubsystems.XRCameraIntrinsics;
     using UnityXRCpuImage = UnityEngine.XR.ARSubsystems.XRCpuImage;
 
     /// <remarks>
@@ -25,9 +25,28 @@ namespace CakeLab.ARFlow.DataBuffers
         public UnityXRCpuImage.Format Format;
         public double ImageTimestamp;
         public RawARPlane[] Planes;
+        public UnityXRCameraIntrinsics Intrinsics;
 
         public static explicit operator Grpc.V1.ColorFrame(RawColorFrame rawFrame)
         {
+            var xrCameraIntrinsicsGrpc = new Grpc.V1.Intrinsics
+            {
+                FocalLength = new Grpc.V1.Vector2
+                {
+                    X = rawFrame.Intrinsics.focalLength.x,
+                    Y = rawFrame.Intrinsics.focalLength.y,
+                },
+                PrincipalPoint = new Grpc.V1.Vector2
+                {
+                    X = rawFrame.Intrinsics.principalPoint.x,
+                    Y = rawFrame.Intrinsics.principalPoint.y,
+                },
+                Resolution = new Grpc.V1.Vector2Int
+                {
+                    X = rawFrame.Intrinsics.resolution.x,
+                    Y = rawFrame.Intrinsics.resolution.y,
+                },
+            };
             var xrCpuImageGrpc = new GrpcXRCpuImage
             {
                 Dimensions = new GrpcVector2Int
@@ -45,6 +64,7 @@ namespace CakeLab.ARFlow.DataBuffers
             {
                 DeviceTimestamp = Timestamp.FromDateTime(rawFrame.DeviceTimestamp),
                 Image = xrCpuImageGrpc,
+                Intrinsics = xrCameraIntrinsicsGrpc,
             };
             return colorFrameGrpc;
         }
@@ -111,12 +131,21 @@ namespace CakeLab.ARFlow.DataBuffers
                 InternalDebug.Log("Failed to acquire latest CPU image or camera intrinsics.");
                 return;
             }
+            if (!m_CameraManager.TryGetIntrinsics(out UnityXRCameraIntrinsics intrinsics))
+            {
+                InternalDebug.Log("Failed to acquire latest CPU image or camera intrinsics.");
+                return;
+            }
 
-            AddToBuffer(image, m_Clock.UtcNow);
+            AddToBuffer(image, intrinsics, m_Clock.UtcNow);
             image.Dispose();
         }
 
-        private void AddToBuffer(UnityXRCpuImage image, DateTime deviceTimestampAtCapture)
+        private void AddToBuffer(
+            UnityXRCpuImage image,
+            UnityXRCameraIntrinsics intrinsics,
+            DateTime deviceTimestampAtCapture
+        )
         {
             using (image)
             {
@@ -130,6 +159,7 @@ namespace CakeLab.ARFlow.DataBuffers
                         .Range(0, image.planeCount)
                         .Select(i => (RawARPlane)image.GetPlane(i))
                         .ToArray(),
+                    Intrinsics = intrinsics,
                 };
                 m_Buffer.Add(newFrame);
 

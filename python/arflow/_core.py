@@ -29,7 +29,6 @@ from cakelab.arflow_grpc.v1.device_pb2 import Device
 from cakelab.arflow_grpc.v1.get_session_request_pb2 import GetSessionRequest
 from cakelab.arflow_grpc.v1.get_session_response_pb2 import GetSessionResponse
 from cakelab.arflow_grpc.v1.gyroscope_frame_pb2 import GyroscopeFrame
-from cakelab.arflow_grpc.v1.intrinsics_pb2 import Intrinsics
 from cakelab.arflow_grpc.v1.join_session_request_pb2 import JoinSessionRequest
 from cakelab.arflow_grpc.v1.join_session_response_pb2 import JoinSessionResponse
 from cakelab.arflow_grpc.v1.leave_session_request_pb2 import LeaveSessionRequest
@@ -40,12 +39,6 @@ from cakelab.arflow_grpc.v1.mesh_detection_frame_pb2 import MeshDetectionFrame
 from cakelab.arflow_grpc.v1.plane_detection_frame_pb2 import PlaneDetectionFrame
 from cakelab.arflow_grpc.v1.point_cloud_detection_frame_pb2 import (
     PointCloudDetectionFrame,
-)
-from cakelab.arflow_grpc.v1.register_intrinsic_request_pb2 import (
-    RegisterIntrinsicsRequest,
-)
-from cakelab.arflow_grpc.v1.register_intrinsic_response_pb2 import (
-    RegisterIntrinsicsResponse,
 )
 from cakelab.arflow_grpc.v1.save_ar_frames_request_pb2 import (
     SaveARFramesRequest,
@@ -95,6 +88,8 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         self._client_sessions: dict[str, SessionStream] = {}
         # Initializes SDK with an "empty" global recording. We don't want to log anything into the global recording.
         rr.init(application_id=application_id, spawn=self._spawn_viewer)
+        # TODO: This here is right? https://rerun.io/docs/concepts/spaces-and-transforms#view-coordinates
+        # rr.log("/", rr.ViewCoordinates.RIGHT_HAND_Z_UP, static=True)
         super().__init__()
 
     def _get_session_stream(self, session_id: str) -> SessionStream:
@@ -279,62 +274,6 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         )
 
         return LeaveSessionResponse()
-
-    def on_save_intrinsics(
-        self,
-        intrinsics: Intrinsics,
-        session_stream: SessionStream,
-        device: Device,
-    ) -> None:
-        """Hook for user-defined procedures when intrinsics for a device is registered in a recording stream.
-
-        Args:
-            intrinsics: The intrinsics of that device's camera.
-            session_stream: The session stream.
-            device: The device that sent the AR frames.
-        """
-        pass
-
-    def _process_intrinsics(
-        self,
-        intrinsics: Intrinsics,
-        timestamp: float,
-        session_stream: SessionStream,
-        device: Device,
-    ) -> None:
-        session_stream.save_intrinsics(
-            intrinsics=intrinsics,
-            timestamp=timestamp,
-            device=device,
-        )
-        self.on_save_intrinsics(
-            intrinsics=intrinsics,
-            session_stream=session_stream,
-            device=device,
-        )
-
-    def RegisterIntrinsics(
-        self,
-        request: RegisterIntrinsicsRequest,
-        context: grpc.ServicerContext | None = None,
-    ):
-        """Register intrinsics for a device."""
-        session_stream = self._get_session_stream(request.session_id.value)
-
-        if request.device not in session_stream.info.devices:
-            raise InvalidArgument("Device not in session")
-
-        timestamp = (
-            request.device_timestamp.seconds + request.device_timestamp.nanos / 1e9
-        )
-        self._process_intrinsics(
-            intrinsics=request.intrinsics,
-            timestamp=timestamp,
-            session_stream=session_stream,
-            device=request.device,
-        )
-
-        return RegisterIntrinsicsResponse()
 
     def on_leave_session(self, session_stream: SessionStream, device: Device) -> None:
         """Hook for user-defined procedures when a device leaves a session.

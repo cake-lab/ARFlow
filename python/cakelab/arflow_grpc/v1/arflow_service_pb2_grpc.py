@@ -14,8 +14,6 @@ from cakelab.arflow_grpc.v1 import leave_session_request_pb2 as cakelab_dot_arfl
 from cakelab.arflow_grpc.v1 import leave_session_response_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_leave__session__response__pb2
 from cakelab.arflow_grpc.v1 import list_sessions_request_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_list__sessions__request__pb2
 from cakelab.arflow_grpc.v1 import list_sessions_response_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_list__sessions__response__pb2
-from cakelab.arflow_grpc.v1 import register_intrinsic_request_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_register__intrinsic__request__pb2
-from cakelab.arflow_grpc.v1 import register_intrinsic_response_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_register__intrinsic__response__pb2
 from cakelab.arflow_grpc.v1 import save_ar_frames_request_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__request__pb2
 from cakelab.arflow_grpc.v1 import save_ar_frames_response_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_save__ar__frames__response__pb2
 from cakelab.arflow_grpc.v1 import save_synchronized_ar_frame_request_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__request__pb2
@@ -72,11 +70,6 @@ class ARFlowServiceStub(object):
                 '/cakelab.arflow_grpc.v1.ARFlowService/SaveSynchronizedARFrame',
                 request_serializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__request__pb2.SaveSynchronizedARFrameRequest.SerializeToString,
                 response_deserializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__response__pb2.SaveSynchronizedARFrameResponse.FromString,
-                _registered_method=True)
-        self.RegisterIntrinsics = channel.unary_unary(
-                '/cakelab.arflow_grpc.v1.ARFlowService/RegisterIntrinsics',
-                request_serializer=cakelab_dot_arflow__grpc_dot_v1_dot_register__intrinsic__request__pb2.RegisterIntrinsicsRequest.SerializeToString,
-                response_deserializer=cakelab_dot_arflow__grpc_dot_v1_dot_register__intrinsic__response__pb2.RegisterIntrinsicsResponse.FromString,
                 _registered_method=True)
 
 
@@ -142,13 +135,6 @@ class ARFlowServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def RegisterIntrinsics(self, request, context):
-        """/ Register intrinsics from the camera once before data is sent, in the case we are using color camera
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
 
 def add_ARFlowServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -191,11 +177,6 @@ def add_ARFlowServiceServicer_to_server(servicer, server):
                     servicer.SaveSynchronizedARFrame,
                     request_deserializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__request__pb2.SaveSynchronizedARFrameRequest.FromString,
                     response_serializer=cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__response__pb2.SaveSynchronizedARFrameResponse.SerializeToString,
-            ),
-            'RegisterIntrinsics': grpc.unary_unary_rpc_method_handler(
-                    servicer.RegisterIntrinsics,
-                    request_deserializer=cakelab_dot_arflow__grpc_dot_v1_dot_register__intrinsic__request__pb2.RegisterIntrinsicsRequest.FromString,
-                    response_serializer=cakelab_dot_arflow__grpc_dot_v1_dot_register__intrinsic__response__pb2.RegisterIntrinsicsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -416,33 +397,6 @@ class ARFlowService(object):
             '/cakelab.arflow_grpc.v1.ARFlowService/SaveSynchronizedARFrame',
             cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__request__pb2.SaveSynchronizedARFrameRequest.SerializeToString,
             cakelab_dot_arflow__grpc_dot_v1_dot_save__synchronized__ar__frame__response__pb2.SaveSynchronizedARFrameResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def RegisterIntrinsics(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/cakelab.arflow_grpc.v1.ARFlowService/RegisterIntrinsics',
-            cakelab_dot_arflow__grpc_dot_v1_dot_register__intrinsic__request__pb2.RegisterIntrinsicsRequest.SerializeToString,
-            cakelab_dot_arflow__grpc_dot_v1_dot_register__intrinsic__response__pb2.RegisterIntrinsicsResponse.FromString,
             options,
             channel_credentials,
             insecure,

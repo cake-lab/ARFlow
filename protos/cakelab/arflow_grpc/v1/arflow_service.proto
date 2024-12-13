@@ -18,8 +18,6 @@ import "cakelab/arflow_grpc/v1/save_ar_frames_request.proto";
 import "cakelab/arflow_grpc/v1/save_ar_frames_response.proto";
 import "cakelab/arflow_grpc/v1/save_synchronized_ar_frame_request.proto";
 import "cakelab/arflow_grpc/v1/save_synchronized_ar_frame_response.proto";
-import "cakelab/arflow_grpc/v1/register_intrinsic_request.proto";
-import "cakelab/arflow_grpc/v1/register_intrinsic_response.proto";
 
 option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
 
@@ -44,6 +42,4 @@ service ARFlowService {
   /// Save an synchronized AR frame from a device to its session's recording stream.
   /// This is our old approach and we're keeping this for benchmarking purposes.
   rpc SaveSynchronizedARFrame(SaveSynchronizedARFrameRequest) returns (SaveSynchronizedARFrameResponse);
-  /// Register intrinsics from the camera once before data is sent, in the case we are using color camera
-  rpc RegisterIntrinsics(RegisterIntrinsicsRequest) returns (RegisterIntrinsicsResponse);
 }

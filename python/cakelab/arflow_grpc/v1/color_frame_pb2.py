@@ -22,11 +22,12 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
+from cakelab.arflow_grpc.v1 import intrinsics_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_intrinsics__pb2
 from cakelab.arflow_grpc.v1 import xr_cpu_image_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_xr__cpu__image__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(cakelab/arflow_grpc/v1/color_frame.proto\x12\x16\x63\x61kelab.arflow_grpc.v1\x1a)cakelab/arflow_grpc/v1/xr_cpu_image.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8d\x01\n\nColorFrame\x12\x45\n\x10\x64\x65vice_timestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0f\x64\x65viceTimestamp\x12\x38\n\x05image\x18\x02 \x01(\x0b\x32\".cakelab.arflow_grpc.v1.XRCpuImageR\x05imageB\xa4\x01\n\x1a\x63om.cakelab.arflow_grpc.v1B\x0f\x43olorFrameProtoP\x01\xa2\x02\x03\x43\x41X\xaa\x02\x16\x43\x61keLab.ARFlow.Grpc.V1\xca\x02\x15\x43\x61kelab\\ArflowGrpc\\V1\xe2\x02!Cakelab\\ArflowGrpc\\V1\\GPBMetadata\xea\x02\x17\x43\x61kelab::ArflowGrpc::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(cakelab/arflow_grpc/v1/color_frame.proto\x12\x16\x63\x61kelab.arflow_grpc.v1\x1a\'cakelab/arflow_grpc/v1/intrinsics.proto\x1a)cakelab/arflow_grpc/v1/xr_cpu_image.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd1\x01\n\nColorFrame\x12\x45\n\x10\x64\x65vice_timestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0f\x64\x65viceTimestamp\x12\x38\n\x05image\x18\x02 \x01(\x0b\x32\".cakelab.arflow_grpc.v1.XRCpuImageR\x05image\x12\x42\n\nintrinsics\x18\x03 \x01(\x0b\x32\".cakelab.arflow_grpc.v1.IntrinsicsR\nintrinsicsB\xa4\x01\n\x1a\x63om.cakelab.arflow_grpc.v1B\x0f\x43olorFrameProtoP\x01\xa2\x02\x03\x43\x41X\xaa\x02\x16\x43\x61keLab.ARFlow.Grpc.V1\xca\x02\x15\x43\x61kelab\\ArflowGrpc\\V1\xe2\x02!Cakelab\\ArflowGrpc\\V1\\GPBMetadata\xea\x02\x17\x43\x61kelab::ArflowGrpc::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,6 +35,6 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'cakelab.arflow_grpc.v1.colo
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\032com.cakelab.arflow_grpc.v1B\017ColorFrameProtoP\001\242\002\003CAX\252\002\026CakeLab.ARFlow.Grpc.V1\312\002\025Cakelab\\ArflowGrpc\\V1\342\002!Cakelab\\ArflowGrpc\\V1\\GPBMetadata\352\002\027Cakelab::ArflowGrpc::V1'
-  _globals['_COLORFRAME']._serialized_start=145
-  _globals['_COLORFRAME']._serialized_end=286
+  _globals['_COLORFRAME']._serialized_start=186
+  _globals['_COLORFRAME']._serialized_end=395
 # @@protoc_insertion_point(module_scope)

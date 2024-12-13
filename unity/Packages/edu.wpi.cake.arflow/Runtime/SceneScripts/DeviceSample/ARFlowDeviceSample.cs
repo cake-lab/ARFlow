@@ -48,8 +48,6 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public IClock clock;
 
-    public IntrinsicsData intrinsicsData;
-
     private List<BaseDataModalityUIConfig> m_DataModalityUIConfigs;
     private List<CancellationTokenSource> m_CtsList = new List<CancellationTokenSource>();
 
@@ -534,16 +532,11 @@ public class ARFlowDeviceSample : MonoBehaviour
     [Tooltip("UI Window sending AR data")]
     public ARViewWindow arViewWindow;
 
-    private async void OnStartPauseButton()
+    private void OnStartPauseButton()
     {
         m_isSending = !m_isSending;
         if (m_isSending)
         {
-            // start sending
-            // register intrinsics for pinhole camera on server
-            intrinsicsData.GetIntrinsic(out var intrinsics, out var timestamp);
-            await grpcClient.RegisterIntrinsicsAsync(m_ActiveSession.Id, m_Device, timestamp, intrinsics);
-
             arViewWindow.startPauseButton.GetComponentInChildren<TMP_Text>().text = "Pause";
             foreach (var control in m_BufferControls)
             {
@@ -691,9 +684,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         m_PlaneDetectionUIConfig = new PlaneDetectionUIConfig(planeManager, clock);
         m_PointCloudDetectionUIConfig = new PointCloudDetectionUIConfig(pointCloudManager, clock);
         m_TransformUIConfig = new TransformUIConfig(Camera.main, clock);
-
-        // Initialize intrinsics data with new clock
-        intrinsicsData = new IntrinsicsData(cameraManager, clock);
 
         audioBufferControl = new BufferControl(m_AudioUIConfig);
         colorBufferControl = new BufferControl(m_ColorUIConfig);

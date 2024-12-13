@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package cakelab.arflow_grpc.v1;
-
-option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
-
-/// https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARFoundation.ARPlane.html#UnityEngine_XR_ARFoundation_ARPlane
-message RegisterIntrinsicsResponse {}

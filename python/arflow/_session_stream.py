@@ -12,7 +12,6 @@ from arflow._types import (
     Timeline,
 )
 from arflow._utils import (
-    convert_intrinsics_into_matrix,
     group_color_frames_by_format_and_dims,
     group_depth_frames_by_format_dims_and_smoothness,
 )
@@ -23,7 +22,6 @@ from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
 from cakelab.arflow_grpc.v1.depth_frame_pb2 import DepthFrame
 from cakelab.arflow_grpc.v1.device_pb2 import Device
 from cakelab.arflow_grpc.v1.gyroscope_frame_pb2 import GyroscopeFrame
-from cakelab.arflow_grpc.v1.intrinsics_pb2 import Intrinsics
 from cakelab.arflow_grpc.v1.mesh_detection_frame_pb2 import MeshDetectionFrame
 from cakelab.arflow_grpc.v1.plane_detection_frame_pb2 import PlaneDetectionFrame
 from cakelab.arflow_grpc.v1.point_cloud_detection_frame_pb2 import (
@@ -103,44 +101,6 @@ class SessionStream:
             recording=self.stream.to_native(),  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
         )
 
-    def save_intrinsics(self, intrinsics: Intrinsics, timestamp: float, device: Device):
-        width = intrinsics.resolution.x
-        height = intrinsics.resolution.y
-        entity_path = rr.new_entity_path(
-            [
-                f"{self.info.metadata.name}_{self.info.id.value}",
-                f"{device.model}_{device.name}_{device.uid}",
-                ARFrameType.COLOR_FRAME,
-                f"{width}x{height}",
-            ]
-        )
-        print("is saving intrinsics")
-        print("timestamp", timestamp)
-        print("intrinsics", convert_intrinsics_into_matrix(intrinsics))
-        rr.log(
-            entity_path,
-            [rr.Pinhole.indicator()],
-            static=True,
-            recording=self.stream,
-        )
-        rr.send_columns(
-            entity_path=entity_path,
-            times=[
-                rr.TimeSecondsColumn(
-                    timeline=Timeline.DEVICE,
-                    times=[
-                        timestamp,
-                    ],
-                ),
-            ],
-            components=[
-                rr.components.PinholeProjectionBatch(
-                    data=[convert_intrinsics_into_matrix(intrinsics)]
-                )
-            ],
-            recording=self.stream.to_native(),  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
-        )
-
     def save_color_frames(
         self,
         frames: list[ColorFrame],
@@ -153,7 +113,6 @@ class SessionStream:
         if len(frames) == 0:
             logger.warning("No color frames to save.")
             return
-        print(frames[0].image.timestamp)
         grouped_frames = group_color_frames_by_format_and_dims(frames)
         for (format, width, height), homogenous_frames in grouped_frames.items():
             if len(homogenous_frames) == 0:
@@ -165,6 +124,14 @@ class SessionStream:
                     f"{device.model}_{device.name}_{device.uid}",
                     ARFrameType.COLOR_FRAME,
                     f"{width}x{height}",
+                ]
+            )
+            intrinsics_entity_path = rr.new_entity_path(
+                [
+                    f"{self.info.metadata.name}_{self.info.id.value}",
+                    f"{device.model}_{device.name}_{device.uid}",
+                    ARFrameType.COLOR_FRAME,
+                    f"{homogenous_frames[0].intrinsics.resolution.x}x{homogenous_frames[0].intrinsics.resolution.y}",
                 ]
             )
 
@@ -185,6 +152,48 @@ class SessionStream:
                 logger.warning(f"Unsupported color frame format: {format}")
                 continue
 
+            rr.log(
+                intrinsics_entity_path,
+                [rr.Pinhole.indicator()],
+                static=True,
+                recording=self.stream,
+            )
+            rr.send_columns(
+                intrinsics_entity_path,
+                times=[
+                    rr.TimeSecondsColumn(
+                        timeline=Timeline.DEVICE,
+                        times=[
+                            f.device_timestamp.seconds + f.device_timestamp.nanos / 1e9
+                            for f in homogenous_frames
+                        ],
+                    ),
+                ],
+                components=[
+                    rr.components.PinholeProjectionBatch(
+                        data=[
+                            np.array(
+                                [
+                                    [
+                                        f.intrinsics.focal_length.x,
+                                        0,
+                                        f.intrinsics.principal_point.x,
+                                    ],
+                                    [
+                                        0,
+                                        f.intrinsics.focal_length.y,
+                                        f.intrinsics.principal_point.y,
+                                    ],
+                                    [0, 0, 1],
+                                ],
+                                dtype=np.float32,
+                            )
+                            for f in homogenous_frames
+                        ]
+                    )
+                ],
+                recording=self.stream.to_native(),  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+            )
             rr.log(
                 entity_path,
                 [format_static, rr.Image.indicator()],
@@ -809,7 +818,9 @@ class SessionStream:
 # TODO: Performance opportunity for hot path. Can operate on a batch of images at once instead of one at a time.
 def _to_i420_format(image: XRCpuImage) -> npt.NDArray[np.uint8]:
     if len(image.planes) != 3:
-        logger.error(f"Skipping bad image. Expected 3 planes, got {len(image.planes)}.")
+        logger.warning(
+            f"Skipping bad image. Expected 3 planes, got {len(image.planes)}."
+        )
         return np.array([], dtype=np.uint8)
 
     height = image.dimensions.y
@@ -851,7 +862,7 @@ def _to_boundary_points_3d(
     plane: ARPlane,
 ) -> npt.NDArray[np.float32]:
     if len(plane.boundary) == 0:
-        logger.error("Skipping plane with no boundary points.")
+        logger.warning("Skipping plane with no boundary points.")
         return np.array([], dtype=np.float32)
 
     normal_as_np = np.array([plane.normal.x, plane.normal.y, plane.normal.z])

@@ -25,20 +25,22 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CihjYWtlbGFiL2FyZmxvd19ncnBjL3YxL2NvbG9yX2ZyYW1lLnByb3RvEhZj",
-            "YWtlbGFiLmFyZmxvd19ncnBjLnYxGiljYWtlbGFiL2FyZmxvd19ncnBjL3Yx",
-            "L3hyX2NwdV9pbWFnZS5wcm90bxofZ29vZ2xlL3Byb3RvYnVmL3RpbWVzdGFt",
-            "cC5wcm90byKNAQoKQ29sb3JGcmFtZRJFChBkZXZpY2VfdGltZXN0YW1wGAEg",
-            "ASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIPZGV2aWNlVGltZXN0",
-            "YW1wEjgKBWltYWdlGAIgASgLMiIuY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5Y",
-            "UkNwdUltYWdlUgVpbWFnZUKkAQoaY29tLmNha2VsYWIuYXJmbG93X2dycGMu",
-            "djFCD0NvbG9yRnJhbWVQcm90b1ABogIDQ0FYqgIWQ2FrZUxhYi5BUkZsb3cu",
-            "R3JwYy5WMcoCFUNha2VsYWJcQXJmbG93R3JwY1xWMeICIUNha2VsYWJcQXJm",
-            "bG93R3JwY1xWMVxHUEJNZXRhZGF0YeoCF0Nha2VsYWI6OkFyZmxvd0dycGM6",
-            "OlYxYgZwcm90bzM="));
+            "YWtlbGFiLmFyZmxvd19ncnBjLnYxGidjYWtlbGFiL2FyZmxvd19ncnBjL3Yx",
+            "L2ludHJpbnNpY3MucHJvdG8aKWNha2VsYWIvYXJmbG93X2dycGMvdjEveHJf",
+            "Y3B1X2ltYWdlLnByb3RvGh9nb29nbGUvcHJvdG9idWYvdGltZXN0YW1wLnBy",
+            "b3RvItEBCgpDb2xvckZyYW1lEkUKEGRldmljZV90aW1lc3RhbXAYASABKAsy",
+            "Gi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUg9kZXZpY2VUaW1lc3RhbXAS",
+            "OAoFaW1hZ2UYAiABKAsyIi5jYWtlbGFiLmFyZmxvd19ncnBjLnYxLlhSQ3B1",
+            "SW1hZ2VSBWltYWdlEkIKCmludHJpbnNpY3MYAyABKAsyIi5jYWtlbGFiLmFy",
+            "Zmxvd19ncnBjLnYxLkludHJpbnNpY3NSCmludHJpbnNpY3NCpAEKGmNvbS5j",
+            "YWtlbGFiLmFyZmxvd19ncnBjLnYxQg9Db2xvckZyYW1lUHJvdG9QAaICA0NB",
+            "WKoCFkNha2VMYWIuQVJGbG93LkdycGMuVjHKAhVDYWtlbGFiXEFyZmxvd0dy",
+            "cGNcVjHiAiFDYWtlbGFiXEFyZmxvd0dycGNcVjFcR1BCTWV0YWRhdGHqAhdD",
+            "YWtlbGFiOjpBcmZsb3dHcnBjOjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.XrCpuImageReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.IntrinsicsReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.XrCpuImageReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::CakeLab.ARFlow.Grpc.V1.ColorFrame), global::CakeLab.ARFlow.Grpc.V1.ColorFrame.Parser, new[]{ "DeviceTimestamp", "Image" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::CakeLab.ARFlow.Grpc.V1.ColorFrame), global::CakeLab.ARFlow.Grpc.V1.ColorFrame.Parser, new[]{ "DeviceTimestamp", "Image", "Intrinsics" }, null, null, null, null)
           }));
     }
     #endregion
@@ -82,6 +84,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
     public ColorFrame(ColorFrame other) : this() {
       deviceTimestamp_ = other.deviceTimestamp_ != null ? other.deviceTimestamp_.Clone() : null;
       image_ = other.image_ != null ? other.image_.Clone() : null;
+      intrinsics_ = other.intrinsics_ != null ? other.intrinsics_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -115,6 +118,18 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
     }
 
+    /// <summary>Field number for the "intrinsics" field.</summary>
+    public const int IntrinsicsFieldNumber = 3;
+    private global::CakeLab.ARFlow.Grpc.V1.Intrinsics intrinsics_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::CakeLab.ARFlow.Grpc.V1.Intrinsics Intrinsics {
+      get { return intrinsics_; }
+      set {
+        intrinsics_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -132,6 +147,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
       if (!object.Equals(DeviceTimestamp, other.DeviceTimestamp)) return false;
       if (!object.Equals(Image, other.Image)) return false;
+      if (!object.Equals(Intrinsics, other.Intrinsics)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -141,6 +157,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       int hash = 1;
       if (deviceTimestamp_ != null) hash ^= DeviceTimestamp.GetHashCode();
       if (image_ != null) hash ^= Image.GetHashCode();
+      if (intrinsics_ != null) hash ^= Intrinsics.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -167,6 +184,10 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         output.WriteRawTag(18);
         output.WriteMessage(Image);
       }
+      if (intrinsics_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Intrinsics);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -185,6 +206,10 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         output.WriteRawTag(18);
         output.WriteMessage(Image);
       }
+      if (intrinsics_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Intrinsics);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -200,6 +225,9 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
       if (image_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Image);
+      }
+      if (intrinsics_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Intrinsics);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -224,6 +252,12 @@ namespace CakeLab.ARFlow.Grpc.V1 {
           Image = new global::CakeLab.ARFlow.Grpc.V1.XRCpuImage();
         }
         Image.MergeFrom(other.Image);
+      }
+      if (other.intrinsics_ != null) {
+        if (intrinsics_ == null) {
+          Intrinsics = new global::CakeLab.ARFlow.Grpc.V1.Intrinsics();
+        }
+        Intrinsics.MergeFrom(other.Intrinsics);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -258,6 +292,13 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             input.ReadMessage(Image);
             break;
           }
+          case 26: {
+            if (intrinsics_ == null) {
+              Intrinsics = new global::CakeLab.ARFlow.Grpc.V1.Intrinsics();
+            }
+            input.ReadMessage(Intrinsics);
+            break;
+          }
         }
       }
     #endif
@@ -289,6 +330,13 @@ namespace CakeLab.ARFlow.Grpc.V1 {
               Image = new global::CakeLab.ARFlow.Grpc.V1.XRCpuImage();
             }
             input.ReadMessage(Image);
+            break;
+          }
+          case 26: {
+            if (intrinsics_ == null) {
+              Intrinsics = new global::CakeLab.ARFlow.Grpc.V1.Intrinsics();
+            }
+            input.ReadMessage(Intrinsics);
             break;
           }
         }
