@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace CakeLab.ARFlow.DataBuffers
 {
+    using CakeLab.ARFlow.Utilities;
     using Clock;
     using Grpc.V1;
 
@@ -123,6 +124,7 @@ namespace CakeLab.ARFlow.DataBuffers
                 0,
                 m_TransformDataSize
             );
+            InternalDebug.Log($"Camera transform: {m}");
             var newFrame = new RawTransformFrame
             {
                 DeviceTimestamp = deviceTimestampAtCapture,

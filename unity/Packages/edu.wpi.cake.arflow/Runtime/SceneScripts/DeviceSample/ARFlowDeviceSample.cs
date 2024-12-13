@@ -582,6 +582,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         public Button stopScanButton;
         public Button finishScanButton;
 
+        public TMP_Text statusText;
         public TMP_Text positionText;
         public TMP_Text rotationText;
     }
@@ -604,6 +605,11 @@ public class ARFlowDeviceSample : MonoBehaviour
         arucoWindow.configWindow.SetActive(false);
         arucoWindow.scanWindow.SetActive(true);
         arucoWindow.finishScanButton.interactable = false;
+
+        arucoWindow.statusText.text = "To sync, scan an ArUco Marker of the type specified.";
+        arucoWindow.positionText.text = $"";
+        arucoWindow.rotationText.text = $"";
+
     }
     void onStopScan()
     {
@@ -629,6 +635,7 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         InternalDebug.Log($"Space synced successfully {arucoSyncObj.transform.position}");
         arucoWindow.finishScanButton.interactable = true;
+        arucoWindow.statusText.text = "ArUco marker scanned. To finish syncing, press the finish button";
         arucoWindow.positionText.text = $"Position: {arucoSyncObj.transform.position}";
         arucoWindow.rotationText.text = $"Rotation: {arucoSyncObj.transform.rotation.eulerAngles}";
     }
