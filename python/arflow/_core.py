@@ -41,7 +41,6 @@ from cakelab.arflow_grpc.v1.plane_detection_frame_pb2 import PlaneDetectionFrame
 from cakelab.arflow_grpc.v1.point_cloud_detection_frame_pb2 import (
     PointCloudDetectionFrame,
 )
-from cakelab.arflow_grpc.v1.pose_frame_pb2 import PoseFrame
 from cakelab.arflow_grpc.v1.register_intrinsic_request_pb2 import (
     RegisterIntrinsicsRequest,
 )

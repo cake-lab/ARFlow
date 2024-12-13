@@ -149,9 +149,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
-    private PoseUIConfig m_PoseUIConfig;
-    BufferControl poseBufferControl;
-
     private AudioUIConfig m_AudioUIConfig;
     BufferControl audioBufferControl;
 
@@ -686,7 +683,6 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// </summary>
     private void InitUIConfig()
     {
-        m_PoseUIConfig = new PoseUIConfig(poseObjTransform, clock);
         m_AudioUIConfig = new AudioUIConfig(clock, Microphone.devices.Count() > 0);
         m_ColorUIConfig = new ColorUIConfig(cameraManager, clock);
         m_depthUIConfig = new DepthUIConfig(occlusionManager, clock);
@@ -699,7 +695,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Initialize intrinsics data with new clock
         intrinsicsData = new IntrinsicsData(cameraManager, clock);
 
-        poseBufferControl = new BufferControl(m_PoseUIConfig);
         audioBufferControl = new BufferControl(m_AudioUIConfig);
         colorBufferControl = new BufferControl(m_ColorUIConfig);
         depthBufferControl = new BufferControl(m_depthUIConfig);
@@ -711,7 +706,6 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         m_dataModalityUIConfigs = new List<BaseDataModalityUIConfig>()
         {
-            m_PoseUIConfig,
             m_AudioUIConfig,
             m_ColorUIConfig,
             m_depthUIConfig,
@@ -724,7 +718,6 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         m_BufferControls = new List<BufferControl>()
         {
-            poseBufferControl,
             audioBufferControl,
             colorBufferControl,
             depthBufferControl,

@@ -1,6 +1,5 @@
 from cakelab.arflow_grpc.v1 import vector2_pb2 as _vector2_pb2
 from cakelab.arflow_grpc.v1 import vector2_int_pb2 as _vector2_int_pb2
-from cakelab.arflow_grpc.v1 import vector3_pb2 as _vector3_pb2
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Optional, Union as _Union

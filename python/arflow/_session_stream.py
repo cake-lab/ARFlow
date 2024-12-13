@@ -67,7 +67,6 @@ class SessionStream:
             [
                 f"{self.info.metadata.name}_{self.info.id.value}",
                 f"{device.model}_{device.name}_{device.uid}",
-                ARFrameType.TRANSFORM_FRAME,
             ]
         )
         rr.log(
@@ -139,6 +138,7 @@ class SessionStream:
                     data=[convert_intrinsics_into_matrix(intrinsics)]
                 )
             ],
+            recording=self.stream.to_native(),  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
         )
 
     def save_color_frames(

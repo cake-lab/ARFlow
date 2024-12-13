@@ -33,33 +33,31 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             "dGlvbl9mcmFtZS5wcm90bxoyY2FrZWxhYi9hcmZsb3dfZ3JwYy92MS9wbGFu",
             "ZV9kZXRlY3Rpb25fZnJhbWUucHJvdG8aOGNha2VsYWIvYXJmbG93X2dycGMv",
             "djEvcG9pbnRfY2xvdWRfZGV0ZWN0aW9uX2ZyYW1lLnByb3RvGixjYWtlbGFi",
-            "L2FyZmxvd19ncnBjL3YxL3RyYW5zZm9ybV9mcmFtZS5wcm90bxonY2FrZWxh",
-            "Yi9hcmZsb3dfZ3JwYy92MS9wb3NlX2ZyYW1lLnByb3RvIoYGCgdBUkZyYW1l",
-            "ElEKD3RyYW5zZm9ybV9mcmFtZRgBIAEoCzImLmNha2VsYWIuYXJmbG93X2dy",
-            "cGMudjEuVHJhbnNmb3JtRnJhbWVIAFIOdHJhbnNmb3JtRnJhbWUSRQoLY29s",
-            "b3JfZnJhbWUYAiABKAsyIi5jYWtlbGFiLmFyZmxvd19ncnBjLnYxLkNvbG9y",
-            "RnJhbWVIAFIKY29sb3JGcmFtZRJFCgtkZXB0aF9mcmFtZRgDIAEoCzIiLmNh",
-            "a2VsYWIuYXJmbG93X2dycGMudjEuRGVwdGhGcmFtZUgAUgpkZXB0aEZyYW1l",
-            "ElEKD2d5cm9zY29wZV9mcmFtZRgEIAEoCzImLmNha2VsYWIuYXJmbG93X2dy",
-            "cGMudjEuR3lyb3Njb3BlRnJhbWVIAFIOZ3lyb3Njb3BlRnJhbWUSRQoLYXVk",
-            "aW9fZnJhbWUYBSABKAsyIi5jYWtlbGFiLmFyZmxvd19ncnBjLnYxLkF1ZGlv",
-            "RnJhbWVIAFIKYXVkaW9GcmFtZRJhChVwbGFuZV9kZXRlY3Rpb25fZnJhbWUY",
-            "BiABKAsyKy5jYWtlbGFiLmFyZmxvd19ncnBjLnYxLlBsYW5lRGV0ZWN0aW9u",
-            "RnJhbWVIAFITcGxhbmVEZXRlY3Rpb25GcmFtZRJxChtwb2ludF9jbG91ZF9k",
-            "ZXRlY3Rpb25fZnJhbWUYByABKAsyMC5jYWtlbGFiLmFyZmxvd19ncnBjLnYx",
-            "LlBvaW50Q2xvdWREZXRlY3Rpb25GcmFtZUgAUhhwb2ludENsb3VkRGV0ZWN0",
-            "aW9uRnJhbWUSXgoUbWVzaF9kZXRlY3Rpb25fZnJhbWUYCCABKAsyKi5jYWtl",
-            "bGFiLmFyZmxvd19ncnBjLnYxLk1lc2hEZXRlY3Rpb25GcmFtZUgAUhJtZXNo",
-            "RGV0ZWN0aW9uRnJhbWUSQgoKcG9zZV9mcmFtZRgJIAEoCzIhLmNha2VsYWIu",
-            "YXJmbG93X2dycGMudjEuUG9zZUZyYW1lSABSCXBvc2VGcmFtZUIGCgRkYXRh",
-            "QqEBChpjb20uY2FrZWxhYi5hcmZsb3dfZ3JwYy52MUIMQXJGcmFtZVByb3Rv",
-            "UAGiAgNDQViqAhZDYWtlTGFiLkFSRmxvdy5HcnBjLlYxygIVQ2FrZWxhYlxB",
-            "cmZsb3dHcnBjXFYx4gIhQ2FrZWxhYlxBcmZsb3dHcnBjXFYxXEdQQk1ldGFk",
-            "YXRh6gIXQ2FrZWxhYjo6QXJmbG93R3JwYzo6VjFiBnByb3RvMw=="));
+            "L2FyZmxvd19ncnBjL3YxL3RyYW5zZm9ybV9mcmFtZS5wcm90byLCBQoHQVJG",
+            "cmFtZRJRCg90cmFuc2Zvcm1fZnJhbWUYASABKAsyJi5jYWtlbGFiLmFyZmxv",
+            "d19ncnBjLnYxLlRyYW5zZm9ybUZyYW1lSABSDnRyYW5zZm9ybUZyYW1lEkUK",
+            "C2NvbG9yX2ZyYW1lGAIgASgLMiIuY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5D",
+            "b2xvckZyYW1lSABSCmNvbG9yRnJhbWUSRQoLZGVwdGhfZnJhbWUYAyABKAsy",
+            "Ii5jYWtlbGFiLmFyZmxvd19ncnBjLnYxLkRlcHRoRnJhbWVIAFIKZGVwdGhG",
+            "cmFtZRJRCg9neXJvc2NvcGVfZnJhbWUYBCABKAsyJi5jYWtlbGFiLmFyZmxv",
+            "d19ncnBjLnYxLkd5cm9zY29wZUZyYW1lSABSDmd5cm9zY29wZUZyYW1lEkUK",
+            "C2F1ZGlvX2ZyYW1lGAUgASgLMiIuY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5B",
+            "dWRpb0ZyYW1lSABSCmF1ZGlvRnJhbWUSYQoVcGxhbmVfZGV0ZWN0aW9uX2Zy",
+            "YW1lGAYgASgLMisuY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5QbGFuZURldGVj",
+            "dGlvbkZyYW1lSABSE3BsYW5lRGV0ZWN0aW9uRnJhbWUScQobcG9pbnRfY2xv",
+            "dWRfZGV0ZWN0aW9uX2ZyYW1lGAcgASgLMjAuY2FrZWxhYi5hcmZsb3dfZ3Jw",
+            "Yy52MS5Qb2ludENsb3VkRGV0ZWN0aW9uRnJhbWVIAFIYcG9pbnRDbG91ZERl",
+            "dGVjdGlvbkZyYW1lEl4KFG1lc2hfZGV0ZWN0aW9uX2ZyYW1lGAggASgLMiou",
+            "Y2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5NZXNoRGV0ZWN0aW9uRnJhbWVIAFIS",
+            "bWVzaERldGVjdGlvbkZyYW1lQgYKBGRhdGFCoQEKGmNvbS5jYWtlbGFiLmFy",
+            "Zmxvd19ncnBjLnYxQgxBckZyYW1lUHJvdG9QAaICA0NBWKoCFkNha2VMYWIu",
+            "QVJGbG93LkdycGMuVjHKAhVDYWtlbGFiXEFyZmxvd0dycGNcVjHiAiFDYWtl",
+            "bGFiXEFyZmxvd0dycGNcVjFcR1BCTWV0YWRhdGHqAhdDYWtlbGFiOjpBcmZs",
+            "b3dHcnBjOjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.AudioFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.ColorFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.DepthFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.GyroscopeFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.MeshDetectionFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.PlaneDetectionFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.PointCloudDetectionFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.TransformFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.PoseFrameReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.AudioFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.ColorFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.DepthFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.GyroscopeFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.MeshDetectionFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.PlaneDetectionFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.PointCloudDetectionFrameReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.TransformFrameReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::CakeLab.ARFlow.Grpc.V1.ARFrame), global::CakeLab.ARFlow.Grpc.V1.ARFrame.Parser, new[]{ "TransformFrame", "ColorFrame", "DepthFrame", "GyroscopeFrame", "AudioFrame", "PlaneDetectionFrame", "PointCloudDetectionFrame", "MeshDetectionFrame", "PoseFrame" }, new[]{ "Data" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::CakeLab.ARFlow.Grpc.V1.ARFrame), global::CakeLab.ARFlow.Grpc.V1.ARFrame.Parser, new[]{ "TransformFrame", "ColorFrame", "DepthFrame", "GyroscopeFrame", "AudioFrame", "PlaneDetectionFrame", "PointCloudDetectionFrame", "MeshDetectionFrame" }, new[]{ "Data" }, null, null, null)
           }));
     }
     #endregion
@@ -125,9 +123,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
           break;
         case DataOneofCase.MeshDetectionFrame:
           MeshDetectionFrame = other.MeshDetectionFrame.Clone();
-          break;
-        case DataOneofCase.PoseFrame:
-          PoseFrame = other.PoseFrame.Clone();
           break;
       }
 
@@ -236,18 +231,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
     }
 
-    /// <summary>Field number for the "pose_frame" field.</summary>
-    public const int PoseFrameFieldNumber = 9;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::CakeLab.ARFlow.Grpc.V1.PoseFrame PoseFrame {
-      get { return dataCase_ == DataOneofCase.PoseFrame ? (global::CakeLab.ARFlow.Grpc.V1.PoseFrame) data_ : null; }
-      set {
-        data_ = value;
-        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.PoseFrame;
-      }
-    }
-
     private object data_;
     /// <summary>Enum of possible cases for the "data" oneof.</summary>
     public enum DataOneofCase {
@@ -260,7 +243,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       PlaneDetectionFrame = 6,
       PointCloudDetectionFrame = 7,
       MeshDetectionFrame = 8,
-      PoseFrame = 9,
     }
     private DataOneofCase dataCase_ = DataOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -299,7 +281,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       if (!object.Equals(PlaneDetectionFrame, other.PlaneDetectionFrame)) return false;
       if (!object.Equals(PointCloudDetectionFrame, other.PointCloudDetectionFrame)) return false;
       if (!object.Equals(MeshDetectionFrame, other.MeshDetectionFrame)) return false;
-      if (!object.Equals(PoseFrame, other.PoseFrame)) return false;
       if (DataCase != other.DataCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -316,7 +297,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       if (dataCase_ == DataOneofCase.PlaneDetectionFrame) hash ^= PlaneDetectionFrame.GetHashCode();
       if (dataCase_ == DataOneofCase.PointCloudDetectionFrame) hash ^= PointCloudDetectionFrame.GetHashCode();
       if (dataCase_ == DataOneofCase.MeshDetectionFrame) hash ^= MeshDetectionFrame.GetHashCode();
-      if (dataCase_ == DataOneofCase.PoseFrame) hash ^= PoseFrame.GetHashCode();
       hash ^= (int) dataCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -368,10 +348,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         output.WriteRawTag(66);
         output.WriteMessage(MeshDetectionFrame);
       }
-      if (dataCase_ == DataOneofCase.PoseFrame) {
-        output.WriteRawTag(74);
-        output.WriteMessage(PoseFrame);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -414,10 +390,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         output.WriteRawTag(66);
         output.WriteMessage(MeshDetectionFrame);
       }
-      if (dataCase_ == DataOneofCase.PoseFrame) {
-        output.WriteRawTag(74);
-        output.WriteMessage(PoseFrame);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -451,9 +423,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
       }
       if (dataCase_ == DataOneofCase.MeshDetectionFrame) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(MeshDetectionFrame);
-      }
-      if (dataCase_ == DataOneofCase.PoseFrame) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(PoseFrame);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -515,12 +484,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             MeshDetectionFrame = new global::CakeLab.ARFlow.Grpc.V1.MeshDetectionFrame();
           }
           MeshDetectionFrame.MergeFrom(other.MeshDetectionFrame);
-          break;
-        case DataOneofCase.PoseFrame:
-          if (PoseFrame == null) {
-            PoseFrame = new global::CakeLab.ARFlow.Grpc.V1.PoseFrame();
-          }
-          PoseFrame.MergeFrom(other.PoseFrame);
           break;
       }
 
@@ -615,15 +578,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             MeshDetectionFrame = subBuilder;
             break;
           }
-          case 74: {
-            global::CakeLab.ARFlow.Grpc.V1.PoseFrame subBuilder = new global::CakeLab.ARFlow.Grpc.V1.PoseFrame();
-            if (dataCase_ == DataOneofCase.PoseFrame) {
-              subBuilder.MergeFrom(PoseFrame);
-            }
-            input.ReadMessage(subBuilder);
-            PoseFrame = subBuilder;
-            break;
-          }
         }
       }
     #endif
@@ -713,15 +667,6 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             }
             input.ReadMessage(subBuilder);
             MeshDetectionFrame = subBuilder;
-            break;
-          }
-          case 74: {
-            global::CakeLab.ARFlow.Grpc.V1.PoseFrame subBuilder = new global::CakeLab.ARFlow.Grpc.V1.PoseFrame();
-            if (dataCase_ == DataOneofCase.PoseFrame) {
-              subBuilder.MergeFrom(PoseFrame);
-            }
-            input.ReadMessage(subBuilder);
-            PoseFrame = subBuilder;
             break;
           }
         }

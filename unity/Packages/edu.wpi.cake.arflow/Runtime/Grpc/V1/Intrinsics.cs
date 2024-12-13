@@ -27,18 +27,18 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             "CidjYWtlbGFiL2FyZmxvd19ncnBjL3YxL2ludHJpbnNpY3MucHJvdG8SFmNh",
             "a2VsYWIuYXJmbG93X2dycGMudjEaJGNha2VsYWIvYXJmbG93X2dycGMvdjEv",
             "dmVjdG9yMi5wcm90bxooY2FrZWxhYi9hcmZsb3dfZ3JwYy92MS92ZWN0b3Iy",
-            "X2ludC5wcm90bxokY2FrZWxhYi9hcmZsb3dfZ3JwYy92MS92ZWN0b3IzLnBy",
-            "b3RvIt4BCgpJbnRyaW5zaWNzEkIKDGZvY2FsX2xlbmd0aBgBIAEoCzIfLmNh",
-            "a2VsYWIuYXJmbG93X2dycGMudjEuVmVjdG9yMlILZm9jYWxMZW5ndGgSSAoP",
-            "cHJpbmNpcGFsX3BvaW50GAIgASgLMh8uY2FrZWxhYi5hcmZsb3dfZ3JwYy52",
-            "MS5WZWN0b3IyUg5wcmluY2lwYWxQb2ludBJCCgpyZXNvbHV0aW9uGAMgASgL",
-            "MiIuY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5WZWN0b3IySW50UgpyZXNvbHV0",
-            "aW9uQqQBChpjb20uY2FrZWxhYi5hcmZsb3dfZ3JwYy52MUIPSW50cmluc2lj",
-            "c1Byb3RvUAGiAgNDQViqAhZDYWtlTGFiLkFSRmxvdy5HcnBjLlYxygIVQ2Fr",
-            "ZWxhYlxBcmZsb3dHcnBjXFYx4gIhQ2FrZWxhYlxBcmZsb3dHcnBjXFYxXEdQ",
-            "Qk1ldGFkYXRh6gIXQ2FrZWxhYjo6QXJmbG93R3JwYzo6VjFiBnByb3RvMw=="));
+            "X2ludC5wcm90byLeAQoKSW50cmluc2ljcxJCCgxmb2NhbF9sZW5ndGgYASAB",
+            "KAsyHy5jYWtlbGFiLmFyZmxvd19ncnBjLnYxLlZlY3RvcjJSC2ZvY2FsTGVu",
+            "Z3RoEkgKD3ByaW5jaXBhbF9wb2ludBgCIAEoCzIfLmNha2VsYWIuYXJmbG93",
+            "X2dycGMudjEuVmVjdG9yMlIOcHJpbmNpcGFsUG9pbnQSQgoKcmVzb2x1dGlv",
+            "bhgDIAEoCzIiLmNha2VsYWIuYXJmbG93X2dycGMudjEuVmVjdG9yMkludFIK",
+            "cmVzb2x1dGlvbkKkAQoaY29tLmNha2VsYWIuYXJmbG93X2dycGMudjFCD0lu",
+            "dHJpbnNpY3NQcm90b1ABogIDQ0FYqgIWQ2FrZUxhYi5BUkZsb3cuR3JwYy5W",
+            "McoCFUNha2VsYWJcQXJmbG93R3JwY1xWMeICIUNha2VsYWJcQXJmbG93R3Jw",
+            "Y1xWMVxHUEJNZXRhZGF0YeoCF0Nha2VsYWI6OkFyZmxvd0dycGM6OlYxYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.Vector2Reflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.Vector2IntReflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.Vector3Reflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.Vector2Reflection.Descriptor, global::CakeLab.ARFlow.Grpc.V1.Vector2IntReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::CakeLab.ARFlow.Grpc.V1.Intrinsics), global::CakeLab.ARFlow.Grpc.V1.Intrinsics.Parser, new[]{ "FocalLength", "PrincipalPoint", "Resolution" }, null, null, null, null)
           }));
