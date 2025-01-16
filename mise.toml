@@ -63,7 +63,7 @@ run = "poetry build"
 
 [tasks."server:ci"]
 description = "Run CI tasks"
-depends = ["lint-server", "typecheck-server", "test-server"]
+depends = ["server:lint", "server:typecheck", "server:test"]
 
 [tasks."server:docs:serve"]
 description = "Serve server documentation with pdoc"

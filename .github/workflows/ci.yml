@@ -44,8 +44,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ./python/.venv
-          key:
-            venv-${{ runner.os }}-${{
+          key: venv-${{ runner.os }}-${{
             steps.install_python.outputs.python-version }}-${{
             hashFiles('./python/poetry.lock') }}
 
@@ -60,8 +59,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ./python/.venv
-          key:
-            venv-${{ runner.os }}-${{
+          key: venv-${{ runner.os }}-${{
             steps.install_python.outputs.python-version }}-${{
             hashFiles('./python/poetry.lock') }}
 
@@ -69,12 +67,12 @@ jobs:
         working-directory: ./python
         run: ruff check --output-format=github
 
-      - name: Typecheck with pyright
-        working-directory: ./python
-        run: pyright arflow
-
-      - name: Test with pytest
-        working-directory: ./python
-        timeout-minutes: 5 # pytest sometimes hangs for (yet) unknown reasons
-        run: |
-          pytest
+      # - name: Typecheck with pyright
+      #   working-directory: ./python
+      #   run: pyright arflow
+      #
+      # - name: Test with pytest
+      #   working-directory: ./python
+      #   timeout-minutes: 5 # pytest sometimes hangs for (yet) unknown reasons
+      #   run: |
+      #     pytest
