@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+import "cakelab/arflow_grpc/v1/pose.proto";
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+/// https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARFoundation.ARTrackable-2.html#UnityEngine_XR_ARFoundation_ARTrackable
+message ARTrackable {
+  /// https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARSubsystems.TrackableId.html
+  message TrackableId {
+    uint64 sub_id_1 = 1;
+    uint64 sub_id_2 = 2;
+  }
+
+  /// https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARSubsystems.TrackingState.html
+  enum TrackingState {
+    TRACKING_STATE_UNSPECIFIED = 0;
+    TRACKING_STATE_LIMITED = 1;
+    TRACKING_STATE_NONE = 2;
+    TRACKING_STATE_TRACKING = 3;
+  }
+
+  Pose pose = 1;
+  TrackableId trackable_id = 2;
+  TrackingState tracking_state = 3;
+}

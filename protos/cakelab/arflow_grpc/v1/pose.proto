@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+import "cakelab/arflow_grpc/v1/quaternion.proto";
+import "cakelab/arflow_grpc/v1/vector3.proto";
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+/// https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Pose.html
+message Pose {
+  Vector3 forward = 1;
+  Vector3 position = 2;
+  Vector3 right = 3;
+  Quaternion rotation = 4;
+  Vector3 up = 5;
+}

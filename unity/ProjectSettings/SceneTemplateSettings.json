@@ -63,6 +63,11 @@
         },
         {
             "userAdded": false,
+            "type": "UnityEngine.PhysicsMaterial",
+            "defaultInstantiationMode": 0
+        },
+        {
+            "userAdded": false,
             "type": "UnityEngine.PhysicsMaterial2D",
             "defaultInstantiationMode": 0
         },
@@ -84,7 +89,7 @@
         {
             "userAdded": false,
             "type": "UnityEditor.SceneAsset",
-            "defaultInstantiationMode": 1
+            "defaultInstantiationMode": 0
         },
         {
             "userAdded": false,

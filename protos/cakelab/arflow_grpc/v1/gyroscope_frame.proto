@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+import "cakelab/arflow_grpc/v1/quaternion.proto";
+import "cakelab/arflow_grpc/v1/vector3.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+message GyroscopeFrame {
+  google.protobuf.Timestamp device_timestamp = 1;
+  Quaternion attitude = 2;
+  Vector3 rotation_rate = 3;
+  Vector3 gravity = 4;
+  Vector3 acceleration = 5;
+}

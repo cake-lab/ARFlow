@@ -1,5 +1,9 @@
-rm -rf clientHTMLOutput
+#!/usr/bin/env bash
+rm -rf ../../website/docs/client
 rm -rf api
+rm -f index.md
+
+cp ../Packages/edu.wpi.cake.arflow/README.md index.md
 
 docfx metadata
 docfx build docfx.json > docfx.log

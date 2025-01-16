@@ -1,4 +1,15 @@
 {
+  "editor.tabSize": 4,
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "[json]": {
+    "editor.tabSize": 2
+  },
+  "[yaml]": {
+    "editor.tabSize": 4
+  },
+  "editor.insertSpaces": true,
   "notebook.formatOnSave.enabled": true,
   "notebook.codeActionsOnSave": {
     "notebook.source.fixAll": "explicit",
@@ -19,8 +30,7 @@
   "python.testing.pytestEnabled": true,
   "[csharp]": {
     "editor.formatOnSave": true,
-    "editor.maxTokenizationLineLength": 2500,
-    "editor.inlineSuggest.suppressSuggestions": false
+    "editor.maxTokenizationLineLength": 2500
   },
   "files.exclude": {
     "**/.git": true,
@@ -46,5 +56,12 @@
     "thecakelab",
     "Xihe"
   ],
-  "conventionalCommits.scopes": ["server", "client", "examples", "others"]
+  "conventionalCommits.scopes": [
+    "protos",
+    "server",
+    "cli",
+    "client",
+    "examples",
+    "others"
+  ]
 }

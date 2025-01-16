@@ -22,12 +22,12 @@ jobs:
         id: install_python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.12"
 
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2
         with:
-          poetry-version: "1.8.3"
+          poetry-version: "1.8.4"
 
       - name: Setup a local virtual environment (if no poetry.toml file)
         working-directory: ./python
@@ -39,7 +39,10 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ./python/.venv
-          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+          key:
+            venv-${{ runner.os }}-${{
+            steps.install_python.outputs.python-version }}-${{
+            hashFiles('./python/poetry.lock') }}
 
       - name: Install dependencies (skipped if cache hit, fallback to install)
         working-directory: ./python
@@ -52,7 +55,10 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ./python/.venv
-          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+          key:
+            venv-${{ runner.os }}-${{
+            steps.install_python.outputs.python-version }}-${{
+            hashFiles('./python/poetry.lock') }}
 
       - name: Use PyPI API token
         working-directory: ./python

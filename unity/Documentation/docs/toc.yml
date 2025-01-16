@@ -1,0 +1,3 @@
+# Write a Markdown file for each documentation page. Keep a list of the pages in this file.
+- name: Example
+  href: example.md

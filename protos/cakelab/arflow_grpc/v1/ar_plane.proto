@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+import "cakelab/arflow_grpc/v1/ar_trackable.proto";
+import "cakelab/arflow_grpc/v1/vector2.proto";
+import "cakelab/arflow_grpc/v1/vector3.proto";
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+/// https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARFoundation.ARPlane.html#UnityEngine_XR_ARFoundation_ARPlane
+message ARPlane {
+  ARTrackable trackable = 1;
+  repeated Vector2 boundary = 2;
+  Vector3 center = 3;
+  Vector3 normal = 4;
+  Vector2 size = 5;
+  optional ARTrackable.TrackableId subsumed_by_id = 6;
+}

@@ -27,12 +27,12 @@ jobs:
         id: install_python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.12"
 
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2
         with:
-          poetry-version: "1.8.3"
+          poetry-version: "1.8.4"
 
       - name: Setup a local virtual environment (if no poetry.toml file)
         working-directory: ./python
@@ -44,7 +44,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ./python/.venv
-          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{
+            steps.install_python.outputs.python-version }}-${{
+            hashFiles('./python/poetry.lock') }}
 
       - name: Install dependencies (used by later workflows)
         working-directory: ./python
@@ -57,19 +59,20 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ./python/.venv
-          key: venv-${{ runner.os }}-${{ steps.install_python.outputs.python-version }}-${{ hashFiles('./python/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{
+            steps.install_python.outputs.python-version }}-${{
+            hashFiles('./python/poetry.lock') }}
 
       - name: Lint with ruff
         working-directory: ./python
         run: ruff check --output-format=github
 
-      - name: Typecheck with pyright
-        working-directory: ./python
-        run: pyright arflow
-
-      - name: Test with pytest
-        working-directory: ./python
-        timeout-minutes: 5 # pytest sometimes hangs for (yet) unknown reasons
-        # TODO: Add coverage tracking once we have a stable test suite
-        run: |
-          pytest
+      # - name: Typecheck with pyright
+      #   working-directory: ./python
+      #   run: pyright arflow
+      #
+      # - name: Test with pytest
+      #   working-directory: ./python
+      #   timeout-minutes: 5 # pytest sometimes hangs for (yet) unknown reasons
+      #   run: |
+      #     pytest

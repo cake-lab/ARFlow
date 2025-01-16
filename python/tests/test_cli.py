@@ -3,10 +3,9 @@
 # ruff:noqa: D103
 # pyright: reportPrivateUsage=false
 
-import argparse
 import logging
+import os
 import shlex
-import tempfile
 from pathlib import Path
 from typing import Literal
 from unittest.mock import MagicMock, patch
@@ -14,164 +13,204 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from arflow._cli import (
-    _validate_dir_path,
-    _validate_file_path,
+    _prompt_until_valid_dir,
     parse_args,
-    replay,
-    serve,
+    rerun,
+    save,
+    view,
 )
 
 
-@pytest.fixture
-def temp_dir():
-    with tempfile.TemporaryDirectory() as td:
-        yield td
+# https://docs.pytest.org/en/stable/how-to/tmp_path.html#the-tmp-path-fixture
+def test_existing_directory(tmp_path: Path):
+    assert _prompt_until_valid_dir(str(tmp_path)) == str(tmp_path)
 
 
-@pytest.fixture
-def temp_file():
-    with tempfile.NamedTemporaryFile() as tf:
-        yield tf.name
+def test_create_new_directory(tmp_path: Path):
+    new_dir = str(tmp_path / "new_dir")
+
+    with patch("builtins.input") as mock_input:
+        mock_input.side_effect = ["y"]
+        result = _prompt_until_valid_dir(new_dir)
+
+    assert result == new_dir
+    assert os.path.isdir(new_dir)
 
 
-def test_validate_dir_path_valid(temp_dir: str):
-    assert _validate_dir_path(temp_dir) == temp_dir
+def test_provide_alternate_directory(tmp_path: Path):
+    non_existent = str(tmp_path / "nonexistent")
+    alternate = str(tmp_path / "alternate")
+    os.makedirs(alternate, exist_ok=True)
+
+    with patch("builtins.input") as mock_input:
+        mock_input.side_effect = [
+            "n",
+            alternate,
+        ]  # Decline creation, provide existing dir
+        result = _prompt_until_valid_dir(non_existent)
+
+    assert result == alternate
 
 
-def test_validate_dir_path_invalid():
-    with pytest.raises(argparse.ArgumentTypeError):
-        _validate_dir_path("/path/to/nonexistent/directory")
-
-
-def test_validate_dir_path_none():
-    assert _validate_dir_path(None) is None
-
-
-def test_validate_file_path_valid(temp_file: str):
-    assert _validate_file_path(temp_file) == temp_file
-
-
-def test_validate_file_path_invalid():
-    with pytest.raises(argparse.ArgumentTypeError):
-        _validate_file_path("/path/to/nonexistent/file.txt")
-
-
-def test_serve():
+def test_view():
     with patch("arflow._cli.run_server") as mock_run_server, patch(
         "arflow._cli.ARFlowServicer"
     ) as mock_servicer:
         args = MagicMock()
         args.port = 1234
-        args.save_path = "/tmp/save_path"
 
-        serve(args)
+        view(args)
 
         mock_run_server.assert_called_once_with(
-            mock_servicer, port=1234, path_to_save=Path("/tmp/save_path")
+            mock_servicer,
+            spawn_viewer=True,
+            save_dir=None,
+            port=1234,
         )
 
 
-def test_replay():
-    with patch("arflow._cli.ARFlowPlayer") as mock_player_class, patch(
+def test_save():
+    with patch("arflow._cli.run_server") as mock_run_server, patch(
         "arflow._cli.ARFlowServicer"
     ) as mock_servicer:
-        mock_player_instance = MagicMock()
-        mock_player_class.return_value = mock_player_instance
-
         args = MagicMock()
-        args.file_path = "/path/to/data.file"
+        args.port = 1234
+        args.save_dir = "/tmp/save_path"
 
-        replay(args)
+        save(args)
 
-        mock_player_class.assert_called_once_with(
-            mock_servicer, Path("/path/to/data.file")
+        mock_run_server.assert_called_once_with(
+            mock_servicer,
+            spawn_viewer=False,
+            save_dir=Path("/tmp/save_path"),
+            port=1234,
         )
-        mock_player_instance.run.assert_called_once()
+
+
+def test_rerun():
+    with patch("os.execvp") as mock_execvp:
+        rerun(["some-arbitary-rerun-command", "-p", "1234"])
+        mock_execvp.assert_called_once_with(
+            "rerun", ["rerun", "some-arbitary-rerun-command", "-p", "1234"]
+        )
 
 
 @pytest.mark.parametrize(
-    "command, subcommand, debug, verbose, port, save_path, file_path",
+    "command, subcommand, debug, quiet, port, save_dir",
     [
-        ("", None, False, False, None, None, None),
-        ("-d", None, True, False, None, None, None),
-        ("-v", None, False, True, None, None, None),
-        ("-d -v", None, True, True, None, None, None),
-        ("serve", "serve", False, False, 8500, None, None),
-        ("-d serve", "serve", True, False, 8500, None, None),
-        ("-d serve -p 1234", "serve", True, False, 1234, None, None),
         (
-            "-d serve -s /tmp/save_path",
-            "serve",
+            "",
+            None,
+            False,
+            False,
+            None,
+            None,
+        ),
+        (
+            "-d",
+            None,
+            True,
+            False,
+            None,
+            None,
+        ),
+        (
+            "-q",
+            None,
+            False,
+            True,
+            None,
+            None,
+        ),
+        (
+            "view",
+            "view",
+            False,
+            False,
+            8500,
+            None,
+        ),
+        (
+            "-d save",
+            "save",
+            True,
+            False,
+            8500,
+            None,
+        ),
+        (
+            "-d save -p 1234",
+            "save",
+            True,
+            False,
+            1234,
+            None,
+        ),
+        (
+            "-d save -s /tmp/save_path",
+            "save",
             True,
             False,
             8500,
             "/tmp/save_path",
-            None,
         ),
         (
-            "-d serve -p 1234 -s /tmp/save_path",
-            "serve",
+            "-d save -p 1234 -s /tmp/save_path",
+            "save",
             True,
             False,
             1234,
             "/tmp/save_path",
-            None,
         ),
         (
-            "replay /path/to/data.file",
-            "replay",
+            "rerun /path/to/data.file",
+            "rerun",
             False,
             False,
             None,
             None,
-            "/path/to/data.file",
         ),
         (
-            "-d replay /path/to/data.file",
-            "replay",
+            "-d rerun /path/to/data.file",
+            "rerun",
             True,
             False,
             None,
             None,
-            "/path/to/data.file",
         ),
     ],
 )
 def test_parse_args(
     command: str,
-    subcommand: Literal["serve", "replay"] | None,
+    subcommand: Literal["view", "save", "rerun"] | None,
     debug: bool,
-    verbose: bool,
+    quiet: bool,
     port: int | None,
-    save_path: str | None,
-    file_path: str | None,
+    save_dir: str | None,
+    tmp_path: Path,
 ):
-    with patch(
-        "arflow._cli._validate_file_path", return_value="/path/to/data.file"
-    ), patch("arflow._cli._validate_dir_path", return_value="/tmp/save_path"):
-        if debug and verbose:
-            with pytest.raises(SystemExit):
-                parse_args(shlex.split(command))
-            return
+    if save_dir is None:
+        save_dir = str(tmp_path)
+    with patch("arflow._cli._prompt_until_valid_dir", return_value=save_dir):
+        _, args, _ = parse_args(shlex.split(command))
 
-        _, args = parse_args(shlex.split(command))
+    if not debug and not quiet:
+        assert args.loglevel == logging.INFO
+    elif debug:
+        assert args.loglevel == logging.DEBUG
+    elif quiet:
+        assert args.loglevel == logging.WARNING
 
-        if not debug and not verbose:
-            assert args.loglevel == logging.WARNING
-        elif debug:
-            assert args.loglevel == logging.DEBUG
-        elif verbose:
-            assert args.loglevel == logging.INFO
-
-        if subcommand == "serve":
-            assert args.func == serve
-            assert args.port == port
-            assert args.save_path == save_path
-        elif subcommand == "replay":
-            assert args.func == replay
-            assert args.file_path == file_path
-        else:
-            assert not hasattr(args, "port")
-            assert not hasattr(args, "save_path")
-            assert not hasattr(args, "file_path")
-            assert not hasattr(args, "func")
+    if subcommand == "view":
+        assert args.func == view
+        assert args.port == port
+    elif subcommand == "save":
+        assert args.func == save
+        assert args.port == port
+        assert args.save_dir == save_dir
+    elif subcommand == "rerun":
+        assert args.func == rerun
+    else:
+        assert not hasattr(args, "func")
+        assert not hasattr(args, "port")
+        assert not hasattr(args, "save_dir")

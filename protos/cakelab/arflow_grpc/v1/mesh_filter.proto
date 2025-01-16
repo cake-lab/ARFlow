@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+/// https://docs.unity3d.com/6000.0/Documentation/ScriptReference/MeshFilter.html
+message MeshFilter {
+  message EncodedMesh {
+    message EncodedSubMesh {
+      bytes data = 1;
+    }
+
+    repeated EncodedSubMesh sub_meshes = 1;
+  }
+
+  int32 instance_id = 1;
+  EncodedMesh mesh = 2;
+}

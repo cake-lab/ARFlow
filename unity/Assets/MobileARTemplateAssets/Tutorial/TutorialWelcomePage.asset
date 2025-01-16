@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0885f594ab85594caa28e1a96cbe0d8, type: 3}
+  m_Name: TutorialWelcomePage
+  m_EditorClassIdentifier: 
+  Modified:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Image: {fileID: 2800000, guid: 42994e90d97cd4279be774deb5789e39, type: 3}
+  m_WindowTitle:
+    m_Untranslated: AR Mobile Template
+  m_Title:
+    m_Untranslated: Welcome to the AR Mobile Template project!
+  m_Description:
+    m_Untranslated: "This project template seeks to help you build engaging mobile
+      AR experiences. It provides a preconfigured project with XR packages and core
+      components for interactions and UI.<br>\nBefore you begin, select the mobile
+      platform you plan to deploy to by navigating to Edit > Project Settings > XR
+      Plug-in Management and selecting your target platform. <br>\nIf your platform
+      isn\u2019t  listed, make sure you have the right platform module installed
+      by navigating to your project from the Unity Hub Projects tab > Editor Version
+      > Add Platform, then select the target Platform Module from the list. <br>\nPlease
+      refer to the <a href=\"https://docs.unity3d.com/Packages/com.unity.template.ar-mobile@2.0\">Quick
+      Start Guide</a> for more detailed information on the content and settings used
+      in this template. "
+  m_Buttons:
+  - Text:
+      m_Untranslated: Close
+    Tooltip:
+      m_Untranslated: 
+    OnClick:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000}
+          m_TargetAssemblyTypeName: Unity.Tutorials.Core.Editor.TutorialWelcomePage,
+            Unity.Tutorials.Core.Editor
+          m_MethodName: CloseCurrentModalDialog
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 1

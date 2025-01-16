@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+message DeleteSessionResponse {}
