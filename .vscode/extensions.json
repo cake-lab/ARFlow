@@ -3,6 +3,9 @@
     "redhat.vscode-yaml",
     "streetsidesoftware.code-spell-checker",
     "DavidAnson.vscode-markdownlint",
-    "bufbuild.vscode-buf"
+    "bufbuild.vscode-buf",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff"
   ]
 }
