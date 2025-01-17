@@ -26,7 +26,6 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         private List<GameObject> m_UIConfigElements = new();
         // Configs
         private const string MODALITY_NAME = "Plane Detection";
-        private TMP_InputField bufferSizeField;
 
         private TMP_InputField delayField;
 
@@ -55,11 +54,6 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
 
             //Buffer toggle (on or off)
             InstantiateGameObject.InstantiateToggle(parent, prefabs.togglePrefab, ENABLE_NAME, new Action<bool>[] { onToggleModality, ToggleConfig }, out toggle, out _);
-
-            //Buffer Size
-            InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, BUFFER_SIZE_NAME, DEFAULT_BUFFER_SIZE, out var bufferSizeObject, out bufferSizeField);
-            bufferSizeField.contentType = TMP_InputField.ContentType.IntegerNumber;
-            m_UIConfigElements.Add(bufferSizeObject);
 
             //Delay
             InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, DELAY_NAME, DELAY_DEFAULT, out var delayObject, out delayField);
@@ -104,7 +98,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
         public PlaneDetectionBuffer GetBufferFromConfig()
         {
-            return new PlaneDetectionBuffer(int.Parse(bufferSizeField.text), m_Manager, m_Clock);
+            return new PlaneDetectionBuffer(m_Manager, m_Clock);
         }
 
         public override IARFrameBuffer GetGenericBuffer()

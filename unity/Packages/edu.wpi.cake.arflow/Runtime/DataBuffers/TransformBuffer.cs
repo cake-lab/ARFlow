@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
-using System.Timers;
 using Google.Protobuf.WellKnownTypes;
 using UnityEngine;
 
@@ -54,18 +53,17 @@ namespace CakeLab.ARFlow.DataBuffers
         private const int m_TransformDataSize = 3 * 4 * sizeof(float);
         private float m_SamplingIntervalMs;
         private bool m_IsCapturing;
-        private readonly List<RawTransformFrame> m_Buffer;
+        private ConcurrentQueue<RawTransformFrame> m_Buffer;
 
-        public IReadOnlyList<RawTransformFrame> Buffer => m_Buffer;
+        public ConcurrentQueue<RawTransformFrame> Buffer => m_Buffer;
 
         public TransformBuffer(
-            int initialBufferSize,
             Camera mainCamera,
             IClock clock,
             float samplingIntervalMs = 50
         )
         {
-            m_Buffer = new List<RawTransformFrame>(initialBufferSize);
+            m_Buffer = new ConcurrentQueue<RawTransformFrame>();
             m_MainCamera = mainCamera;
             m_Clock = clock;
             m_SamplingIntervalMs = samplingIntervalMs;
@@ -130,12 +128,7 @@ namespace CakeLab.ARFlow.DataBuffers
                 DeviceTimestamp = deviceTimestampAtCapture,
                 Data = cameraTransformBytes,
             };
-            m_Buffer.Add(newFrame);
-        }
-
-        public void ClearBuffer()
-        {
-            m_Buffer.Clear();
+            m_Buffer.Enqueue(newFrame);
         }
 
         public RawTransformFrame TryAcquireLatestFrame()
@@ -143,7 +136,7 @@ namespace CakeLab.ARFlow.DataBuffers
             return m_Buffer.LastOrDefault();
         }
 
-        public ARFrame[] GetARFramesFromBuffer()
+        public ARFrame[] TakeARFrames()
         {
             return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
         }
@@ -151,7 +144,7 @@ namespace CakeLab.ARFlow.DataBuffers
         public void Dispose()
         {
             StopCapture();
-            ClearBuffer();
+            m_Buffer.Clear();
         }
     }
 }

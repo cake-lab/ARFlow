@@ -123,7 +123,7 @@ public class ARFlowDeviceSample : MonoBehaviour
                 // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
                 await Awaitable.WaitForSecondsAsync(currentDelay, control.cts.Token);
 
-                ARFrame[] arFrames = control.buffer.GetARFramesFromBuffer();
+                ARFrame[] arFrames = control.buffer.TakeARFrames();
 
                 if (arFrames.Length == 0)
                 {
@@ -138,7 +138,6 @@ public class ARFlowDeviceSample : MonoBehaviour
                     m_Device,
                     control.cts.Token
                 );
-                control.buffer.ClearBuffer();
             }
         }
         catch (OperationCanceledException e)

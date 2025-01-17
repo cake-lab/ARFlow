@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.WellKnownTypes;
@@ -165,17 +166,16 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_Clock = value;
         }
 
-        private readonly List<RawPlaneDetectionFrame> m_Buffer;
+        private ConcurrentQueue<RawPlaneDetectionFrame> m_Buffer;
 
-        public IReadOnlyList<RawPlaneDetectionFrame> Buffer => m_Buffer;
+        public ConcurrentQueue<RawPlaneDetectionFrame> Buffer => m_Buffer;
 
         public PlaneDetectionBuffer(
-            int initialBufferSize,
             ARPlaneManager planeManager,
             IClock clock
         )
         {
-            m_Buffer = new List<RawPlaneDetectionFrame>(initialBufferSize);
+            m_Buffer = new ConcurrentQueue<RawPlaneDetectionFrame>();
             m_PlaneManager = planeManager;
             m_Clock = clock;
         }
@@ -204,8 +204,13 @@ namespace CakeLab.ARFlow.DataBuffers
             PlaneDetectionState state
         )
         {
-            m_Buffer.AddRange(
-                planes?.Select(plane => new RawPlaneDetectionFrame
+            if (planes == null)
+            {
+                return;
+            }
+            foreach (var plane in planes)
+            {
+                m_Buffer.Enqueue(new RawPlaneDetectionFrame
                 {
                     State = state,
                     Pose = plane.pose,
@@ -216,8 +221,8 @@ namespace CakeLab.ARFlow.DataBuffers
                     Center = plane.center,
                     Normal = plane.normal,
                     Size = plane.size,
-                })
-            );
+                });
+            }
         }
 
         private void AddToBuffer(
@@ -225,8 +230,13 @@ namespace CakeLab.ARFlow.DataBuffers
             DateTime deviceTimestampAtCapture
         )
         {
-            m_Buffer.AddRange(
-                planes?.Select(plane => new RawPlaneDetectionFrame
+            if (planes == null)
+            {
+                return;
+            }
+            foreach (var plane in planes)
+            {
+                m_Buffer.Enqueue(new RawPlaneDetectionFrame
                 {
                     State = PlaneDetectionState.Removed,
                     Pose = plane.Value.pose,
@@ -234,13 +244,8 @@ namespace CakeLab.ARFlow.DataBuffers
                     TrackingState = plane.Value.trackingState,
                     DeviceTimestamp = deviceTimestampAtCapture,
                     SubsumedById = plane.Value.subsumedBy.trackableId,
-                })
-            );
-        }
-
-        public void ClearBuffer()
-        {
-            m_Buffer.Clear();
+                });
+            }
         }
 
         public RawPlaneDetectionFrame TryAcquireLatestFrame()
@@ -248,15 +253,21 @@ namespace CakeLab.ARFlow.DataBuffers
             return m_Buffer.LastOrDefault();
         }
 
-        public ARFrame[] GetARFramesFromBuffer()
+        public ARFrame[] TakeARFrames()
         {
-            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
+            ConcurrentQueue<RawPlaneDetectionFrame> oldFrames;
+            lock (m_Buffer)
+            {
+                oldFrames = m_Buffer;
+                m_Buffer = new();
+            }
+            return oldFrames.Select(frame => (ARFrame)frame).ToArray();
         }
 
         public void Dispose()
         {
             StopCapture();
-            ClearBuffer();
+            m_Buffer.Clear();
         }
     }
 }

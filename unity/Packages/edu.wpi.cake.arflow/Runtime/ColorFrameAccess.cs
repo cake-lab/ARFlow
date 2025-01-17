@@ -57,7 +57,7 @@ namespace CakeLab.ARFlow.Samples
         /// </summary>
         void Awake()
         {
-            m_CameraBuffer = new ColorBuffer(64, m_CameraManager, m_Clock);
+            m_CameraBuffer = new ColorBuffer(m_CameraManager, m_Clock);
 
             // Initialize default values (if they aren't dynamic or coming from other scripts)
             m_Address = new("http://192.168.1.50:8500");
@@ -119,8 +119,7 @@ namespace CakeLab.ARFlow.Samples
         private void OnStopButtonClicked()
         {
             m_Cts.Cancel();
-            m_CameraBuffer.StopCapture();
-            m_CameraBuffer.ClearBuffer();
+            m_CameraBuffer.Dispose();
             m_GrpcClient?.Dispose();
             m_GrpcClient = null; // to reconnect if needed
 
@@ -141,10 +140,7 @@ namespace CakeLab.ARFlow.Samples
                 await Awaitable.WaitForSecondsAsync(m_DelayInS, m_Cts.Token);
 
                 ARFrame[] arFrames = m_CameraBuffer
-                    .Buffer
-                    // This works because we have an explicit conversion operator defined for RawCameraFrame
-                    .Select(frame => (ARFrame)frame)
-                    .ToArray();
+                    .TakeARFrames();
 
                 if (arFrames.Length == 0)
                 {
@@ -158,7 +154,6 @@ namespace CakeLab.ARFlow.Samples
                     m_Device,
                     m_Cts.Token
                 );
-                m_CameraBuffer.ClearBuffer();
             }
         }
 
