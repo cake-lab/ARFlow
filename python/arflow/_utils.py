@@ -1,4 +1,5 @@
 from collections import defaultdict
+from collections.abc import Sequence
 from typing import DefaultDict, Tuple
 
 from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
@@ -7,7 +8,7 @@ from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
 
 
 def group_color_frames_by_format_and_dims(
-    frames: list[ColorFrame],
+    frames: Sequence[ColorFrame],
 ) -> DefaultDict[Tuple[XRCpuImage.Format, int, int], list[ColorFrame]]:
     """Group color frames by format and dimensions (width x height)."""
     color_frames_grouped_by_format_and_dims: DefaultDict[
@@ -25,7 +26,7 @@ def group_color_frames_by_format_and_dims(
 
 
 def group_depth_frames_by_format_dims_and_smoothness(
-    frames: list[DepthFrame],
+    frames: Sequence[DepthFrame],
 ) -> DefaultDict[Tuple[XRCpuImage.Format, int, int, bool], list[DepthFrame]]:
     """Group depth frames by format, dimensions (width x height), and smoothness."""
     depth_frames_grouped_by_format_dims_and_smoothness: DefaultDict[
