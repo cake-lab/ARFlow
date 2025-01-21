@@ -847,6 +847,7 @@ def _to_i420_format(image: XRCpuImage) -> npt.NDArray[np.uint8]:
     )
     # Downsample and pack U and V planes
     u_data = (
+        # TODO: Fix this workaround
         np.frombuffer(u_plane.data + b"\x00", dtype=np.uint8)
         # pad an extra byte
         .reshape((uv_height, u_plane.row_stride))[

@@ -133,7 +133,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 path=save_path,
                 recording=new_rr_stream,
             )
-            logger.debug("Session data path: %s", save_path)
+            logger.info("Session data path: %s", save_path)
 
         self.on_create_session(
             session_stream=new_session_stream,
