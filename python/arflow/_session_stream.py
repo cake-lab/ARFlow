@@ -67,6 +67,7 @@ class SessionStream:
             [
                 f"{self.info.metadata.name}_{self.info.id.value}",
                 f"{device.model}_{device.name}_{device.uid}",
+                ARFrameType.TRANSFORM_FRAME,
             ]
         )
         rr.log(
@@ -78,7 +79,8 @@ class SessionStream:
         t = np.array([np.frombuffer(frame.data, dtype=np.float32) for frame in frames])
         transforms = np.array([np.eye(4, dtype=np.float32) for _ in range(len(frames))])
         transforms[:, :3, :] = t.reshape((len(frames), 3, 4))
-        # transforms[:, :3, 3] = 0
+
+        # TODO: Do we need to flip Y?
         transforms = y_down_to_y_up @ transforms
         rr.send_columns(
             entity_path,
@@ -847,7 +849,8 @@ def _to_i420_format(image: XRCpuImage) -> npt.NDArray[np.uint8]:
     )
     # Downsample and pack U and V planes
     u_data = (
-        # TODO: Fix this workaround
+        # Have to pad an extra byte due to how the Android image format was captured. Check:
+        # https://stackoverflow.com/questions/51399908/yuv-420-888-byte-format/62090742
         np.frombuffer(u_plane.data + b"\x00", dtype=np.uint8)
         # pad an extra byte
         .reshape((uv_height, u_plane.row_stride))[
