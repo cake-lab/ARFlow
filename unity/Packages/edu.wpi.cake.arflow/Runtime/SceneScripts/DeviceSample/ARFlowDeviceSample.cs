@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using CakeLab.ARFlow;
 using CakeLab.ARFlow.ArUcoTracking;
 using CakeLab.ARFlow.Clock;
 using CakeLab.ARFlow.DataBuffers;
@@ -255,7 +252,8 @@ public class ARFlowDeviceSample : MonoBehaviour
             findServerWindow.windowGameObject.SetActive(false);
             sessionsWindow.windowGameObject.SetActive(true);
             // If "NTP server same as server" is not checked and field is left empty, do not sync. NTP clock will fallback to system clock
-            if (ntpURL.Length > 0) {
+            if (ntpURL.Length > 0)
+            {
                 await ntpClock.SynchronizeAsync();
             }
         }
