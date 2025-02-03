@@ -197,8 +197,8 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         public string serverIP => ipServerField.text;
 
-        public string serverHost => portServerField.text;
-        public string serverAddress => $"http://{serverIP}:{serverHost}";
+        public string serverPort => portServerField.text;
+        public string serverAddress => $"http://{serverIP}:{serverPort}";
 
 
         public bool isToggleOn => NTPSameServerToggle.isOn;
@@ -254,8 +254,10 @@ public class ARFlowDeviceSample : MonoBehaviour
             InitUIConfig();
             findServerWindow.windowGameObject.SetActive(false);
             sessionsWindow.windowGameObject.SetActive(true);
-            await ntpClock.SynchronizeAsync();
-
+            // If "NTP server same as server" is not checked and field is left empty, do not sync. NTP clock will fallback to system clock
+            if (ntpURL.Length > 0) {
+                await ntpClock.SynchronizeAsync();
+            }
         }
         catch (Exception e)
         {
