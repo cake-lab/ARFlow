@@ -185,3 +185,6 @@ pyrightconfig.json
 # benchmark artifacts
 benchmarks/payload
 benchmarks/results
+
+# evaluation artifacts
+!evaluations/**/*.rrd

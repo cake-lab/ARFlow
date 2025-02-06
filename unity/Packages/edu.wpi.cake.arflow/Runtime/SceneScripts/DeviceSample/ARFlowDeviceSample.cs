@@ -258,8 +258,8 @@ public class ARFlowDeviceSample : MonoBehaviour
             {
                 await ntpClock.SynchronizeAsync();
             }
-            // NOTE: enable if want to evaluate temporal sync
-            // CaptureTimeMetrics();
+            // NOTE: enable only if you want to evaluate temporal sync. Don't enable to release builds
+            // CaptureTimeMetrics(1f);
         }
         catch (Exception e)
         {
@@ -278,7 +278,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         public string device_time;
     }
 
-    private async void CaptureTimeMetrics()
+    private async void CaptureTimeMetrics(float interval_s)
     {
         while (true)
         {
@@ -289,8 +289,8 @@ public class ARFlowDeviceSample : MonoBehaviour
                 ntp_time = ntpTime.ToString("o"),
                 device_time = deviceTime.ToString("o"),
             };
-            Debug.LogWarning($"TimeLog: {JsonUtility.ToJson(logEntry)}");
-            await Awaitable.WaitForSecondsAsync(5f);
+            Debug.Log($"{JsonUtility.ToJson(logEntry)}");
+            await Awaitable.WaitForSecondsAsync(interval_s);
         }
     }
 
