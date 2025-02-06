@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Concurrent;
 using CakeLab.ARFlow.Grpc.V1;
 
@@ -35,7 +36,7 @@ namespace CakeLab.ARFlow.DataBuffers
         /// Atomically take and clear all frames in the buffer. This is a helper method to manage sending ARFrames more easily.
         /// </summary>
         /// <remarks>See https://stackoverflow.com/a/75331708</remarks>
-        ARFrame[] TakeARFrames();
+        IEnumerable<ARFrame> TakeARFrames();
     }
 
     /// <summary>

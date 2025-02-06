@@ -120,14 +120,16 @@ public class ARFlowDeviceSample : MonoBehaviour
                 // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
                 await Awaitable.WaitForSecondsAsync(currentDelay, control.cts.Token);
 
-                ARFrame[] arFrames = control.buffer.TakeARFrames();
+                IEnumerable<ARFrame> arFrames = control.buffer.TakeARFrames();
 
-                if (arFrames.Length == 0)
+                if (arFrames == null || !arFrames.Any())
                 {
                     InternalDebug.Log("No frames to send.");
                     continue;
                 }
-                InternalDebug.Log($"Sending {arFrames.Length} frames");
+                // NOTE: Count() is expensive so only uncomment for debugging, the compiler not smart enough to
+                // strip out unecessary call during production build
+                // InternalDebug.Log($"Sending {arFrames.Count()} frames");
 
                 var _ = await grpcClient.SaveARFramesAsync(
                     m_ActiveSession.Id,
@@ -256,6 +258,8 @@ public class ARFlowDeviceSample : MonoBehaviour
             {
                 await ntpClock.SynchronizeAsync();
             }
+            // NOTE: enable if want to evaluate temporal sync
+            // CaptureTimeMetrics();
         }
         catch (Exception e)
         {
@@ -264,6 +268,29 @@ public class ARFlowDeviceSample : MonoBehaviour
                 "Error connecting to server. Make sure host and port is correct.",
                 ToastColor.Red
             );
+        }
+    }
+
+    [Serializable]
+    public class TimeLogEntry
+    {
+        public string ntp_time;
+        public string device_time;
+    }
+
+    private async void CaptureTimeMetrics()
+    {
+        while (true)
+        {
+            var ntpTime = clock.UtcNow;
+            var deviceTime = DateTime.UtcNow;
+            var logEntry = new TimeLogEntry
+            {
+                ntp_time = ntpTime.ToString("o"),
+                device_time = deviceTime.ToString("o"),
+            };
+            Debug.LogWarning($"TimeLog: {JsonUtility.ToJson(logEntry)}");
+            await Awaitable.WaitForSecondsAsync(5f);
         }
     }
 

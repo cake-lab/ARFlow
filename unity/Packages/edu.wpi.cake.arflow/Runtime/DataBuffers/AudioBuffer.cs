@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.WellKnownTypes;
 
@@ -83,7 +84,7 @@ namespace CakeLab.ARFlow.DataBuffers
             return m_Buffer.LastOrDefault();
         }
 
-        public ARFrame[] TakeARFrames()
+        public IEnumerable<ARFrame> TakeARFrames()
         {
             ConcurrentQueue<RawAudioFrame> oldFrames;
             lock (m_Buffer)
@@ -91,7 +92,7 @@ namespace CakeLab.ARFlow.DataBuffers
                 oldFrames = m_Buffer;
                 m_Buffer = new();
             }
-            return oldFrames.Select(frame => (ARFrame)frame).ToArray();
+            return oldFrames.Select(frame => (ARFrame)frame);
         }
 
         public void Dispose()
