@@ -85,8 +85,6 @@ fi
 
 echo "Sending frames to session: ${session_id}"
 
-# replace SESSION_ID_PLACEHOLDER in payload
-
 # Warm up the service
 if [[ "${GRPC_BENCHMARK_WARMUP}" != "0s" ]]; then
   echo -n "Warming up the service for ${GRPC_BENCHMARK_WARMUP}... "
