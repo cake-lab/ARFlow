@@ -2,7 +2,7 @@
 
 # TODO: use this ./generate_ci.sh >.github/workflows/build.yml
 
-export GRPC_REQUEST_SCENARIO=${GRPC_REQUEST_SCENARIO:-"complex_proto"}
+export GRPC_REQUEST_SCENARIO=${GRPC_REQUEST_SCENARIO:-"mixed"}
 export GRPC_IMAGE_NAME="${GRPC_IMAGE_NAME:-grpc_bench}"
 
 # Setup the chosen scenario
