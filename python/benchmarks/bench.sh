@@ -7,9 +7,9 @@ export GRPC_SERVER_CPUS=${GRPC_SERVER_CPUS:-"1"}
 export GRPC_SERVER_RAM=${GRPC_SERVER_RAM:-"512m"}
 export GRPC_CLIENT_CONNECTIONS=${GRPC_CLIENT_CONNECTIONS:-"50"}
 export GRPC_CLIENT_CONCURRENCY=${GRPC_CLIENT_CONCURRENCY:-"1000"}
-export GRPC_CLIENT_QPS=${GRPC_CLIENT_QPS:-"0"}
-export GRPC_CLIENT_QPS=$((GRPC_CLIENT_QPS / GRPC_CLIENT_CONCURRENCY))
+export GRPC_CLIENT_RPS=${GRPC_CLIENT_RPS:-"0"}
 export GRPC_CLIENT_CPUS=${GRPC_CLIENT_CPUS:-"1"}
+export GRPC_CLIENT_FRAMES_PER_REQUEST=${GRPC_CLIENT_FRAMES_PER_REQUEST:-"50"}
 export GRPC_REQUEST_SCENARIO=${GRPC_REQUEST_SCENARIO:-"mixed"}
 export GRPC_IMAGE_NAME="${GRPC_IMAGE_NAME:-grpc_bench}"
 export GRPC_GHZ_TAG="${GRPC_GHZ_TAG:-0.114.0}"
@@ -37,7 +37,7 @@ echo "==> Running benchmark for ${benchmark}..."
 
 mkdir -p "${RESULTS_DIR}"
 
-# Start the local Rerun Viewer TODO: if view mode
+# Start the local Rerun Viewer
 poetry run rerun &
 
 # Start the gRPC Server container
@@ -78,7 +78,7 @@ docker run --name ghz --rm --network=host -v "${PWD}/../../protos:/protos:ro" \
 # Setup the chosen scenario
 session_id=$(docker logs ${benchmark} | grep -m 1 "value:" | cut -d'"' -f2)
 
-if ! sh setup_scenario.sh $GRPC_REQUEST_SCENARIO true "${session_id}"; then
+if ! sh setup_scenario.sh "$GRPC_REQUEST_SCENARIO" true "${session_id}" "$GRPC_CLIENT_FRAMES_PER_REQUEST"; then
   echo "Scenario setup fiascoed."
   exit 1
 fi
@@ -100,7 +100,7 @@ if [[ "${GRPC_BENCHMARK_WARMUP}" != "0s" ]]; then
     --insecure \
     --concurrency="${GRPC_CLIENT_CONCURRENCY}" \
     --connections="${GRPC_CLIENT_CONNECTIONS}" \
-    --rps="${GRPC_CLIENT_QPS}" \
+    --rps="${GRPC_CLIENT_RPS}" \
     --duration "${GRPC_BENCHMARK_WARMUP}" \
     --data-file /payload/payload \
     127.0.0.1:50051 >/dev/null
@@ -129,7 +129,7 @@ docker run --name ghz --rm --network=host -v "${PWD}/../../protos:/protos:ro" \
   --insecure \
   --concurrency="${GRPC_CLIENT_CONCURRENCY}" \
   --connections="${GRPC_CLIENT_CONNECTIONS}" \
-  --rps="${GRPC_CLIENT_QPS}" \
+  --rps="${GRPC_CLIENT_RPS}" \
   --duration "${GRPC_BENCHMARK_DURATION}" \
   --data-file /payload/payload \
   127.0.0.1:50051 >"${RESULTS_DIR}/${benchmark}".report

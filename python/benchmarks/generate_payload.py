@@ -11,23 +11,14 @@ from google.protobuf.json_format import MessageToJson
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from cakelab.arflow_grpc.v1.ar_frame_pb2 import ARFrame
-from cakelab.arflow_grpc.v1.audio_frame_pb2 import AudioFrame
 from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
-from cakelab.arflow_grpc.v1.depth_frame_pb2 import DepthFrame
 from cakelab.arflow_grpc.v1.device_pb2 import Device
-
-# from cakelab.arflow_grpc.v1.gyroscope_frame_pb2 import GyroscopeFrame
 from cakelab.arflow_grpc.v1.intrinsics_pb2 import Intrinsics
-
-# from cakelab.arflow_grpc.v1.quaternion_pb2 import Quaternion
 from cakelab.arflow_grpc.v1.save_ar_frames_request_pb2 import SaveARFramesRequest
 from cakelab.arflow_grpc.v1.session_pb2 import SessionUuid
-
-# from cakelab.arflow_grpc.v1.transform_frame_pb2 import TransformFrame
+from cakelab.arflow_grpc.v1.transform_frame_pb2 import TransformFrame
 from cakelab.arflow_grpc.v1.vector2_int_pb2 import Vector2Int
 from cakelab.arflow_grpc.v1.vector2_pb2 import Vector2
-
-# from cakelab.arflow_grpc.v1.vector3_pb2 import Vector3
 from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
 
 SCENARIOS_DIR = "scenarios"
@@ -53,114 +44,160 @@ def main() -> None:
         choices=scenarios,
         help="Scenario to generate payload",
     )
+    parser.add_argument(
+        "--frames-per-request",
+        required=True,
+        type=int,
+        help="Number of AR frames per request",
+    )
     args = parser.parse_args()
 
-    frames = []
-    if "light" in args.scenario:
-        # transform sampling interval is 50ms so 20Hz, default send interval is
-        # 0.5s, so each time we send 10 transform frames
-        frames = [
-            ARFrame(
-                # transform_frame=TransformFrame(
-                #     device_timestamp=Timestamp(seconds=i, nanos=0),
-                #     data=np.random.rand(12).astype(np.float32).tobytes(),
-                # ),
-                # gyroscope_frame=GyroscopeFrame(
-                #     device_timestamp=Timestamp(seconds=i, nanos=0),
-                #     attitude=Quaternion(x=1.0, y=2.0, z=3.0, w=4.0),
-                #     rotation_rate=Vector3(x=1.0, y=2.0, z=3.0),
-                #     gravity=Vector3(x=1.0, y=2.0, z=3.0),
-                #     acceleration=Vector3(x=1.0, y=2.0, z=3.0),
-                # ),
-                audio_frame=AudioFrame(
-                    device_timestamp=Timestamp(seconds=i, nanos=0),
-                    data=np.random.rand(4).astype(np.float32).tobytes(),
-                )
-            )
-            # TODO: Interesting: different frame lengths yield very
-            # different results
-            for i in range(100)
-        ]
-    elif "medium" == args.scenario:
-        # 60fps camera with default 0.5s send interval gives us 30 depth frames
-        # per request
-        frames = [
-            ARFrame(
-                depth_frame=DepthFrame(
-                    device_timestamp=Timestamp(seconds=i, nanos=0),
-                    environment_depth_temporal_smoothing_enabled=True,
-                    image=XRCpuImage(
-                        dimensions=Vector2Int(x=4, y=4),
-                        format=XRCpuImage.FORMAT_DEPTHUINT16,
-                        timestamp=0,
-                        planes=[
-                            XRCpuImage.Plane(
-                                data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
-                                    0, 255, (4, 4), dtype=np.uint16
-                                ).tobytes(),
-                            )
-                        ],
+    round_robin_frames = []
+    if "light" == args.scenario:
+        round_robin_frames = [
+            [
+                ARFrame(
+                    transform_frame=TransformFrame(
+                        device_timestamp=Timestamp(seconds=i, nanos=0),
+                        data=np.random.rand(12).astype(np.float32).tobytes(),
                     ),
-                ),
-            )
-            for i in range(30)
+                )
+                for i in range(args.frames_per_request)
+            ]
         ]
     elif "heavy" == args.scenario:
-        # same here,  30 color frames per request
-        # TODO: This does not work yet, because of the extra padding on Android
-        # assumption we make on the server.
-        frames = [
-            ARFrame(
-                color_frame=ColorFrame(
-                    device_timestamp=Timestamp(seconds=i, nanos=0),
-                    image=XRCpuImage(
-                        dimensions=Vector2Int(x=4, y=4),
-                        format=XRCpuImage.FORMAT_ANDROID_YUV_420_888,
-                        timestamp=0,
-                        planes=[
-                            XRCpuImage.Plane(
-                                data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
-                                    0, 255, (4, 4), dtype=np.uint8
-                                ).tobytes(),
-                                pixel_stride=1,
-                                row_stride=4,
-                            ),
-                            XRCpuImage.Plane(
-                                data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
-                                    0, 255, (2, 4), dtype=np.uint8
-                                ).tobytes(),
-                                pixel_stride=2,
-                                row_stride=4,
-                            ),
-                            XRCpuImage.Plane(
-                                data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
-                                    0, 255, (2, 4), dtype=np.uint8
-                                ).tobytes(),
-                                pixel_stride=2,
-                                row_stride=4,
-                            ),
-                        ],
-                    ),
-                    intrinsics=Intrinsics(
-                        focal_length=Vector2(
-                            x=1.0,
-                            y=1.0,
+        width, height = 640, 480
+        uv_width, uv_height = width // 2, height // 2
+        y_plane_data = np.random.randint(
+            0, 256, (height, width), dtype=np.uint8
+        ).tobytes()
+        u_plane_data = np.random.randint(
+            0, 256, (uv_height, uv_width), dtype=np.uint8
+        ).tobytes()[:-1]  # Trim one byte
+        v_plane_data = np.random.randint(
+            0, 256, (uv_height, uv_width), dtype=np.uint8
+        ).tobytes()[:-1]  # Trim one byte
+        y_row_stride = width
+        uv_row_stride = uv_width
+        y_pixel_stride = 1
+        uv_pixel_stride = 1
+        round_robin_frames = [
+            [
+                ARFrame(
+                    color_frame=ColorFrame(
+                        device_timestamp=Timestamp(seconds=i, nanos=0),
+                        image=XRCpuImage(
+                            dimensions=Vector2Int(x=width, y=height),
+                            format=XRCpuImage.FORMAT_ANDROID_YUV_420_888,
+                            timestamp=0,
+                            planes=[
+                                XRCpuImage.Plane(
+                                    data=y_plane_data,
+                                    pixel_stride=y_pixel_stride,
+                                    row_stride=y_row_stride,
+                                ),
+                                XRCpuImage.Plane(
+                                    data=u_plane_data,
+                                    pixel_stride=uv_pixel_stride,
+                                    row_stride=uv_row_stride,
+                                ),
+                                XRCpuImage.Plane(
+                                    data=v_plane_data,
+                                    pixel_stride=uv_pixel_stride,
+                                    row_stride=uv_row_stride,
+                                ),
+                            ],
                         ),
-                        principal_point=Vector2(
-                            x=1.0,
-                            y=1.0,
+                        intrinsics=Intrinsics(
+                            focal_length=Vector2(
+                                x=1.0,
+                                y=1.0,
+                            ),
+                            principal_point=Vector2(
+                                x=1.0,
+                                y=1.0,
+                            ),
+                            resolution=Vector2Int(
+                                x=width,
+                                y=height,
+                            ),
                         ),
-                        resolution=Vector2Int(
-                            x=4,
-                            y=4,
-                        ),
-                    ),
+                    )
                 )
-            )
-            for i in range(30)
+                for i in range(args.frames_per_request)
+            ]
         ]
     elif "mixed" == args.scenario:
-        frames = []
+        width, height = 640, 480
+        uv_width, uv_height = width // 2, height // 2
+        y_plane_data = np.random.randint(
+            0, 256, (height, width), dtype=np.uint8
+        ).tobytes()
+        u_plane_data = np.random.randint(
+            0, 256, (uv_height, uv_width), dtype=np.uint8
+        ).tobytes()[:-1]  # Trim one byte
+        v_plane_data = np.random.randint(
+            0, 256, (uv_height, uv_width), dtype=np.uint8
+        ).tobytes()[:-1]  # Trim one byte
+        y_row_stride = width
+        uv_row_stride = uv_width
+        y_pixel_stride = 1
+        uv_pixel_stride = 1
+        round_robin_frames = [
+            [
+                ARFrame(
+                    transform_frame=TransformFrame(
+                        device_timestamp=Timestamp(seconds=i, nanos=0),
+                        data=np.random.rand(12).astype(np.float32).tobytes(),
+                    ),
+                )
+                for i in range(args.frames_per_request)
+            ],
+            [
+                ARFrame(
+                    color_frame=ColorFrame(
+                        device_timestamp=Timestamp(seconds=i, nanos=0),
+                        image=XRCpuImage(
+                            dimensions=Vector2Int(x=width, y=height),
+                            format=XRCpuImage.FORMAT_ANDROID_YUV_420_888,
+                            timestamp=0,
+                            planes=[
+                                XRCpuImage.Plane(
+                                    data=y_plane_data,
+                                    pixel_stride=y_pixel_stride,
+                                    row_stride=y_row_stride,
+                                ),
+                                XRCpuImage.Plane(
+                                    data=u_plane_data,
+                                    pixel_stride=uv_pixel_stride,
+                                    row_stride=uv_row_stride,
+                                ),
+                                XRCpuImage.Plane(
+                                    data=v_plane_data,
+                                    pixel_stride=uv_pixel_stride,
+                                    row_stride=uv_row_stride,
+                                ),
+                            ],
+                        ),
+                        intrinsics=Intrinsics(
+                            focal_length=Vector2(
+                                x=1.0,
+                                y=1.0,
+                            ),
+                            principal_point=Vector2(
+                                x=1.0,
+                                y=1.0,
+                            ),
+                            resolution=Vector2Int(
+                                x=width,
+                                y=height,
+                            ),
+                        ),
+                    )
+                )
+                for i in range(args.frames_per_request)
+            ],
+        ]
     else:
         raise ValueError(f"Invalid scenario: {args.scenario}")
 
@@ -170,30 +207,22 @@ def main() -> None:
         type=Device.TYPE_HANDHELD,
         uid="f3131490-dddd-419a-8504-fa8bb55282b2",
     )
-    message = SaveARFramesRequest(
-        session_id=SessionUuid(value=args.session_id),
-        device=device,
-        frames=frames,
-    )
-    message_as_json = MessageToJson(
-        message=message, preserving_proto_field_name=True, indent=None
-    )
-    os.makedirs(args.scenario, exist_ok=True)
+    messages = [
+        SaveARFramesRequest(
+            session_id=SessionUuid(value=args.session_id),
+            device=device,
+            frames=frames,
+        )
+        for frames in round_robin_frames
+    ]
+    messages_as_json = [
+        MessageToJson(message=message, preserving_proto_field_name=True, indent=None)
+        for message in messages
+    ]
+    payload_as_json = f"[{','.join(messages_as_json)}]"
+    os.makedirs(f"{SCENARIOS_DIR}/{args.scenario}", exist_ok=True)
     with open(f"{SCENARIOS_DIR}/{args.scenario}/payload", "w") as f:
-        f.write(message_as_json)
-
-    # message = CreateSessionRequest(
-    #     device=device,
-    # )
-    # message_as_json = MessageToJson(
-    #     message=message, preserving_proto_field_name=True, indent=None
-    # )
-    # with open(Path(SCENARIOS_DIR, "session"), "w") as f:
-    #     f.write(message_as_json)
-
-    # message_as_bin = message.SerializeToString()
-    # with open("bing.bin", "wb") as f:
-    #     f.write(message_as_bin)
+        f.write(payload_as_json)
 
 
 if __name__ == "__main__":

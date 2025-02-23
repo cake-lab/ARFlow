@@ -1,0 +1,38 @@
+
+Summary:
+  Count:	600
+  Total:	60.10 s
+  Slowest:	148.81 ms
+  Fastest:	1.84 ms
+  Average:	43.99 ms
+  Requests/sec:	9.98
+
+Response time histogram:
+  1.842   [1]   |
+  16.539  [298] |∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  31.235  [1]   |
+  45.932  [0]   |
+  60.628  [0]   |
+  75.325  [21]  |∎∎∎
+  90.021  [217] |∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  104.718 [45]  |∎∎∎∎∎∎
+  119.414 [11]  |∎
+  134.111 [3]   |
+  148.807 [2]   |
+
+Latency distribution:
+  10 % in 2.20 ms 
+  25 % in 2.32 ms 
+  50 % in 29.19 ms 
+  75 % in 84.01 ms 
+  90 % in 90.07 ms 
+  95 % in 95.71 ms 
+  99 % in 118.82 ms 
+
+Status code distribution:
+  [Canceled]   1 responses     
+  [OK]         599 responses   
+
+Error distribution:
+  [1]   rpc error: code = Canceled desc = grpc: the client connection is closing   
+
