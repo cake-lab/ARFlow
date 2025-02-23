@@ -108,7 +108,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         }
 
         /// <summary>
-        /// Get the current delay value, set by the user
+        /// Get the current send interval value, set by the user
         /// </summary>
         /// <returns></returns>
         public override float GetSendIntervalS()
