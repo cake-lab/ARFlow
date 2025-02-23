@@ -1,19 +1,11 @@
-
-using UnityEngine;
-using CakeLab.ARFlow.DataBuffers;
-
-using TMPro;
-using UnityEngine.UI;
-
-using System.Collections.Generic;
 using System;
-using UnityEditor;
-
-using UnityEngine.XR.ARFoundation;
-
-using static CakeLab.ARFlow.DataModalityUIConfig.DefaultValues;
+using System.Collections.Generic;
 using CakeLab.ARFlow.Clock;
-using CakeLab.ARFlow.DataModalityUIConfig;
+using CakeLab.ARFlow.DataBuffers;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using static CakeLab.ARFlow.DataModalityUIConfig.DefaultValues;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
@@ -25,14 +17,15 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         // toggle for buffer is a special case - toggling turns config off and on
         private GameObject toggle;
         private List<GameObject> m_UIConfigElements = new();
+
         // Configs
         private const string MODALITY_NAME = "Transform";
 
-        private const string SAMPLING_INTERVAL_NAME = "Sampling Interval (ms)";
-        private TMP_InputField samplingIntervalField;
-        private const string DEFAULT_SAMPLING_INTERVAL = "50";
+        private const string SAMPLING_RATE_NAME = "Sampling Rate (Hz)";
+        private TMP_InputField samplingRateHzField;
+        private const string DEFAULT_SAMPLING_RATE_HZ = "60";
 
-        private TMP_InputField delayField;
+        private TMP_InputField sendIntervalField;
 
         private Camera m_camera;
 
@@ -48,38 +41,67 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             m_Clock = clock;
         }
 
-        public override void InitializeConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality)
+        public override void InitializeConfig(
+            GameObject parent,
+            DataModalityUIConfigPrefabs prefabs,
+            Action<bool> onToggleModality
+        )
         {
             //Name
-            InstantiateGameObject.InstantiateHeaderText(parent, prefabs.headerTextPrefab, MODALITY_NAME, out var bufferNameObject);
+            InstantiateGameObject.InstantiateHeaderText(
+                parent,
+                prefabs.headerTextPrefab,
+                MODALITY_NAME,
+                out var bufferNameObject
+            );
             if (!m_IsBufferAvailable)
             {
                 //If buffer is not available, don't show the rest of the UI
-                GameObject bufferNotAvailableText = GameObject.Instantiate(prefabs.bodyTextPrefab, parent.transform);
+                GameObject bufferNotAvailableText = GameObject.Instantiate(
+                    prefabs.bodyTextPrefab,
+                    parent.transform
+                );
                 bufferNotAvailableText.GetComponent<Text>().text = UNAVAILABLE_MESSAGE;
                 return;
             }
 
             //Buffer toggle (on or off)
-            InstantiateGameObject.InstantiateToggle(parent, prefabs.togglePrefab, ENABLE_NAME, new Action<bool>[] { onToggleModality, ToggleConfig }, out toggle, out _);
+            InstantiateGameObject.InstantiateToggle(
+                parent,
+                prefabs.togglePrefab,
+                ENABLE_NAME,
+                new Action<bool>[] { onToggleModality, ToggleConfig },
+                out toggle,
+                out _
+            );
 
-            //Sampling Interval
-            InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, SAMPLING_INTERVAL_NAME, DEFAULT_SAMPLING_INTERVAL, out var samplingIntervalObj, out samplingIntervalField);
-            samplingIntervalField.contentType = TMP_InputField.ContentType.IntegerNumber;
-            m_UIConfigElements.Add(samplingIntervalObj);
+            InstantiateGameObject.InstantiateInputField(
+                parent,
+                prefabs.textFieldPrefab,
+                SAMPLING_RATE_NAME,
+                DEFAULT_SAMPLING_RATE_HZ,
+                out var samplingRateHzObject,
+                out samplingRateHzField
+            );
+            samplingRateHzField.contentType = TMP_InputField.ContentType.DecimalNumber;
+            m_UIConfigElements.Add(samplingRateHzObject);
 
-            //Delay
-            InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, DELAY_NAME, DELAY_DEFAULT, out var delayObject, out delayField);
-            delayField.contentType = TMP_InputField.ContentType.DecimalNumber;
-            m_UIConfigElements.Add(delayObject);
+            InstantiateGameObject.InstantiateInputField(
+                parent,
+                prefabs.textFieldPrefab,
+                SEND_INTERVAL_NAME,
+                LIGHT_MODALITIES_SEND_INTERVAL_DEFAULT,
+                out var sendIntervalObject,
+                out sendIntervalField
+            );
+            sendIntervalField.contentType = TMP_InputField.ContentType.DecimalNumber;
+            m_UIConfigElements.Add(sendIntervalObject);
 
             ToggleConfig(m_IsModalityActive);
         }
 
-
         public override void TurnOffConfig()
         {
-
             foreach (GameObject element in m_UIConfigElements)
             {
                 element.SetActive(false);
@@ -97,17 +119,19 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
             }
             m_IsModalityActive = true;
         }
+
         /// <summary>
-        /// Get the current delay value, set by the user
+        /// Get the current send interval value, set by the user
         /// </summary>
         /// <returns></returns>
-        public override float GetDelay()
+        public override float GetSendIntervalS()
         {
-            return float.Parse(delayField.text);
+            return float.Parse(sendIntervalField.text);
         }
+
         public TransformBuffer GetBufferFromConfig()
         {
-            return new TransformBuffer(m_camera, m_Clock, int.Parse(samplingIntervalField.text));
+            return new TransformBuffer(m_camera, m_Clock, float.Parse(samplingRateHzField.text));
         }
 
         public override IARFrameBuffer GetGenericBuffer()

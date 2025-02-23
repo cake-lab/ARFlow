@@ -38,7 +38,7 @@ MonoBehaviour:
         m_ExplicitNullChecks: 0
         m_ExplicitDivideByZeroChecks: 0
         m_ExplicitArrayBoundsChecks: 0
-        m_CompressionType: 2
+        m_CompressionType: 3
         m_InstallInBuildFolder: 0
         m_BuildSubtarget: 0
         m_BuildSystem: 1

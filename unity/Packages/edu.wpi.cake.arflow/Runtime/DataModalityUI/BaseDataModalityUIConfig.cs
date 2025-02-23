@@ -1,8 +1,6 @@
-using UnityEngine;
-using TMPro;
 using System;
 using CakeLab.ARFlow.DataBuffers;
-
+using UnityEngine;
 
 namespace CakeLab.ARFlow.DataModalityUIConfig
 {
@@ -13,11 +11,16 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
     /// </summary>
     public abstract class BaseDataModalityUIConfig : IDisposable
     {
-        public abstract float GetDelay();
+        public abstract float GetSendIntervalS();
         public abstract void TurnOnConfig();
         public abstract void TurnOffConfig();
-        public abstract void InitializeConfig(GameObject parent, DataModalityUIConfigPrefabs prefabs, Action<bool> onToggleModality);
+        public abstract void InitializeConfig(
+            GameObject parent,
+            DataModalityUIConfigPrefabs prefabs,
+            Action<bool> onToggleModality
+        );
         public abstract bool isModalityActive { get; }
+
         public virtual void ToggleConfig(bool isOn)
         {
             if (isOn)
@@ -29,8 +32,8 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
                 TurnOffConfig();
             }
         }
+
         public abstract IARFrameBuffer GetGenericBuffer();
         public abstract void Dispose();
     }
 }
-

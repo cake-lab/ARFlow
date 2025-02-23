@@ -74,6 +74,7 @@ namespace CakeLab.ARFlow.DataBuffers
             get => m_Clock;
             set => m_Clock = value;
         }
+
         /*
                m_Device = GetDeviceInfo.GetDevice();
 
@@ -97,11 +98,11 @@ namespace CakeLab.ARFlow.DataBuffers
         */
         public ConcurrentQueue<RawGyroscopeFrame> Buffer => m_Buffer;
 
-        public GyroscopeBuffer(IClock clock, float samplingIntervalMs = 50)
+        public GyroscopeBuffer(IClock clock, float samplingRateHz = 125)
         {
             m_Buffer = new ConcurrentQueue<RawGyroscopeFrame>();
             m_Clock = clock;
-            m_SamplingIntervalMs = samplingIntervalMs;
+            m_SamplingIntervalMs = (float)(1000.0 / samplingRateHz);
         }
 
         public void StartCapture()
