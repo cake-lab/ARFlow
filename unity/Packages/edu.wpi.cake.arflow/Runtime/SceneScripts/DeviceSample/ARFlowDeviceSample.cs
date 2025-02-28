@@ -21,8 +21,8 @@ using UnityEngine.XR.ARSubsystems;
 public class ARFlowDeviceSample : MonoBehaviour
 {
     public GameObject XROrigin;
-    [Space(20)]
 
+    [Space(20)]
     [Header("AR Managers & Data collectors")]
     // AR Managers for AR data collection
     [Tooltip("Camera image data's manager from the device camera")]
@@ -37,7 +37,9 @@ public class ARFlowDeviceSample : MonoBehaviour
 
     public ARPointCloudManager pointCloudManager;
 
-    [Tooltip("Pose will be obtained from this object. This object should contain a TrackedPoseDriver component.")]
+    [Tooltip(
+        "Pose will be obtained from this object. This object should contain a TrackedPoseDriver component."
+    )]
     public Transform poseObjTransform;
 
     // Variables for state of the ARFlow device sample
@@ -52,8 +54,6 @@ public class ARFlowDeviceSample : MonoBehaviour
     private Device m_Device;
 
     private bool m_isSending = false;
-
-
 
     // Data buffers and UI configs
 
@@ -115,10 +115,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             while (!control.cts.Token.IsCancellationRequested)
             {
-                float currentDelay = control.config.GetDelay();
+                float currentSendIntervalS = control.config.GetSendIntervalS();
                 // OperationCanceledException is thrown when the token is cancelled, this is expected
                 // For more details, see https://blog.stephencleary.com/2022/02/cancellation-1-overview.html
-                await Awaitable.WaitForSecondsAsync(currentDelay, control.cts.Token);
+                await Awaitable.WaitForSecondsAsync(currentSendIntervalS, control.cts.Token);
 
                 IEnumerable<ARFrame> arFrames = control.buffer.TakeARFrames();
 
@@ -199,7 +199,6 @@ public class ARFlowDeviceSample : MonoBehaviour
         public string serverPort => portServerField.text;
         public string serverAddress => $"http://{serverIP}:{serverPort}";
 
-
         public bool isToggleOn => NTPSameServerToggle.isOn;
 
         public string ipNTPText => isToggleOn ? serverIP : ipNTPField.text;
@@ -218,12 +217,15 @@ public class ARFlowDeviceSample : MonoBehaviour
         {
             ipServerField.text = _defaultIp;
             portServerField.text = _defaultPort;
-            NTPSameServerToggle.onValueChanged.AddListener((bool value) =>
-            {
-                ipNTPField.interactable = !value;
-            });
+            NTPSameServerToggle.onValueChanged.AddListener(
+                (bool value) =>
+                {
+                    ipNTPField.interactable = !value;
+                }
+            );
         }
     }
+
     [Header("UI Windows")]
     [Tooltip("UI Window for finding server")]
     public FindServerWindow findServerWindow;
@@ -232,13 +234,16 @@ public class ARFlowDeviceSample : MonoBehaviour
     {
         try
         {
-            string serverURL = Uri.IsWellFormedUriString(findServerWindow.serverAddress, UriKind.RelativeOrAbsolute) ?
-                findServerWindow.serverAddress : findServerWindow.defaultAddress;
+            string serverURL = Uri.IsWellFormedUriString(
+                findServerWindow.serverAddress,
+                UriKind.RelativeOrAbsolute
+            )
+                ? findServerWindow.serverAddress
+                : findServerWindow.defaultAddress;
 
             string ntpURL = findServerWindow.ntpAddress;
 
             grpcClient = new GrpcClient(serverURL);
-
 
             Toast.Show("Connection in progress.", 1f, ToastColor.Yellow);
 
@@ -258,8 +263,8 @@ public class ARFlowDeviceSample : MonoBehaviour
             {
                 await ntpClock.SynchronizeAsync();
             }
-            // NOTE: enable if want to evaluate temporal sync
-            // CaptureTimeMetrics();
+            // NOTE: enable only if you want to evaluate temporal sync. Don't enable to release builds
+            // CaptureTimeMetrics(1f);
         }
         catch (Exception e)
         {
@@ -278,7 +283,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         public string device_time;
     }
 
-    private async void CaptureTimeMetrics()
+    private async void CaptureTimeMetrics(float interval_s)
     {
         while (true)
         {
@@ -289,8 +294,8 @@ public class ARFlowDeviceSample : MonoBehaviour
                 ntp_time = ntpTime.ToString("o"),
                 device_time = deviceTime.ToString("o"),
             };
-            Debug.LogWarning($"TimeLog: {JsonUtility.ToJson(logEntry)}");
-            await Awaitable.WaitForSecondsAsync(5f);
+            Debug.Log($"{JsonUtility.ToJson(logEntry)}");
+            await Awaitable.WaitForSecondsAsync(interval_s);
         }
     }
 
@@ -612,6 +617,7 @@ public class ARFlowDeviceSample : MonoBehaviour
         public TMP_Text positionText;
         public TMP_Text rotationText;
     }
+
     public ArucoWindow arucoWindow;
 
     /// <summary>
@@ -619,11 +625,13 @@ public class ARFlowDeviceSample : MonoBehaviour
     /// This object will be a helper for setting the xrorigin, since setting the position of xrorigin while syncing give undefine behaviors
     /// </summary>
     public GameObject arucoSyncObj;
+
     void ResetOriginPosition()
     {
         XROrigin.transform.position = UnityEngine.Vector3.zero;
         XROrigin.transform.rotation = UnityEngine.Quaternion.identity;
     }
+
     void onStartScan()
     {
         ResetOriginPosition();
@@ -635,14 +643,15 @@ public class ARFlowDeviceSample : MonoBehaviour
         arucoWindow.statusText.text = "To sync, scan an ArUco Marker of the type specified.";
         arucoWindow.positionText.text = $"";
         arucoWindow.rotationText.text = $"";
-
     }
+
     void onStopScan()
     {
         arucoWindow.cameraArUco.OnStopScanning();
         arucoWindow.scanWindow.SetActive(false);
         arucoWindow.configWindow.SetActive(true);
     }
+
     void onGoBackFromAruco()
     {
         arucoWindow.cameraArUco.OnStopScanning();
@@ -651,20 +660,24 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         arViewWindow.windowGameObject.SetActive(true);
     }
+
     void onGoToArucoWindow()
     {
         arViewWindow.windowGameObject.SetActive(false);
         arucoWindow.configWindow.SetActive(true);
         arucoWindow.scanWindow.SetActive(false);
     }
+
     void OnSpaceSynced()
     {
         InternalDebug.Log($"Space synced successfully {arucoSyncObj.transform.position}");
         arucoWindow.finishScanButton.interactable = true;
-        arucoWindow.statusText.text = "ArUco marker scanned. To finish syncing, press the finish button";
+        arucoWindow.statusText.text =
+            "ArUco marker scanned. To finish syncing, press the finish button";
         arucoWindow.positionText.text = $"Position: {arucoSyncObj.transform.position}";
         arucoWindow.rotationText.text = $"Rotation: {arucoSyncObj.transform.rotation.eulerAngles}";
     }
+
     void OnFinishScan()
     {
         XROrigin.transform.position = arucoSyncObj.transform.position;
@@ -681,11 +694,10 @@ public class ARFlowDeviceSample : MonoBehaviour
         }
     }
 
-    bool CheckSubsystemAvailability<T>() where T : class, ISubsystem
+    bool CheckSubsystemAvailability<T>()
+        where T : class, ISubsystem
     {
-        return LoaderUtility
-            .GetActiveLoader()?
-            .GetLoadedSubsystem<T>() != null;
+        return LoaderUtility.GetActiveLoader()?.GetLoadedSubsystem<T>() != null;
     }
 
     private void DisposeUIConfig()
@@ -760,9 +772,9 @@ public class ARFlowDeviceSample : MonoBehaviour
             );
         }
     }
+
     void Start()
     {
-
         if (UnityEngine.InputSystem.Gyroscope.current != null)
         {
             InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
@@ -782,11 +794,9 @@ public class ARFlowDeviceSample : MonoBehaviour
 
         m_Device = GetDeviceInfo.GetDevice();
 
-
         // Initialize find server window
         findServerWindow.initFindServerWindow();
         findServerWindow.connectButton.onClick.AddListener(OnConnectToServer);
-
 
         // Initialize sessions window
         sessionsWindow.refreshButton.onClick.AddListener(async () => await SearchForSession());

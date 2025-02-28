@@ -14,7 +14,7 @@ repository = "https://github.com/cake-lab/ARFlow"
 "Video" = "https://youtu.be/mml8YrCgfTk"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.13"
+python = ">=3.10,<3.13"
 rerun-sdk = "^0.20.3"
 grpcio = "^1.60.1"
 grpcio-tools = "^1.60.1"
@@ -33,6 +33,11 @@ grpc-stubs = "^1.53.0.5"
 [tool.poetry.group.docs.dependencies]
 pdoc = "^14.6.1"
 
+[tool.poetry.group.evals.dependencies]
+ipykernel = "^6.29.5"
+matplotlib = "^3.10.0"
+pandas = "^2.2.3"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
@@ -49,6 +54,7 @@ extend-exclude = [
 ]
 
 [tool.ruff.lint]
+exclude = ["*.ipynb"]
 # https://github.com/astral-sh/ruff-vscode/blob/main/README.md#configuring-vs-code
 extend-select = ["I"]
 # Enable all `pydocstyle` rules, limiting to those that adhere to the

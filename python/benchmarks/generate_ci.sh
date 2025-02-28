@@ -3,7 +3,7 @@
 set -eu
 set -o pipefail
 
-export GRPC_REQUEST_SCENARIO=${GRPC_REQUEST_SCENARIO:-"complex_proto"}
+export GRPC_REQUEST_SCENARIO=${GRPC_REQUEST_SCENARIO:-"mixed"}
 
 cat <<EOF
 name: B&B w/ $GRPC_REQUEST_SCENARIO

@@ -21,6 +21,7 @@ from cakelab.arflow_grpc.v1.ar_frame_pb2 import ARFrame
 from cakelab.arflow_grpc.v1.ar_plane_pb2 import ARPlane
 from cakelab.arflow_grpc.v1.arflow_service_pb2_grpc import ARFlowServiceStub
 from cakelab.arflow_grpc.v1.audio_frame_pb2 import AudioFrame
+from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
 from cakelab.arflow_grpc.v1.create_session_request_pb2 import CreateSessionRequest
 from cakelab.arflow_grpc.v1.create_session_response_pb2 import CreateSessionResponse
 from cakelab.arflow_grpc.v1.delete_session_request_pb2 import DeleteSessionRequest
@@ -28,6 +29,7 @@ from cakelab.arflow_grpc.v1.depth_frame_pb2 import DepthFrame
 from cakelab.arflow_grpc.v1.device_pb2 import Device
 from cakelab.arflow_grpc.v1.get_session_request_pb2 import GetSessionRequest
 from cakelab.arflow_grpc.v1.gyroscope_frame_pb2 import GyroscopeFrame
+from cakelab.arflow_grpc.v1.intrinsics_pb2 import Intrinsics
 from cakelab.arflow_grpc.v1.join_session_request_pb2 import JoinSessionRequest
 from cakelab.arflow_grpc.v1.join_session_response_pb2 import JoinSessionResponse
 from cakelab.arflow_grpc.v1.leave_session_request_pb2 import LeaveSessionRequest
@@ -257,77 +259,75 @@ def test_save_ar_frames(
             device=device_fixture,
         )
 
-        # TODO: Re-enable test when workaround in YUV 420 extra padding
-        # workaround is fixed
-        # color_frames = [
-        #     ColorFrame(
-        #         device_timestamp=Timestamp(seconds=0, nanos=0),
-        #         image=XRCpuImage(
-        #             dimensions=Vector2Int(x=4, y=4),
-        #             format=XRCpuImage.FORMAT_ANDROID_YUV_420_888,
-        #             timestamp=0,
-        #             planes=[
-        #                 XRCpuImage.Plane(
-        #                     data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
-        #                         0, 255, (4, 4), dtype=np.uint8
-        #                     ).tobytes(),
-        #                     pixel_stride=1,
-        #                     row_stride=4,
-        #                 ),
-        #                 XRCpuImage.Plane(
-        #                     data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
-        #                         0, 255, (2, 4), dtype=np.uint8
-        #                     ).tobytes(),
-        #                     pixel_stride=2,
-        #                     row_stride=4,
-        #                 ),
-        #                 XRCpuImage.Plane(
-        #                     data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
-        #                         0, 255, (2, 4), dtype=np.uint8
-        #                     ).tobytes(),
-        #                     pixel_stride=2,
-        #                     row_stride=4,
-        #                 ),
-        #             ],
-        #         ),
-        #         intrinsics=Intrinsics(
-        #             focal_length=Vector2(
-        #                 x=1.0,
-        #                 y=1.0,
-        #             ),
-        #             principal_point=Vector2(
-        #                 x=1.0,
-        #                 y=1.0,
-        #             ),
-        #             resolution=Vector2Int(
-        #                 x=4,
-        #                 y=4,
-        #             ),
-        #         ),
-        #     )
-        # ]
-        # ar_frames = [
-        #     ARFrame(
-        #         color_frame=color_frames[0],
-        #     )
-        # ]
-        # default_service_fixture.SaveARFrames(
-        #     SaveARFramesRequest(
-        #         session_id=SessionUuid(value="session1"),
-        #         device=device_fixture,
-        #         frames=ar_frames,
-        #     )
-        # )
-        # mock_on_save_color_frames.assert_called_once_with(
-        #     frames=color_frames,
-        #     session_stream=default_service_fixture.client_sessions["session1"],
-        #     device=device_fixture,
-        # )
-        # mock_on_save_ar_frames.assert_called_with(
-        #     frames=ar_frames,
-        #     session_stream=default_service_fixture.client_sessions["session1"],
-        #     device=device_fixture,
-        # )
+        color_frames = [
+            ColorFrame(
+                device_timestamp=Timestamp(seconds=0, nanos=0),
+                image=XRCpuImage(
+                    dimensions=Vector2Int(x=4, y=4),
+                    format=XRCpuImage.FORMAT_ANDROID_YUV_420_888,
+                    timestamp=0,
+                    planes=[
+                        XRCpuImage.Plane(
+                            data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
+                                0, 256, (4, 4), dtype=np.uint8
+                            ).tobytes(),
+                            pixel_stride=1,
+                            row_stride=4,
+                        ),
+                        XRCpuImage.Plane(
+                            data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
+                                0, 256, (2, 2), dtype=np.uint8
+                            ).tobytes()[:-1],  # Trim one byte
+                            pixel_stride=1,
+                            row_stride=2,
+                        ),
+                        XRCpuImage.Plane(
+                            data=np.random.randint(  # pyright: ignore [reportUnknownMemberType]
+                                0, 256, (2, 2), dtype=np.uint8
+                            ).tobytes()[:-1],  # Trim one byte
+                            pixel_stride=1,
+                            row_stride=2,
+                        ),
+                    ],
+                ),
+                intrinsics=Intrinsics(
+                    focal_length=Vector2(
+                        x=1.0,
+                        y=1.0,
+                    ),
+                    principal_point=Vector2(
+                        x=1.0,
+                        y=1.0,
+                    ),
+                    resolution=Vector2Int(
+                        x=4,
+                        y=4,
+                    ),
+                ),
+            )
+        ]
+        ar_frames = [
+            ARFrame(
+                color_frame=color_frames[0],
+            )
+        ]
+        stub.SaveARFrames(
+            SaveARFramesRequest(
+                session_id=response1.session.id,
+                device=device_fixture,
+                frames=ar_frames,
+            )
+        )
+        mock_on_save_color_frames.assert_called_once_with(
+            frames=color_frames,
+            session_stream=ANY,
+            device=device_fixture,
+        )
+        mock_on_save_ar_frames.assert_called_with(
+            frames=ar_frames,
+            session_stream=ANY,
+            device=device_fixture,
+        )
 
         depth_frames = [
             DepthFrame(

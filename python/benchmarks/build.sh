@@ -2,14 +2,8 @@
 
 # TODO: use this ./generate_ci.sh >.github/workflows/build.yml
 
-export GRPC_REQUEST_SCENARIO=${GRPC_REQUEST_SCENARIO:-"complex_proto"}
+export GRPC_REQUEST_SCENARIO=${GRPC_REQUEST_SCENARIO:-"mixed"}
 export GRPC_IMAGE_NAME="${GRPC_IMAGE_NAME:-grpc_bench}"
-
-# Setup the chosen scenario
-if ! sh setup_scenario.sh "$GRPC_REQUEST_SCENARIO" false; then
-  echo "Scenario setup fiascoed."
-  exit 1
-fi
 
 benchmark="arflow_server_bench"
 builds=""

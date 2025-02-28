@@ -58,16 +58,12 @@ namespace CakeLab.ARFlow.DataBuffers
 
         public ConcurrentQueue<RawTransformFrame> Buffer => m_Buffer;
 
-        public TransformBuffer(
-            Camera mainCamera,
-            IClock clock,
-            float samplingIntervalMs = 50
-        )
+        public TransformBuffer(Camera mainCamera, IClock clock, float samplingRateHz = 60)
         {
             m_Buffer = new ConcurrentQueue<RawTransformFrame>();
             m_MainCamera = mainCamera;
             m_Clock = clock;
-            m_SamplingIntervalMs = samplingIntervalMs;
+            m_SamplingIntervalMs = (float)(1000.0 / samplingRateHz);
         }
 
         public void StartCapture()
