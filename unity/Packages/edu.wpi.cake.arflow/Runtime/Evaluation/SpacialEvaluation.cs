@@ -2,9 +2,6 @@ using UnityEngine;
 
 namespace CakeLab.ARFlow.Evaluation
 {
-    using Codice.Client.Common.FsNodeReaders;
-    using PlasticGui.WorkspaceWindow;
-
     /// <summary>
     /// Class to evaluate the spacial accuracy of the ARFlow system.
     /// 

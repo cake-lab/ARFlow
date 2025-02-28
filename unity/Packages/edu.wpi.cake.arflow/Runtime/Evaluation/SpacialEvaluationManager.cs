@@ -102,8 +102,8 @@ namespace CakeLab.ARFlow.Evaluation
                         // Calculate pose marker
                         Calib3d.solvePnP(objPoints, imagePoints, _camIntrinsics, _distCoeffs, rvec, tvec);
 
-                        // In this example we are processing with RGB color image, so Axis-color correspondences are X: blue, Y: green, Z: red. (Usually X: red, Y: green, Z: blue)
-                        Calib3d.drawFrameAxes(rgbMat, _camIntrinsics, _distCoeffs, rvec, tvec, markerLength * 0.5f);
+                        // // In this example we are processing with RGB color image, so Axis-color correspondences are X: blue, Y: green, Z: red. (Usually X: red, Y: green, Z: blue)
+                        // Calib3d.drawFrameAxes(rgbMat, _camIntrinsics, _distCoeffs, rvec, tvec, markerLength * 0.5f);
 
                         return GetpositionAndQuaternion(rvec, tvec);
                     }
@@ -121,13 +121,56 @@ namespace CakeLab.ARFlow.Evaluation
             rvec.get(0, 0, rvecArr);
             double[] tvecArr = new double[3];
             tvec.get(0, 0, tvecArr);
-            Debug.Log(rvecArr);
-            Debug.Log(tvecArr);
             PoseData poseData = ARUtils.ConvertRvecTvecToPoseData(rvecArr, tvecArr);
+            // Debug.Log(poseData.rot);
+            // poseData.rot = Quaternion.Inverse(poseData.rot);
+            // Debug.Log(poseData.rot);
+            // poseData.rot = Offset(poseData.rot);
 
-            // Convert to transform matrix.
-            return ARUtils.ConvertPoseDataToMatrix(ref poseData, true);
+            Debug.Log(poseData.rot);
+            var res = ARUtils.ConvertPoseDataToMatrix(ref poseData, true);
+
+            return res;
         }
+
+        /*
+        predicted: 
+            -0.95958	0.04530	    -0.27778	-0.97365
+            -0.00672	0.98299	    0.18353	    -0.36796
+            0.28137	    0.17797	    -0.94295	3.28595
+            0.00000	0.00000	0.00000	1.00000
+
+        predicted: 
+            -0.96569	0.00496	    0.25966	    -0.96942
+            0.05072	    0.98417	    0.16983	    -0.37315
+            -0.25471	0.17717	    -0.95065	3.27472
+            0.00000	0.00000	0.00000	1.00000
+
+        */
+
+        // private Matrix4x4 InverseRotations(Matrix4x4 mat) {
+            
+        // }
+
+        private Quaternion Offset(Quaternion q) {
+            var offset = Quaternion.Euler(0, -20, -90);
+            return offset * q;
+        }
+
+        private Matrix4x4 FlipZ(Matrix4x4 mat) {
+            var flipZ = Matrix4x4.Scale(new Vector3(1, 1, -1));
+            return flipZ*mat;
+        }
+
+        private Matrix4x4 SwapXZ(Matrix4x4 mat) {
+            var swapXZ = Matrix4x4.identity;
+            swapXZ.m00 = 0; swapXZ.m02 = 1;
+            swapXZ.m20 = 1; swapXZ.m22 = 0;
+
+            return swapXZ*mat;
+        }
+
+
 
         public void dispose()
         {
@@ -151,12 +194,12 @@ namespace CakeLab.ARFlow.Evaluation
         //The textured plane, child to the arucoObj. 
         //In the current implementation, this plane is rotated by 90 degrees along the y axis. 
         // This is to make sure that the initial state (unrotated)
-        public GameObject texturedPlane;
+        public GameObject arucoPlane;
 
-        // The ARPlane object that will be moved, child of the arucoParent
-        public GameObject arucoObj;
-        // The parent object of the ARPlane object. These two objects are for rotation purposes.
-        public GameObject arucoParent;
+        // // The ARPlane object that will be moved, child of the arucoParent
+        // public GameObject arucoObj;
+        // // The parent object of the ARPlane object. These two objects are for rotation purposes.
+        // public GameObject arucoParent;
 
         public Camera activeCamera;
 
@@ -182,12 +225,14 @@ namespace CakeLab.ARFlow.Evaluation
 
         Mat GetCameraIntrinsics()
         {
-            float f = activeCamera.focalLength;
-            float fx = f;
-            float fy = f;
+            float fx = (activeCamera.focalLength * activeCamera.pixelWidth) / activeCamera.sensorSize.x;
+            float fy = (activeCamera.focalLength * activeCamera.pixelHeight) / activeCamera.sensorSize.y;
 
-            float cx = activeCamera.sensorSize.x / 2;
-            float cy = activeCamera.sensorSize.y / 2;
+            // float fx = f;
+            // float fy = f;
+
+            float cx = activeCamera.pixelWidth / 2;
+            float cy = activeCamera.pixelHeight / 2;
 
             Mat camMatrix = new Mat(3, 3, CvType.CV_64FC1);
             camMatrix.put(0, 0, fx);
@@ -217,8 +262,41 @@ namespace CakeLab.ARFlow.Evaluation
             {
                 isCancelled = true;
                 isRunning = false;
-                buttonText.text = "Start";
+                buttonText.text = "Start in iterations";
             }
+        }
+
+        /// <summary>
+        /// Detect and shows the prediction from the window currently shown on the camera (instead of procedural testing)
+        /// </summary>
+        void FixedUpdate()
+        {
+            if (isRunning) return;
+            Mat intrinsics = GetCameraIntrinsics();
+
+            var markerLength = arucoPlane.transform.localScale.x*10;
+
+            int mHeight = activeCamera.pixelHeight;
+            int mWidth = activeCamera.pixelWidth;
+
+            var rect = new UnityEngine.Rect(0, 0, mWidth, mHeight);
+            RenderTexture renderTexture = new RenderTexture(mWidth, mHeight, 24);
+            Texture2D screenShot = new Texture2D(mWidth, mHeight, TextureFormat.RGBA32, false);
+            activeCamera.targetTexture = renderTexture;
+
+            activeCamera.Render();
+
+            RenderTexture.active = renderTexture;
+            screenShot.ReadPixels(rect, 0, 0);
+
+            Matrix4x4 evalRes = spacialEvaluation.ObtainPoseFromImage(screenShot, markerLength, intrinsics);
+            Matrix4x4 truth = GetGroundTruth();
+
+
+            string info = $"predicted: \n{evalRes} \n truth: \n {truth}";
+
+
+            infoText.text = info;
         }
 
         void StartEvaluation(int iterations)
@@ -239,7 +317,9 @@ namespace CakeLab.ARFlow.Evaluation
             activeCamera.targetTexture = renderTexture;
 
             // Assuming marker is scaled proportionally in all directions, and units are in meters.
-            var markerLength = texturedPlane.transform.localScale.x;
+            //TODO
+            var markerLength = arucoPlane.transform.localScale.x*10;
+
 
             for (int i = 0; i < iterations; i++)
             {
@@ -277,14 +357,13 @@ namespace CakeLab.ARFlow.Evaluation
 
         Matrix4x4 GetGroundTruth()
         {
-            Transform t = arucoObj.transform;
-            // Vector3 relativePosition = activeCamera.transform.InverseTransformDirection(t.position - activeCamera.transform.position);
+            Transform t = arucoPlane.transform;
+            Vector3 relativePosition = activeCamera.transform.InverseTransformPoint(t.position);
 
-
-            // return Matrix4x4.TRS(relativePosition, t.rotation, Vector3.one);
-            return Matrix4x4.TRS(t.position, t.rotation, Vector3.one);
-
-
+            Quaternion relativeRotation = Quaternion.Inverse(activeCamera.transform.rotation) * t.rotation;
+            Debug.Log(relativeRotation);
+            return Matrix4x4.TRS(relativePosition, relativeRotation, Vector3.one);
+            // return Matrix4x4.TRS(t.position, t.rotation, Vector3.one);
         }
 
         void randomizePosition()
@@ -293,13 +372,13 @@ namespace CakeLab.ARFlow.Evaluation
             // ranges are set to be of adequate size to fit the camera viewport.
             Vector3 viewportPos = new Vector3();
 
-            viewportPos.x = Random.Range(0.1f, 0.9f);
-            viewportPos.y = Random.Range(0.1f, 0.9f);
+            viewportPos.x = Random.Range(0.2f, 0.8f);
+            viewportPos.y = Random.Range(0.2f, 0.8f);
             viewportPos.z = Random.Range(3, 6);
 
             Vector3 pos = activeCamera.ViewportToWorldPoint(viewportPos);
             Debug.Log(pos);
-            arucoParent.transform.position = activeCamera.ViewportToWorldPoint(viewportPos);
+            arucoPlane.transform.position = activeCamera.ViewportToWorldPoint(viewportPos);
         }
 
         void randomizeRotation()
@@ -307,18 +386,20 @@ namespace CakeLab.ARFlow.Evaluation
             // Randomize x and z of parent
             // Values are tested relative to camera's viewport, so that it is visible
             Vector3 parentRotation = new Vector3();
-            parentRotation.x = Random.Range(-100, -50);
+            parentRotation.x = Random.Range(-40, -120);
+            parentRotation.y = Random.Range(-30, 30);
             parentRotation.z = Random.Range(-30, 30);
-            arucoParent.transform.rotation = Quaternion.Euler(parentRotation);
+            arucoPlane.transform.rotation = Quaternion.Euler(parentRotation);
+            // arucoParent.transform.rotation = Quaternion.Euler(parentRotation);
 
             //randomize y of plane
-            Vector3 planeRotation = new Vector3();
-            planeRotation.y = Random.Range(0, 360);
-            planeRotation.x = 0;
-            planeRotation.z = 0;
-            arucoObj.transform.localRotation = Quaternion.Euler(planeRotation);
+            // Vector3 planeRotation = new Vector3();
+            // planeRotation.x = 0;
+            // planeRotation.z = 0;
+            // arucoObj.transform.localRotation = Quaternion.Euler(planeRotation);
         }
     }
+
 
 
 }
