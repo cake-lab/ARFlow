@@ -127,50 +127,37 @@ namespace CakeLab.ARFlow.Evaluation
             // Debug.Log(poseData.rot);
             // poseData.rot = Offset(poseData.rot);
 
-            Debug.Log(poseData.rot);
+            //Through testing, it is observed that the change in coordinate system is missing for the rotational data. 
             var res = ARUtils.ConvertPoseDataToMatrix(ref poseData, true);
 
+            //Perform coordinate change for rotational data
+            res = FlipAxes(res);
+            
             return res;
         }
 
-        /*
-        predicted: 
-            -0.95958	0.04530	    -0.27778	-0.97365
-            -0.00672	0.98299	    0.18353	    -0.36796
-            0.28137	    0.17797	    -0.94295	3.28595
-            0.00000	0.00000	0.00000	1.00000
+        private Matrix4x4 FlipAxes(Matrix4x4 mat){
+            Vector4 col0 = mat.GetColumn(0);
+            Vector4 col1 = mat.GetColumn(1);
+            Vector4 col2 = mat.GetColumn(2);
 
-        predicted: 
-            -0.96569	0.00496	    0.25966	    -0.96942
-            0.05072	    0.98417	    0.16983	    -0.37315
-            -0.25471	0.17717	    -0.95065	3.27472
-            0.00000	0.00000	0.00000	1.00000
+            Matrix4x4 corrected = mat;
+            corrected.SetColumn(0, col0); // Right
+            corrected.SetColumn(1, col2); // Up
+            corrected.SetColumn(2, -col1); // Forward
 
-        */
-
-        // private Matrix4x4 InverseRotations(Matrix4x4 mat) {
-            
-        // }
+            return corrected;
+        }
 
         private Quaternion Offset(Quaternion q) {
-            var offset = Quaternion.Euler(0, -20, -90);
+            // For rotation: This offset produces the lowest error compared to the truth data 
+            // fine-tuned by hand and not reliable (signs flip when scanning aruco marker)
+
+            // var offset = Quaternion.Euler(-45, 60, -90);
+            // var offset = Quaternion.Euler(-90, 0, 0);
+            var offset = Quaternion.Euler(0, -90, 90);
             return offset * q;
         }
-
-        private Matrix4x4 FlipZ(Matrix4x4 mat) {
-            var flipZ = Matrix4x4.Scale(new Vector3(1, 1, -1));
-            return flipZ*mat;
-        }
-
-        private Matrix4x4 SwapXZ(Matrix4x4 mat) {
-            var swapXZ = Matrix4x4.identity;
-            swapXZ.m00 = 0; swapXZ.m02 = 1;
-            swapXZ.m20 = 1; swapXZ.m22 = 0;
-
-            return swapXZ*mat;
-        }
-
-
 
         public void dispose()
         {
@@ -292,11 +279,93 @@ namespace CakeLab.ARFlow.Evaluation
             Matrix4x4 evalRes = spacialEvaluation.ObtainPoseFromImage(screenShot, markerLength, intrinsics);
             Matrix4x4 truth = GetGroundTruth();
 
+            // for OnDrawGizmos
+            // OnDrawGizmos does not call the methods that perform prediction,
+            // since my laptop does not have enough RAM to run this real-time.
+            // TODO: remove and replace
+            evalR = ExtractRotation(evalRes);
+            trueR = ExtractRotation(truth);
 
-            string info = $"predicted: \n{evalRes} \n truth: \n {truth}";
+            evalP = ExtractPosition(evalRes);
+            trueP = ExtractPosition(truth);
 
+            // Quaternion offset = Quaternion.Inverse(trueR) * (evalR);
+            // ShowDebugOffset(offset);
+        }
+
+        void ShowDebugOffset(Quaternion offset){
+            string info = $"truth: {trueR} \n prediction: {evalR}";
+            info += $"\noffset angle: {ComputeQuaternionError(offset)}";
 
             infoText.text = info;
+        }
+
+        Quaternion evalR = Quaternion.identity;
+        Quaternion trueR = Quaternion.identity;
+        Vector3 evalP = new Vector3();
+        Vector3 trueP = new Vector3();
+
+        void OnDrawGizmos()
+        {
+            Quaternion predRot = evalR;
+            Quaternion truthRot = trueR;
+
+            // Get positions (you might use the translation part of the TRS)
+            Vector3 posPred = evalP;
+            Vector3 posTruth = trueP;
+
+            // Draw truth axes at its position (red = right, green = up, blue = forward)
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(posTruth, posTruth + truthRot * Vector3.right);
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(posTruth, posTruth + truthRot * Vector3.up);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(posTruth, posTruth + truthRot * Vector3.forward);
+
+            // Draw predicted axes offset a bit for clarity
+            Vector3 offsetPos = posPred + Vector3.right * 0.5f;
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(offsetPos, offsetPos + predRot * Vector3.right);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(offsetPos, offsetPos + predRot * Vector3.up);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(offsetPos, offsetPos + predRot * Vector3.forward);
+        }
+
+        float ComputeQuaternionError(Quaternion offset) {
+            float angle;
+            Vector3 axis;
+            offset.ToAngleAxis(out angle, out axis);
+
+            // Ensure the angle is within [0, 180] degrees
+            if (angle > 180f)
+                angle = 360f - angle; 
+
+            return angle; // Angular error in degrees
+        }
+
+        public Quaternion ExtractRotation(Matrix4x4 matrix)
+        {
+            Vector3 forward;
+            forward.x = matrix.m02;
+            forward.y = matrix.m12;
+            forward.z = matrix.m22;
+
+            Vector3 upwards;
+            upwards.x = matrix.m01;
+            upwards.y = matrix.m11;
+            upwards.z = matrix.m21;
+
+            return Quaternion.LookRotation(forward, upwards);
+        }
+
+        public Vector3 ExtractPosition(Matrix4x4 matrix)
+        {
+            Vector3 position;
+            position.x = matrix.m03;
+            position.y = matrix.m13;
+            position.z = matrix.m23;
+            return position;
         }
 
         void StartEvaluation(int iterations)
@@ -354,16 +423,13 @@ namespace CakeLab.ARFlow.Evaluation
             isRunning = false;
 
         }
-
+ 
         Matrix4x4 GetGroundTruth()
         {
             Transform t = arucoPlane.transform;
-            Vector3 relativePosition = activeCamera.transform.InverseTransformPoint(t.position);
 
-            Quaternion relativeRotation = Quaternion.Inverse(activeCamera.transform.rotation) * t.rotation;
-            Debug.Log(relativeRotation);
-            return Matrix4x4.TRS(relativePosition, relativeRotation, Vector3.one);
-            // return Matrix4x4.TRS(t.position, t.rotation, Vector3.one);
+            Matrix4x4 trsMat = Matrix4x4.TRS(t.position, t.rotation, Vector3.one);
+            return activeCamera.transform.localToWorldMatrix * trsMat;
         }
 
         void randomizePosition()
