@@ -263,9 +263,13 @@ namespace CakeLab.ARFlow.Evaluation
             + $"Time in second: {totalTime}";
 
             EvalParam evalParam = GetEvalParam(iterations);
+            EvalCameraIntrinsics evalCam = GetEvalCamIntrinsicsInfo();
+            EvalSetupInfo evalSetup = GetEvalSetupInfo();
             EvalInfo evalInfo = new EvalInfo 
             {
                 evalParam=evalParam,
+                cameraIntrinsics=evalCam,
+                setupInfo=evalSetup,
                 totalTime=totalTime,
                 matrixError=matrixError,
                 translationError=translationError,
@@ -277,8 +281,27 @@ namespace CakeLab.ARFlow.Evaluation
             isRunning = false;
         }
 
+        /// <summary>
+        /// Get the info for writing the evaluation to a file
+        /// </summary>
+        /// <returns></returns>
         EvalParam GetEvalParam(int totalCount) 
         {
+
+            return new EvalParam 
+            {
+                deviceModel = SystemInfo.deviceModel,
+                deviceName = SystemInfo.deviceName,
+                deviceType = SystemInfo.deviceType,
+                totalCount = totalCount,
+            };
+        }
+
+        /// <summary>
+        /// Get the info for writing the evaluation to a file
+        /// </summary>
+        /// <returns></returns>
+        EvalCameraIntrinsics GetEvalCamIntrinsicsInfo() {
             Vector2 focalLength;
             focalLength.x = (activeCamera.focalLength * activeCamera.pixelWidth) / activeCamera.sensorSize.x;
             focalLength.y = (activeCamera.focalLength * activeCamera.pixelHeight) / activeCamera.sensorSize.y;
@@ -287,14 +310,22 @@ namespace CakeLab.ARFlow.Evaluation
             principalPoint.x = activeCamera.pixelWidth / 2;
             principalPoint.y = activeCamera.pixelHeight / 2;
 
-            return new EvalParam 
+            return new EvalCameraIntrinsics
             {
-                deviceModel = SystemInfo.deviceModel,
-                deviceName = SystemInfo.deviceName,
-                deviceType = SystemInfo.deviceType,
-                totalCount = totalCount,
                 focalLength = focalLength,
                 principalPoint = principalPoint
+            };
+        }
+
+        /// <summary>
+        /// Get the info for writing the evaluation to a file
+        /// </summary>
+        /// <returns></returns>
+        EvalSetupInfo GetEvalSetupInfo() {
+            return new EvalSetupInfo
+            {
+                positionSetup = randomPositionSetup,
+                rotationSetup = randomRotationSetup
             };
         }
  
@@ -305,14 +336,28 @@ namespace CakeLab.ARFlow.Evaluation
             Matrix4x4 trsMat = Matrix4x4.TRS(t.position, t.rotation, Vector3.one);
             return activeCamera.transform.localToWorldMatrix * trsMat;
         }
+        
+        readonly Vector3Setup randomPositionSetup = new Vector3Setup 
+        {
+            xVariation = new Vector2(0.2f, 0.8f),
+            yVariation = new Vector2(0.2f, 0.8f),
+            zVariation = new Vector2(3, 6),
+        };
+
+        readonly Vector3Setup randomRotationSetup = new Vector3Setup
+        {
+            xVariation = new Vector2(-40, -150),
+            yVariation = new Vector2(-50, 50),
+            zVariation = new Vector2(-50, 50),
+        };
 
         void randomizePosition()
         {
             Vector3 viewportPos = new Vector3();
 
-            viewportPos.x = Random.Range(0.2f, 0.8f);
-            viewportPos.y = Random.Range(0.2f, 0.8f);
-            viewportPos.z = Random.Range(3, 6);
+            viewportPos.x = Random.Range(randomPositionSetup.xVariation.x, randomPositionSetup.xVariation.y);
+            viewportPos.y = Random.Range(randomPositionSetup.yVariation.x, randomPositionSetup.yVariation.y);
+            viewportPos.z = Random.Range(randomPositionSetup.zVariation.x, randomPositionSetup.zVariation.y);
 
             arucoPlane.transform.position = activeCamera.ViewportToWorldPoint(viewportPos);
         }
@@ -322,9 +367,9 @@ namespace CakeLab.ARFlow.Evaluation
             // Randomize x and z of parent
             // Values are tested relative to camera's viewport to make sure it is visible
             Vector3 parentRotation = new Vector3();
-            parentRotation.x = Random.Range(-40, -150);
-            parentRotation.y = Random.Range(-50, 50);
-            parentRotation.z = Random.Range(-50, 50);
+            parentRotation.x = Random.Range(randomRotationSetup.xVariation.x, randomRotationSetup.xVariation.y);
+            parentRotation.y = Random.Range(randomRotationSetup.yVariation.x, randomRotationSetup.yVariation.y);
+            parentRotation.z = Random.Range(randomRotationSetup.zVariation.x, randomRotationSetup.zVariation.y);
             arucoPlane.transform.rotation = Quaternion.Euler(parentRotation);
         }
     }
