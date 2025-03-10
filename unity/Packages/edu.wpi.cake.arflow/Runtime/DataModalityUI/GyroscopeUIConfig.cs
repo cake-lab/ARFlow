@@ -26,8 +26,6 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         private List<GameObject> m_UIConfigElements = new();
         // Configs
         private const string MODALITY_NAME = "Gyroscope";
-        private TMP_InputField bufferSizeField;
-
         private const string SAMPLING_INTERVAL_NAME = "Sampling Interval (ms)";
         private TMP_InputField samplingIntervalField;
         private const string DEFAULT_SAMPLING_INTERVAL = "50";
@@ -58,11 +56,6 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
 
             //Buffer toggle (on or off)
             InstantiateGameObject.InstantiateToggle(parent, prefabs.togglePrefab, ENABLE_NAME, new Action<bool>[] { onToggleModality, ToggleConfig }, out toggle, out _);
-
-            //Buffer Size
-            InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, BUFFER_SIZE_NAME, DEFAULT_BUFFER_SIZE, out var bufferSizeObject, out bufferSizeField);
-            bufferSizeField.contentType = TMP_InputField.ContentType.IntegerNumber;
-            m_UIConfigElements.Add(bufferSizeObject);
 
             //Sampling Interval
             InstantiateGameObject.InstantiateInputField(parent, prefabs.textFieldPrefab, SAMPLING_INTERVAL_NAME, DEFAULT_SAMPLING_INTERVAL, out var samplingIntervalObj, out samplingIntervalField);
@@ -110,7 +103,7 @@ namespace CakeLab.ARFlow.DataModalityUIConfig
         public GyroscopeBuffer GetBufferFromConfig()
         {
             InternalDebug.Log("Gyroscope buffer created");
-            return new GyroscopeBuffer(int.Parse(bufferSizeField.text), m_Clock, int.Parse(samplingIntervalField.text));
+            return new GyroscopeBuffer(m_Clock, int.Parse(samplingIntervalField.text));
         }
 
         public override IARFrameBuffer GetGenericBuffer()

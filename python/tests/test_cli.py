@@ -53,11 +53,13 @@ def test_provide_alternate_directory(tmp_path: Path):
 
 
 def test_view():
-    with patch("arflow._cli.run_server") as mock_run_server, patch(
-        "arflow._cli.ARFlowServicer"
-    ) as mock_servicer:
+    with (
+        patch("arflow._cli.run_server") as mock_run_server,
+        patch("arflow._cli.ARFlowServicer") as mock_servicer,
+    ):
         args = MagicMock()
         args.port = 1234
+        args.application_id = "test-id"
 
         view(args)
 
@@ -66,16 +68,19 @@ def test_view():
             spawn_viewer=True,
             save_dir=None,
             port=1234,
+            application_id="test-id",
         )
 
 
 def test_save():
-    with patch("arflow._cli.run_server") as mock_run_server, patch(
-        "arflow._cli.ARFlowServicer"
-    ) as mock_servicer:
+    with (
+        patch("arflow._cli.run_server") as mock_run_server,
+        patch("arflow._cli.ARFlowServicer") as mock_servicer,
+    ):
         args = MagicMock()
         args.port = 1234
         args.save_dir = "/tmp/save_path"
+        args.application_id = "test-id"
 
         save(args)
 
@@ -84,6 +89,7 @@ def test_save():
             spawn_viewer=False,
             save_dir=Path("/tmp/save_path"),
             port=1234,
+            application_id="test-id",
         )
 
 
@@ -96,7 +102,7 @@ def test_rerun():
 
 
 @pytest.mark.parametrize(
-    "command, subcommand, debug, quiet, port, save_dir",
+    "command, subcommand, debug, quiet, port, save_dir, application_id",
     [
         (
             "",
@@ -105,6 +111,7 @@ def test_rerun():
             False,
             None,
             None,
+            "arflow",
         ),
         (
             "-d",
@@ -113,6 +120,7 @@ def test_rerun():
             False,
             None,
             None,
+            "arflow",
         ),
         (
             "-q",
@@ -121,6 +129,7 @@ def test_rerun():
             True,
             None,
             None,
+            "arflow",
         ),
         (
             "view",
@@ -129,6 +138,7 @@ def test_rerun():
             False,
             8500,
             None,
+            "arflow",
         ),
         (
             "-d save",
@@ -137,6 +147,7 @@ def test_rerun():
             False,
             8500,
             None,
+            "arflow",
         ),
         (
             "-d save -p 1234",
@@ -145,6 +156,7 @@ def test_rerun():
             False,
             1234,
             None,
+            "arflow",
         ),
         (
             "-d save -s /tmp/save_path",
@@ -153,14 +165,16 @@ def test_rerun():
             False,
             8500,
             "/tmp/save_path",
+            "arflow",
         ),
         (
-            "-d save -p 1234 -s /tmp/save_path",
+            "-d save -p 1234 -s /tmp/save_path -a test-id",
             "save",
             True,
             False,
             1234,
             "/tmp/save_path",
+            "test-id",
         ),
         (
             "rerun /path/to/data.file",
@@ -169,12 +183,14 @@ def test_rerun():
             False,
             None,
             None,
+            None,
         ),
         (
             "-d rerun /path/to/data.file",
             "rerun",
             True,
             False,
+            None,
             None,
             None,
         ),
@@ -187,6 +203,7 @@ def test_parse_args(
     quiet: bool,
     port: int | None,
     save_dir: str | None,
+    application_id: str | None,
     tmp_path: Path,
 ):
     if save_dir is None:
@@ -204,13 +221,16 @@ def test_parse_args(
     if subcommand == "view":
         assert args.func == view
         assert args.port == port
+        assert args.application_id == application_id
     elif subcommand == "save":
         assert args.func == save
         assert args.port == port
         assert args.save_dir == save_dir
+        assert args.application_id == application_id
     elif subcommand == "rerun":
         assert args.func == rerun
     else:
         assert not hasattr(args, "func")
         assert not hasattr(args, "port")
         assert not hasattr(args, "save_dir")
+        assert not hasattr(args, "application_id")

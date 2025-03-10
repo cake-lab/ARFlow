@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.WellKnownTypes;
@@ -97,9 +98,9 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_Clock = value;
         }
 
-        private readonly List<RawColorFrame> m_Buffer;
+        private ConcurrentQueue<RawColorFrame> m_Buffer;
 
-        public IReadOnlyList<RawColorFrame> Buffer => m_Buffer;
+        public ConcurrentQueue<RawColorFrame> Buffer => m_Buffer;
 
         /// <summary>
         /// Typically this should be called at Awake of the MonoBehaviour that contains the ARCameraManager.
@@ -107,9 +108,9 @@ namespace CakeLab.ARFlow.DataBuffers
         /// <remarks>
         /// See <a href="https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scenes/FaceTracking/ToggleCameraFacingDirectionOnAction.cs">ToggleCameraFacingDirectionOnAction.cs</a> for an example of how to use this class.
         /// </remarks>
-        public ColorBuffer(int initialBufferSize, ARCameraManager cameraManager, IClock clock)
+        public ColorBuffer(ARCameraManager cameraManager, IClock clock)
         {
-            m_Buffer = new List<RawColorFrame>(initialBufferSize);
+            m_Buffer = new ConcurrentQueue<RawColorFrame>();
             m_CameraManager = cameraManager;
             m_Clock = clock;
         }
@@ -161,7 +162,7 @@ namespace CakeLab.ARFlow.DataBuffers
                         .ToArray(),
                     Intrinsics = intrinsics,
                 };
-                m_Buffer.Add(newFrame);
+                m_Buffer.Enqueue(newFrame);
 
                 InternalDebug.Log(
                     $"Device time: {newFrame.DeviceTimestamp}\nImage timestamp: {newFrame.ImageTimestamp}\nImage format: {newFrame.Format}\nImage plane count: {image.planeCount}"
@@ -169,25 +170,26 @@ namespace CakeLab.ARFlow.DataBuffers
             }
         }
 
-        public void ClearBuffer()
-        {
-            m_Buffer.Clear();
-        }
-
         public RawColorFrame TryAcquireLatestFrame()
         {
             return m_Buffer.LastOrDefault();
         }
 
-        public ARFrame[] GetARFramesFromBuffer()
+        public IEnumerable<ARFrame> TakeARFrames()
         {
-            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
+            ConcurrentQueue<RawColorFrame> oldFrames;
+            lock (m_Buffer)
+            {
+                oldFrames = m_Buffer;
+                m_Buffer = new();
+            }
+            return oldFrames.Select(frame => (ARFrame)frame);
         }
 
         public void Dispose()
         {
             StopCapture();
-            ClearBuffer();
+            m_Buffer.Clear();
         }
 
         /// <remarks>

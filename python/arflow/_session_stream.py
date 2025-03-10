@@ -1,6 +1,7 @@
 """Session helps participating devices stream to the same Rerun recording."""
 
 import logging
+from collections.abc import Sequence
 
 import DracoPy
 import numpy as np
@@ -15,7 +16,6 @@ from arflow._utils import (
     group_color_frames_by_format_and_dims,
     group_depth_frames_by_format_dims_and_smoothness,
 )
-from cakelab.arflow_grpc.v1.ar_plane_pb2 import ARPlane
 from cakelab.arflow_grpc.v1.ar_trackable_pb2 import ARTrackable
 from cakelab.arflow_grpc.v1.audio_frame_pb2 import AudioFrame
 from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
@@ -29,6 +29,8 @@ from cakelab.arflow_grpc.v1.point_cloud_detection_frame_pb2 import (
 )
 from cakelab.arflow_grpc.v1.session_pb2 import Session
 from cakelab.arflow_grpc.v1.transform_frame_pb2 import TransformFrame
+from cakelab.arflow_grpc.v1.vector2_pb2 import Vector2
+from cakelab.arflow_grpc.v1.vector3_pb2 import Vector3
 from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
 
 logger = logging.getLogger(__name__)
@@ -54,7 +56,7 @@ class SessionStream:
 
     def save_transform_frames(
         self,
-        frames: list[TransformFrame],
+        frames: Sequence[TransformFrame],
         device: Device,
     ):
         if len(frames) == 0:
@@ -65,6 +67,7 @@ class SessionStream:
             [
                 f"{self.info.metadata.name}_{self.info.id.value}",
                 f"{device.model}_{device.name}_{device.uid}",
+                ARFrameType.TRANSFORM_FRAME,
             ]
         )
         rr.log(
@@ -76,7 +79,8 @@ class SessionStream:
         t = np.array([np.frombuffer(frame.data, dtype=np.float32) for frame in frames])
         transforms = np.array([np.eye(4, dtype=np.float32) for _ in range(len(frames))])
         transforms[:, :3, :] = t.reshape((len(frames), 3, 4))
-        # transforms[:, :3, 3] = 0
+
+        # TODO: Do we need to flip Y?
         transforms = y_down_to_y_up @ transforms
         rr.send_columns(
             entity_path,
@@ -103,7 +107,7 @@ class SessionStream:
 
     def save_color_frames(
         self,
-        frames: list[ColorFrame],
+        frames: Sequence[ColorFrame],
         device: Device,
     ):
         """Assumes that the device is in the session and all frames have the same format, width, height, and originating device.
@@ -226,7 +230,7 @@ class SessionStream:
 
     def save_depth_frames(
         self,
-        frames: list[DepthFrame],
+        frames: Sequence[DepthFrame],
         device: Device,
     ):
         """Assumes that the device is in the session and all frames have the same format, width, height, smoothness, and and originating device."""
@@ -303,7 +307,7 @@ class SessionStream:
 
     def save_gyroscope_frames(
         self,
-        frames: list[GyroscopeFrame],
+        frames: Sequence[GyroscopeFrame],
         device: Device,
     ):
         if len(frames) == 0:
@@ -443,7 +447,7 @@ class SessionStream:
 
     def save_audio_frames(
         self,
-        frames: list[AudioFrame],
+        frames: Sequence[AudioFrame],
         device: Device,
     ):
         if len(frames) == 0:
@@ -484,7 +488,7 @@ class SessionStream:
 
     def save_plane_detection_frames(
         self,
-        frames: list[PlaneDetectionFrame],
+        frames: Sequence[PlaneDetectionFrame],
         device: Device,
     ):
         if len(frames) == 0:
@@ -507,7 +511,9 @@ class SessionStream:
         positively_changed_frames = list(
             filter(
                 lambda f: f.state == PlaneDetectionFrame.STATE_ADDED
-                or f.state == PlaneDetectionFrame.STATE_UPDATED,
+                or f.state == PlaneDetectionFrame.STATE_UPDATED
+                and len(f.plane.boundary)
+                > 0,  # boundary can sometimes 0 points for some reason
                 frames,
             )
         )
@@ -526,7 +532,11 @@ class SessionStream:
                 # TODO: notice ARTrackable.Pose
                 rr.components.LineStrip3DBatch(
                     data=[
-                        _to_boundary_points_3d(f.plane)
+                        _convert_2d_to_3d_boundary_points(
+                            boundary=f.plane.boundary,
+                            normal=f.plane.normal,
+                            center=f.plane.center,
+                        )
                         for f in positively_changed_frames
                     ]
                 ),
@@ -590,7 +600,7 @@ class SessionStream:
 
     def save_point_cloud_detection_frames(
         self,
-        frames: list[PointCloudDetectionFrame],
+        frames: Sequence[PointCloudDetectionFrame],
         device: Device,
     ):
         if len(frames) == 0:
@@ -740,7 +750,7 @@ class SessionStream:
 
     def save_mesh_detection_frames(
         self,
-        frames: list[MeshDetectionFrame],
+        frames: Sequence[MeshDetectionFrame],
         device: Device,
     ):
         if len(frames) == 0:
@@ -839,6 +849,8 @@ def _to_i420_format(image: XRCpuImage) -> npt.NDArray[np.uint8]:
     )
     # Downsample and pack U and V planes
     u_data = (
+        # Have to pad an extra byte due to how the Android image format was captured. Check:
+        # https://stackoverflow.com/questions/51399908/yuv-420-888-byte-format/62090742
         np.frombuffer(u_plane.data + b"\x00", dtype=np.uint8)
         # pad an extra byte
         .reshape((uv_height, u_plane.row_stride))[
@@ -857,15 +869,16 @@ def _to_i420_format(image: XRCpuImage) -> npt.NDArray[np.uint8]:
     return np.concatenate([y_data, u_data, v_data])
 
 
-# TODO: Happy path programming. Please add error handling
-def _to_boundary_points_3d(
-    plane: ARPlane,
+def _convert_2d_to_3d_boundary_points(
+    boundary: Sequence[Vector2],
+    normal: Vector3,
+    center: Vector3,
 ) -> npt.NDArray[np.float32]:
-    if len(plane.boundary) == 0:
+    if len(boundary) == 0:
         logger.warning("Skipping plane with no boundary points.")
         return np.array([], dtype=np.float32)
 
-    normal_as_np = np.array([plane.normal.x, plane.normal.y, plane.normal.z])
+    normal_as_np = np.array([normal.x, normal.y, normal.z])
     normalized_normal_as_np = normal_as_np / np.linalg.norm(normal_as_np)
     arbitary_vector = (
         np.array([1, 0, 0])
@@ -875,11 +888,11 @@ def _to_boundary_points_3d(
     u = np.cross(normalized_normal_as_np, arbitary_vector)
     u = u / np.linalg.norm(u)
     v = np.cross(normalized_normal_as_np, u)
-    center_as_np = np.array([plane.center.x, plane.center.y, plane.center.z])
+    center_as_np = np.array([center.x, center.y, center.z])
     boundary_points_3d = np.array(
-        [center_as_np + point_2d.x * u + point_2d.y * v for point_2d in plane.boundary]
+        [center_as_np + point_2d.x * u + point_2d.y * v for point_2d in boundary]
         # close off boundary
-        + [center_as_np + plane.boundary[0].x * u + plane.boundary[0].y * v],
+        + [center_as_np + boundary[0].x * u + boundary[0].y * v],
         dtype=np.float32,
     )
     return boundary_points_3d

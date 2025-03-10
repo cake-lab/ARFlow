@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.WellKnownTypes;
@@ -136,17 +137,16 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_Clock = value;
         }
 
-        private readonly List<RawPointCloudDetectionFrame> m_Buffer;
+        private ConcurrentQueue<RawPointCloudDetectionFrame> m_Buffer;
 
-        public IReadOnlyList<RawPointCloudDetectionFrame> Buffer => m_Buffer;
+        public ConcurrentQueue<RawPointCloudDetectionFrame> Buffer => m_Buffer;
 
         public PointCloudDetectionBuffer(
-            int initialBufferSize,
             ARPointCloudManager pointCloudManager,
             IClock clock
         )
         {
-            m_Buffer = new List<RawPointCloudDetectionFrame>(initialBufferSize);
+            m_Buffer = new ConcurrentQueue<RawPointCloudDetectionFrame>();
             m_PointCloudManager = pointCloudManager;
             m_Clock = clock;
         }
@@ -177,20 +177,24 @@ namespace CakeLab.ARFlow.DataBuffers
             PointCloudDetectionState state
         )
         {
-            m_Buffer.AddRange(
-                pointClouds?.Select(pointCloud => new RawPointCloudDetectionFrame
+            if (pointClouds == null)
+            {
+                return;
+            }
+            foreach (var pointCloud in pointClouds)
+            {
+                m_Buffer.Enqueue(new RawPointCloudDetectionFrame
                 {
                     State = state,
                     Pose = pointCloud.pose,
                     TrackableId = pointCloud.trackableId,
                     TrackingState = pointCloud.trackingState,
                     DeviceTimestamp = deviceTimestampAtCapture,
-                    ConfidenceValues =
-                        pointCloud.confidenceValues?.ToArray() ?? Array.Empty<float>(),
+                    ConfidenceValues = pointCloud.confidenceValues?.ToArray() ?? Array.Empty<float>(),
                     Identifiers = pointCloud.identifiers?.ToArray() ?? Array.Empty<ulong>(),
                     Positions = pointCloud.positions?.ToArray() ?? Array.Empty<UnityVector3>(),
-                })
-            );
+                });
+            }
         }
 
         private void AddToBuffer(
@@ -198,8 +202,13 @@ namespace CakeLab.ARFlow.DataBuffers
             DateTime deviceTimestampAtCapture
         )
         {
-            m_Buffer.AddRange(
-                pointClouds?.Select(pointCloud => new RawPointCloudDetectionFrame
+            if (pointClouds == null)
+            {
+                return;
+            }
+            foreach (var pointCloud in pointClouds)
+            {
+                m_Buffer.Enqueue(new RawPointCloudDetectionFrame
                 {
                     State = PointCloudDetectionState.Removed,
                     Pose = pointCloud.Value.pose,
@@ -209,13 +218,8 @@ namespace CakeLab.ARFlow.DataBuffers
                     ConfidenceValues = Array.Empty<float>(),
                     Identifiers = Array.Empty<ulong>(),
                     Positions = Array.Empty<UnityVector3>(),
-                })
-            );
-        }
-
-        public void ClearBuffer()
-        {
-            m_Buffer.Clear();
+                });
+            }
         }
 
         public RawPointCloudDetectionFrame TryAcquireLatestFrame()
@@ -223,15 +227,21 @@ namespace CakeLab.ARFlow.DataBuffers
             return m_Buffer.LastOrDefault();
         }
 
-        public ARFrame[] GetARFramesFromBuffer()
+        public IEnumerable<ARFrame> TakeARFrames()
         {
-            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
+            ConcurrentQueue<RawPointCloudDetectionFrame> oldFrames;
+            lock (m_Buffer)
+            {
+                oldFrames = m_Buffer;
+                m_Buffer = new();
+            }
+            return oldFrames.Select(frame => (ARFrame)frame);
         }
 
         public void Dispose()
         {
             StopCapture();
-            ClearBuffer();
+            m_Buffer.Clear();
         }
     }
 }

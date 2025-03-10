@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.WellKnownTypes;
@@ -62,7 +63,7 @@ namespace CakeLab.ARFlow.DataBuffers
 
     public class GyroscopeBuffer : IARFrameBuffer<RawGyroscopeFrame>
     {
-        private readonly List<RawGyroscopeFrame> m_Buffer;
+        private ConcurrentQueue<RawGyroscopeFrame> m_Buffer;
         private float m_SamplingIntervalMs;
         private bool m_IsCapturing;
 
@@ -94,11 +95,11 @@ namespace CakeLab.ARFlow.DataBuffers
                 }
 
         */
-        public IReadOnlyList<RawGyroscopeFrame> Buffer => m_Buffer;
+        public ConcurrentQueue<RawGyroscopeFrame> Buffer => m_Buffer;
 
-        public GyroscopeBuffer(int initialBufferSize, IClock clock, float samplingIntervalMs = 50)
+        public GyroscopeBuffer(IClock clock, float samplingIntervalMs = 50)
         {
-            m_Buffer = new List<RawGyroscopeFrame>(initialBufferSize);
+            m_Buffer = new ConcurrentQueue<RawGyroscopeFrame>();
             m_Clock = clock;
             m_SamplingIntervalMs = samplingIntervalMs;
         }
@@ -142,12 +143,7 @@ namespace CakeLab.ARFlow.DataBuffers
                 Gravity = GravitySensor.current.gravity.ReadValue(),
                 Acceleration = Accelerometer.current.acceleration.ReadValue(),
             };
-            m_Buffer.Add(newFrame);
-        }
-
-        public void ClearBuffer()
-        {
-            m_Buffer.Clear();
+            m_Buffer.Enqueue(newFrame);
         }
 
         public RawGyroscopeFrame TryAcquireLatestFrame()
@@ -155,15 +151,21 @@ namespace CakeLab.ARFlow.DataBuffers
             return m_Buffer.LastOrDefault();
         }
 
-        public ARFrame[] GetARFramesFromBuffer()
+        public IEnumerable<ARFrame> TakeARFrames()
         {
-            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
+            ConcurrentQueue<RawGyroscopeFrame> oldFrames;
+            lock (m_Buffer)
+            {
+                oldFrames = m_Buffer;
+                m_Buffer = new();
+            }
+            return oldFrames.Select(frame => (ARFrame)frame);
         }
 
         public void Dispose()
         {
             StopCapture();
-            ClearBuffer();
+            m_Buffer.Clear();
         }
     }
 }

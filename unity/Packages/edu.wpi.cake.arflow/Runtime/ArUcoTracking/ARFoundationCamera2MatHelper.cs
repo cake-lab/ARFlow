@@ -532,7 +532,6 @@ namespace CakeLab.ARFlow.ArUcoTracking
 
         protected virtual void ProcessImage(XRCpuImage.AsyncConversionStatus status, XRCpuImage.ConversionParams conversionParams, NativeArray<byte> data)
         {
-            Debug.Log("ProcessImage");
             if (status != XRCpuImage.AsyncConversionStatus.Ready)
             {
                 Debug.LogErrorFormat("Async request failed with status {0}", status);

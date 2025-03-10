@@ -181,3 +181,7 @@ pyrightconfig.json
 
 # data files
 *.rrd
+
+# benchmark artifacts
+benchmarks/payload
+benchmarks/results

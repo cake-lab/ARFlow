@@ -100,7 +100,7 @@ def parse_args(
         "-p",
         "--port",
         type=int,
-        default=8500,
+        default=int(os.getenv("PORT", 8500)),
         help=f"Port to run the server on (default: %(default)s).",
     )
     view_parser.add_argument(

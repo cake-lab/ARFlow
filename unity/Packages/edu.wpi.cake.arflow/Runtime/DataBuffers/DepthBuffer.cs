@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
+using System.Collections.Generic;
 using Google.Protobuf.WellKnownTypes;
-using Unity.Collections;
 using UnityEngine.XR.ARFoundation;
 
 namespace CakeLab.ARFlow.DataBuffers
@@ -75,13 +75,13 @@ namespace CakeLab.ARFlow.DataBuffers
             set => m_Clock = value;
         }
 
-        private readonly List<RawDepthFrame> m_Buffer;
+        private ConcurrentQueue<RawDepthFrame> m_Buffer;
 
-        public IReadOnlyList<RawDepthFrame> Buffer => m_Buffer;
+        public ConcurrentQueue<RawDepthFrame> Buffer => m_Buffer;
 
-        public DepthBuffer(int initialBufferSize, AROcclusionManager occlusionManager, IClock clock)
+        public DepthBuffer(AROcclusionManager occlusionManager, IClock clock)
         {
-            m_Buffer = new List<RawDepthFrame>(initialBufferSize);
+            m_Buffer = new ConcurrentQueue<RawDepthFrame>();
             m_OcclusionManager = occlusionManager;
             m_Clock = clock;
         }
@@ -123,12 +123,7 @@ namespace CakeLab.ARFlow.DataBuffers
                     .Select(i => (RawARPlane)image.GetPlane(i))
                     .ToArray(),
             };
-            m_Buffer.Add(newFrame);
-        }
-
-        public void ClearBuffer()
-        {
-            m_Buffer.Clear();
+            m_Buffer.Enqueue(newFrame);
         }
 
         public RawDepthFrame TryAcquireLatestFrame()
@@ -136,15 +131,21 @@ namespace CakeLab.ARFlow.DataBuffers
             return m_Buffer.LastOrDefault();
         }
 
-        public ARFrame[] GetARFramesFromBuffer()
+        public IEnumerable<ARFrame> TakeARFrames()
         {
-            return m_Buffer.Select(frame => (ARFrame)frame).ToArray();
+            ConcurrentQueue<RawDepthFrame> oldFrames;
+            lock (m_Buffer)
+            {
+                oldFrames = m_Buffer;
+                m_Buffer = new();
+            }
+            return oldFrames.Select(frame => (ARFrame)frame);
         }
 
         public void Dispose()
         {
             StopCapture();
-            ClearBuffer();
+            m_Buffer.Clear();
         }
     }
 }

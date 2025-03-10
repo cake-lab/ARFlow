@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using CakeLab.ARFlow.Grpc.V1;
 
 namespace CakeLab.ARFlow.DataBuffers
@@ -11,15 +12,14 @@ namespace CakeLab.ARFlow.DataBuffers
     {
         void StartCapture();
         void StopCapture();
-        void ClearBuffer();
-
     }
+
     /// <summary>
     /// Interface for a data buffer that stores data of type T. Read-only, ordered access to the buffer is provided.
     /// </summary>
     public interface IDataBuffer<T> : IDataBuffer
     {
-        IReadOnlyList<T> Buffer { get; }
+        ConcurrentQueue<T> Buffer { get; }
         /// <summary>
         /// Tries to acquire the latest frame from the buffer. If the buffer is empty, returns the default.
         /// </summary>
@@ -33,10 +33,10 @@ namespace CakeLab.ARFlow.DataBuffers
     public interface IARFrameBuffer : IDataBuffer
     {
         /// <summary>
-        /// Get ARFrames from the buffer. This is a helper method to manage sending ARFrames more easily.
+        /// Atomically take and clear all frames in the buffer. This is a helper method to manage sending ARFrames more easily.
         /// </summary>
-        /// <returns></returns>
-        ARFrame[] GetARFramesFromBuffer();
+        /// <remarks>See https://stackoverflow.com/a/75331708</remarks>
+        IEnumerable<ARFrame> TakeARFrames();
     }
 
     /// <summary>

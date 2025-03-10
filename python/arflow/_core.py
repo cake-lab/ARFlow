@@ -2,10 +2,11 @@
 
 import logging
 import uuid
+from collections.abc import Sequence
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from typing import Any, Iterable, Type
+from typing import Any, Type
 
 import grpc
 import rerun as rr
@@ -72,6 +73,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         Args:
             spawn_viewer: Whether to spawn the Rerun Viewer in another process.
             save_dir: The path to save the data to. Assumed to be an existing directory.
+            application_id: The application ID to store recordings under.
 
         Raises:
             ValueError: If neither or both operational modes are selected.
@@ -82,19 +84,20 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             raise ValueError(
                 "Either spawn the viewer or save the data, but not both, and neither can be disabled."
             )
-        self._spawn_viewer = spawn_viewer
-        self._save_dir = save_dir
-        self._application_id = application_id
-        self._client_sessions: dict[str, SessionStream] = {}
+        self.spawn_viewer = spawn_viewer
+        self.save_dir = save_dir
+        self.application_id = application_id
+        self.client_sessions: dict[str, SessionStream] = {}
+        """Active session streams, indexed by their ID."""
         # Initializes SDK with an "empty" global recording. We don't want to log anything into the global recording.
-        rr.init(application_id=application_id, spawn=self._spawn_viewer)
+        rr.init(application_id=self.application_id, spawn=self.spawn_viewer)
         # TODO: This here is right? https://rerun.io/docs/concepts/spaces-and-transforms#view-coordinates
         # rr.log("/", rr.ViewCoordinates.RIGHT_HAND_Z_UP, static=True)
         super().__init__()
 
     def _get_session_stream(self, session_id: str) -> SessionStream:
         try:
-            return self._client_sessions[session_id]
+            return self.client_sessions[session_id]
         except KeyError:
             raise NotFound("Session not found")
 
@@ -103,9 +106,9 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
     ) -> CreateSessionResponse:
         new_session_id = str(uuid.uuid4())
         new_rr_stream = rr.new_recording(
-            application_id=self._application_id,
+            application_id=self.application_id,
             recording_id=new_session_id,  # recording_id identifies streams
-            spawn=self._spawn_viewer,
+            spawn=self.spawn_viewer,
         )
         new_session = Session(
             id=SessionUuid(value=new_session_id),
@@ -116,11 +119,11 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             info=new_session,
             stream=new_rr_stream,
         )
-        self._client_sessions[new_session_id] = new_session_stream
+        self.client_sessions[new_session_id] = new_session_stream
         logger.info("Created new session: %s", new_session_stream.info)
 
-        if self._save_dir is not None:
-            save_path = self._save_dir / Path(f"{new_session_stream.info.id.value}.rrd")
+        if self.save_dir is not None:
+            save_path = self.save_dir / Path(f"{new_session_stream.info.id.value}.rrd")
 
             # Overriding the save path if provided in session metadata
             if len(request.session_metadata.save_path) != 0:
@@ -130,7 +133,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 path=save_path,
                 recording=new_rr_stream,
             )
-            logger.debug("Session data path: %s", save_path)
+            logger.info("Session data path: %s", save_path)
 
         self.on_create_session(
             session_stream=new_session_stream,
@@ -152,7 +155,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         self, request: DeleteSessionRequest, context: grpc.ServicerContext | None = None
     ) -> DeleteSessionResponse:
         try:
-            session_stream = self._client_sessions.pop(request.session_id.value)
+            session_stream = self.client_sessions.pop(request.session_id.value)
         except KeyError:
             raise NotFound("Session not found")
 
@@ -181,41 +184,18 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
         logger.info("Retrieved session: %s", session_stream.info)
 
-        self.on_get_session(session_stream=session_stream)
-
         return GetSessionResponse(session=session_stream.info)
-
-    def on_get_session(self, session_stream: SessionStream) -> None:
-        """Hook for user-defined procedures when a session is retrieved.
-
-        Args:
-            session_stream: The session stream.
-        """
-        pass
 
     def ListSessions(
         self, request: ListSessionsRequest, context: grpc.ServicerContext | None = None
     ) -> ListSessionsResponse:
-        current_session_streams = [
-            session_stream for session_stream in self._client_sessions.values()
-        ]
         current_sessions = [
-            session_stream.info for session_stream in current_session_streams
+            session_stream.info for session_stream in self.client_sessions.values()
         ]
 
-        logger.info("Listed %s current sessions", len(current_session_streams))
-
-        self.on_list_sessions(session_streams=current_session_streams)
+        logger.info("Listed %s current sessions", len(current_sessions))
 
         return ListSessionsResponse(sessions=current_sessions)
-
-    def on_list_sessions(self, session_streams: Iterable[SessionStream]) -> None:
-        """Hook for user-defined procedures when all sessions are requested.
-
-        Args:
-            session_streams: The session streams.
-        """
-        pass
 
     def JoinSession(
         self, request: JoinSessionRequest, context: grpc.ServicerContext | None = None
@@ -262,7 +242,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         try:
             session_stream.info.devices.remove(request.device)
         except ValueError:
-            raise InvalidArgument("Device not in session")
+            raise NotFound("Device not in session")
 
         logger.info(
             "Client %s left session %s", request.device, request.session_id.value
@@ -296,9 +276,8 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         session_stream = self._get_session_stream(request.session_id.value)
 
         if request.device not in session_stream.info.devices:
-            raise InvalidArgument("Device not in session")
+            raise NotFound("Device not in session")
 
-        ar_frames = []
         frames_grouped_by_type = {
             type: [
                 frame for frame in request.frames if frame.WhichOneof("data") == type
@@ -310,19 +289,19 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 continue
 
             if frame_type == ARFrameType.TRANSFORM_FRAME and frames[0].transform_frame:
-                ar_frames = self._process_transform_frames(
+                self._process_transform_frames(
                     frames=[f.transform_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
                 )
             elif frame_type == ARFrameType.COLOR_FRAME and frames[0].color_frame:
-                ar_frames = self._process_color_frames(
+                self._process_color_frames(
                     frames=[f.color_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
                 )
             elif frame_type == ARFrameType.DEPTH_FRAME and frames[0].depth_frame:
-                ar_frames = self._process_depth_frames(
+                self._process_depth_frames(
                     frames=[f.depth_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
@@ -330,13 +309,13 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             elif (
                 frame_type == ARFrameType.GYROSCOPE_FRAME and frames[0].gyroscope_frame
             ):
-                ar_frames = self._process_gyroscope_frames(
+                self._process_gyroscope_frames(
                     frames=[f.gyroscope_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
                 )
             elif frame_type == ARFrameType.AUDIO_FRAME and frames[0].audio_frame:
-                ar_frames = self._process_audio_frames(
+                self._process_audio_frames(
                     frames=[f.audio_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
@@ -345,7 +324,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 frame_type == ARFrameType.PLANE_DETECTION_FRAME
                 and frames[0].plane_detection_frame
             ):
-                ar_frames = self._process_plane_detection_frames(
+                self._process_plane_detection_frames(
                     frames=[f.plane_detection_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
@@ -354,7 +333,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 frame_type == ARFrameType.POINT_CLOUD_DETECTION_FRAME
                 and frames[0].point_cloud_detection_frame
             ):
-                ar_frames = self._process_point_cloud_detection_frames(
+                self._process_point_cloud_detection_frames(
                     frames=[f.point_cloud_detection_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
@@ -363,7 +342,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
                 frame_type == ARFrameType.MESH_DETECTION_FRAME
                 and frames[0].mesh_detection_frame
             ):
-                ar_frames = self._process_mesh_detection_frames(
+                self._process_mesh_detection_frames(
                     frames=[f.mesh_detection_frame for f in frames],
                     session_stream=session_stream,
                     device=request.device,
@@ -376,7 +355,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         )
 
         self.on_save_ar_frames(
-            frames=ar_frames,
+            frames=request.frames,
             session_stream=session_stream,
             device=request.device,
         )
@@ -385,10 +364,10 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def _process_transform_frames(
         self,
-        frames: list[TransformFrame],
+        frames: Sequence[TransformFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> list[ARFrame]:
+    ) -> None:
         session_stream.save_transform_frames(
             frames=frames,
             device=device,
@@ -398,14 +377,13 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return [ARFrame(transform_frame=f) for f in frames]
 
     def _process_color_frames(
         self,
-        frames: list[ColorFrame],
+        frames: Sequence[ColorFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> list[ARFrame]:
+    ) -> None:
         session_stream.save_color_frames(
             frames=frames,
             device=device,
@@ -415,14 +393,13 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return [ARFrame(color_frame=f) for f in frames]
 
     def _process_depth_frames(
         self,
-        frames: list[DepthFrame],
+        frames: Sequence[DepthFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> list[ARFrame]:
+    ) -> None:
         session_stream.save_depth_frames(
             frames=frames,
             device=device,
@@ -432,14 +409,13 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return [ARFrame(depth_frame=f) for f in frames]
 
     def _process_gyroscope_frames(
         self,
-        frames: list[GyroscopeFrame],
+        frames: Sequence[GyroscopeFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> list[ARFrame]:
+    ) -> None:
         session_stream.save_gyroscope_frames(
             frames=frames,
             device=device,
@@ -449,14 +425,13 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return [ARFrame(gyroscope_frame=f) for f in frames]
 
     def _process_audio_frames(
         self,
-        frames: list[AudioFrame],
+        frames: Sequence[AudioFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> list[ARFrame]:
+    ) -> None:
         session_stream.save_audio_frames(
             frames=frames,
             device=device,
@@ -466,14 +441,13 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return [ARFrame(audio_frame=f) for f in frames]
 
     def _process_plane_detection_frames(
         self,
-        frames: list[PlaneDetectionFrame],
+        frames: Sequence[PlaneDetectionFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> list[ARFrame]:
+    ) -> None:
         session_stream.save_plane_detection_frames(
             frames=frames,
             device=device,
@@ -483,14 +457,13 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return [ARFrame(plane_detection_frame=f) for f in frames]
 
     def _process_point_cloud_detection_frames(
         self,
-        frames: list[PointCloudDetectionFrame],
+        frames: Sequence[PointCloudDetectionFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> list[ARFrame]:
+    ) -> None:
         session_stream.save_point_cloud_detection_frames(
             frames=frames,
             device=device,
@@ -500,14 +473,13 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return [ARFrame(point_cloud_detection_frame=f) for f in frames]
 
     def _process_mesh_detection_frames(
         self,
-        frames: list[MeshDetectionFrame],
+        frames: Sequence[MeshDetectionFrame],
         session_stream: SessionStream,
         device: Device,
-    ) -> list[ARFrame]:
+    ) -> None:
         session_stream.save_mesh_detection_frames(
             frames=frames,
             device=device,
@@ -517,11 +489,10 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream=session_stream,
             device=device,
         )
-        return [ARFrame(mesh_detection_frame=f) for f in frames]
 
     def on_save_ar_frames(
         self,
-        frames: list[ARFrame],
+        frames: Sequence[ARFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
@@ -536,7 +507,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_transform_frames(
         self,
-        frames: list[TransformFrame],
+        frames: Sequence[TransformFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
@@ -551,7 +522,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_color_frames(
         self,
-        frames: list[ColorFrame],
+        frames: Sequence[ColorFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
@@ -566,7 +537,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_depth_frames(
         self,
-        frames: list[DepthFrame],
+        frames: Sequence[DepthFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
@@ -581,7 +552,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_gyroscope_frames(
         self,
-        frames: list[GyroscopeFrame],
+        frames: Sequence[GyroscopeFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
@@ -596,7 +567,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_audio_frames(
         self,
-        frames: list[AudioFrame],
+        frames: Sequence[AudioFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
@@ -611,7 +582,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_plane_detection_frames(
         self,
-        frames: list[PlaneDetectionFrame],
+        frames: Sequence[PlaneDetectionFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
@@ -626,7 +597,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_point_cloud_detection_frames(
         self,
-        frames: list[PointCloudDetectionFrame],
+        frames: Sequence[PointCloudDetectionFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
@@ -641,7 +612,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
     def on_save_mesh_detection_frames(
         self,
-        frames: list[MeshDetectionFrame],
+        frames: Sequence[MeshDetectionFrame],
         session_stream: SessionStream,
         device: Device,
     ) -> None:
@@ -662,53 +633,48 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         session_stream = self._get_session_stream(request.session_id.value)
 
         if request.device not in session_stream.info.devices:
-            raise InvalidArgument("Device not in session")
+            raise NotFound("Device not in session")
 
-        try:
-            decoded_transform_frame = self._process_transform_frames(
-                frames=[request.frame.transform_frame],
-                session_stream=session_stream,
-                device=request.device,
-            )[0]
-            decoded_depth_frame = self._process_depth_frames(
-                frames=[request.frame.depth_frame],
-                session_stream=session_stream,
-                device=request.device,
-            )[0]
-            decoded_color_frame = self._process_color_frames(
-                frames=[request.frame.color_frame],
-                session_stream=session_stream,
-                device=request.device,
-            )[0]
-            decoded_gyroscope_frame = self._process_gyroscope_frames(
-                frames=[request.frame.gyroscope_frame],
-                session_stream=session_stream,
-                device=request.device,
-            )[0]
-            decoded_audio_frame = self._process_audio_frames(
-                frames=[request.frame.audio_frame],
-                session_stream=session_stream,
-                device=request.device,
-            )[0]
-            decoded_plane_detection_frame = self._process_plane_detection_frames(
-                frames=[request.frame.plane_detection_frame],
-                session_stream=session_stream,
-                device=request.device,
-            )[0]
-            decoded_point_cloud_detection_frame = (
-                self._process_point_cloud_detection_frames(
-                    frames=[request.frame.point_cloud_detection_frame],
-                    session_stream=session_stream,
-                    device=request.device,
-                )[0]
-            )
-            decoded_mesh_detection_frame = self._process_mesh_detection_frames(
-                frames=[request.frame.mesh_detection_frame],
-                session_stream=session_stream,
-                device=request.device,
-            )[0]
-        except IndexError as e:
-            raise InvalidArgument(f"Error processing synchronized AR frame: {e}")
+        self._process_transform_frames(
+            frames=[request.frame.transform_frame],
+            session_stream=session_stream,
+            device=request.device,
+        )
+        self._process_depth_frames(
+            frames=[request.frame.depth_frame],
+            session_stream=session_stream,
+            device=request.device,
+        )
+        self._process_color_frames(
+            frames=[request.frame.color_frame],
+            session_stream=session_stream,
+            device=request.device,
+        )
+        self._process_gyroscope_frames(
+            frames=[request.frame.gyroscope_frame],
+            session_stream=session_stream,
+            device=request.device,
+        )
+        self._process_audio_frames(
+            frames=[request.frame.audio_frame],
+            session_stream=session_stream,
+            device=request.device,
+        )
+        self._process_plane_detection_frames(
+            frames=[request.frame.plane_detection_frame],
+            session_stream=session_stream,
+            device=request.device,
+        )
+        self._process_point_cloud_detection_frames(
+            frames=[request.frame.point_cloud_detection_frame],
+            session_stream=session_stream,
+            device=request.device,
+        )
+        self._process_mesh_detection_frames(
+            frames=[request.frame.mesh_detection_frame],
+            session_stream=session_stream,
+            device=request.device,
+        )
 
         logger.info(
             "Saved synchronized AR frame of device %s to session %s",
@@ -716,15 +682,9 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             session_stream.info.id.value,
         )
 
-        # self.on_save_ar_frames(
-        #     frames=decoded_ar_frames,
-        #     session_stream=session_stream,
-        #     device=request.device,
-        # )
-
         return SaveSynchronizedARFrameResponse()
 
-    def on_program_exit(self) -> None:
+    def on_server_exit(self) -> None:
         """Closes all TCP connections, servers, and files.
 
         @private
@@ -732,7 +692,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         logger.debug("Closing all TCP connections, servers, and files...")
         # Disconnects the global recording. Without this, this function will hang indefinitely.
         rr.disconnect()
-        for id, session in self._client_sessions.items():
+        for id, session in self.client_sessions.items():
             rr.disconnect(session.stream)
             logger.debug("Disconnected session: %s", id)
         logger.debug("All clients disconnected")
@@ -799,7 +759,7 @@ def run_server(  # pragma: no cover
         all_rpcs_done_event = server.stop(30)
         all_rpcs_done_event.wait(30)
 
-        servicer.on_program_exit()
+        servicer.on_server_exit()
 
         # TODO: Discuss hook for user-defined cleanup procedures.
 
