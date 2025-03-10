@@ -1,0 +1,35 @@
+
+Summary:
+  Count:	2399
+  Total:	60.00 s
+  Slowest:	63.46 ms
+  Fastest:	1.44 ms
+  Average:	15.73 ms
+  Requests/sec:	39.98
+
+Response time histogram:
+  1.444  [1]    |
+  7.646  [1197] |∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  13.848 [1]    |
+  20.050 [1]    |
+  26.252 [50]   |∎∎
+  32.454 [1077] |∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  38.656 [66]   |∎∎
+  44.858 [0]    |
+  51.060 [2]    |
+  57.262 [2]    |
+  63.464 [2]    |
+
+Latency distribution:
+  10 % in 1.92 ms 
+  25 % in 2.26 ms 
+  50 % in 16.76 ms 
+  75 % in 28.42 ms 
+  90 % in 30.42 ms 
+  95 % in 31.36 ms 
+  99 % in 34.80 ms 
+
+Status code distribution:
+  [OK]   2399 responses   
+
+

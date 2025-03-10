@@ -6,7 +6,7 @@ using OpenCVForUnity.ImgprocModule;
 using OpenCVForUnity.UnityUtils;
 using OpenCVForUnity.UnityUtils.Helper;
 
-// using CakeLab.ARFlow.;
+using static CakeLab.ARFlow.Utilities.MathUtilities;
 
 namespace CakeLab.ARFlow.Evaluation
 {
@@ -15,179 +15,50 @@ namespace CakeLab.ARFlow.Evaluation
     using TMPro;
     using UnityEngine.UI;
 
-
-
-    /// <summary>
-    /// Class to evaluate the spacial accuracy of the ARFlow system.
-    /// 
-
-    public class ArUcoSpacialEvaluation : SpacialEvaluation
-    {
-        List<Mat> _corners;
-        List<Mat> _rejectedCorners;
-
-
-        Mat _rgbMat;
-
-
-        Mat _camIntrinsics;
-        Mat ids;
-        MatOfDouble _distCoeffs;
-        Dictionary _dictionary;
-        ArucoDetector _arucoDetector;
-
-        //TODO: configure. For now the default (and used ArUco marker) is 4x4 50
-        public int dictionaryId = Objdetect.DICT_4X4_50;
-
-        public ArUcoSpacialEvaluation()
-        {
-
-            ids = new Mat();
-            _corners = new List<Mat>();
-            _rejectedCorners = new List<Mat>();
-            _rgbMat = new Mat(); // Initialize _rgbMat
-            _distCoeffs = new MatOfDouble(0, 0, 0, 0);
-
-            DetectorParameters detectorParams = new DetectorParameters();
-            detectorParams.set_useAruco3Detection(true);
-            RefineParameters refineParameters = new RefineParameters(10f, 3f, true);
-            _dictionary = Objdetect.getPredefinedDictionary((int)dictionaryId);
-            _arucoDetector = new ArucoDetector(_dictionary, detectorParams, refineParameters);
-
-        }
-
-
-        /// <summary>
-        /// Obtain the pose of the camera from the captured image.
-        /// Pose is displayed as the localToWorldMatrix.
-        /// </summary>
-        /// <param name="capturedImage"></param>
-        /// <returns></returns>
-        // public abstract Matrix4x4 ObtainPoseFromImage(Texture2D capturedImage, float markerLength, Mat camIntrinsics);
-        public Matrix4x4 ObtainPoseFromImage(Texture2D capturedImage, float markerLength, Mat camIntrinsics)
-        {
-            if (camIntrinsics != null)
-            {
-                _camIntrinsics = camIntrinsics;
-            }
-
-            // Initialize _rgbMat with the dimensions of the captured image
-            if (_rgbMat.empty())
-            {
-                _rgbMat = new Mat(capturedImage.height, capturedImage.width, CvType.CV_8UC3);
-            }
-
-            Utils.texture2DToMat(capturedImage, _rgbMat);
-            _arucoDetector.detectMarkers(_rgbMat, _corners, ids, _rejectedCorners);
-
-            return EstimatePoseCanonicalMarker(_rgbMat, markerLength);
-        }
-
-        private Matrix4x4 EstimatePoseCanonicalMarker(Mat rgbMat, float markerLength)
-        {
-            using (MatOfPoint3f objPoints = new MatOfPoint3f(
-                new Point3(-markerLength / 2f, markerLength / 2f, 0),
-                new Point3(markerLength / 2f, markerLength / 2f, 0),
-                new Point3(markerLength / 2f, -markerLength / 2f, 0),
-                new Point3(-markerLength / 2f, -markerLength / 2f, 0)
-            ))
-            {
-                if (ids.total() > 0)
-                {
-                    using (Mat rvec = new Mat(1, 1, CvType.CV_64FC3))
-                    using (Mat tvec = new Mat(1, 1, CvType.CV_64FC3))
-                    using (Mat corner_4x1 = _corners[0].reshape(2, 4)) // 1*4*CV_32FC2 => 4*1*CV_32FC2
-                    using (MatOfPoint2f imagePoints = new MatOfPoint2f(corner_4x1))
-                    {
-                        // Calculate pose marker
-                        Calib3d.solvePnP(objPoints, imagePoints, _camIntrinsics, _distCoeffs, rvec, tvec);
-
-                        // In this example we are processing with RGB color image, so Axis-color correspondences are X: blue, Y: green, Z: red. (Usually X: red, Y: green, Z: blue)
-                        Calib3d.drawFrameAxes(rgbMat, _camIntrinsics, _distCoeffs, rvec, tvec, markerLength * 0.5f);
-
-                        return GetpositionAndQuaternion(rvec, tvec);
-                    }
-                }
-            }
-
-
-            return Matrix4x4.identity;
-        }
-
-        private Matrix4x4 GetpositionAndQuaternion(Mat rvec, Mat tvec)
-        {
-            // Convert to unity pose data.
-            double[] rvecArr = new double[3];
-            rvec.get(0, 0, rvecArr);
-            double[] tvecArr = new double[3];
-            tvec.get(0, 0, tvecArr);
-            Debug.Log(rvecArr);
-            Debug.Log(tvecArr);
-            PoseData poseData = ARUtils.ConvertRvecTvecToPoseData(rvecArr, tvecArr);
-
-            // Convert to transform matrix.
-            return ARUtils.ConvertPoseDataToMatrix(ref poseData, true);
-        }
-
-        public void dispose()
-        {
-            _camIntrinsics.Dispose();
-            _distCoeffs.Dispose();
-            ids.Dispose();
-            foreach (var corner in _corners)
-            {
-                corner.Dispose();
-            }
-            foreach (var corner in _rejectedCorners)
-            {
-                corner.Dispose();
-            }
-        }
-    }
-
     public class SpacialEvaluationManager : MonoBehaviour
     {
 
-        //The textured plane, child to the arucoObj. 
-        //In the current implementation, this plane is rotated by 90 degrees along the y axis. 
-        // This is to make sure that the initial state (unrotated)
-        public GameObject texturedPlane;
-
-        // The ARPlane object that will be moved, child of the arucoParent
-        public GameObject arucoObj;
-        // The parent object of the ARPlane object. These two objects are for rotation purposes.
-        public GameObject arucoParent;
+        // The textured plane, child to the arucoObj. 
+        // With the way Unity sets up the gameobject texture, the plane is rotated 180 degree so that it matches the original orientation
+        public GameObject arucoPlane;
 
         public Camera activeCamera;
 
         public TMP_Text infoText;
         public Button toggleButton;
-        public TMP_Text buttonText;
+        public TMP_Text toggleButtonText;
+
+        public Button switchButton;
+        public TMP_Text switchButtonText;
 
         public TMP_InputField iterationsInput;
-
-
+        
         ArUcoSpacialEvaluation spacialEvaluation = new ArUcoSpacialEvaluation();
 
         bool isRunning = false;
 
         bool isCancelled = false;
 
+        enum Mode {
+            IterationTesting,
+            LiveDebug
+        }
 
+        Mode currentMode = Mode.IterationTesting;
 
         void Start()
         {
-            toggleButton.onClick.AddListener(OnButtonClicked);
+            toggleButton.onClick.AddListener(OnToggleButtonClicked);
+            switchButton.onClick.AddListener(OnSwitchButtonClicked);
         }
 
         Mat GetCameraIntrinsics()
         {
-            float f = activeCamera.focalLength;
-            float fx = f;
-            float fy = f;
+            float fx = (activeCamera.focalLength * activeCamera.pixelWidth) / activeCamera.sensorSize.x;
+            float fy = (activeCamera.focalLength * activeCamera.pixelHeight) / activeCamera.sensorSize.y;
 
-            float cx = activeCamera.sensorSize.x / 2;
-            float cy = activeCamera.sensorSize.y / 2;
+            float cx = activeCamera.pixelWidth / 2;
+            float cy = activeCamera.pixelHeight / 2;
 
             Mat camMatrix = new Mat(3, 3, CvType.CV_64FC1);
             camMatrix.put(0, 0, fx);
@@ -203,122 +74,304 @@ namespace CakeLab.ARFlow.Evaluation
             return camMatrix;
         }
 
-        void OnButtonClicked()
+        void OnToggleButtonClicked()
         {
-            int iterations = iterationsInput.text == "" ? 1 : int.Parse(iterationsInput.text);
-            if (!isRunning)
+            if (currentMode == Mode.IterationTesting) 
             {
-                isCancelled = false;
-                isRunning = true;
-                StartEvaluation(iterations);
-                buttonText.text = "Stop";
+                int iterations = iterationsInput.text == "" ? 1 : int.Parse(iterationsInput.text);
+                if (!isRunning)
+                {
+                    isCancelled = false;
+                    isRunning = true;
+                    StartEvaluation(iterations);
+                    toggleButtonText.text = "Stop";
+                }
+                else
+                {
+                    isCancelled = true;
+                    isRunning = false;
+                    toggleButtonText.text = "Start in iterations";
+                }
             }
-            else
-            {
-                isCancelled = true;
-                isRunning = false;
-                buttonText.text = "Start";
+            else if (currentMode == Mode.LiveDebug) {
+                randomizePosition();
+                randomizeRotation();
+
+                ComputePredictionAndTrueData();
             }
         }
 
-        void StartEvaluation(int iterations)
+        void OnSwitchButtonClicked()
         {
-            //Potentially randomize camera intrinsics
-            Mat intrinsics = GetCameraIntrinsics();
+            if (currentMode == Mode.IterationTesting) 
+            {
+                toggleButtonText.text = "Randomize Transformation";
+                switchButtonText.text = "Switch to Iterations testing";
+                currentMode = Mode.LiveDebug;
+            }   
+            else if (currentMode == Mode.LiveDebug) 
+            {
+                toggleButtonText.text = "Start in iterations";
+                switchButtonText.text = "Switch to live debugging";
+                currentMode = Mode.IterationTesting;
+            } 
+        }
 
-            float errorScore = 0;
-            int validCount = 0;
-
+        /// <summary>
+        /// Capture the image from the active camera as a Texture2D
+        /// </summary>
+        /// <returns>Note that this texture should be destroyed at the end of it's life cycle.</returns>
+        Texture2D CaptureFromActiveCamera() {
             int mHeight = activeCamera.pixelHeight;
             int mWidth = activeCamera.pixelWidth;
 
             var rect = new UnityEngine.Rect(0, 0, mWidth, mHeight);
             RenderTexture renderTexture = new RenderTexture(mWidth, mHeight, 24);
             Texture2D screenShot = new Texture2D(mWidth, mHeight, TextureFormat.RGBA32, false);
-
             activeCamera.targetTexture = renderTexture;
 
-            // Assuming marker is scaled proportionally in all directions, and units are in meters.
-            var markerLength = texturedPlane.transform.localScale.x;
+            activeCamera.Render();
 
+            RenderTexture.active = renderTexture;
+            screenShot.ReadPixels(rect, 0, 0);
+
+            return screenShot;
+        }
+
+        /// <summary>
+        /// Detect and shows the prediction from the window currently shown on the camera (instead of procedural testing)
+        /// </summary>
+        void FixedUpdate()
+        {
+            if (isRunning) return;
+#if UNITY_EDITOR
+            //This code is only for when we are able to move the object freely (currently not implemented in builds)
+            //To help with debugging with detectors
+            // ComputePredictionAndTrueData();
+#endif
+        }
+        
+        /// <summary>
+        /// Compute and populate the predR, trueR, predP, trueP fields for the OnDrawGizmos method
+        /// </summary>
+        void ComputePredictionAndTrueData() {
+            Mat intrinsics = GetCameraIntrinsics();
+
+            var markerLength = arucoPlane.transform.localScale.x*10;
+            
+            Texture2D screenShot = CaptureFromActiveCamera();
+
+            Matrix4x4 predRes = spacialEvaluation.ObtainPoseFromImage(screenShot, markerLength, intrinsics);
+            Matrix4x4 truth = GetGroundTruth();
+
+            // for OnDrawGizmos
+            predR = ExtractRotationFromMatrix(predRes);
+            trueR = ExtractRotationFromMatrix(truth);
+
+            predP = ExtractPositionFromMatrix(predRes);
+            trueP = ExtractPositionFromMatrix(truth);
+
+            ShowDebugOffset(predRes);
+
+            Destroy(screenShot);
+        }
+
+        void ShowDebugOffset(Matrix4x4 predRes){
+            
+            string info = $"truth: {trueR} \n prediction: {predR}";
+            info += $"\noffset angle: {ComputeQuaternionError(trueR, predR)}";
+            if (predRes == Matrix4x4.identity) info += "\nNot detected";
+            infoText.text = info;
+        }
+
+        Quaternion predR = Quaternion.identity;
+        Quaternion trueR = Quaternion.identity;
+        Vector3 predP = new Vector3();
+        Vector3 trueP = new Vector3();
+
+        void OnDrawGizmos()
+        {
+            Quaternion predRot = predR;
+            Quaternion truthRot = trueR;
+
+            // Get positions (you might use the translation part of the TRS)
+            Vector3 posPred = predP;
+            Vector3 posTruth = trueP;
+
+            // Draw truth axes at its position (red = right, green = up, blue = forward)
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(posTruth, posTruth + truthRot * Vector3.right);
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(posTruth, posTruth + truthRot * Vector3.up);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(posTruth, posTruth + truthRot * Vector3.forward);
+
+            // Draw predicted axes offset a bit for clarity
+            Vector3 offsetPos = posPred + Vector3.right * 0.5f;
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(offsetPos, offsetPos + predRot * Vector3.right);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(offsetPos, offsetPos + predRot * Vector3.up);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(offsetPos, offsetPos + predRot * Vector3.forward);
+        }
+
+        //TODO: Potentially move this to th SpacialEvaluation class
+        void StartEvaluation(int iterations)
+        {
+            //Potentially randomize camera intrinsics
+            Mat intrinsics = GetCameraIntrinsics();
+
+            float totalTime = 0;
+            float matrixError = 0;
+            float translationError = 0;
+            float rotationError = 0;
+
+            int validCount = 0;
+            // Assuming marker is scaled proportionally in all directions.
+            var markerLength = arucoPlane.transform.localScale.x*10;
             for (int i = 0; i < iterations; i++)
             {
-                if (isCancelled) return;
                 randomizePosition();
                 randomizeRotation();
+                Texture2D screenShot = CaptureFromActiveCamera();
 
-                activeCamera.Render();
+                if (isCancelled) return;
 
-                RenderTexture.active = renderTexture;
-                screenShot.ReadPixels(rect, 0, 0);
+                float t = Time.realtimeSinceStartup;
 
-                Matrix4x4 evalRes = spacialEvaluation.ObtainPoseFromImage(screenShot, markerLength, intrinsics);
+                Matrix4x4 predRes = spacialEvaluation.ObtainPoseFromImage(screenShot, markerLength, intrinsics);
+                
+                totalTime += Time.realtimeSinceStartup - t;
                 Matrix4x4 truth = GetGroundTruth();
 
-                if (evalRes != Matrix4x4.identity)
+                if (predRes != Matrix4x4.identity)
                 {
-                    errorScore += SpacialEvaluation.GetErrorScore(truth, evalRes);
+                    matrixError += GetFrobeniusNorm(truth, predRes);
+                    translationError += GetTranslationError(truth, predRes);
+                    rotationError += GetRotationalError(truth, predRes);
                     validCount++;
                 }
-                Debug.Log(errorScore);
-                Debug.Log(evalRes);
-                Debug.Log(truth);
-                Debug.Log("---------------------");
 
-
-                infoText.text = errorScore.ToString();
+                Destroy(screenShot);
             }
 
-            buttonText.text = "Start";
-            infoText.text = $"{errorScore.ToString()}/{validCount}";
-            isRunning = false;
+            toggleButtonText.text = "Start";
+            infoText.text = $"Matrix error: {matrixError}/{validCount}\n"
+            + $"Translation error: {translationError}/{validCount}\n"
+            + $"Rotation error: {rotationError}/{validCount}\n"
+            + $"Time in second: {totalTime}";
 
+            EvalParam evalParam = GetEvalParam(iterations);
+            EvalCameraIntrinsics evalCam = GetEvalCamIntrinsicsInfo();
+            EvalSetupInfo evalSetup = GetEvalSetupInfo();
+            EvalInfo evalInfo = new EvalInfo 
+            {
+                evalParam=evalParam,
+                cameraIntrinsics=evalCam,
+                setupInfo=evalSetup,
+                totalTime=totalTime,
+                matrixError=matrixError,
+                translationError=translationError,
+                rotationError=rotationError,
+                validScanCount=validCount
+            };
+
+            spacialEvaluation.WriteResultToFile(evalInfo);
+            isRunning = false;
         }
 
+        /// <summary>
+        /// Get the info for writing the evaluation to a file
+        /// </summary>
+        /// <returns></returns>
+        EvalParam GetEvalParam(int totalCount) 
+        {
+
+            return new EvalParam 
+            {
+                deviceModel = SystemInfo.deviceModel,
+                deviceName = SystemInfo.deviceName,
+                deviceType = SystemInfo.deviceType,
+                totalCount = totalCount,
+            };
+        }
+
+        /// <summary>
+        /// Get the info for writing the evaluation to a file
+        /// </summary>
+        /// <returns></returns>
+        EvalCameraIntrinsics GetEvalCamIntrinsicsInfo() {
+            Vector2 focalLength;
+            focalLength.x = (activeCamera.focalLength * activeCamera.pixelWidth) / activeCamera.sensorSize.x;
+            focalLength.y = (activeCamera.focalLength * activeCamera.pixelHeight) / activeCamera.sensorSize.y;
+
+            Vector2 principalPoint;
+            principalPoint.x = activeCamera.pixelWidth / 2;
+            principalPoint.y = activeCamera.pixelHeight / 2;
+
+            return new EvalCameraIntrinsics
+            {
+                focalLength = focalLength,
+                principalPoint = principalPoint
+            };
+        }
+
+        /// <summary>
+        /// Get the info for writing the evaluation to a file
+        /// </summary>
+        /// <returns></returns>
+        EvalSetupInfo GetEvalSetupInfo() {
+            return new EvalSetupInfo
+            {
+                positionSetup = randomPositionSetup,
+                rotationSetup = randomRotationSetup
+            };
+        }
+ 
         Matrix4x4 GetGroundTruth()
         {
-            Transform t = arucoObj.transform;
-            // Vector3 relativePosition = activeCamera.transform.InverseTransformDirection(t.position - activeCamera.transform.position);
+            Transform t = arucoPlane.transform;
 
-
-            // return Matrix4x4.TRS(relativePosition, t.rotation, Vector3.one);
-            return Matrix4x4.TRS(t.position, t.rotation, Vector3.one);
-
-
+            Matrix4x4 trsMat = Matrix4x4.TRS(t.position, t.rotation, Vector3.one);
+            return activeCamera.transform.localToWorldMatrix * trsMat;
         }
+        
+        readonly Vector3Setup randomPositionSetup = new Vector3Setup 
+        {
+            xVariation = new Vector2(0.2f, 0.8f),
+            yVariation = new Vector2(0.2f, 0.8f),
+            zVariation = new Vector2(3, 6),
+        };
+
+        readonly Vector3Setup randomRotationSetup = new Vector3Setup
+        {
+            xVariation = new Vector2(-40, -150),
+            yVariation = new Vector2(-50, 50),
+            zVariation = new Vector2(-50, 50),
+        };
 
         void randomizePosition()
         {
-            // Randomize the position of the object
-            // ranges are set to be of adequate size to fit the camera viewport.
             Vector3 viewportPos = new Vector3();
 
-            viewportPos.x = Random.Range(0.1f, 0.9f);
-            viewportPos.y = Random.Range(0.1f, 0.9f);
-            viewportPos.z = Random.Range(3, 6);
+            viewportPos.x = Random.Range(randomPositionSetup.xVariation.x, randomPositionSetup.xVariation.y);
+            viewportPos.y = Random.Range(randomPositionSetup.yVariation.x, randomPositionSetup.yVariation.y);
+            viewportPos.z = Random.Range(randomPositionSetup.zVariation.x, randomPositionSetup.zVariation.y);
 
-            Vector3 pos = activeCamera.ViewportToWorldPoint(viewportPos);
-            Debug.Log(pos);
-            arucoParent.transform.position = activeCamera.ViewportToWorldPoint(viewportPos);
+            arucoPlane.transform.position = activeCamera.ViewportToWorldPoint(viewportPos);
         }
 
         void randomizeRotation()
         {
             // Randomize x and z of parent
-            // Values are tested relative to camera's viewport, so that it is visible
+            // Values are tested relative to camera's viewport to make sure it is visible
             Vector3 parentRotation = new Vector3();
-            parentRotation.x = Random.Range(-100, -50);
-            parentRotation.z = Random.Range(-30, 30);
-            arucoParent.transform.rotation = Quaternion.Euler(parentRotation);
-
-            //randomize y of plane
-            Vector3 planeRotation = new Vector3();
-            planeRotation.y = Random.Range(0, 360);
-            planeRotation.x = 0;
-            planeRotation.z = 0;
-            arucoObj.transform.localRotation = Quaternion.Euler(planeRotation);
+            parentRotation.x = Random.Range(randomRotationSetup.xVariation.x, randomRotationSetup.xVariation.y);
+            parentRotation.y = Random.Range(randomRotationSetup.yVariation.x, randomRotationSetup.yVariation.y);
+            parentRotation.z = Random.Range(randomRotationSetup.zVariation.x, randomRotationSetup.zVariation.y);
+            arucoPlane.transform.rotation = Quaternion.Euler(parentRotation);
         }
     }
-
 
 }
