@@ -6,9 +6,11 @@ from collections.abc import Sequence
 from concurrent import futures
 from pathlib import Path
 from signal import SIGINT, SIGTERM, signal
-from typing import Any, Type
+from typing import Any, Type, List
 
 import grpc
+import psutil
+import qrcode
 import rerun as rr
 from grpc_interceptor.exceptions import InvalidArgument, NotFound
 
@@ -17,6 +19,7 @@ from arflow._session_stream import SessionStream
 from arflow._types import (
     ARFrameType,
 )
+from arflow._utils import is_private_ip
 from cakelab.arflow_grpc.v1 import arflow_service_pb2_grpc
 from cakelab.arflow_grpc.v1.ar_frame_pb2 import ARFrame
 from cakelab.arflow_grpc.v1.audio_frame_pb2 import AudioFrame
@@ -105,10 +108,9 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         self, request: CreateSessionRequest, context: grpc.ServicerContext | None = None
     ) -> CreateSessionResponse:
         new_session_id = str(uuid.uuid4())
-        new_rr_stream = rr.new_recording(
+        new_rr_stream = rr.RecordingStream(
             application_id=self.application_id,
             recording_id=new_session_id,  # recording_id identifies streams
-            spawn=self.spawn_viewer,
         )
         new_session = Session(
             id=SessionUuid(value=new_session_id),
@@ -121,6 +123,9 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
         )
         self.client_sessions[new_session_id] = new_session_stream
         logger.info("Created new session: %s", new_session_stream.info)
+
+        if self.spawn_viewer:
+            new_rr_stream.spawn()
 
         if self.save_dir is not None:
             save_path = self.save_dir / Path(f"{new_session_stream.info.id.value}.rrd")
@@ -704,6 +709,7 @@ def run_server(  # pragma: no cover
     spawn_viewer: bool = True,
     save_dir: Path | None = None,
     application_id: str = "arflow",
+    host: str = "[::]",
     port: int = 8500,
 ) -> None:
     """Run gRPC server.
@@ -735,10 +741,37 @@ def run_server(  # pragma: no cover
             ("grpc.max_receive_message_length", -1),
         ],
     )
-    arflow_service_pb2_grpc.add_ARFlowServiceServicer_to_server(servicer, server)  # pyright: ignore [reportUnknownMemberType]
-    server.add_insecure_port("[::]:%s" % port)
+    arflow_service_pb2_grpc.add_ARFlowServiceServicer_to_server(  # type: ignore
+        servicer, server
+    )  # pyright: ignore [reportUnknownMemberType]
+    server.add_insecure_port(f"{host}:{port}")
     server.start()
     logger.info("Server started, listening on %s", port)
+    logger.info("To connect, scan the QR code below with your device.")
+
+    # Print QR code for quick client login.
+    qr = qrcode.QRCode()
+
+    if host == "[::]":
+        # Gather private (LAN) IPv4 addresses
+        ip_options: List[str] = []
+        for iface, addr_list in psutil.net_if_addrs().items():
+            for addr in addr_list:
+                if addr.family.name == "AF_INET" and is_private_ip(addr.address):
+                    ip_options.append(addr.address)
+
+        logger.info(f"Using default host {ip_options[0]}")
+        qr.add_data(f"{ip_options[0]}:{port}")
+    else:
+        qr.add_data(f"{host}:{port}")
+
+    qr.make()
+    qr.print_ascii(invert=True)  # invert=True for dark-on-light appearance
+
+    if host == "[::]":
+        logger.info(f"Pass -o or --host to change the IP of the QR code.")
+
+    logger.info("\n")
 
     def handle_shutdown(*_: Any) -> None:
         """Shutdown gracefully.
@@ -755,7 +788,7 @@ def run_server(  # pragma: no cover
         3. Wait on the `threading.Event` object returned by `server.stop(30)` to ensure Python does not exit prematurely.
         4. Optionally, perform cleanup procedures and save any necessary data before shutting down completely.
         """
-        logger.debug("Shutting down gracefully")
+        logger.debug("Shutting down gracefully.")
         all_rpcs_done_event = server.stop(30)
         all_rpcs_done_event.wait(30)
 
@@ -763,7 +796,7 @@ def run_server(  # pragma: no cover
 
         # TODO: Discuss hook for user-defined cleanup procedures.
 
-        logger.info("Server shut down gracefully")
+        logger.info("Server shut down gracefully.")
 
     signal(SIGTERM, handle_shutdown)
     signal(SIGINT, handle_shutdown)

@@ -20,6 +20,7 @@ grpcio = "^1.71.0"
 grpcio-tools = "^1.71.0"
 grpc-interceptor = "^0.15.4"
 dracopy = "^1.5.0"
+qrcode = "^8.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"             # Sync with `.github/ci.yml` if changed
@@ -29,6 +30,7 @@ pytest-cov = "^5.0.0"
 pre-commit = "^3.8.0"
 pyright = "^1.1.382"        # Sync with `.github/ci.yml` if changed
 grpc-stubs = "^1.53.0.5"
+commitizen = "^4.6.2"
 
 [tool.poetry.group.docs.dependencies]
 pdoc = "^15.0.3"
@@ -59,7 +61,7 @@ exclude = ["*.ipynb"]
 extend-select = ["I"]
 # Enable all `pydocstyle` rules, limiting to those that adhere to the
 # Google convention via `convention = "google"`, below.
-select = ["D", "T"]
+select = ["D", "T", "I"]
 
 # On top of the Google convention, disable `D417`, which requires
 # documentation for every function parameter.

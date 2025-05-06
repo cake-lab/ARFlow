@@ -1,3 +1,4 @@
+import ipaddress
 from collections import defaultdict
 from collections.abc import Sequence
 from typing import DefaultDict, Tuple
@@ -42,3 +43,19 @@ def group_depth_frames_by_format_dims_and_smoothness(
             )
         ].append(frame)
     return depth_frames_grouped_by_format_dims_and_smoothness
+
+
+def is_private_ip(ip: str) -> bool:
+    """Check if the IP address is private (LAN) and not a loopback address.
+
+    Args:
+        ip: The IP address to check.
+
+    Returns:
+        bool: True if the IP address is private and not a loopback address, False otherwise.
+    """
+    try:
+        ip_obj = ipaddress.ip_address(ip)
+        return ip_obj.is_private and not ip_obj.is_loopback
+    except ValueError:
+        return False
