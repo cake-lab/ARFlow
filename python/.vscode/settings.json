@@ -1,0 +1,8 @@
+{
+    "cSpell.words": [
+        "arflow"
+    ],
+    "editor.formatOnSave": true,
+    "python.formatting.provider": "none", // disable other formatters
+    "editor.defaultFormatter": "charliermarsh.ruff"
+}
