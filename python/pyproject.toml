@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "arflow"
-version = "0.3.0"
-description = "ARFlow is a data-sharing layer that enables developer-friendly data streaming, storage, and visualization for augmented reality (AR) device data."
+version = "0.4.0"
+description = "ARFlow is a data-sharing layer that enables developer-friendly data streaming, storage, and visualization of augmented reality (AR) device data."
 authors = ["Yiqin Zhao <yiqinzhao@outlook.com>"]
 readme = "README.md"
 packages = [{ include = "arflow" }, { include = "cakelab/arflow_grpc/v1" }]
@@ -14,12 +14,12 @@ repository = "https://github.com/cake-lab/ARFlow"
 "Video" = "https://youtu.be/mml8YrCgfTk"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.13"
-rerun-sdk = "^0.20.3"
-grpcio = "^1.60.1"
-grpcio-tools = "^1.60.1"
+python = ">=3.10,<4.0"
+rerun-sdk = "^0.23.1"
+grpcio = "^1.71.0"
+grpcio-tools = "^1.71.0"
 grpc-interceptor = "^0.15.4"
-dracopy = "^1.4.0"
+dracopy = "^1.5.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"             # Sync with `.github/ci.yml` if changed
@@ -31,7 +31,7 @@ pyright = "^1.1.382"        # Sync with `.github/ci.yml` if changed
 grpc-stubs = "^1.53.0.5"
 
 [tool.poetry.group.docs.dependencies]
-pdoc = "^14.6.1"
+pdoc = "^15.0.3"
 
 [tool.poetry.group.evals.dependencies]
 ipykernel = "^6.29.5"
