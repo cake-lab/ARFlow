@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+message Vector3 {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}

@@ -1,0 +1,11 @@
+# For details on buf.yaml configuration, visit https://buf.build/docs/configuration/v2/buf-yaml
+version: v2
+modules:
+  - path: protos
+lint:
+  use:
+    - STANDARD
+  rpc_allow_google_protobuf_empty_responses: true
+breaking:
+  use:
+    - FILE

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+import "cakelab/arflow_grpc/v1/session.proto";
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+message GetSessionResponse {
+  Session session = 1;
+}

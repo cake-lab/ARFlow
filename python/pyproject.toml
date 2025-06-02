@@ -1,11 +1,15 @@
 [tool.poetry]
 name = "arflow"
-version = "0.3.0"
+version = "0.4.0"
 description = "ARFlow is a data-sharing layer that enables developer-friendly data streaming, storage, and visualization for augmented reality (AR) device data."
-authors = ["Yiqin Zhao <yiqinzhao@outlook.com>"]
+authors = [
+  "Yiqin Zhao <yiqinzhao@outlook.com>",
+  "Thinh Nguyen <ngthinh302@gmail.com>",
+  "Khang Luu <knluu@wpi.edu>",
+]
 readme = "README.md"
-packages = [{ include = "arflow" }]
-license = "GPL-3.0"
+packages = [{ include = "arflow" }, { include = "cakelab/arflow_grpc/v1" }]
+license = "Apache 2.0"
 homepage = "https://cake.wpi.edu/ARFlow/"
 repository = "https://github.com/cake-lab/ARFlow"
 
@@ -14,49 +18,68 @@ repository = "https://github.com/cake-lab/ARFlow"
 "Video" = "https://youtu.be/mml8YrCgfTk"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.13"
-rerun-sdk = "^0.12.1"
+python = ">=3.10,<3.13"
+rerun-sdk = "==0.20.*"
 grpcio = "^1.60.1"
 grpcio-tools = "^1.60.1"
+grpc-interceptor = "^0.15.4"
+dracopy = "^1.4.0"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.6.4"
-pyright = "^1.1.379"
+ruff = "^0.6.4"             # Sync with `.github/ci.yml` if changed
 pytest = "^8.3.2"
+pytest-randomly = "^3.15.0"
+pytest-cov = "^5.0.0"
 pre-commit = "^3.8.0"
+pyright = "^1.1.382"        # Sync with `.github/ci.yml` if changed
+grpc-stubs = "^1.53.0.5"
 
 [tool.poetry.group.docs.dependencies]
 pdoc = "^14.6.1"
+
+[tool.poetry.group.evals.dependencies]
+ipykernel = "^6.29.5"
+matplotlib = "^3.10.0"
+pandas = "^2.2.3"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-serve = "arflow.serve:serve"
+arflow = "arflow._cli:main"
 
 [tool.ruff]
 # gRPC generated files
 extend-exclude = [
-    "arflow/service_pb2.py",
-    "arflow/service_pb2_grpc.py",
-    "arflow/service_pb2.pyi",
+  "examples",
+  "cakelab/arflow_grpc/**.py",
+  "cakelab/arflow_grpc/**.pyi",
 ]
 
 [tool.ruff.lint]
+exclude = ["*.ipynb"]
 # https://github.com/astral-sh/ruff-vscode/blob/main/README.md#configuring-vs-code
 extend-select = ["I"]
+# Enable all `pydocstyle` rules, limiting to those that adhere to the
+# Google convention via `convention = "google"`, below.
+select = ["D", "T"]
+
+# On top of the Google convention, disable `D417`, which requires
+# documentation for every function parameter.
+ignore = ["D417"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.pyright]
-typeCheckingMode = "off" # TODO: Enable strict type checking
-ignore = [
-    "arflow/service_pb2.py",
-    "arflow/service_pb2_grpc.py",
-    "arflow/service_pb2.pyi",
+typeCheckingMode = "strict"
+exclude = [
+  "examples",
+  "cakelab/arflow_grpc/**.py",
+  "cakelab/arflow_grpc/**.pyi",
 ]
-# https://github.com/RobertCraigie/pyright-python#pre-commit
-venvPath = "."
-venv = ".venv"
+
+[tool.pytest.ini_options]
+# coverage report for only `arflow` package with missing lines with 5 slowest tests
+addopts = "-vv --durations 5 --cov arflow --cov-report term-missing --cov-fail-under=100"

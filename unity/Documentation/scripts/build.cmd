@@ -3,13 +3,15 @@ SETLOCAL
 SETLOCAL ENABLEEXTENSIONS
 
 rmdir /s /q api
-rmdir /s /q clientHTMLOutput
+cd ../../website/docs
+rmdir /s /q client
+cd ../../unity/Documentation
 
 del index.md
 
-chdir ../
-type "README.md" > "Documentation/index.md"
-chdir Documentation
+cd ../
+type "Packages/edu.wpi.cake.arflow/README.md" > "Documentation/index.md"
+cd Documentation
 
 docfx metadata
 docfx build docfx.json > docfx.log

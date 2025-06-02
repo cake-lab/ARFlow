@@ -56,12 +56,5 @@ MonoBehaviour:
     m_VoxelSize: 0.1
   m_TrackedImageDiscoveryParams:
     m_TrackingUpdateInterval: 0.09
-  m_EnvironmentProbeDiscoveryParams:
-    m_MinUpdateTime: 0.2
-    m_MaxDiscoveryDistance: 3
-    m_DiscoveryDelayTime: 1
-    m_CubemapFaceSize: 16
-  m_AnchorDiscoveryParams:
-    m_MinTimeUntilUpdate: 0.2
   m_UseXRay: 1
   m_FlipXRayDirection: 0

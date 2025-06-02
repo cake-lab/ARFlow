@@ -6,8 +6,14 @@ import pdoc
 
 
 def make_docs():
+    """Generate documentation for the `arflow` package and `examples` package."""
     pdoc.pdoc(
-        "arflow", "examples", output_directory=Path(__file__).parent.parent / "docs"
+        "arflow",
+        "examples",
+        output_directory=Path(__file__).parent.parent.parent
+        / "website"
+        / "docs"
+        / "server",
     )
 
 

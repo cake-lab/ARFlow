@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+import "cakelab/arflow_grpc/v1/mesh_filter.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+message MeshDetectionFrame {
+  enum State {
+    STATE_UNSPECIFIED = 0;
+    STATE_ADDED = 1;
+    STATE_UPDATED = 2;
+    STATE_REMOVED = 3;
+  }
+
+  State state = 1;
+  google.protobuf.Timestamp device_timestamp = 2;
+  MeshFilter mesh_filter = 3;
+}

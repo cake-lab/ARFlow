@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package cakelab.arflow_grpc.v1;
+
+import "cakelab/arflow_grpc/v1/device.proto";
+
+option csharp_namespace = "CakeLab.ARFlow.Grpc.V1";
+
+message SessionUuid {
+  string value = 1;
+}
+
+message SessionMetadata {
+  string name = 1;
+  // Path to the session data file on the server. Default to a server-defined path. Does nothing if the server is in View mode.
+  optional string save_path = 2;
+}
+
+message Session {
+  SessionUuid id = 1;
+  SessionMetadata metadata = 2;
+  repeated Device devices = 3;
+}

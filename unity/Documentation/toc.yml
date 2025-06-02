@@ -1,2 +1,4 @@
-- name: API
+- name: Docs
+  href: docs/
+- name: Scripting API
   href: api/

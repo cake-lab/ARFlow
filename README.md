@@ -1,82 +1,76 @@
 # ARFlow
 
-ARFlow is a data-sharing layer that enables developer-friendly data streaming, storage, and visualization for augmented reality (AR) device data.
-This project aims to provide a tool to democratize and accelerate AR research and development.
+[![image](https://img.shields.io/pypi/v/arflow.svg)](https://pypi.python.org/pypi/arflow)
+[![image](https://img.shields.io/pypi/l/arflow.svg)](https://github.com/cake-lab/ARFlow/blob/main/LICENSE)
+[![image](https://img.shields.io/pypi/pyversions/arflow.svg)](https://pypi.python.org/pypi/arflow)
+[![CI status](https://github.com/cake-lab/ARFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/cake-lab/ARFlow/actions)
+[![Release status](https://github.com/cake-lab/ARFlow/actions/workflows/release.yml/badge.svg)](https://github.com/cake-lab/ARFlow/actions)
 
-[Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#how-to-cite-arflow) | [Project Page](https://cake.wpi.edu/ARFlow/) | [Video](https://youtu.be/mml8YrCgfTk)
+ARFlow is a data-sharing layer that enables developer-friendly data streaming,
+storage, and visualization for augmented reality (AR) device data. This project
+aims to provide a tool to democratize and accelerate AR research and
+development.
 
-## Getting Started
+[Paper](https://doi.org/10.1145/3638550.3643617) | [BibTeX](#how-to-cite-arflow)
+| [Project Page](https://cake.wpi.edu/ARFlow/) |
+[Video](https://youtu.be/mml8YrCgfTk)
+
+## Quick Start
 
 ### Device Preparation
 
-First, you need an AR device.
-We currently support iOS and Android phones and tablets. Meta Quests 3 support is being developed.
-Make sure you have the developer mode enabled on your device.
+First, you need an AR device. We currently support iOS and Android phones and
+tablets. Meta Quests 3 support is being developed. Make sure you have the
+developer mode enabled on your device.
 
 ### Server Setup
 
-Next, create your own ARFlow server instance to start playing with the device collected AR data. Here we show the steps to build a simple server:
+The ARFlow server can be simply installed via `pip`:
 
-```bash
+```shell
 # Create a python environment using your favorite tool, then
 pip install arflow
 ```
 
-Create a Python file `simple_arflow_server.py` and paste the following code:
+Next, start up your own ARFlow server instance with the ARFlow CLI:
 
-```python
-"""A simple example of extending the ARFlow server."""
-
-import arflow
-
-
-class CustomService(arflow.ARFlowService):
-    def on_frame_received(self, frame: arflow.DataFrameRequest):
-        """Called when a frame is received."""
-        print("Frame received!")
-
-
-def main():
-    arflow.create_server(CustomService, port=8500, path_to_save="./")
-
-
-if __name__ == "__main__":
-    main()
+```shell
+arflow view # This will start the server on port 8500
 ```
 
-Run it!
-
-```
-python simple_arflow_server.py
-```
+Besides from the `view` mode, ARFlow also has other powerful options. You can
+check out some examples [here](./python/README.md#server-cli).
 
 ### Client Setup
 
-Next, follow the client application installation [guide](./unity/README.md) to build the ARFlow client app and install it on your device.
-Following the onscreen instruction to input the server address and port (8500 for the previous example) information, then tap **connect** and **start**. 
+Next, go to the [releases](https://github.com/cake-lab/ARFlow/releases) page and
+find the prebuilt items for Android and iOS. For Android, directly install the
+prebuilt `apk` on your device. For iOS, compile the generated Xcode project to
+deploy the ARFlow client app to your iOS device. Note that you will need to
+configure the developer credentials in the Xcode project.
+
+After launching the ARFlow client app, follow the onscreen instruction to input
+the server address and port (8500 for the previous example) information, then
+tap **connect** and **start**.
 
 Watch our demo video:
 
 [![Demo video](https://img.youtube.com/vi/mml8YrCgfTk/maxresdefault.jpg)](https://youtu.be/mml8YrCgfTk)
 
-
 ## Contribution
 
-Please read the [CONTRIBUTING](./CONTRIBUTING.md) guideline first, and refer to the individual [server](./python/README.md) and [client](./unity/README.md) installation guides.
+Please read the
+[CONTRIBUTING](https://github.com/cake-lab/ARFlow/blob/main/CONTRIBUTING.md)
+guideline first, and refer to the individual [server](./python/README.md) and
+[client](./unity/Packages/edu.wpi.cake.arflow/README.md) installation guides.
 
-### Contributors 
+### Contributors
 
+<!-- markdownlint-disable -->
 <!-- readme: contributors -start -->
 <table>
 	<tbody>
 		<tr>
-            <td align="center">
-                <a href="https://github.com/YiqinZhao">
-                    <img src="https://avatars.githubusercontent.com/u/11468820?v=4" width="100;" alt="YiqinZhao"/>
-                    <br />
-                    <sub><b>Yiqin Zhao</b></sub>
-                </a>
-            </td>
             <td align="center">
                 <a href="https://github.com/legoeruro">
                     <img src="https://avatars.githubusercontent.com/u/68761938?v=4" width="100;" alt="legoeruro"/>
@@ -91,14 +85,23 @@ Please read the [CONTRIBUTING](./CONTRIBUTING.md) guideline first, and refer to 
                     <sub><b>Thinh Nguyen</b></sub>
                 </a>
             </td>
+            <td align="center">
+                <a href="https://github.com/YiqinZhao">
+                    <img src="https://avatars.githubusercontent.com/u/11468820?v=4" width="100;" alt="YiqinZhao"/>
+                    <br />
+                    <sub><b>Yiqin Zhao</b></sub>
+                </a>
+            </td>
 		</tr>
 	<tbody>
 </table>
 <!-- readme: contributors -end -->
+<!-- markdownlint-restore -->
 
 ## How to cite ARFlow
 
-Please add the following citation in your publication if you used our code for your research project.
+Please add the following citation in your publication if you used our code for
+your research project.
 
 ```bibtex
 @inproceedings{zhao2024arflow,
@@ -121,4 +124,5 @@ series = {HOTMOBILE '24}
 
 ## Acknowledgement
 
-This work was supported in part by NSF Grants #2105564 and #2236987, and a VMware grant.
+This work was supported in part by NSF Grants #2105564 and #2236987, and a
+VMware grant.
