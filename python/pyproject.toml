@@ -1,11 +1,15 @@
 [tool.poetry]
 name = "arflow"
-version = "0.3.0"
+version = "0.4.0"
 description = "ARFlow is a data-sharing layer that enables developer-friendly data streaming, storage, and visualization for augmented reality (AR) device data."
-authors = ["Yiqin Zhao <yiqinzhao@outlook.com>"]
+authors = [
+  "Yiqin Zhao <yiqinzhao@outlook.com>",
+  "Thinh Nguyen <ngthinh302@gmail.com>",
+  "Khang Luu <knluu@wpi.edu>",
+]
 readme = "README.md"
 packages = [{ include = "arflow" }, { include = "cakelab/arflow_grpc/v1" }]
-license = "GPL-3.0"
+license = "Apache 2.0"
 homepage = "https://cake.wpi.edu/ARFlow/"
 repository = "https://github.com/cake-lab/ARFlow"
 
@@ -15,7 +19,7 @@ repository = "https://github.com/cake-lab/ARFlow"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-rerun-sdk = "^0.20.3"
+rerun-sdk = "==0.20.*"
 grpcio = "^1.60.1"
 grpcio-tools = "^1.60.1"
 grpc-interceptor = "^0.15.4"
