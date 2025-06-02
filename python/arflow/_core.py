@@ -746,11 +746,11 @@ def run_server(  # pragma: no cover
     )  # pyright: ignore [reportUnknownMemberType]
     server.add_insecure_port(f"{host}:{port}")
     server.start()
-    logger.info("Server started, listening on %s", port)
-    logger.info("To connect, scan the QR code below with your device.")
+    # logger.info("Server started, listening on %s", port)
+    # logger.info("To connect, scan the QR code below with your device.")
 
     # Print QR code for quick client login.
-    qr = qrcode.QRCode()
+    # qr = qrcode.QRCode()
 
     if host == "[::]":
         # Gather private (LAN) IPv4 addresses
@@ -760,18 +760,17 @@ def run_server(  # pragma: no cover
                 if addr.family.name == "AF_INET" and is_private_ip(addr.address):
                     ip_options.append(addr.address)
 
-        logger.info(f"Using default host {ip_options[0]}")
-        qr.add_data(f"{ip_options[0]}:{port}")
+        logger.info(f"Using default host {ip_options[0]} with port {port}.")
+        # qr.add_data(f"{ip_options[0]}:{port}")
     else:
-        qr.add_data(f"{host}:{port}")
+        # qr.add_data(f"{host}:{port}")
+        pass
 
-    qr.make()
-    qr.print_ascii(invert=True)  # invert=True for dark-on-light appearance
+    # qr.make()
+    # qr.print_ascii(invert=True)  # invert=True for dark-on-light appearance
 
     if host == "[::]":
-        logger.info(f"Pass -o or --host to change the IP of the QR code.")
-
-    logger.info("\n")
+        logger.info(f"Pass -o or --host to change the host IP of the QR code.")
 
     def handle_shutdown(*_: Any) -> None:
         """Shutdown gracefully.

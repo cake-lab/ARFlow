@@ -4,5 +4,13 @@
     ],
     "editor.formatOnSave": true,
     "python.formatting.provider": "none", // disable other formatters
-    "editor.defaultFormatter": "charliermarsh.ruff"
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.ruff_cache": true,
+    }
 }

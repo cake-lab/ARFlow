@@ -10364,7 +10364,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Welcome to the ARFlow Device sample!
+  m_text: 'Welcome to the ARFlow!
 
     Enter server address to continue.'
   m_isRightToLeft: 0
@@ -11850,7 +11850,6 @@ MonoBehaviour:
   planeManager: {fileID: 1385474980}
   meshManager: {fileID: 1572649768}
   pointCloudManager: {fileID: 1385474981}
-  poseObjTransform: {fileID: 853469693}
   findServerWindow:
     windowGameObject: {fileID: 566417460}
     ipServerField: {fileID: 2136666873}
@@ -11893,17 +11892,6 @@ MonoBehaviour:
       type: 3}
     togglePrefab: {fileID: 8600293455292102095, guid: 8b3b3dfc20d76f2438dbb0edcc028f78,
       type: 3}
-  arucoWindow:
-    cameraArUco: {fileID: 1825304658}
-    configWindow: {fileID: 1444693243}
-    startScanButton: {fileID: 1508792852}
-    goBackButton: {fileID: 742152003}
-    scanWindow: {fileID: 1807695630}
-    stopScanButton: {fileID: 2022134920}
-    finishScanButton: {fileID: 2045366808}
-    statusText: {fileID: 496122599}
-    positionText: {fileID: 1561047235}
-    rotationText: {fileID: 1174848706}
   arucoSyncObj: {fileID: 945769611}
 --- !u!1 &1572649766
 GameObject:
@@ -16040,7 +16028,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2141553874
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20768,6 +20756,7 @@ MonoBehaviour:
   m_CameraFrameRateLabel: {fileID: 2069276354979615327}
   m_CameraDepthSensorLabel: {fileID: 2036260307109737128}
   m_CameraConfigurationDropdown: {fileID: 1949154504536755140}
+  m_DebugMenuRenderMode: 0
 --- !u!224 &6234637625175567706
 RectTransform:
   m_ObjectHideFlags: 0

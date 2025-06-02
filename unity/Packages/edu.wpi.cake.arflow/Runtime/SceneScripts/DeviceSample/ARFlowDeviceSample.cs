@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using CakeLab.ARFlow.ArUcoTracking;
 using CakeLab.ARFlow.Clock;
 using CakeLab.ARFlow.DataBuffers;
 using CakeLab.ARFlow.DataModalityUIConfig;
@@ -40,15 +39,11 @@ public class ARFlowDeviceSample : MonoBehaviour
     [Tooltip(
         "Pose will be obtained from this object. This object should contain a TrackedPoseDriver component."
     )]
-    public Transform poseObjTransform;
 
     // Variables for state of the ARFlow device sample
     public IGrpcClient grpcClient;
 
     public IClock clock;
-
-    private List<BaseDataModalityUIConfig> m_DataModalityUIConfigs;
-    private List<CancellationTokenSource> m_CtsList = new List<CancellationTokenSource>();
 
     private Session m_ActiveSession;
     private Device m_Device;
@@ -600,25 +595,25 @@ public class ARFlowDeviceSample : MonoBehaviour
         await SearchForSession();
     }
 
-    //Aruco windows
-    [Serializable]
-    public class ArucoWindow
-    {
-        public ARFoundationCameraArUco cameraArUco;
-        public GameObject configWindow;
-        public Button startScanButton;
-        public Button goBackButton;
+    // //Aruco windows
+    // [Serializable]
+    // public class ArucoWindow
+    // {
+    //     public ARFoundationCameraArUco cameraArUco;
+    //     public GameObject configWindow;
+    //     public Button startScanButton;
+    //     public Button goBackButton;
 
-        public GameObject scanWindow;
-        public Button stopScanButton;
-        public Button finishScanButton;
+    //     public GameObject scanWindow;
+    //     public Button stopScanButton;
+    //     public Button finishScanButton;
 
-        public TMP_Text statusText;
-        public TMP_Text positionText;
-        public TMP_Text rotationText;
-    }
+    //     public TMP_Text statusText;
+    //     public TMP_Text positionText;
+    //     public TMP_Text rotationText;
+    // }
 
-    public ArucoWindow arucoWindow;
+    // public ArucoWindow arucoWindow;
 
     /// <summary>
     /// The object that will be synced with the ARuco marker
@@ -632,59 +627,59 @@ public class ARFlowDeviceSample : MonoBehaviour
         XROrigin.transform.rotation = UnityEngine.Quaternion.identity;
     }
 
-    void onStartScan()
-    {
-        ResetOriginPosition();
-        arucoWindow.cameraArUco.OnStartScanning();
-        arucoWindow.configWindow.SetActive(false);
-        arucoWindow.scanWindow.SetActive(true);
-        arucoWindow.finishScanButton.interactable = false;
+    // void onStartScan()
+    // {
+    //     ResetOriginPosition();
+    //     arucoWindow.cameraArUco.OnStartScanning();
+    //     arucoWindow.configWindow.SetActive(false);
+    //     arucoWindow.scanWindow.SetActive(true);
+    //     arucoWindow.finishScanButton.interactable = false;
 
-        arucoWindow.statusText.text = "To sync, scan an ArUco Marker of the type specified.";
-        arucoWindow.positionText.text = $"";
-        arucoWindow.rotationText.text = $"";
-    }
+    //     arucoWindow.statusText.text = "To sync, scan an ArUco Marker of the type specified.";
+    //     arucoWindow.positionText.text = $"";
+    //     arucoWindow.rotationText.text = $"";
+    // }
 
-    void onStopScan()
-    {
-        arucoWindow.cameraArUco.OnStopScanning();
-        arucoWindow.scanWindow.SetActive(false);
-        arucoWindow.configWindow.SetActive(true);
-    }
+    // void onStopScan()
+    // {
+    //     arucoWindow.cameraArUco.OnStopScanning();
+    //     arucoWindow.scanWindow.SetActive(false);
+    //     arucoWindow.configWindow.SetActive(true);
+    // }
 
-    void onGoBackFromAruco()
-    {
-        arucoWindow.cameraArUco.OnStopScanning();
-        arucoWindow.scanWindow.SetActive(false);
-        arucoWindow.configWindow.SetActive(false);
+    // void onGoBackFromAruco()
+    // {
+    //     arucoWindow.cameraArUco.OnStopScanning();
+    //     arucoWindow.scanWindow.SetActive(false);
+    //     arucoWindow.configWindow.SetActive(false);
 
-        arViewWindow.windowGameObject.SetActive(true);
-    }
+    //     arViewWindow.windowGameObject.SetActive(true);
+    // }
 
-    void onGoToArucoWindow()
-    {
-        arViewWindow.windowGameObject.SetActive(false);
-        arucoWindow.configWindow.SetActive(true);
-        arucoWindow.scanWindow.SetActive(false);
-    }
+    // void onGoToArucoWindow()
+    // {
+    //     arViewWindow.windowGameObject.SetActive(false);
+    //     arucoWindow.configWindow.SetActive(true);
+    //     arucoWindow.scanWindow.SetActive(false);
+    // }
 
-    void OnSpaceSynced()
-    {
-        InternalDebug.Log($"Space synced successfully {arucoSyncObj.transform.position}");
-        arucoWindow.finishScanButton.interactable = true;
-        arucoWindow.statusText.text =
-            "ArUco marker scanned. To finish syncing, press the finish button";
-        arucoWindow.positionText.text = $"Position: {arucoSyncObj.transform.position}";
-        arucoWindow.rotationText.text = $"Rotation: {arucoSyncObj.transform.rotation.eulerAngles}";
-    }
+    // void OnSpaceSynced()
+    // {
+    //     InternalDebug.Log($"Space synced successfully {arucoSyncObj.transform.position}");
+    //     arucoWindow.finishScanButton.interactable = true;
+    //     arucoWindow.statusText.text =
+    //         "ArUco marker scanned. To finish syncing, press the finish button";
+    //     arucoWindow.positionText.text = $"Position: {arucoSyncObj.transform.position}";
+    //     arucoWindow.rotationText.text = $"Rotation: {arucoSyncObj.transform.rotation.eulerAngles}";
+    // }
 
-    void OnFinishScan()
-    {
-        XROrigin.transform.position = arucoSyncObj.transform.position;
-        XROrigin.transform.rotation = arucoSyncObj.transform.rotation;
+    // void OnFinishScan()
+    // {
+    //     XROrigin.transform.position = arucoSyncObj.transform.position;
+    //     XROrigin.transform.rotation = arucoSyncObj.transform.rotation;
 
-        onGoBackFromAruco();
-    }
+    //     onGoBackFromAruco();
+    // }
 
     void OnApplicationQuit()
     {
@@ -814,13 +809,13 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Initialize AR view window
         arViewWindow.startPauseButton.onClick.AddListener(OnStartPauseButton);
         arViewWindow.goBackButton.onClick.AddListener(OnGoBackFromARView);
-        arViewWindow.arucoSyncButton.onClick.AddListener(onGoToArucoWindow);
+        // arViewWindow.arucoSyncButton.onClick.AddListener(onGoToArucoWindow);
 
         // Initialize Aruco window
-        arucoWindow.startScanButton.onClick.AddListener(onStartScan);
-        arucoWindow.goBackButton.onClick.AddListener(onGoBackFromAruco);
-        arucoWindow.stopScanButton.onClick.AddListener(onStopScan);
-        arucoWindow.cameraArUco.OnSpaceSynced += OnSpaceSynced;
-        arucoWindow.finishScanButton.onClick.AddListener(OnFinishScan);
+        // arucoWindow.startScanButton.onClick.AddListener(onStartScan);
+        // arucoWindow.goBackButton.onClick.AddListener(onGoBackFromAruco);
+        // arucoWindow.stopScanButton.onClick.AddListener(onStopScan);
+        // arucoWindow.cameraArUco.OnSpaceSynced += OnSpaceSynced;
+        // arucoWindow.finishScanButton.onClick.AddListener(OnFinishScan);
     }
 }
