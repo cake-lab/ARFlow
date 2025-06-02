@@ -55,7 +55,7 @@ tap **connect** and **start**.
 
 Watch our demo video:
 
-[![Demo video](https://img.youtube.com/vi/mml8YrCgfTk/maxresdefault.jpg)](https://youtu.be/mml8YrCgfTk)
+[![Demo video](https://img.youtube.com/vi/mml8YrCgfTk/maxresdefault.jpg)](https://www.youtube.com/watch?v=Da3Ao2f6UUo&t=129s)
 
 ## Contribution
 
