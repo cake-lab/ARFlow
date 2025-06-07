@@ -17,6 +17,8 @@ from cakelab.arflow_grpc.v1.join_session_request_pb2 import JoinSessionRequest
 from cakelab.arflow_grpc.v1.join_session_response_pb2 import JoinSessionResponse
 from cakelab.arflow_grpc.v1.list_sessions_request_pb2 import ListSessionsRequest
 from cakelab.arflow_grpc.v1.list_sessions_response_pb2 import ListSessionsResponse
+from cakelab.arflow_grpc.v1.leave_session_request_pb2 import LeaveSessionRequest
+from cakelab.arflow_grpc.v1.leave_session_response_pb2 import LeaveSessionResponse
 from cakelab.arflow_grpc.v1.save_ar_frames_request_pb2 import SaveARFramesRequest
 from cakelab.arflow_grpc.v1.save_ar_frames_response_pb2 import SaveARFramesResponse
 
@@ -52,6 +54,13 @@ class GrpcClient:
     async def list_sessions_async(self) -> ListSessionsResponse:
         request = ListSessionsRequest()
         response: Awaitable[ListSessionsResponse] = ARFlowServiceStub(self.channel).ListSessions(request)
+        return response
+    async def leave_session_async(self, session_id: str, device: Device) -> LeaveSessionResponse:
+        request = LeaveSessionRequest(
+            session_id=SessionUuid(value=session_id),
+            device=device
+        )
+        response: Awaitable[LeaveSessionResponse] = ARFlowServiceStub(self.channel).LeaveSession(request)
         return response
     async def save_ar_frames_async(self, session_id: str, ar_frames: Iterable[ARFrame], device: Device) -> SaveARFramesResponse:
         request = SaveARFramesRequest(
