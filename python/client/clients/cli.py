@@ -21,8 +21,8 @@ class CLIClient:
     running: Thread | None = None
     stop_event: Event | None = None
     def __init__(self):
-        host = input("Enter hostname")
-        port = input("Enter port")
+        host = input("Enter hostname: ")
+        port = input("Enter port: ")
         self.client = GrpcClient(f"{host}:{port}")
         asyncio.run(self.__manage_sessions())
 
