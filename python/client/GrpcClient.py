@@ -23,37 +23,37 @@ from cakelab.arflow_grpc.v1.save_ar_frames_response_pb2 import SaveARFramesRespo
 class GrpcClient:
     def __init__(self, url):
         self.channel = grpc.insecure_channel(url)
-    async def CreateSessionAsync(self, name: str, device: Device, save_path: str = "") -> CreateSessionResponse:
+    async def create_session_async(self, name: str, device: Device, save_path: str = "") -> CreateSessionResponse:
         request = CreateSessionRequest(
             session_metadata=SessionMetadata(name=name, save_path=save_path),
             device=device
         )
         response: Awaitable[CreateSessionResponse] = ARFlowServiceStub(self.channel).CreateSession(request)
         return response
-    async def DeleteSessionAsync(self, session_id: str) -> DeleteSessionResponse:
+    async def delete_session_async(self, session_id: str) -> DeleteSessionResponse:
         request = DeleteSessionRequest(
             session_id=SessionUuid(value = session_id)
         )
         response: Awaitable[DeleteSessionResponse] = ARFlowServiceStub(self.channel).DeleteSession(request)
         return response
-    async def GetSessionAsync(self, session_id: str) -> GetSessionResponse:
+    async def get_session_async(self, session_id: str) -> GetSessionResponse:
         request = GetSessionRequest(
             session_id=SessionUuid(value=session_id)
         )
         response: Awaitable[GetSessionResponse] = ARFlowServiceStub(self.channel).GetSession(request)
         return response
-    async def JoinSessionAsync(self, session_id: str, device: Device) -> JoinSessionResponse:
+    async def join_session_async(self, session_id: str, device: Device) -> JoinSessionResponse:
         request = JoinSessionRequest(
             session_id=SessionUuid(value=session_id),
             device=device
         )
         response: Awaitable[JoinSessionResponse] = ARFlowServiceStub(self.channel).JoinSession(request)
         return response
-    async def ListSessionsAsync(self) -> ListSessionsResponse:
+    async def list_sessions_async(self) -> ListSessionsResponse:
         request = ListSessionsRequest()
         response: Awaitable[ListSessionsResponse] = ARFlowServiceStub(self.channel).ListSessions(request)
         return response
-    async def SaveARFramesAsync(self, session_id: str, ar_frames: Iterable[ARFrame], device: Device) -> SaveARFramesResponse:
+    async def save_ar_frames_async(self, session_id: str, ar_frames: Iterable[ARFrame], device: Device) -> SaveARFramesResponse:
         request = SaveARFramesRequest(
             session_id=SessionUuid(value=session_id),
             frames=ar_frames,
