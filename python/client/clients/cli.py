@@ -107,6 +107,11 @@ class CLIClient:
                         self.running.start()
                         print("Starting Recording")
                 case "2":
+                    if self.running:
+                        self.stop_event.set()
+                        self.running.join()
+                        self.running = None
+                        self.stop_event = None
                     await self.client.leave_session_async(self.session.id.value, GetDeviceInfo.get_device_info())
                     print("Leaving Session")
                     return
