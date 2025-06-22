@@ -7,6 +7,11 @@ import DracoPy
 import numpy as np
 import numpy.typing as npt
 import rerun as rr
+import subprocess
+import threading
+import queue
+from time import sleep
+import cv2
 
 from arflow._types import (
     ARFrameType,
@@ -53,6 +58,85 @@ class SessionStream:
         """Session information."""
         self.stream = stream
         """Stream handle to the Rerun recording associated with this session."""
+        self.streaming_pipes: dict[str, subprocess.Popen] = {}
+        self.stops: dict[str, bool] = {}
+        self.decoder_threads: dict[str, threading.Thread] = {} #ffmpeg pipe needs to be kept empty so that it does not corrupt
+        self.rerun_writers: dict[str, threading.Thread] = {} #write to the rerun stream
+        self.image_queues: dict[str, queue.Queue] = {}
+        self.timestamp_queues: dict[str, queue.Queue] = {}
+        self.frame_chunk_queues: dict[str, queue.Queue] = {}
+        self.device_intervals: dict[str, float] = {}
+
+    def decoder_thread(self, device: Device, width:int, height:int):
+        while not self.stops[device.uid]:
+            raw = self.streaming_pipes[device.uid].stdout.read(height*width*3)
+            if not raw:
+                continue
+            frame = np.frombuffer(raw, dtype=np.uint8)
+            self.image_queues[device.uid].put(frame)
+    def rerun_writer(self, device: Device, width:int, height:int):
+        # currently theres no real way to transfer an array of timestamps, and I don't want to modify the entire API
+        # so frame timestamps are approximated by chunk
+        # timestamp_chunk + device_interval/num_frames_in_chunk (where device interval is in seconds)
+        # smaller chunking intervals should give better timestamps, but assuming that the client isn't doing anything crazy this should be accurate too
+        cur_base_timestamp = self.timestamp_queues[device.uid].get()
+        cur_num_frames_processed = 0
+        cur_num_frames_in_batch = self.frame_chunk_queues[device.uid].get()
+        print(cur_num_frames_in_batch)
+        #i dunno what any of this is, just copying from the main save color frames
+        while not self.stops[device.uid]:
+            print("hi")
+            # also make sure that they always have a value, and to use the older frames time approximation if needed
+            if (cur_num_frames_processed >= cur_num_frames_in_batch and not self.timestamp_queues[device.uid].empty()):
+                cur_base_timestamp = self.timestamp_queues[device.uid].get()
+                cur_num_frames_processed = cur_num_frames_processed - cur_num_frames_in_batch 
+                cur_num_frames_in_batch = self.frame_chunk_queues[device.uid].get()
+
+            entity_path = rr.new_entity_path(
+                [
+                    f"{self.info.metadata.name}_{self.info.id.value}",
+                    f"{device.model}_{device.name}_{device.uid}",
+                    ARFrameType.COLOR_FRAME,
+                    f"{width}x{height}",
+                ]
+            )
+            format_static = rr.components.ImageFormat(
+                width=width,
+                height=height,
+                pixel_format=None,
+                color_model=rr.ColorModel.RGB,
+            )
+            data=self.image_queues[device.uid].get()
+            #also ommitting intrinsics for now
+            rr.log(
+                entity_path,
+                [format_static, rr.Image.indicator()],
+                static=True,
+                recording=self.stream,
+            )
+            rr.send_columns(
+                entity_path,
+                times=[
+                    rr.TimeSecondsColumn(
+                        timeline=Timeline.DEVICE,
+                        times=[
+                            0 #cur_base_timestamp + cur_num_frames_processed * self.device_intervals[device.uid] / cur_num_frames_in_batch
+                        ],
+                    ),
+                    rr.TimeSecondsColumn(
+                        timeline=Timeline.IMAGE,
+                        times=[0], #cur_base_timestamp + cur_num_frames_processed * self.device_intervals[device.uid] / cur_num_frames_in_batch
+                    ),
+                ],
+                components=[
+                    rr.components.ImageBufferBatch(
+                        data=data,
+                        strict=True,
+                    ),
+                ],
+                recording=self.stream.to_native(),  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+            )
+            sleep(self.device_intervals[device.uid]/cur_num_frames_in_batch)
 
     def save_transform_frames(
         self,
@@ -146,6 +230,44 @@ class SessionStream:
                     pixel_format=rr.PixelFormat.Y_U_V12_LimitedRange,
                 )
                 data = np.array([_to_i420_format(f.image) for f in homogenous_frames])
+            elif format == 10:
+                format_static = rr.components.ImageFormat(
+                    width=width,
+                    height=height,
+                    pixel_format=None,
+                    color_model=rr.ColorModel.RGB,
+                )
+                data = np.array([
+                    np.frombuffer(f.image.planes[0].data, dtype=np.uint8)
+                    for f in homogenous_frames
+                ])
+            elif format == 16:
+                for f in homogenous_frames:
+                    if device.uid not in self.streaming_pipes:
+                        self.image_queues[device.uid] = queue.Queue()
+                        self.timestamp_queues[device.uid] = queue.Queue()
+                        self.frame_chunk_queues[device.uid] = queue.Queue()
+                    self.timestamp_queues[device.uid].put(f.device_timestamp) #for now # of frames in the chunk is stored in row stride field
+                    self.frame_chunk_queues[device.uid].put(f.image.planes[0].row_stride)
+                    if device.uid not in self.streaming_pipes:
+                        self.streaming_pipes[device.uid] = subprocess.Popen([
+                            'ffmpeg',
+                            '-probesize', '5000000',
+                            '-analyzeduration', '10000000',
+                            '-f', 'h264',
+                            '-i', 'pipe:0',
+                            '-f', 'rawvideo',
+                            '-pix_fmt', 'bgr24',
+                            'pipe:1'
+                        ], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                        self.stops[device.uid] = False
+                        self.device_intervals[device.uid] = f.image.planes[0].pixel_stride/1000
+                        self.decoder_threads[device.uid] = threading.Thread(target=self.decoder_thread, args=(device, f.image.dimensions.x, f.image.dimensions.y), daemon=True)
+                        self.decoder_threads[device.uid].start()
+                        self.rerun_writers[device.uid] = threading.Thread(target=self.rerun_writer, args=(device, f.image.dimensions.x, f.image.dimensions.y), daemon=True)
+                        self.rerun_writers[device.uid].start()
+                    self.streaming_pipes[device.uid].stdin.write(f.image.planes[0].data)
+                continue
             # elif format == XRCpuImage.FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE:
             #     format_static = rr.components.ImageFormat(
             #         width=width,
@@ -204,6 +326,7 @@ class SessionStream:
                 static=True,
                 recording=self.stream,
             )
+            print(format_static)
             rr.send_columns(
                 entity_path,
                 times=[

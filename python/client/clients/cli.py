@@ -83,7 +83,7 @@ class CLIClient:
 
     async def __join_session(self):
         if self.session is None: return
-        runner = SessionRunner(self.session, GetDeviceInfo.get_device_info(), self.__on_frame)
+        runner = SessionRunner(self.session, GetDeviceInfo.get_device_info(), self.__on_frame, 250)
         print("Currently only able to record camera frames")
         while True:
             print("Options:")
@@ -105,6 +105,7 @@ class CLIClient:
                         self.stop_event = Event()
                         self.running = Thread(target=self.__record_frame, args=(runner,))
                         self.running.start()
+                        await runner.start_recording()
                         print("Starting Recording")
                 case "2":
                     if self.running:
