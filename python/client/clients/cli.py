@@ -17,6 +17,7 @@ from threading import Event
 from time import sleep
 
 class CLIClient:
+    """A simple CLI client for managing AR sessions."""
     session: Session | None = None
     running: Thread | None = None
     stop_event: Event | None = None
@@ -27,6 +28,10 @@ class CLIClient:
         asyncio.run(self.__manage_sessions())
 
     async def __manage_sessions(self):
+        """
+        Manage AR sessions through a CLI interface.
+        Very basic.
+        """
         while True:
             print("Available Sessions:")
             session_list: list[Session] = list((await self.client.list_sessions_async()).sessions)
@@ -82,8 +87,11 @@ class CLIClient:
                     print("Invalid Option")
 
     async def __join_session(self):
+        """
+        Join an existing session and start recording frames.
+        """
         if self.session is None: return
-        runner = SessionRunner(self.session, GetDeviceInfo.get_device_info(), self.__on_frame, 250)
+        runner = SessionRunner(self.session, GetDeviceInfo.get_device_info(), self.__on_frame, 2000)
         print("Currently only able to record camera frames")
         while True:
             print("Options:")
@@ -95,20 +103,28 @@ class CLIClient:
             choice: str = input("Choose an option: ")
             match choice:
                 case "1":
-                    if self.running:
+                    if self.running is not None:
+                        # stop recording if already running
+                        print("Stopping Recording")
+                        print("Waiting on thread exits...")
                         self.stop_event.set()
+                        runner.stop()
                         self.running.join()
                         self.running = None
                         self.stop_event = None
-                        print("Stopping Recording")
                     else:
+                        #start recording
+                        print("Starting Recording")
                         self.stop_event = Event()
+                        runner.start()
                         self.running = Thread(target=self.__record_frame, args=(runner,))
                         self.running.start()
                         await runner.start_recording()
-                        print("Starting Recording")
                 case "2":
                     if self.running:
+                        # if recording is still running, stop it first
+                        print("Stopping Recording First...")
+                        print("Waiting on thread exits...")
                         self.stop_event.set()
                         self.running.join()
                         self.running = None
@@ -120,12 +136,14 @@ class CLIClient:
                     print("Invalid Option")
 
     def __record_frame(self, runner: SessionRunner):
+        # create calls to send a frame to a server every 2 seconds
         while not self.stop_event.is_set():
             asyncio.run(runner.gather_camera_frame_async())
-            sleep(0.25)
+            sleep(2)
 
 
     async def __on_frame(self, session: Session, frame: ARFrame , device: Device):
+        # handler for a callback when an AR frame is gathered and needs to be sent to the server
         if self.session is None:
             return
         await self.client.save_ar_frames_async(

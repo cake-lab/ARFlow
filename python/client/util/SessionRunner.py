@@ -20,17 +20,53 @@ class SessionRunner:
     device: Device | None = None
     onARFrame: Callable[[Session, ARFrame, Device], Coroutine[Any, Any, None]] | None = None
     def __init__(self, session: Session, device: Device, onARFrame: Callable[[Session, ARFrame, Device], Coroutine[Any, Any, None]], gathering_interval: int):
-        self.camera = cv2.VideoCapture(0)
+        """
+        Initializes the SessionRunner with a session, device, and callback for AR frames.
+        """
         self.onARFrame = onARFrame
         self.session = session
         self.device = device
         self.stopped = False
+        self.gatherer_thread = None
+        self.reader_thread = None
         self.gathering_interval = gathering_interval
-        self.width = int(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
-        self.height = int(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.width = None 
+        self.height = None
         self.chunk_buffer = bytearray()
         self.num_frames_stored = 0
-        self.ffmpeg_enc = subprocess.Popen([
+        self.ffmpeg_enc = None
+        self.thread_mutex: threading.Lock = threading.Lock()
+        self.buffer_mutex: threading.Lock = threading.Lock()
+    def frame_encoder(self):
+        """ Continuously captures frames from the camera, and writes to ffmpegs pipe to encode them"""
+        while not self.stopped:
+            ret, frame = self.camera.read()
+            if not ret:
+                break 
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            self.ffmpeg_enc.stdin.write(frame_rgb.tobytes())
+            self.thread_mutex.acquire()
+            self.num_frames_stored += 1
+            self.thread_mutex.release()
+    def encoding_reciever(self):
+        """ Continuously reads encoded data from ffmpeg and stores it in a buffer"""
+        while not self.stopped:
+            data = self.ffmpeg_enc.stdout.read(4096)
+            if not data:
+                break
+            self.buffer_mutex.acquire()
+            self.chunk_buffer.extend(data)
+            self.buffer_mutex.release()
+    def start(self):
+        """
+        Starts this session runner, initializing camera and ffmpeg encoder.
+        """
+        self.stopped = False
+        if self.camera is None:
+            self.camera = cv2.VideoCapture(0)
+            self.width = int(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
+            self.height = int(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.ffmpeg_enc = self.ffmpeg_enc = subprocess.Popen([
             'ffmpeg',
             '-f', 'rawvideo',
             '-pix_fmt', 'bgr24',
@@ -42,33 +78,39 @@ class SessionRunner:
             '-f', 'h264',
             'pipe:1'
         ], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        self.thread_mutex: threading.Lock = threading.Lock()
-    def frame_encoder(self):
-        while not self.stopped:
-            ret, frame = self.camera.read()
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            if not ret:
-                break 
-            self.ffmpeg_enc.stdin.write(frame_rgb.tobytes())
-    def encoding_reciever(self):
-        while not self.stopped:
-            data = self.ffmpeg_enc.stdout.read(4096)
-            if not data:
-                break
-            self.thread_mutex.acquire()
-            self.num_frames_stored += 1
-            self.chunk_buffer.extend(data)
-            self.thread_mutex.release()
-    def __del__(self):
+    def stop(self):
+        """ 
+        Stops this session runner, releasing camera and ffmpeg resources.
+        """
+        self.stopped = True
         if self.camera is not None:
             self.camera.release()
             self.camera = None
+        if self.ffmpeg_enc is not None:
+            self.ffmpeg_enc.stdin.close() 
+            self.ffmpeg_enc.stdout.close()
+            self.ffmpeg_enc.wait()
+            self.ffmpeg_enc = None
+        if self.gatherer_thread is not None:
+            self.gatherer_thread.join()
+            self.gatherer_thread = None
+        if self.reader_thread is not None:
+            self.reader_thread.join()
+            self.reader_thread = None
     async def start_recording(self):
-        threading.Thread(target=self.frame_encoder, args=(), daemon=True ).start()
-        threading.Thread(target=self.encoding_reciever, args=(), daemon=True).start()
-        print("hi")
+        self.gatherer_thread = threading.Thread(target=self.frame_encoder, args=(), daemon=True )
+        self.gatherer_thread.start()
+        self.reader_thread = threading.Thread(target=self.encoding_reciever, args=(), daemon=True)
+        self.reader_thread.start()
     async def gather_camera_frame_async(self) -> None:
         """
+        Gathers a camera frame, encodes it, and sends it as an ARFrame.
+        Current implementation gathers and sends frames in H264 format.
+        However you will find code to send individual RGB and YUV frames as well in the comment below.
+        """
+        """
+        #This code addresses implementation for gather frames in RGB and YUV formats without compression
+        #Mostly as a demonstration of how to do so in python
         #Non - streaming required
         if self.camera is None:
             return
@@ -98,6 +140,7 @@ class SessionRunner:
         if not self.chunk_buffer:
             return
         self.thread_mutex.acquire()
+        self.buffer_mutex.acquire()
         h264 = XRCpuImage.Plane(
             data=bytes(self.chunk_buffer),
             row_stride = self.num_frames_stored, #for now utilize the row stride field to store number of frames
@@ -105,6 +148,7 @@ class SessionRunner:
         )
         self.num_frames_stored = 0
         self.chunk_buffer.clear()
+        self.buffer_mutex.release()
         self.thread_mutex.release()
         now = time.time()
         timestamp = Timestamp()
