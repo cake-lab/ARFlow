@@ -1,0 +1,69 @@
+{
+  "timestamp": "20250629_160028",
+  "results": [
+    {
+      "config": {
+        "name": "SD_Uncompressed",
+        "width": 640,
+        "height": 480,
+        "compressed": false
+      },
+      "measurements": {
+        "bytes_sent": 138240000,
+        "frames_processed": 150,
+        "fps_achieved": 27.35127730286215,
+        "psnr_score": null,
+        "bandwidth_mbps": 221.184,
+        "compression_ratio": null
+      }
+    },
+    {
+      "config": {
+        "name": "SD_Compressed",
+        "width": 640,
+        "height": 480,
+        "compressed": true
+      },
+      "measurements": {
+        "bytes_sent": 11520000,
+        "frames_processed": 150,
+        "fps_achieved": 27.49798815353655,
+        "psnr_score": 54.927148,
+        "bandwidth_mbps": 18.432,
+        "compression_ratio": 0.21473934402652356
+      }
+    },
+    {
+      "config": {
+        "name": "HD_Uncompressed",
+        "width": 1920,
+        "height": 1080,
+        "compressed": false
+      },
+      "measurements": {
+        "bytes_sent": 933120000,
+        "frames_processed": 150,
+        "fps_achieved": 26.97079982709531,
+        "psnr_score": null,
+        "bandwidth_mbps": 1492.992,
+        "compression_ratio": null
+      }
+    },
+    {
+      "config": {
+        "name": "HD_Compressed",
+        "width": 1920,
+        "height": 1080,
+        "compressed": true
+      },
+      "measurements": {
+        "bytes_sent": 77760000,
+        "frames_processed": 150,
+        "fps_achieved": 27.665508148397013,
+        "psnr_score": 58.282008,
+        "bandwidth_mbps": 124.416,
+        "compression_ratio": 0.29552274457698224
+      }
+    }
+  ]
+}
