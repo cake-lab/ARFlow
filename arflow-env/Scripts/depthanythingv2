@@ -1,0 +1,6 @@
+#!C:\Users\alexr\Desktop\testingARFlow\ARFlow2\ARFlow\arflow-env\Scripts\python.exe
+import sys
+from depthanythingv2 import main
+
+if __name__ == '__main__':
+    sys.exit(main())
