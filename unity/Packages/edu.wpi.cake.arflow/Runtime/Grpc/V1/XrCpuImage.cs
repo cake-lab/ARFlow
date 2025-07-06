@@ -26,7 +26,7 @@ namespace CakeLab.ARFlow.Grpc.V1 {
           string.Concat(
             "CiljYWtlbGFiL2FyZmxvd19ncnBjL3YxL3hyX2NwdV9pbWFnZS5wcm90bxIW",
             "Y2FrZWxhYi5hcmZsb3dfZ3JwYy52MRooY2FrZWxhYi9hcmZsb3dfZ3JwYy92",
-            "MS92ZWN0b3IyX2ludC5wcm90byL4AwoKWFJDcHVJbWFnZRJCCgpkaW1lbnNp",
+            "MS92ZWN0b3IyX2ludC5wcm90byKOBQoKWFJDcHVJbWFnZRJCCgpkaW1lbnNp",
             "b25zGAEgASgLMiIuY2FrZWxhYi5hcmZsb3dfZ3JwYy52MS5WZWN0b3IySW50",
             "UgpkaW1lbnNpb25zEkEKBmZvcm1hdBgCIAEoDjIpLmNha2VsYWIuYXJmbG93",
             "X2dycGMudjEuWFJDcHVJbWFnZS5Gb3JtYXRSBmZvcm1hdBIcCgl0aW1lc3Rh",
@@ -34,14 +34,17 @@ namespace CakeLab.ARFlow.Grpc.V1 {
             "LmFyZmxvd19ncnBjLnYxLlhSQ3B1SW1hZ2UuUGxhbmVSBnBsYW5lcxpdCgVQ",
             "bGFuZRIdCgpyb3dfc3RyaWRlGAEgASgFUglyb3dTdHJpZGUSIQoMcGl4ZWxf",
             "c3RyaWRlGAIgASgFUgtwaXhlbFN0cmlkZRISCgRkYXRhGAMgASgMUgRkYXRh",
-            "IqMBCgZGb3JtYXQSFgoSRk9STUFUX1VOU1BFQ0lGSUVEEAASHgoaRk9STUFU",
+            "IrkCCgZGb3JtYXQSFgoSRk9STUFUX1VOU1BFQ0lGSUVEEAASHgoaRk9STUFU",
             "X0FORFJPSURfWVVWXzQyMF84ODgQARIwCixGT1JNQVRfSU9TX1lQX0NCQ1Jf",
-            "NDIwXzhCSV9QTEFOQVJfRlVMTF9SQU5HRRACEhcKE0ZPUk1BVF9ERVBUSEZM",
-            "T0FUMzIQBBIWChJGT1JNQVRfREVQVEhVSU5UMTYQBUKkAQoaY29tLmNha2Vs",
-            "YWIuYXJmbG93X2dycGMudjFCD1hyQ3B1SW1hZ2VQcm90b1ABogIDQ0FYqgIW",
-            "Q2FrZUxhYi5BUkZsb3cuR3JwYy5WMcoCFUNha2VsYWJcQXJmbG93R3JwY1xW",
-            "MeICIUNha2VsYWJcQXJmbG93R3JwY1xWMVxHUEJNZXRhZGF0YeoCF0Nha2Vs",
-            "YWI6OkFyZmxvd0dycGM6OlYxYgZwcm90bzM="));
+            "NDIwXzhCSV9QTEFOQVJfRlVMTF9SQU5HRRACEhgKFEZPUk1BVF9PTkVDT01Q",
+            "T05FTlQ4EAMSFwoTRk9STUFUX0RFUFRIRkxPQVQzMhAEEhYKEkZPUk1BVF9E",
+            "RVBUSFVJTlQxNhAFEhkKFUZPUk1BVF9PTkVDT01QT05FTlQzMhAGEhEKDUZP",
+            "Uk1BVF9BUkdCMzIQBxIRCg1GT1JNQVRfUkdCQTMyEAgSEQoNRk9STUFUX0JH",
+            "UkEzMhAJEhAKDEZPUk1BVF9SR0IyNBAKEhQKEEZPUk1BVF9IMjY0UkdCMjQQ",
+            "EEKkAQoaY29tLmNha2VsYWIuYXJmbG93X2dycGMudjFCD1hyQ3B1SW1hZ2VQ",
+            "cm90b1ABogIDQ0FYqgIWQ2FrZUxhYi5BUkZsb3cuR3JwYy5WMcoCFUNha2Vs",
+            "YWJcQXJmbG93R3JwY1xWMeICIUNha2VsYWJcQXJmbG93R3JwY1xWMVxHUEJN",
+            "ZXRhZGF0YeoCF0Nha2VsYWI6OkFyZmxvd0dycGM6OlYxYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::CakeLab.ARFlow.Grpc.V1.Vector2IntReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -375,14 +378,21 @@ namespace CakeLab.ARFlow.Grpc.V1 {
         /// </summary>
         [pbr::OriginalName("FORMAT_ANDROID_YUV_420_888")] AndroidYuv420888 = 1,
         [pbr::OriginalName("FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE")] IosYpCbcr4208BiPlanarFullRange = 2,
+        [pbr::OriginalName("FORMAT_ONECOMPONENT8")] Onecomponent8 = 3,
         /// <summary>
-        /// @exclude FORMAT_ONECOMPONENT8 = 3;
+        ///&#x2F; iOS
         /// </summary>
         [pbr::OriginalName("FORMAT_DEPTHFLOAT32")] Depthfloat32 = 4,
         /// <summary>
         ///&#x2F; Android
         /// </summary>
         [pbr::OriginalName("FORMAT_DEPTHUINT16")] Depthuint16 = 5,
+        [pbr::OriginalName("FORMAT_ONECOMPONENT32")] Onecomponent32 = 6,
+        [pbr::OriginalName("FORMAT_ARGB32")] Argb32 = 7,
+        [pbr::OriginalName("FORMAT_RGBA32")] Rgba32 = 8,
+        [pbr::OriginalName("FORMAT_BGRA32")] Bgra32 = 9,
+        [pbr::OriginalName("FORMAT_RGB24")] Rgb24 = 10,
+        [pbr::OriginalName("FORMAT_H264RGB24")] H264Rgb24 = 16,
       }
 
       /// <summary>
