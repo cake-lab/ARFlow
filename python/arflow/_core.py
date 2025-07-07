@@ -160,6 +160,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             raise NotFound("Session not found")
 
         rr.disconnect(session_stream.stream)
+        session_stream.terminate()
         logger.info("Deleted session: %s", session_stream.info)
 
         self.on_delete_session(session_stream=session_stream)
@@ -241,6 +242,7 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
 
         try:
             session_stream.info.devices.remove(request.device)
+            session_stream.remove_device(request.device)
         except ValueError:
             raise NotFound("Device not in session")
 
@@ -274,7 +276,6 @@ class ARFlowServicer(arflow_service_pb2_grpc.ARFlowServiceServicer):
             raise InvalidArgument("No frames provided")
 
         session_stream = self._get_session_stream(request.session_id.value)
-
         if request.device not in session_stream.info.devices:
             raise NotFound("Device not in session")
 

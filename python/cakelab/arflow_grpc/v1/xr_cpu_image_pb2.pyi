@@ -14,13 +14,27 @@ class XRCpuImage(_message.Message):
         FORMAT_UNSPECIFIED: _ClassVar[XRCpuImage.Format]
         FORMAT_ANDROID_YUV_420_888: _ClassVar[XRCpuImage.Format]
         FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE: _ClassVar[XRCpuImage.Format]
+        FORMAT_ONECOMPONENT8: _ClassVar[XRCpuImage.Format]
         FORMAT_DEPTHFLOAT32: _ClassVar[XRCpuImage.Format]
         FORMAT_DEPTHUINT16: _ClassVar[XRCpuImage.Format]
+        FORMAT_ONECOMPONENT32: _ClassVar[XRCpuImage.Format]
+        FORMAT_ARGB32: _ClassVar[XRCpuImage.Format]
+        FORMAT_RGBA32: _ClassVar[XRCpuImage.Format]
+        FORMAT_BGRA32: _ClassVar[XRCpuImage.Format]
+        FORMAT_RGB24: _ClassVar[XRCpuImage.Format]
+        FORMAT_H264RGB24: _ClassVar[XRCpuImage.Format]
     FORMAT_UNSPECIFIED: XRCpuImage.Format
     FORMAT_ANDROID_YUV_420_888: XRCpuImage.Format
     FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE: XRCpuImage.Format
+    FORMAT_ONECOMPONENT8: XRCpuImage.Format
     FORMAT_DEPTHFLOAT32: XRCpuImage.Format
     FORMAT_DEPTHUINT16: XRCpuImage.Format
+    FORMAT_ONECOMPONENT32: XRCpuImage.Format
+    FORMAT_ARGB32: XRCpuImage.Format
+    FORMAT_RGBA32: XRCpuImage.Format
+    FORMAT_BGRA32: XRCpuImage.Format
+    FORMAT_RGB24: XRCpuImage.Format
+    FORMAT_H264RGB24: XRCpuImage.Format
     class Plane(_message.Message):
         __slots__ = ("row_stride", "pixel_stride", "data")
         ROW_STRIDE_FIELD_NUMBER: _ClassVar[int]

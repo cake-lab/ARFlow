@@ -1,0 +1,5 @@
+Configuration,Resolution,Compression,Bytes Sent,Frames,FPS Achieved,PSNR (dB),Bandwidth (Mbps),Compression Ratio
+SD_Uncompressed,640x480,Uncompressed,138240000,150,26.99,N/A,221.18,N/A
+SD_Compressed,640x480,H.264,11520000,150,27.75,54.93,18.43,0.2:1
+HD_Uncompressed,1920x1080,Uncompressed,933120000,150,26.91,N/A,1492.99,N/A
+HD_Compressed,1920x1080,H.264,77760000,150,27.43,58.28,124.42,0.3:1

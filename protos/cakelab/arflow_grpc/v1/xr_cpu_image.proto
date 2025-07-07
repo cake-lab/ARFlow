@@ -14,14 +14,15 @@ message XRCpuImage {
     // @exclude The number in each field should match the enum XRCpuImage.Format for more convenient conversion.
     FORMAT_ANDROID_YUV_420_888 = 1;
     FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE = 2;
-    // @exclude FORMAT_ONECOMPONENT8 = 3;
+    FORMAT_ONECOMPONENT8 = 3;
     FORMAT_DEPTHFLOAT32 = 4; /// iOS
     FORMAT_DEPTHUINT16 = 5; /// Android
-    // @exclude FORMAT_ONECOMPONENT32 = 6;
-    // @exclude FORMAT_ARGB32 = 7;
-    // @exclude FORMAT_RGBA32 = 8;
-    // @exclude FORMAT_BGRA32 = 9;
-    // @exclude FORMAT_RGB24 = 10;
+    FORMAT_ONECOMPONENT32 = 6;
+    FORMAT_ARGB32 = 7;
+    FORMAT_RGBA32 = 8;
+    FORMAT_BGRA32 = 9;
+    FORMAT_RGB24 = 10;
+    FORMAT_H264RGB24 = 16;
   }
 
   /// https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/api/UnityEngine.XR.ARSubsystems.XRCpuImage.Plane.html
