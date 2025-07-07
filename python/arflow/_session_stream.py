@@ -11,7 +11,6 @@ import subprocess
 import threading
 import queue
 from time import sleep
-import cv2
 
 from arflow._types import (
     ARFrameType,
@@ -118,7 +117,6 @@ class SessionStream:
         cur_base_timestamp = self.timestamp_queues[device.uid].get()
         cur_num_frames_processed = 0
         cur_num_frames_in_batch = self.frame_chunk_queues[device.uid].get()
-        print(cur_num_frames_in_batch)
         #i dunno what any of this is, just copying from the main save color frames
         while not self.stops[device.uid]:
             # also make sure that they always have a value, and to use the older frames time approximation if needed
@@ -148,7 +146,6 @@ class SessionStream:
                 static=True,
                 recording=self.stream,
             )
-            # print(cur_base_timestamp.seconds + cur_base_timestamp.nanos / 1e9 + cur_num_frames_processed * self.device_intervals[device.uid] / cur_num_frames_in_batch)
             rr.send_columns(
                 entity_path,
                 times=[
@@ -276,7 +273,7 @@ class SessionStream:
                     pixel_format=rr.PixelFormat.Y_U_V12_LimitedRange,
                 )
                 data = np.array([_to_i420_format(f.image) for f in homogenous_frames])
-            elif format == 10:
+            elif format == XRCpuImage.FORMAT_RGB24:
                 """
                 Decode a frame in RGB format and display it
                 """
@@ -290,7 +287,7 @@ class SessionStream:
                     np.frombuffer(f.image.planes[0].data, dtype=np.uint8)
                     for f in homogenous_frames
                 ])
-            elif format == 16:
+            elif format == XRCpuImage.FORMAT_H264RGB24:
                 """
                 Decode a frame in H264 format 
                 Create ffmpeg process/thread if none exists
@@ -302,7 +299,6 @@ class SessionStream:
                         self.image_queues[device.uid] = queue.Queue()
                         self.timestamp_queues[device.uid] = queue.Queue()
                         self.frame_chunk_queues[device.uid] = queue.Queue()
-                    print(f.device_timestamp)
                     self.timestamp_queues[device.uid].put(f.device_timestamp) #for now # of frames in the chunk is stored in row stride field
                     self.frame_chunk_queues[device.uid].put(f.image.planes[0].row_stride)
                     if device.uid not in self.streaming_pipes:
@@ -382,7 +378,6 @@ class SessionStream:
                 static=True,
                 recording=self.stream,
             )
-            print(format_static)
             rr.send_columns(
                 entity_path,
                 times=[
