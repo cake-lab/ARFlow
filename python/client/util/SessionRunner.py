@@ -45,7 +45,7 @@ class SessionRunner:
         Timestamp.FromNanoseconds(timestamp, nanos)
         xrcpu_image: XRCpuImage = XRCpuImage(
             dimensions= Vector2Int(x=width, y=height),
-            format= XRCpuImage.FORMAT_JPEG_RGB24,
+            format= XRCpuImage.Format.FORMAT_JPEG_RGB24,
             timestamp=now,
             planes=[plane]
         )
