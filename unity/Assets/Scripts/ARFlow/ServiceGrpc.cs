@@ -8,9 +8,9 @@
 using grpc = global::Grpc.Core;
 
 namespace ARFlow {
-  /// <summary>
+
   /// The ARFlowService service definition.
-  /// </summary>
+
   public static partial class ARFlowService
   {
     static readonly string __ServiceName = "ARFlowService";
@@ -73,13 +73,13 @@ namespace ARFlow {
         __Marshaller_DataFrameRequest,
         __Marshaller_DataFrameResponse);
 
-    /// <summary>Service descriptor</summary>
+    // <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
       get { return global::ARFlow.ServiceReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Base class for server-side implementations of ARFlowService</summary>
+    // <summary>Base class for server-side implementations of ARFlowService</summary>
     [grpc::BindServiceMethod(typeof(ARFlowService), "BindService")]
     public abstract partial class ARFlowServiceBase
     {

@@ -20,31 +20,30 @@ public class ARFlowUnityDataSample : MonoBehaviour
     private System.Random _rnd = new System.Random();
 
 
-    /// <summary>
-    /// Camera to exist in the Unity Scene, of which we will capture data from
-    /// </summary>
+    // Camera to exist in the Unity Scene, of which we will capture data from
+   
     private Camera _captureCamera;
 
-    /// <summary>
-    /// Camera color is rendered into this texture
-    /// </summary>
+ 
+    // Camera color is rendered into this texture
+  
     private RenderTexture _colorRenderTexture;
-    /// <summary>
-    /// Read pixels of the _colorRenderTexture to get color data
-    /// </summary>
+  
+    // Read pixels of the _colorRenderTexture to get color data
+ 
     private Texture2D _colorTexture;
 
-    /// <summary>
-    /// Shader to render depth from camera.
-    /// </summary>
+
+    // Shader to render depth from camera.
+
     private Shader _depthShader;
-    /// <summary>
-    /// Camera depth is rendered into this texture
-    /// </summary>
+
+    // Camera depth is rendered into this texture
+  
     private RenderTexture _depthRenderTexture;
-    /// <summary>
-    /// Read pixels of the _depthTexture to get depth data
-    /// </summary>
+
+    // Read pixels of the _depthTexture to get depth data
+ 
     private Texture2D _depthTexture;
 
     // Start is called before the first frame update
@@ -67,9 +66,9 @@ public class ARFlowUnityDataSample : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
-    /// <summary>
-    /// On connection, calculate register request data and send to server.
-    /// </summary>
+
+    // On connection, calculate register request data and send to server.
+
     private void OnConnectButtonClick()
     {
         Matrix4x4 projectionMatrix = _captureCamera.projectionMatrix;
@@ -119,19 +118,19 @@ public class ARFlowUnityDataSample : MonoBehaviour
         });
     }
 
-    /// <summary>
-    /// On pause, pressing the button changes the _enabled flag to true  (and text display) and data starts sending in Update()
-    /// On start, pressing the button changes the _enabled flag to false and data stops sending
-    /// </summary>
+  
+    // On pause, pressing the button changes the _enabled flag to true  (and text display) and data starts sending in Update()
+    // On start, pressing the button changes the _enabled flag to false and data stops sending
+
     private void OnStartPauseButtonClick()
     {
         _enabled = !_enabled;
         startPauseButton.GetComponentInChildren<TMP_Text>().text = _enabled ? "Pause" : "Start";
     }
 
-    /// <summary>
-    /// Render RGB and depth data to a Texture2D and read raw bytes data from the Texture2D. This data is sent over the server.
-    /// </summary>
+
+    // Render RGB and depth data to a Texture2D and read raw bytes data from the Texture2D. This data is sent over the server.
+
     private void UploadFrame()
     {
         // Render RGB.
@@ -163,9 +162,9 @@ public class ARFlowUnityDataSample : MonoBehaviour
     }
 
     // Update is called once per frame
-    /// <summary>
-    /// If the _enabled flag is true, starts uploading frame to server.
-    /// </summary>
+  
+    // If the _enabled flag is true, starts uploading frame to server.
+
     void Update()
     {
         if (!_enabled) return;
