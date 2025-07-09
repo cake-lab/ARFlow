@@ -31,24 +31,23 @@ class SessionRunner:
         if not ret:
             return
         height, width = frame.shape[:2]
-        yuv = (cv2.cvtColor(frame, cv2.COLOR_BGR2YUV_I420)).flatten()
-        y_size = width * height
-        uv_size = y_size // 4
-        Y: XRCpuImage.Plane = XRCpuImage.Plane(data = (yuv[:y_size].reshape((height, width))).tobytes(), row_stride = width, pixel_stride=1)
-        U: XRCpuImage.Plane = XRCpuImage.Plane(data = (yuv[y_size:y_size + uv_size].reshape((height // 2, width // 2))).tobytes(), row_stride = width // 2, pixel_stride=1)
-        V: XRCpuImage.Plane = XRCpuImage.Plane(data = (yuv[y_size + uv_size:].reshape((height // 2, width // 2))).tobytes(), row_stride = width // 2, pixel_stride=1)
-        # Trim the U and V planes because ARFlow adds an extra byte as it is a bug with the android format
-        U.data = U.data[:-1]
-        V.data = V.data[:-1]
+        success, encoded = cv2.imencode('.jpg', frame)
+        if not success:
+            return
+        plane: XRCpuImage.Plane = XRCpuImage.Plane(
+            data=encoded.tobytes(),
+            row_stride=0,
+            pixel_stride=0,
+        )
         now = time.time()
         timestamp = Timestamp()
         nanos = int(now * 1e9)
         Timestamp.FromNanoseconds(timestamp, nanos)
         xrcpu_image: XRCpuImage = XRCpuImage(
             dimensions= Vector2Int(x=width, y=height),
-            format= XRCpuImage.FORMAT_ANDROID_YUV_420_888,
+            format= XRCpuImage.FORMAT_JPEG_RGB24,
             timestamp=now,
-            planes=[Y, U, V]
+            planes=[plane]
         )
         color_frame = ColorFrame(
             image=xrcpu_image,
