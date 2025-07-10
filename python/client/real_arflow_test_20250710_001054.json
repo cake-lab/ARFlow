@@ -1,0 +1,45 @@
+{
+  "timestamp": "20250710_001054",
+  "test_type": "real_arflow_compression",
+  "server": "localhost:8500",
+  "results": [
+    {
+      "config": {
+        "name": "ARFlow_SD_PNG",
+        "duration": 30,
+        "description": "ARFlow SD (PNG Compressed)",
+        "width": 640,
+        "height": 480
+      },
+      "measurements": {
+        "frames_sent": 611,
+        "bytes_sent": 192035334,
+        "fps_achieved": 19.842161486386413,
+        "cpu_usage_avg": 46.36,
+        "memory_usage_mb": 81.91796875,
+        "bandwidth_mbps": 49.890620076204925,
+        "psnr": 361.2019990992245,
+        "errors": []
+      }
+    },
+    {
+      "config": {
+        "name": "ARFlow_HD_PNG",
+        "duration": 30,
+        "description": "ARFlow HD (PNG Compressed)",
+        "width": 1280,
+        "height": 720
+      },
+      "measurements": {
+        "frames_sent": 217,
+        "bytes_sent": 185273703,
+        "fps_achieved": 7.096268537299018,
+        "cpu_usage_avg": 49.42857142857143,
+        "memory_usage_mb": 66.921875,
+        "bandwidth_mbps": 48.470117949780004,
+        "psnr": 361.20199909922064,
+        "errors": []
+      }
+    }
+  ]
+}

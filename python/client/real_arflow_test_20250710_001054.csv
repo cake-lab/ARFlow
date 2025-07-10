@@ -1,0 +1,3 @@
+Configuration,Duration (s),Frames Received,Bytes Received,FPS Achieved,CPU Usage (%),Memory Usage (MB),Bandwidth (Mbps),PSNR (dB),Errors
+ARFlow_SD_PNG,30,611,192035334,19.84,46.4,81.9,49.89,361.20,None
+ARFlow_HD_PNG,30,217,185273703,7.10,49.4,66.9,48.47,361.20,None
