@@ -3,11 +3,11 @@
 import logging
 from collections.abc import Sequence
 
+import cv2
 import DracoPy
 import numpy as np
 import numpy.typing as npt
 import rerun as rr
-import cv2
 
 from arflow._types import (
     ARFrameType,

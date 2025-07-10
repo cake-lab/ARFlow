@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
-"""Real ARFlow Compression Test
+"""Real ARFlow Compression Test.
 
-This script measures the difference between streaming and non-streaming modes
-by monitoring existing ARFlow sessions and measuring their network usage.
-
-Usage:
-1. Start ARFlow server: arflow view --port 8500
-2. Connect your device to the server
-3. Run this test: python real_arflow_compression_test.py
-
-Note: This test monitors existing sessions from connected devices.
+This script runs a test for a suite of tests on the device by connecting to an existing ARFlow server
+and creating a session. It then starts recording on its own.
 """
 
 import argparse
@@ -18,11 +11,11 @@ import csv
 import json
 import sys
 import time
+import traceback
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, List
-import traceback
 
 import cv2
 
@@ -77,6 +70,7 @@ class RealARFlowTester:
     """Test compression impact using real ARFlow components."""
 
     def __init__(self, server_host: str = "localhost", server_port: int = 8500):
+        """Initialize the tester with server details."""
         self.server_host = server_host
         self.server_port = server_port
         self.configs = [

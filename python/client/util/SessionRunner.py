@@ -1,16 +1,20 @@
-from cakelab.arflow_grpc.v1.session_pb2 import Session
-from cakelab.arflow_grpc.v1.device_pb2 import Device
+"""A class that handles the session and camera for a device."""
+import time
+from typing import Any, Callable, Coroutine
+
+import cv2
+from google.protobuf.timestamp_pb2 import Timestamp
 
 from cakelab.arflow_grpc.v1.ar_frame_pb2 import ARFrame
 from cakelab.arflow_grpc.v1.color_frame_pb2 import ColorFrame
-from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
+from cakelab.arflow_grpc.v1.device_pb2 import Device
+from cakelab.arflow_grpc.v1.session_pb2 import Session
 from cakelab.arflow_grpc.v1.vector2_int_pb2 import Vector2Int
-from google.protobuf.timestamp_pb2 import Timestamp
-import cv2
-import time
-from typing import Callable, Coroutine, Any
+from cakelab.arflow_grpc.v1.xr_cpu_image_pb2 import XRCpuImage
+
 
 class SessionRunner:
+    """A class that handles the session and camera for a device."""
     camera : cv2.VideoCapture | None = None
     session: Session | None = None
     device: Device | None = None
@@ -18,15 +22,18 @@ class SessionRunner:
     summed_psnr: float = 0.0
     onARFrame: Callable[[Session, ARFrame, Device], Coroutine[Any, Any, None]] | None = None
     def __init__(self, session: Session, device: Device, onARFrame: Callable[[Session, ARFrame, Device], Coroutine[Any, Any, None]]):
+        """Initializes a new SessionRunner instance."""
         self.camera = cv2.VideoCapture(0)
         self.onARFrame = onARFrame
         self.session = session
         self.device = device
     def __del__(self):
+        """Destructor to make sure the camera is released."""
         if self.camera is not None:
             self.camera.release()
             self.camera = None
     async def gather_camera_frame_async(self) -> None:
+        """Gathers a camera frame and triggers an event when its done."""
         if self.camera is None:
             return
         ret, frame = self.camera.read()

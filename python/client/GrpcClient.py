@@ -1,31 +1,35 @@
-import grpc
+"""A gRPC client for interacting with the ARFlow server."""
 from typing import Awaitable, Iterable
 
-from cakelab.arflow_grpc.v1.ar_frame_pb2 import ARFrame 
+import grpc
 
+from cakelab.arflow_grpc.v1.ar_frame_pb2 import ARFrame
 from cakelab.arflow_grpc.v1.arflow_service_pb2_grpc import ARFlowServiceStub
-from cakelab.arflow_grpc.v1.session_pb2 import SessionUuid, SessionMetadata
-from cakelab.arflow_grpc.v1.device_pb2 import Device
-
 from cakelab.arflow_grpc.v1.create_session_request_pb2 import CreateSessionRequest
 from cakelab.arflow_grpc.v1.create_session_response_pb2 import CreateSessionResponse
 from cakelab.arflow_grpc.v1.delete_session_request_pb2 import DeleteSessionRequest
 from cakelab.arflow_grpc.v1.delete_session_response_pb2 import DeleteSessionResponse
+from cakelab.arflow_grpc.v1.device_pb2 import Device
 from cakelab.arflow_grpc.v1.get_session_request_pb2 import GetSessionRequest
 from cakelab.arflow_grpc.v1.get_session_response_pb2 import GetSessionResponse
 from cakelab.arflow_grpc.v1.join_session_request_pb2 import JoinSessionRequest
 from cakelab.arflow_grpc.v1.join_session_response_pb2 import JoinSessionResponse
-from cakelab.arflow_grpc.v1.list_sessions_request_pb2 import ListSessionsRequest
-from cakelab.arflow_grpc.v1.list_sessions_response_pb2 import ListSessionsResponse
 from cakelab.arflow_grpc.v1.leave_session_request_pb2 import LeaveSessionRequest
 from cakelab.arflow_grpc.v1.leave_session_response_pb2 import LeaveSessionResponse
+from cakelab.arflow_grpc.v1.list_sessions_request_pb2 import ListSessionsRequest
+from cakelab.arflow_grpc.v1.list_sessions_response_pb2 import ListSessionsResponse
 from cakelab.arflow_grpc.v1.save_ar_frames_request_pb2 import SaveARFramesRequest
 from cakelab.arflow_grpc.v1.save_ar_frames_response_pb2 import SaveARFramesResponse
+from cakelab.arflow_grpc.v1.session_pb2 import SessionMetadata, SessionUuid
+
 
 class GrpcClient:
+    """A gRPC client for interacting with the ARFlow server."""
     def __init__(self, url):
+        """Initializes a new GrpcClient instance."""
         self.channel = grpc.insecure_channel(url)
     async def create_session_async(self, name: str, device: Device, save_path: str = "") -> CreateSessionResponse:
+        """Creates a new session."""
         request = CreateSessionRequest(
             session_metadata=SessionMetadata(name=name, save_path=save_path),
             device=device
@@ -33,18 +37,21 @@ class GrpcClient:
         response: Awaitable[CreateSessionResponse] = ARFlowServiceStub(self.channel).CreateSession(request)
         return response
     async def delete_session_async(self, session_id: str) -> DeleteSessionResponse:
+        """Deletes a specific session."""
         request = DeleteSessionRequest(
             session_id=SessionUuid(value = session_id)
         )
         response: Awaitable[DeleteSessionResponse] = ARFlowServiceStub(self.channel).DeleteSession(request)
         return response
     async def get_session_async(self, session_id: str) -> GetSessionResponse:
+        """Retrieves a specific session."""
         request = GetSessionRequest(
             session_id=SessionUuid(value=session_id)
         )
         response: Awaitable[GetSessionResponse] = ARFlowServiceStub(self.channel).GetSession(request)
         return response
     async def join_session_async(self, session_id: str, device: Device) -> JoinSessionResponse:
+        """Joins an existing session."""
         request = JoinSessionRequest(
             session_id=SessionUuid(value=session_id),
             device=device
@@ -52,10 +59,12 @@ class GrpcClient:
         response: Awaitable[JoinSessionResponse] = ARFlowServiceStub(self.channel).JoinSession(request)
         return response
     async def list_sessions_async(self) -> ListSessionsResponse:
+        """Lists all active sessions."""
         request = ListSessionsRequest()
         response: Awaitable[ListSessionsResponse] = ARFlowServiceStub(self.channel).ListSessions(request)
         return response
     async def leave_session_async(self, session_id: str, device: Device) -> LeaveSessionResponse:
+        """Leaves a session."""
         request = LeaveSessionRequest(
             session_id=SessionUuid(value=session_id),
             device=device
@@ -63,6 +72,7 @@ class GrpcClient:
         response: Awaitable[LeaveSessionResponse] = ARFlowServiceStub(self.channel).LeaveSession(request)
         return response
     async def save_ar_frames_async(self, session_id: str, ar_frames: Iterable[ARFrame], device: Device) -> SaveARFramesResponse:
+        """Saves AR frames to the server."""
         request = SaveARFramesRequest(
             session_id=SessionUuid(value=session_id),
             frames=ar_frames,
@@ -72,5 +82,6 @@ class GrpcClient:
         return response
 
     def close(self):
+        """Close the gRPC channel."""
         self.channel.close()
     

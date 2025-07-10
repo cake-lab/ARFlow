@@ -1,26 +1,27 @@
 
+"""A simple command line interface for the ARFlow gRPC server."""
+import asyncio
+from threading import Event, Thread
+from time import sleep
 
 from GrpcClient import GrpcClient
 from util.GetDeviceInfo import GetDeviceInfo
 from util.SessionRunner import SessionRunner
 
-from cakelab.arflow_grpc.v1.device_pb2 import Device
-from cakelab.arflow_grpc.v1.session_pb2 import Session
 from cakelab.arflow_grpc.v1.ar_frame_pb2 import ARFrame
-
 from cakelab.arflow_grpc.v1.create_session_response_pb2 import CreateSessionResponse
+from cakelab.arflow_grpc.v1.device_pb2 import Device
 from cakelab.arflow_grpc.v1.list_sessions_response_pb2 import ListSessionsResponse
+from cakelab.arflow_grpc.v1.session_pb2 import Session
 
-import asyncio
-from threading import Thread
-from threading import Event
-from time import sleep
 
 class CLIClient:
+    """A simple command line interface for the ARFlow gRPC server."""
     session: Session | None = None
     running: Thread | None = None
     stop_event: Event | None = None
     def __init__(self):
+        """Initialize the CLI client and start the session management loop."""
         host = input("Enter hostname: ")
         port = input("Enter port: ")
         self.client = GrpcClient(f"{host}:{port}")
@@ -134,6 +135,7 @@ class CLIClient:
         )
 
 def main():
+    """Main function to run the CLI client."""
     CLIClient()
     
     
