@@ -1,4 +1,9 @@
-"""A gRPC client for interacting with the ARFlow server."""
+"""A simple Python gRPC client."""
+
+# ruff:noqa: D103
+# pyright: reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false
+# We have to do the above because the grpc stub has no type hints
+
 from typing import Awaitable, Iterable
 
 import grpc
@@ -24,64 +29,128 @@ from cakelab.arflow_grpc.v1.session_pb2 import SessionMetadata, SessionUuid
 
 
 class GrpcClient:
-    """A gRPC client for interacting with the ARFlow server."""
-    def __init__(self, url):
-        """Initializes a new GrpcClient instance."""
+    """A simple gRPC client class."""
+
+    stub: ARFlowServiceStub
+
+    def __init__(self, url: str):
+        """Initialize the gRPC client.
+
+        Args:
+            url: The URL of the gRPC server.
+        """
         self.channel = grpc.insecure_channel(url)
-    async def create_session_async(self, name: str, device: Device, save_path: str = "") -> CreateSessionResponse:
-        """Creates a new session."""
+        self.stub = ARFlowServiceStub(self.channel)
+
+    async def create_session_async(
+        self, name: str, device: Device, save_path: str = ""
+    ) -> Awaitable[CreateSessionResponse]:
+        """Create a new session.
+
+        Args:
+            name: The name of the session.
+            device: The device to use for the session.
+            save_path: The path to save the session data to.
+
+        Returns:
+                The response from the server.
+        """
         request = CreateSessionRequest(
             session_metadata=SessionMetadata(name=name, save_path=save_path),
-            device=device
+            device=device,
         )
-        response: Awaitable[CreateSessionResponse] = ARFlowServiceStub(self.channel).CreateSession(request)
+        response: Awaitable[CreateSessionResponse] = self.stub.CreateSession(request)
         return response
-    async def delete_session_async(self, session_id: str) -> DeleteSessionResponse:
-        """Deletes a specific session."""
-        request = DeleteSessionRequest(
-            session_id=SessionUuid(value = session_id)
-        )
-        response: Awaitable[DeleteSessionResponse] = ARFlowServiceStub(self.channel).DeleteSession(request)
+
+    async def delete_session_async(
+        self, session_id: str
+    ) -> Awaitable[DeleteSessionResponse]:
+        """Delete a session.
+
+        Args:
+            session_id: The session id to delete.
+
+        Returns:
+                The response from the server.
+        """
+        request = DeleteSessionRequest(session_id=SessionUuid(value=session_id))
+        response: Awaitable[DeleteSessionResponse] = self.stub.DeleteSession(request)
         return response
-    async def get_session_async(self, session_id: str) -> GetSessionResponse:
-        """Retrieves a specific session."""
-        request = GetSessionRequest(
-            session_id=SessionUuid(value=session_id)
-        )
-        response: Awaitable[GetSessionResponse] = ARFlowServiceStub(self.channel).GetSession(request)
+
+    async def get_session_async(self, session_id: str) -> Awaitable[GetSessionResponse]:
+        """Get a session by its ID.
+
+        Args:
+            session_id: The session id to get.
+
+        Returns:
+            The response from the server.
+        """
+        request = GetSessionRequest(session_id=SessionUuid(value=session_id))
+        response: Awaitable[GetSessionResponse] = self.stub.GetSession(request)
         return response
-    async def join_session_async(self, session_id: str, device: Device) -> JoinSessionResponse:
-        """Joins an existing session."""
+
+    async def join_session_async(
+        self, session_id: str, device: Device
+    ) -> Awaitable[JoinSessionResponse]:
+        """Join a session.
+
+        Args:
+            session_id: The session id to join.
+            device: The device to join the session with.
+
+        Returns:
+            The response from the server.
+        """
         request = JoinSessionRequest(
-            session_id=SessionUuid(value=session_id),
-            device=device
+            session_id=SessionUuid(value=session_id), device=device
         )
-        response: Awaitable[JoinSessionResponse] = ARFlowServiceStub(self.channel).JoinSession(request)
+        response: Awaitable[JoinSessionResponse] = self.stub.JoinSession(request)
         return response
-    async def list_sessions_async(self) -> ListSessionsResponse:
-        """Lists all active sessions."""
+
+    async def list_sessions_async(self) -> Awaitable[ListSessionsResponse]:
+        """List all sessions."""
         request = ListSessionsRequest()
-        response: Awaitable[ListSessionsResponse] = ARFlowServiceStub(self.channel).ListSessions(request)
+        response: Awaitable[ListSessionsResponse] = self.stub.ListSessions(request)
         return response
-    async def leave_session_async(self, session_id: str, device: Device) -> LeaveSessionResponse:
-        """Leaves a session."""
+
+    async def leave_session_async(
+        self, session_id: str, device: Device
+    ) -> Awaitable[LeaveSessionResponse]:
+        """Leave a session.
+
+        Args:
+            session_id: The session ID.
+            device: The device that left the session.
+
+        Returns:
+            The response from the server.
+        """
         request = LeaveSessionRequest(
-            session_id=SessionUuid(value=session_id),
-            device=device
+            session_id=SessionUuid(value=session_id), device=device
         )
-        response: Awaitable[LeaveSessionResponse] = ARFlowServiceStub(self.channel).LeaveSession(request)
+        response: Awaitable[LeaveSessionResponse] = self.stub.LeaveSession(request)
         return response
-    async def save_ar_frames_async(self, session_id: str, ar_frames: Iterable[ARFrame], device: Device) -> SaveARFramesResponse:
-        """Saves AR frames to the server."""
+
+    async def save_ar_frames_async(
+        self, session_id: str, ar_frames: Iterable[ARFrame], device: Device
+    ) -> Awaitable[SaveARFramesResponse]:
+        """Save AR frames to the session.
+
+        Args:
+            session_id: The session ID.
+            ar_frames: The AR frames to save.
+            device: The device that captured the AR frames.
+
+        Returns:
+            The response from the server.
+        """
         request = SaveARFramesRequest(
-            session_id=SessionUuid(value=session_id),
-            frames=ar_frames,
-            device=device
+            session_id=SessionUuid(value=session_id), frames=ar_frames, device=device
         )
-        response: Awaitable[SaveARFramesResponse] = ARFlowServiceStub(self.channel).SaveARFrames(request)
+        response: Awaitable[SaveARFramesResponse] = self.stub.SaveARFrames(request)
         return response
 
     def close(self):
-        """Close the gRPC channel."""
+        """Close the channel."""
         self.channel.close()
-    
