@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from cakelab.arflow_grpc.v1 import vector2_int_pb2 as cakelab_dot_arflow__grpc_dot_v1_dot_vector2__int__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n)cakelab/arflow_grpc/v1/xr_cpu_image.proto\x12\x16\x63\x61kelab.arflow_grpc.v1\x1a(cakelab/arflow_grpc/v1/vector2_int.proto\"\xf8\x03\n\nXRCpuImage\x12\x42\n\ndimensions\x18\x01 \x01(\x0b\x32\".cakelab.arflow_grpc.v1.Vector2IntR\ndimensions\x12\x41\n\x06\x66ormat\x18\x02 \x01(\x0e\x32).cakelab.arflow_grpc.v1.XRCpuImage.FormatR\x06\x66ormat\x12\x1c\n\ttimestamp\x18\x03 \x01(\x01R\ttimestamp\x12@\n\x06planes\x18\x04 \x03(\x0b\x32(.cakelab.arflow_grpc.v1.XRCpuImage.PlaneR\x06planes\x1a]\n\x05Plane\x12\x1d\n\nrow_stride\x18\x01 \x01(\x05R\trowStride\x12!\n\x0cpixel_stride\x18\x02 \x01(\x05R\x0bpixelStride\x12\x12\n\x04\x64\x61ta\x18\x03 \x01(\x0cR\x04\x64\x61ta\"\xa3\x01\n\x06\x46ormat\x12\x16\n\x12\x46ORMAT_UNSPECIFIED\x10\x00\x12\x1e\n\x1a\x46ORMAT_ANDROID_YUV_420_888\x10\x01\x12\x30\n,FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE\x10\x02\x12\x17\n\x13\x46ORMAT_DEPTHFLOAT32\x10\x04\x12\x16\n\x12\x46ORMAT_DEPTHUINT16\x10\x05\x42\xa4\x01\n\x1a\x63om.cakelab.arflow_grpc.v1B\x0fXrCpuImageProtoP\x01\xa2\x02\x03\x43\x41X\xaa\x02\x16\x43\x61keLab.ARFlow.Grpc.V1\xca\x02\x15\x43\x61kelab\\ArflowGrpc\\V1\xe2\x02!Cakelab\\ArflowGrpc\\V1\\GPBMetadata\xea\x02\x17\x43\x61kelab::ArflowGrpc::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n)cakelab/arflow_grpc/v1/xr_cpu_image.proto\x12\x16\x63\x61kelab.arflow_grpc.v1\x1a(cakelab/arflow_grpc/v1/vector2_int.proto\"\x8b\x05\n\nXRCpuImage\x12\x42\n\ndimensions\x18\x01 \x01(\x0b\x32\".cakelab.arflow_grpc.v1.Vector2IntR\ndimensions\x12\x41\n\x06\x66ormat\x18\x02 \x01(\x0e\x32).cakelab.arflow_grpc.v1.XRCpuImage.FormatR\x06\x66ormat\x12\x1c\n\ttimestamp\x18\x03 \x01(\x01R\ttimestamp\x12@\n\x06planes\x18\x04 \x03(\x0b\x32(.cakelab.arflow_grpc.v1.XRCpuImage.PlaneR\x06planes\x1a]\n\x05Plane\x12\x1d\n\nrow_stride\x18\x01 \x01(\x05R\trowStride\x12!\n\x0cpixel_stride\x18\x02 \x01(\x05R\x0bpixelStride\x12\x12\n\x04\x64\x61ta\x18\x03 \x01(\x0cR\x04\x64\x61ta\"\xb6\x02\n\x06\x46ormat\x12\x16\n\x12\x46ORMAT_UNSPECIFIED\x10\x00\x12\x1e\n\x1a\x46ORMAT_ANDROID_YUV_420_888\x10\x01\x12\x30\n,FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE\x10\x02\x12\x17\n\x13\x46ORMAT_DEPTHFLOAT32\x10\x04\x12\x16\n\x12\x46ORMAT_DEPTHUINT16\x10\x05\x12\x19\n\x15\x46ORMAT_ONECOMPONENT32\x10\x06\x12\x11\n\rFORMAT_ARGB32\x10\x07\x12\x11\n\rFORMAT_RGBA32\x10\x08\x12\x11\n\rFORMAT_BGRA32\x10\t\x12\x10\n\x0c\x46ORMAT_RGB24\x10\n\x12\x15\n\x11\x46ORMAT_JPEG_RGB24\x10\x0b\x12\x14\n\x10\x46ORMAT_PNG_RGB24\x10\x0c\x42\xa4\x01\n\x1a\x63om.cakelab.arflow_grpc.v1B\x0fXrCpuImageProtoP\x01\xa2\x02\x03\x43\x41X\xaa\x02\x16\x43\x61keLab.ARFlow.Grpc.V1\xca\x02\x15\x43\x61kelab\\ArflowGrpc\\V1\xe2\x02!Cakelab\\ArflowGrpc\\V1\\GPBMetadata\xea\x02\x17\x43\x61kelab::ArflowGrpc::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,9 +34,9 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\032com.cakelab.arflow_grpc.v1B\017XrCpuImageProtoP\001\242\002\003CAX\252\002\026CakeLab.ARFlow.Grpc.V1\312\002\025Cakelab\\ArflowGrpc\\V1\342\002!Cakelab\\ArflowGrpc\\V1\\GPBMetadata\352\002\027Cakelab::ArflowGrpc::V1'
   _globals['_XRCPUIMAGE']._serialized_start=112
-  _globals['_XRCPUIMAGE']._serialized_end=616
+  _globals['_XRCPUIMAGE']._serialized_end=763
   _globals['_XRCPUIMAGE_PLANE']._serialized_start=357
   _globals['_XRCPUIMAGE_PLANE']._serialized_end=450
   _globals['_XRCPUIMAGE_FORMAT']._serialized_start=453
-  _globals['_XRCPUIMAGE_FORMAT']._serialized_end=616
+  _globals['_XRCPUIMAGE_FORMAT']._serialized_end=763
 # @@protoc_insertion_point(module_scope)
