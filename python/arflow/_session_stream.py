@@ -3,6 +3,7 @@
 import logging
 from collections.abc import Sequence
 
+import cv2
 import DracoPy
 import numpy as np
 import numpy.typing as npt
@@ -146,6 +147,31 @@ class SessionStream:
                     pixel_format=rr.PixelFormat.Y_U_V12_LimitedRange,
                 )
                 data = np.array([_to_i420_format(f.image) for f in homogenous_frames])
+            elif format == XRCpuImage.FORMAT_RGB24:
+                """
+                Decode a frame in RGB format and display it
+                """
+                format_static = rr.components.ImageFormat(
+                    width=width,
+                    height=height,
+                    pixel_format=None,
+                    color_model=rr.ColorModel.RGB,
+                )
+                data = np.array([
+                    np.frombuffer(f.image.planes[0].data, dtype=np.uint8)
+                    for f in homogenous_frames
+                ])
+            elif format == XRCpuImage.FORMAT_JPEG_RGB24 or format == XRCpuImage.FORMAT_PNG_RGB24:
+                format_static = rr.components.ImageFormat(
+                    width=width,
+                    height=height,
+                    pixel_format=None,
+                    color_model=rr.ColorModel.BGR,
+                )
+                data = np.array([
+                    cv2.imdecode(np.frombuffer(f.image.planes[0].data, dtype=np.uint8), cv2.IMREAD_COLOR).flatten()
+                    for f in homogenous_frames
+                ])
             # elif format == XRCpuImage.FORMAT_IOS_YP_CBCR_420_8BI_PLANAR_FULL_RANGE:
             #     format_static = rr.components.ImageFormat(
             #         width=width,
