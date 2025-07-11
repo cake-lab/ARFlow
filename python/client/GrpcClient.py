@@ -153,5 +153,4 @@ class GrpcClient:
 
     def close(self):
         """Close the channel."""
-
         self.channel.close()

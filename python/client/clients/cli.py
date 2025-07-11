@@ -1,4 +1,4 @@
-
+# ruff: noqa: T201
 """A simple command line interface for the ARFlow gRPC server."""
 import asyncio
 from threading import Event, Thread

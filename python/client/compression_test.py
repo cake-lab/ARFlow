@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: T201
 """Real ARFlow Compression Test.
 
 This script runs a test for a suite of tests on the device by connecting to an existing ARFlow server
