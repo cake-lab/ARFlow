@@ -92,13 +92,6 @@ guideline first, and refer to the individual [server](./python/README.md) and
                     <sub><b>Yiqin Zhao</b></sub>
                 </a>
             </td>
-            <td align="center">
-                <a href="https://github.com/catmajor">
-                    <img src="https://avatars.githubusercontent.com/u/119273404?v=4" width="100;" alt="catmajor"/>
-                    <br />
-                    <sub><b>Nikita Ostapenko</b></sub>
-                </a>
-            </td>
 		</tr>
 	<tbody>
 </table>
