@@ -7,10 +7,10 @@
 
 using grpc = global::Grpc.Core;
 
-namespace ARFlow {
+namespace ARFlow
+{
 
-  /// The ARFlowService service definition.
-
+  /// </summary>
   public static partial class ARFlowService
   {
     static readonly string __ServiceName = "ARFlowService";

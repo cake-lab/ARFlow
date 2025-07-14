@@ -54,14 +54,12 @@ public class ARFlowXiheDemo : MonoBehaviour
             UploadFrame();
         }
     }
-
     private void PlaceObject()
     {
         Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
         _initialized = true;
         placementIndicator.SetActive(false);
     }
-
     private void UpdatePlacementIndicator()
     {
         if (placementPoseIsValid)
@@ -74,7 +72,6 @@ public class ARFlowXiheDemo : MonoBehaviour
             placementIndicator.SetActive(false);
         }
     }
-
     private void UpdatePlacementPose()
     {
         var screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
@@ -91,7 +88,6 @@ public class ARFlowXiheDemo : MonoBehaviour
             placementPose.rotation = Quaternion.LookRotation(cameraBearing);
         }
     }
-
     private void OnConnectButtonClick()
     {
         if (!_initialized)
@@ -187,7 +183,6 @@ public class ARFlowXiheDemo : MonoBehaviour
             m.m10, m.m11, m.m12, m.m13,
             m.m20, m.m21, m.m22, m.m23
         }, 0, cameraTransformBytes, 0, transformLength);
-
 
         var responseSHC = _client.SendFrame(new DataFrameRequest()
         {

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace ARFlow
 {
-    
-    /// Handles on-device storage of AR data frames in binary format
 
+    /// Handles on-device storage of AR data frames in binary format
     public class ARFlowDataStorage
     {
         private readonly string _storagePath;
@@ -28,14 +27,10 @@ namespace ARFlow
             {
                 Directory.CreateDirectory(_storagePath);
             }
-
-            Debug.Log($"ARFlow storage initialized at: {_storagePath}");
         }
 
-        
-        /// Store a data frame to local storage
-   
-        public async Task<string> StoreFrameAsync(DataFrameRequest frameData, Dictionary<string, object> metadata = null)
+        /// Store a data frame to local storage   
+        public async Task<(bool success, string filePath)> StoreFrameAsync(DataFrameRequest frameData, Dictionary<string, object> metadata = null)
         {
             var timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff");
             var fileName = $"frame_{_frameCounter:D6}_{timestamp}.bin";
@@ -70,28 +65,23 @@ namespace ARFlow
                     }
                 }
 
-                Debug.Log($"Frame stored: {Path.GetFileName(filePath)}");
-                return filePath;
+                return (true, filePath);
             }
             catch (Exception e)
             {
                 Debug.LogError($"Failed to store frame: {e.Message}");
-                return null;
+                return (false, null);
             }
         }
 
-        
-        /// Store frame data 
-       
-        public string StoreFrame(DataFrameRequest frameData, Dictionary<string, object> metadata = null)
+        /// Store frame data        
+        public (bool success, string filePath) StoreFrame(DataFrameRequest frameData, Dictionary<string, object> metadata = null)
         {
             return StoreFrameAsync(frameData, metadata).Result;
         }
 
-        
         /// Load a stored frame by file path
-
-        public async Task<(DataFrameRequest frameData, Dictionary<string, object> metadata)> LoadFrameAsync(string filePath)
+        public async Task<(bool success, DataFrameRequest frameData, Dictionary<string, object> metadata)> LoadFrameAsync(string filePath)
         {
             try
             {
@@ -114,39 +104,37 @@ namespace ARFlow
                 await fileStream.ReadAsync(frameBytes, 0, frameDataLength);
 
                 var frameData = DataFrameRequest.Parser.ParseFrom(frameBytes);
-                return (frameData, metadata);
+                return (true, frameData, metadata);
             }
             catch (Exception e)
             {
                 Debug.LogError($"Failed to load frame from {filePath}: {e.Message}");
-                return (null, null);
+                return (false, null, null);
             }
         }
 
-        
-        /// Get list of all stored frame files
- 
-        public List<string> GetStoredFrames()
+        /// Get list of all stored frame files 
+        public (bool success, List<string> files) GetStoredFrames()
         {
             var files = new List<string>();
             try
             {
                 files.AddRange(Directory.GetFiles(_storagePath, "*.bin"));
                 files.Sort(); // Sort by filename (includes timestamp)
+                return (true, files);
             }
             catch (Exception e)
             {
                 Debug.LogError($"Failed to get stored frames: {e.Message}");
+                return (false, files);
             }
-            return files;
         }
 
-        
-        /// Clear all stored data
-       
-        public void ClearStorage()
+        /// Clear all stored data    
+        public bool ClearStorage()
         {
-           
+            try
+            {
                 var files = Directory.GetFiles(_storagePath);
                 foreach (var file in files)
                 {
@@ -154,15 +142,17 @@ namespace ARFlow
                 }
                 _fileQueue.Clear();
                 _frameCounter = 0;
-                Debug.Log("Storage cleared");
-            
-       
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to clear storage: {e.Message}");
+                return false;
+            }
         }
 
-        
-        /// Get storage statistics
-    
-        public (int fileCount, long totalSizeBytes, string storagePath) GetStorageInfo()
+        /// Get storage statistics   
+        public (bool success, int fileCount, long totalSizeBytes, string storagePath) GetStorageInfo()
         {
             try
             {
@@ -172,27 +162,23 @@ namespace ARFlow
                 {
                     totalSize += new FileInfo(file).Length;
                 }
-                return (files.Length, totalSize, _storagePath);
+                return (true, files.Length, totalSize, _storagePath);
             }
             catch (Exception e)
             {
                 Debug.LogError($"Failed to get storage info: {e.Message}");
-                return (0, 0, _storagePath);
+                return (false, 0, 0, _storagePath);
             }
         }
     }
 
-    
-    /// Helper class for JSON serialization of dictionaries
-  
+    /// Helper class for JSON serialization of dictionaries  
     [Serializable]
     public class SerializableDictionary
     {
         public List<string> keys = new List<string>();
         public List<string> values = new List<string>();
-
         public SerializableDictionary() { }
-
         public SerializableDictionary(Dictionary<string, object> dict)
         {
             foreach (var kvp in dict)
@@ -201,7 +187,6 @@ namespace ARFlow
                 values.Add(kvp.Value?.ToString() ?? "");
             }
         }
-
         public Dictionary<string, object> ToDictionary()
         {
             var dict = new Dictionary<string, object>();
