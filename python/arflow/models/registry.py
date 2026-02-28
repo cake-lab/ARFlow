@@ -19,8 +19,8 @@ from arflow.models.session import (
     LeaveSessionResponseMsg,
 )
 
-# 注意：此列表的顺序将决定每种 Message 对应的 SensorFlex Type ID (0, 1, 2...)
-# 这个顺序极其重要，必须与 Unity 端保持严格一致，且后期不再更改已有项的顺序！
+# Note: The order of this list will determine the SensorFlex Type ID (0, 1, 2...) for each Message
+# This order is extremely important, it must be strictly consistent with the Unity end, and the order of existing items should not be changed later!
 ARFLOW_MESSAGE_MODELS = [
     DeviceMsg,  # 0
     SessionUuidMsg,  # 1

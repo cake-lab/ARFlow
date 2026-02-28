@@ -25,7 +25,7 @@ from arflow.models.session import (
 
 logger = logging.getLogger(__name__)
 
-# 全局的 Session 管理字典，存 MsgSpec 定义的数据
+# Global Session management dictionary, storing MsgSpec defined data
 sessions: Dict[str, CreateSessionRequestMsg] = {}
 """@private"""
 
@@ -43,7 +43,7 @@ class ARFlowWebSocketServer:
         # 这里为兼容 0.3 的逻辑，选择在 handle_create_session 时处理
 
     def _save_frame_data(self, message_type_name: str, message_bytes: bytes):
-        """@private: 为了在退出时保存 session 的记录"""
+        """@private: For saving session records upon exit"""
         time_stamp = (time.time_ns() - self._start_time) / 1e9
         self._frame_data.append(
             {"time_stamp": time_stamp, "data": message_bytes, "type": message_type_name}
@@ -70,11 +70,11 @@ class ARFlowWebSocketServer:
             return
 
         if isinstance(obj, CreateSessionRequestMsg):
-            # 将这个 CreateSessionRequestMsg 储存起来
+            # Store this CreateSessionRequestMsg
             self._save_frame_data("CreateSessionRequestMsg", message)
             await self.handle_create_session(websocket, obj)
         else:
-            # 预留给以后的 Image 等传输 Frame
+            # Reserved for future Image and other transmission Frames
             logger.warning(f"Unhandled message type: {type(obj)}")
 
     async def handle_create_session(self, websocket: ServerConnection, request: CreateSessionRequestMsg):
@@ -83,14 +83,14 @@ class ARFlowWebSocketServer:
         
         sessions[new_session_id] = request
 
-        # 唤醒 Rerun Viewer
+        # Wake up Rerun Viewer
         self.recorder.init(f"{request.device.device_name} - ARFlow", spawn=self.spawn_viewer)
         print("Registered a client with UUID: %s" % new_session_id, request)
 
         # Call the for user extension code.
         self.on_register(request)
 
-        # 构建发回客户端的凭证
+        # Build the credentials sent back to the client
         session_msg = SessionMsg(
             id=SessionUuidMsg(value=new_session_id),
             metadata=request.session_metadata,
@@ -119,4 +119,4 @@ class ARFlowWebSocketServer:
 
         print(f"Data saved to {save_path}")
 
-    # 省略 60FPS 的 Decode 函数，未来第六周重写此部分时会补充上来
+    # Omitting the 60FPS Decode function, this will be supplemented when rewriting this part in the future
