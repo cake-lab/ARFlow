@@ -1,127 +1,109 @@
-"""Data exchanging service."""
+"""Data exchanging service via WebSockets."""
 
 import os
 import pickle
 import time
 import uuid
+import asyncio
+import logging
 from time import gmtime, strftime
-from typing import Dict, List
+from typing import Dict, List, Any
 
 import numpy as np
 import rerun as rr
+from websockets.asyncio.server import serve, ServerConnection
+from websockets.exceptions import ConnectionClosed
 
-from arflow import service_pb2, service_pb2_grpc
+from arflow.models.registry import sf_decode, sf_encode
+from arflow.models.session import (
+    CreateSessionRequestMsg,
+    CreateSessionResponseMsg,
+    SessionMsg,
+    SessionUuidMsg,
+    SessionMetadataMsg,
+)
 
-sessions: Dict[str, service_pb2.RegisterRequest] = {}
+logger = logging.getLogger(__name__)
+
+# 全局的 Session 管理字典，存 MsgSpec 定义的数据
+sessions: Dict[str, CreateSessionRequestMsg] = {}
 """@private"""
 
-
-class ARFlowService(service_pb2_grpc.ARFlowService):
-    """ARFlow gRPC service."""
+class ARFlowWebSocketServer:
+    """ARFlow WebSocket service."""
 
     _start_time = time.time_ns()
     _frame_data: List[Dict[str, float | bytes]] = []
 
-    def __init__(self) -> None:
+    def __init__(self, application_id: str = "arflow", spawn_viewer: bool = True) -> None:
         self.recorder = rr
-        super().__init__()
+        self.application_id = application_id
+        self.spawn_viewer = spawn_viewer
+        # _core.py 时代，是在 register 的时候才 init，我们保留这个设计或在 Server 启动时 init
+        # 这里为兼容 0.3 的逻辑，选择在 handle_create_session 时处理
 
-    def _save_frame_data(
-        self, request: service_pb2.DataFrameRequest | service_pb2.RegisterRequest
-    ):
-        """@private"""
+    def _save_frame_data(self, message_type_name: str, message_bytes: bytes):
+        """@private: 为了在退出时保存 session 的记录"""
         time_stamp = (time.time_ns() - self._start_time) / 1e9
         self._frame_data.append(
-            {"time_stamp": time_stamp, "data": request.SerializeToString()}
+            {"time_stamp": time_stamp, "data": message_bytes, "type": message_type_name}
         )
 
-    def register(
-        self, request: service_pb2.RegisterRequest, context, uid: str | None = None
-    ) -> service_pb2.RegisterResponse:
-        """Register a client."""
+    async def handle_client(self, websocket: ServerConnection):
+        logger.info(f"Client connected: {websocket.remote_address}")
+        try:
+            async for message in websocket:
+                if isinstance(message, bytes):
+                    await self._process_message(websocket, message)
+                else:
+                    logger.warning("Received non-binary message, dropping.")
+        except ConnectionClosed:
+            logger.info(f"Client disconnected: {websocket.remote_address}")
+        except Exception as e:
+            logger.error(f"Error handling client {websocket.remote_address}: {e}")
 
-        self._save_frame_data(request)
+    async def _process_message(self, websocket: ServerConnection, message: bytes):
+        try:
+            obj = sf_decode(message)
+        except Exception as e:
+            logger.error(f"Failed to decode message: {e}")
+            return
 
-        # Start processing.
-        if uid is None:
-            uid = str(uuid.uuid4())
+        if isinstance(obj, CreateSessionRequestMsg):
+            # 将这个 CreateSessionRequestMsg 储存起来
+            self._save_frame_data("CreateSessionRequestMsg", message)
+            await self.handle_create_session(websocket, obj)
+        else:
+            # 预留给以后的 Image 等传输 Frame
+            logger.warning(f"Unhandled message type: {type(obj)}")
 
-        sessions[uid] = request
+    async def handle_create_session(self, websocket: ServerConnection, request: CreateSessionRequestMsg):
+        """Register a client via CreateSession request."""
+        new_session_id = str(uuid.uuid4())
+        
+        sessions[new_session_id] = request
 
-        self.recorder.init(f"{request.device_name} - ARFlow", spawn=True)
-        print("Registered a client with UUID: %s" % uid, request)
+        # 唤醒 Rerun Viewer
+        self.recorder.init(f"{request.device.device_name} - ARFlow", spawn=self.spawn_viewer)
+        print("Registered a client with UUID: %s" % new_session_id, request)
 
         # Call the for user extension code.
         self.on_register(request)
 
-        return service_pb2.RegisterResponse(uid=uid)
+        # 构建发回客户端的凭证
+        session_msg = SessionMsg(
+            id=SessionUuidMsg(value=new_session_id),
+            metadata=request.session_metadata,
+            devices=[request.device],
+        )
+        response = CreateSessionResponseMsg(session=session_msg)
+        await websocket.send(sf_encode(response))
 
-    def data_frame(
-        self,
-        request: service_pb2.DataFrameRequest,
-        context,
-    ) -> service_pb2.DataFrameResponse:
-        """Process an incoming frame."""
-
-        self._save_frame_data(request)
-
-        # Start processing.
-        decoded_data = {}
-        session_configs = sessions[request.uid]
-
-        if session_configs.camera_color.enabled:
-            color_rgb = ARFlowService.decode_rgb_image(session_configs, request.color)
-            decoded_data["color_rgb"] = color_rgb
-            color_rgb = np.flipud(color_rgb)
-            self.recorder.log("rgb", rr.Image(color_rgb))
-
-        if session_configs.camera_depth.enabled:
-            depth_img = ARFlowService.decode_depth_image(session_configs, request.depth)
-            decoded_data["depth_img"] = depth_img
-            depth_img = np.flipud(depth_img)
-            self.recorder.log("depth", rr.DepthImage(depth_img, meter=1.0))
-
-        if session_configs.camera_transform.enabled:
-            self.recorder.log("world/origin", rr.ViewCoordinates.RIGHT_HAND_Y_DOWN)
-            # self.logger.log(
-            #     "world/xyz",
-            #     rr.Arrows3D(
-            #         vectors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-            #         colors=[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
-            #     ),
-            # )
-
-            transform = ARFlowService.decode_transform(request.transform)
-            decoded_data["transform"] = transform
-            self.recorder.log(
-                "world/camera",
-                self.recorder.Transform3D(
-                    mat3x3=transform[:3, :3], translation=transform[:3, 3]
-                ),
-            )
-
-            k = ARFlowService.decode_intrinsic(session_configs)
-            self.recorder.log("world/camera", rr.Pinhole(image_from_camera=k))
-            self.recorder.log("world/camera", rr.Image(np.flipud(color_rgb)))
-
-        if session_configs.camera_point_cloud.enabled:
-            pcd, clr = ARFlowService.decode_point_cloud(
-                session_configs, k, color_rgb, depth_img, transform
-            )
-            decoded_data["point_cloud_pcd"] = pcd
-            decoded_data["point_cloud_clr"] = clr
-            self.recorder.log("world/point_cloud", rr.Points3D(pcd, colors=clr))
-
-        # Call the for user extension code.
-        self.on_frame_received(decoded_data)
-
-        return service_pb2.DataFrameResponse(message="OK")
-
-    def on_register(self, request: service_pb2.RegisterRequest):
+    def on_register(self, request: CreateSessionRequestMsg):
         """Called when a new device is registered. Override this method to process the data."""
         pass
 
-    def on_frame_received(self, frame_data: service_pb2.DataFrameRequest):
+    def on_frame_received(self, frame_data: Any):
         """Called when a frame is received. Override this method to process the data."""
         pass
 
@@ -137,140 +119,4 @@ class ARFlowService(service_pb2_grpc.ARFlowService):
 
         print(f"Data saved to {save_path}")
 
-    @staticmethod
-    def decode_rgb_image(
-        session_configs: service_pb2.RegisterRequest, buffer: bytes
-    ) -> np.ndarray:
-        # Calculate the size of the image.
-        color_img_w = int(
-            session_configs.camera_intrinsics.resolution_x
-            * session_configs.camera_color.resize_factor_x
-        )
-        color_img_h = int(
-            session_configs.camera_intrinsics.resolution_y
-            * session_configs.camera_color.resize_factor_y
-        )
-        p = color_img_w * color_img_h
-        color_img = np.frombuffer(buffer, dtype=np.uint8)
-
-        # Decode RGB bytes into RGB.
-        if session_configs.camera_color.data_type == "RGB24":
-            color_rgb = color_img.reshape((color_img_h, color_img_w, 3))
-            color_rgb = color_rgb.astype(np.uint8)
-
-        # Decode YCbCr bytes into RGB.
-        elif session_configs.camera_color.data_type == "YCbCr420":
-            y = color_img[:p].reshape((color_img_h, color_img_w))
-            cbcr = color_img[p:].reshape((color_img_h // 2, color_img_w // 2, 2))
-            cb, cr = cbcr[:, :, 0], cbcr[:, :, 1]
-
-            # Very important! Convert to float32 first!
-            cb = np.repeat(cb, 2, axis=0).repeat(2, axis=1).astype(np.float32) - 128
-            cr = np.repeat(cr, 2, axis=0).repeat(2, axis=1).astype(np.float32) - 128
-
-            r = np.clip(y + 1.403 * cr, 0, 255)
-            g = np.clip(y - 0.344 * cb - 0.714 * cr, 0, 255)
-            b = np.clip(y + 1.772 * cb, 0, 255)
-
-            color_rgb = np.stack([r, g, b], axis=-1)
-            color_rgb = color_rgb.astype(np.uint8)
-
-        return color_rgb
-
-    @staticmethod
-    def decode_depth_image(
-        session_configs: service_pb2.RegisterRequest, buffer: bytes
-    ) -> np.ndarray:
-        if session_configs.camera_depth.data_type == "f32":
-            dtype = np.float32
-        elif session_configs.camera_depth.data_type == "u16":
-            dtype = np.uint16
-        else:
-            raise ValueError(
-                f"Unknown depth data type: {session_configs.camera_depth.data_type}"
-            )
-
-        depth_img = np.frombuffer(buffer, dtype=dtype)
-        depth_img = depth_img.reshape(
-            (
-                session_configs.camera_depth.resolution_y,
-                session_configs.camera_depth.resolution_x,
-            )
-        )
-
-        # 16-bit unsigned integer, describing the depth (distance to an object) in millimeters.
-        if dtype == np.uint16:
-            depth_img = depth_img.astype(np.float32) / 1000.0
-
-        return depth_img
-
-    @staticmethod
-    def decode_transform(buffer: bytes):
-        y_down_to_y_up = np.array(
-            [
-                [1.0, -0.0, 0.0, 0],
-                [0.0, -1.0, 0.0, 0],
-                [0.0, 0.0, 1.0, 0],
-                [0.0, 0.0, 0, 1.0],
-            ],
-            dtype=np.float32,
-        )
-
-        t = np.frombuffer(buffer, dtype=np.float32)
-        transform = np.eye(4)
-        transform[:3, :] = t.reshape((3, 4))
-        transform[:3, 3] = 0
-        transform = y_down_to_y_up @ transform
-
-        return transform
-
-    @staticmethod
-    def decode_intrinsic(session_configs: service_pb2.RegisterRequest):
-        sx = session_configs.camera_color.resize_factor_x
-        sy = session_configs.camera_color.resize_factor_y
-
-        fx, fy = (
-            session_configs.camera_intrinsics.focal_length_x * sx,
-            session_configs.camera_intrinsics.focal_length_y * sy,
-        )
-        cx, cy = (
-            session_configs.camera_intrinsics.principal_point_x * sx,
-            session_configs.camera_intrinsics.principal_point_y * sy,
-        )
-
-        k = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]])
-
-        return k
-
-    @staticmethod
-    def decode_point_cloud(
-        session_configs: service_pb2.RegisterRequest,
-        k: np.ndarray,
-        color_rgb: np.ndarray,
-        depth_img: np.ndarray,
-        transform: np.ndarray,
-    ) -> np.ndarray:
-        # Flip image is needed for point cloud generation.
-        color_rgb = np.flipud(color_rgb)
-        depth_img = np.flipud(depth_img)
-
-        color_img_w = int(
-            session_configs.camera_intrinsics.resolution_x
-            * session_configs.camera_color.resize_factor_x
-        )
-        color_img_h = int(
-            session_configs.camera_intrinsics.resolution_y
-            * session_configs.camera_color.resize_factor_y
-        )
-        u, v = np.meshgrid(np.arange(color_img_w), np.arange(color_img_h))
-        fx, fy = k[0, 0], k[1, 1]
-        cx, cy = k[0, 2], k[1, 2]
-
-        z = depth_img.copy()
-        x = ((u - cx) * z) / fx
-        y = ((v - cy) * z) / fy
-        pcd = np.stack([x, y, z], axis=-1).reshape(-1, 3)
-        pcd = np.matmul(transform[:3, :3], pcd.T).T + transform[:3, 3]
-        clr = color_rgb.reshape(-1, 3)
-
-        return pcd, clr
+    # 省略 60FPS 的 Decode 函数，未来第六周重写此部分时会补充上来

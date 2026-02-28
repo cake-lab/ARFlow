@@ -1,46 +1,40 @@
-"""Simple server for ARFlow service."""
+"""Simple WebSocket server for ARFlow service."""
 
 import sys
+import asyncio
+import logging
 from concurrent import futures
 
-import grpc
+from arflow.core import ARFlowWebSocketServer
 
-from arflow import service_pb2_grpc
-from arflow.core import ARFlowService
+logger = logging.getLogger(__name__)
 
-
-def create_server(
-    service: ARFlowService, port: int = 8500, path_to_save: str | None = "./"
+async def create_server(
+    service_class, port: int = 8500, path_to_save: str | None = "./"
 ):
-    """Run gRPC server."""
+    """Run WebSocket server."""
+    service = service_class()
     try:
-        service = service()
-        server = grpc.server(
-            futures.ThreadPoolExecutor(max_workers=10),
-            options=[
-                ("grpc.max_send_message_length", -1),
-                ("grpc.max_receive_message_length", -1),
-            ],
-        )
-        service_pb2_grpc.add_ARFlowServiceServicer_to_server(service, server)
-        server.add_insecure_port("[::]:%s" % port)
-        server.start()
-
-        print(f"ARFlow server started on port {port}")
-        server.wait_for_termination()
+        from websockets.asyncio.server import serve
+        async with serve(service.handle_client, "0.0.0.0", port):
+            print(f"ARFlow WebSocket server started on port {port}")
+            await asyncio.Future()  # run forever
+            
+    except asyncio.CancelledError:
+        pass
     except KeyboardInterrupt:
         if path_to_save is not None:
             service.on_program_exit(path_to_save)
         sys.exit(0)
 
-    # except Exception as e:
-    #     print(e)
-
-
 def serve():
-    """Run a simple ARFlow server."""
-    create_server(ARFlowService)
-
+    """Run a simple ARFlow WebSocket server."""
+    logging.basicConfig(level=logging.INFO)
+    try:
+        asyncio.run(create_server(ARFlowWebSocketServer))
+    except KeyboardInterrupt:
+        print("Server stopped.")
 
 if __name__ == "__main__":
     serve()
+
