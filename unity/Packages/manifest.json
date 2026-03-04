@@ -1,7 +1,17 @@
 {
+  "scopedRegistries": [
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.neuecc.messagepack",
+        "com.endel.nativewebsocket"
+      ]
+    }
+  ],
   "dependencies": {
-    "com.endel.nativewebsocket": "https://github.com/endel/NativeWebSocket.git#upm",
-    "com.github.messagepack-csharp": "https://github.com/neuecc/MessagePack-CSharp.git?path=src/MessagePack.UnityClient/Assets/Scripts/MessagePack",
+    "com.endel.nativewebsocket": "1.1.5",
+    "com.neuecc.messagepack": "2.5.192",
     "com.unity.feature.development": "1.0.1",
     "com.unity.textmeshpro": "3.0.8",
     "com.unity.timeline": "1.7.6",
