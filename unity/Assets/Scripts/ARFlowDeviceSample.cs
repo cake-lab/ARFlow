@@ -1,6 +1,8 @@
 using System;
+using System.Text.RegularExpressions;
 using ARFlow;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,16 +26,14 @@ public class ARFlowDeviceSample : MonoBehaviour
     private Vector2Int _sampleSize;
     private bool _enabled = false;
 
+    public TMP_InputField ipField;
+    public TMP_InputField portField;
+
+    private string _defaultConnection = "http://192.168.1.219:8500";
+
     // Start is called before the first frame update
     void Start()
     {
-        // const string serverURL = "http://192.168.1.100:8500";
-        // const string serverURL = "http://169.254.189.74:8500";
-        // const string serverURL = "http://192.168.1.139:8500";
-        // const string serverURL = "http://192.168.1.100:8500";
-        const string serverURL = "http://192.168.1.26:8500";
-        _client = new ARFlowClient(serverURL);
-
         connectButton.onClick.AddListener(OnConnectButtonClick);
         startPauseButton.onClick.AddListener(OnStartPauseButtonClick);
 
@@ -44,12 +44,31 @@ public class ARFlowDeviceSample : MonoBehaviour
         // Application.targetFrameRate = 30;
     }
 
+    bool validIP(string ipField)
+    {
+        return Regex.IsMatch(ipField, @"(\d){1,3}\.(\d){1,3}\.(\d){1,3}\.(\d){1,3}");
+    }
+
+    bool validPort(string portField)
+    {
+        return Regex.IsMatch(portField, @"(\d){1,5}");
+    }
+
     /// <summary>
     /// Get register request data from camera and send to server.
     /// Image and depth info is acquired once to get information for the request, and is disposed afterwards.
     /// </summary>
     private void OnConnectButtonClick()
     {
+        var serverURL = _defaultConnection;
+        if (validIP(ipField.text) && validPort(portField.text))
+        {
+            serverURL = "http://" + ipField.text + ":" + portField.text;
+        }
+        serverURL = Regex.Replace(serverURL, @"\s+", "");
+        // destructor dispose old client when we reconnect
+        _client = new ARFlowClient(serverURL);
+
         try
         {
             cameraManager.TryGetIntrinsics(out var k);
@@ -80,7 +99,12 @@ public class ARFlowDeviceSample : MonoBehaviour
                 CameraDepth = new RegisterRequest.Types.CameraDepth()
                 {
                     Enabled = true,
+#if UNITY_ANDROID
                     DataType = "u16", // f32 for iOS, u16 for Android
+#endif
+#if (UNITY_IOS || UNITY_VISIONOS)
+                    DataType = "f32",
+#endif
                     ConfidenceFilteringLevel = 0,
                     ResolutionX = depthImage.dimensions.x,
                     ResolutionY = depthImage.dimensions.y

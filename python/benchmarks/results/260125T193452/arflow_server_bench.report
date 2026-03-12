@@ -1,0 +1,40 @@
+
+Summary:
+  Count:	100
+  Total:	10.20 s
+  Slowest:	3.86 s
+  Fastest:	5.84 ms
+  Average:	367.27 ms
+  Requests/sec:	9.80
+
+Response time histogram:
+  5.836    [1]  |
+  391.236  [87] |∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  776.636  [0]  |
+  1162.036 [0]  |
+  1547.436 [0]  |
+  1932.836 [0]  |
+  2318.236 [0]  |
+  2703.636 [0]  |
+  3089.037 [2]  |∎
+  3474.437 [4]  |∎∎
+  3859.837 [4]  |∎∎
+
+Latency distribution:
+  10 % in 11.94 ms 
+  25 % in 14.38 ms 
+  50 % in 16.15 ms 
+  75 % in 57.67 ms 
+  90 % in 2.97 s 
+  95 % in 3.46 s 
+  99 % in 3.86 s 
+
+Status code distribution:
+  [OK]            98 responses   
+  [Unavailable]   1 responses    
+  [Canceled]      1 responses    
+
+Error distribution:
+  [1]   rpc error: code = Unavailable desc = error reading from server: read tcp 127.0.0.1:39310->127.0.0.1:50051: use of closed network connection   
+  [1]   rpc error: code = Canceled desc = grpc: the client connection is closing                                                                      
+

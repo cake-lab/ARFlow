@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "depthanythingv2"
+version = "0.1.0"
+description = ""
+authors = ["Felix Nguyen <ngthinh302@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.13"
+torchvision = "^0.19.1"
+arflow = { path = "../.." }
+transformers = "^4.44.2"
+torch = "^2.4.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+depthanythingv2 = "depthanythingv2:main"

@@ -16,7 +16,7 @@ The ARFlow server can be simply installed via `pip`:
 pip install arflow
 ```
 
-## Example
+## Examples
 
 Next, you may integrate ARFlow with your own research prototype via the Python API:
 
@@ -80,6 +80,8 @@ Save the above code to a file, e.g., `simple_replay.py`, replace `FRAME_DATA_PAT
 python3 simple_replay.py
 ```
 
+For more examples, check out the [examples](https://github.com/cake-lab/ARFlow/tree/main/python/examples) directory.
+
 ## Contributing
 
-We welcome contributions to ARFlow! Please refer to the [CONTRIBUTING.md](https://github.com/cake-lab/ARFlow/blob/main/CONTRIBUTING.md) file for more information.
+We welcome contributions to ARFlow! Please refer to the [`CONTRIBUTING.md`](https://github.com/cake-lab/ARFlow/blob/main/CONTRIBUTING.md) file for more information.
