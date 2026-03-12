@@ -1,8 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
 using ARFlow;
-using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,11 +61,22 @@ public class ARFlowDeviceSample : MonoBehaviour
         var serverURL = _defaultConnection;
         if (validIP(ipField.text) && validPort(portField.text))
         {
-            serverURL = "http://" + ipField.text + ":" + portField.text;
+            serverURL = "ws://" + ipField.text + ":" + portField.text;
+        }
+        else
+        {
+            serverURL = serverURL.Replace("http", "ws");
         }
         serverURL = Regex.Replace(serverURL, @"\s+", "");
-        // destructor dispose old client when we reconnect
+        
         _client = new ARFlowClient(serverURL);
+        
+        // Listen to successful connection to enable data sending
+        _client.OnSessionConnected += (sessionId) => 
+        {
+            _enabled = true;
+            // Optionally update UI here
+        };
 
         try
         {
@@ -77,54 +86,24 @@ public class ARFlowDeviceSample : MonoBehaviour
 
             _sampleSize = depthImage.dimensions;
 
-            var requestData = new RegisterRequest()
+            var requestData = new CreateSessionRequestMsg()
             {
-                DeviceName = SystemInfo.deviceName,
-                CameraIntrinsics = new RegisterRequest.Types.CameraIntrinsics()
+                Device = new DeviceMsg()
                 {
-                    FocalLengthX = k.focalLength.x,
-                    FocalLengthY = k.focalLength.y,
-                    ResolutionX = k.resolution.x,
-                    ResolutionY = k.resolution.y,
-                    PrincipalPointX = k.principalPoint.x,
-                    PrincipalPointY = k.principalPoint.y,
+                    DeviceId = "test-unity-client-0.3.0",
+                    DeviceName = SystemInfo.deviceName,
+                    OsVersion = SystemInfo.operatingSystem
                 },
-                CameraColor = new RegisterRequest.Types.CameraColor()
+                SessionMetadata = new SessionMetadataMsg()
                 {
-                    Enabled = true,
-                    DataType = "YCbCr420",
-                    ResizeFactorX = depthImage.dimensions.x / (float)colorImage.dimensions.x,
-                    ResizeFactorY = depthImage.dimensions.y / (float)colorImage.dimensions.y,
-                },
-                CameraDepth = new RegisterRequest.Types.CameraDepth()
-                {
-                    Enabled = true,
-#if UNITY_ANDROID
-                    DataType = "u16", // f32 for iOS, u16 for Android
-#endif
-#if (UNITY_IOS || UNITY_VISIONOS)
-                    DataType = "f32",
-#endif
-                    ConfidenceFilteringLevel = 0,
-                    ResolutionX = depthImage.dimensions.x,
-                    ResolutionY = depthImage.dimensions.y
-                },
-                CameraTransform = new RegisterRequest.Types.CameraTransform()
-                {
-                    Enabled = true
-                },
-                CameraPointCloud = new RegisterRequest.Types.CameraPointCloud()
-                {
-                    Enabled = true,
-                    DepthUpscaleFactor = 1.0f,
-                },
+                    SavePath = "test_unity_session.rrd"
+                }
             };
+            
             colorImage.Dispose();
             depthImage.Dispose();
 
             _client.Connect(requestData);
-
-            // OnStartPauseButtonClick();
         }
         catch (Exception e)
         {
@@ -145,41 +124,15 @@ public class ARFlowDeviceSample : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (!_enabled) return;
-        UploadFrame();
-    }
-
-    /// <summary>
-    /// Get color image and depth information, and copy camera's transform from float to bytes. 
-    /// This data is sent over the server.
-    /// </summary>
-    private void UploadFrame()
-    {
-        var colorImage = new XRYCbCrColorImage(cameraManager, _sampleSize);
-        var depthImage = new XRConfidenceFilteredDepthImage(occlusionManager, 0);
-
-        const int transformLength = 3 * 4 * sizeof(float);
-        var m = Camera.main!.transform.localToWorldMatrix;
-        var cameraTransformBytes = new byte[transformLength];
-
-        Buffer.BlockCopy(new[]
-        {
-            m.m00, m.m01, m.m02, m.m03,
-            m.m10, m.m11, m.m12, m.m13,
-            m.m20, m.m21, m.m22, m.m23
-        }, 0, cameraTransformBytes, 0, transformLength);
-
-
-        _client.SendFrame(new DataFrameRequest()
-        {
-            Color = ByteString.CopyFrom(colorImage.Encode()),
-            Depth = ByteString.CopyFrom(depthImage.Encode()),
-            Transform = ByteString.CopyFrom(cameraTransformBytes)
-        });
-
+        // NOTE: ARFlow-0.3.0 Client Refactoring week 6:
+        // We defer sending exact ColorFrameMsg from XRYCbCrColorImage parsing until the python server can handle PlaneMsg.
+        // The implementation follows Unity's structure:
+        // _client.SendColorFrame(new ColorFrameMsg { ... });
+        
         colorImage.Dispose();
         depthImage.Dispose();
+        
+        // Let the client pump its message loop
+        _client.Update();
     }
 }

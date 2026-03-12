@@ -1,8 +1,17 @@
 {
+  "scopedRegistries": [
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.neuecc.messagepack",
+        "com.endel.nativewebsocket"
+      ]
+    }
+  ],
   "dependencies": {
-    "com.cysharp.yetanotherhttphandler": "https://github.com/Cysharp/YetAnotherHttpHandler.git?path=src/YetAnotherHttpHandler#v1.0.0",
-    "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
-    "com.unity.collab-proxy": "2.4.4",
+    "com.endel.nativewebsocket": "1.1.5",
+    "com.neuecc.messagepack": "2.5.192",
     "com.unity.feature.development": "1.0.1",
     "com.unity.textmeshpro": "3.0.8",
     "com.unity.timeline": "1.7.6",
